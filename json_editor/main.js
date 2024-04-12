@@ -5,10 +5,6 @@ import C2S from "canvas2svg";
 
 //////////////////////////////////////////////////////////////////////////////
 
-import { numberLineWithAnnotationsFromSchema } from './class_extensions/numberLineWithAnnotations';
-import numberLineWithAnnotationsJSONSchema from './schemes/numberLineWithAnnotations.schema.json';
-import numberLineWithAnnotationsSVG from './svgs/numberLineWithAnnotations.svg';
-
 import { filledBarFromSchema } from './class_extensions/filledBar';
 import filledBarJSONSchema from './schemes/filledBar.schema.json';
 import filledBarSVG from './svgs/filledBar.svg';
@@ -20,6 +16,14 @@ import freePaintSVG from './svgs/freePaint.svg';
 import { numbersByPicturesFromSchema } from './class_extensions/numbersByPictures';
 import numbersByPicturesJSONSchema from './schemes/numbersByPictures.schema.json';
 import numbersByPicturesSVG from './svgs/numbersByPictures.svg';
+
+import { numberLineFromSchema } from './class_extensions/numberLine';
+import numberLineJSONSchema from './schemes/numberLine.schema.json';
+import numberLineSVG from './svgs/numberLine.svg';
+
+import { numberLineWithAnnotationsFromSchema } from './class_extensions/numberLineWithAnnotations';
+import numberLineWithAnnotationsJSONSchema from './schemes/numberLineWithAnnotations.schema.json';
+import numberLineWithAnnotationsSVG from './svgs/numberLineWithAnnotations.svg';
 
 import { rectArrayMarkableFromSchema } from './class_extensions/rectArrayMarkable';
 import rectArrayMarkableJSONSchema from './schemes/rectArrayMarkable.schema.json';
@@ -40,7 +44,9 @@ let editor;
 let schemaData;
 
 import { JSONEditor } from '@json-editor/json-editor';
-// window.JSONEditor = JSONEditor;
+/// #if __DEVELOP
+	window.JSONEditor = JSONEditor;
+/// #endif
 import { object_equals } from '../libs/common';
 
 function searchSchemaData( json ) {
@@ -100,7 +106,9 @@ function loadSchema( schema ) {
 		theme: 'bootstrap4',
 		iconlib: "fontawesome4",
 	});
+/// #if __DEVELOP
 	window.editor = editor;
+/// #endif
 	editor.on( 'change', updateEWK );
 
 	editor.on( 'ready', () => {
@@ -117,6 +125,10 @@ function loadSchema( schema ) {
 					case 'freePaint':
 						initContainer(true);
 						creator = (cfgData) => new freePaintFromSchema( base, cfgData );
+						break;
+					case 'numberLine':
+						initContainer(true);
+						creator = (cfgData) => new numberLineFromSchema( base, cfgData );
 						break;
 					case 'numberLineWithAnnotations':
 						initContainer(true);
@@ -159,16 +171,17 @@ function loadSchema( schema ) {
 
 /// #if __DEVELOP
 
-// for Development: always load one JSON schema
-loadSchema( freePaintJSONSchema );
-window.updateEWK = updateEWK;
+// // for Development: always load one JSON schema
+// loadSchema( numberLineJSONSchema );
+// window.updateEWK = updateEWK;
 
-/// #else
+// /// #else
 
 // load schema Links
 const templs = {
 	filledBar: [ filledBarJSONSchema, filledBarSVG ],
 	freePaint: [ freePaintJSONSchema, freePaintSVG ],
+	numberLine: [ numberLineJSONSchema, numberLineSVG ],
 	numberLineWithAnnotations: [ numberLineWithAnnotationsJSONSchema, numberLineWithAnnotationsSVG ],
 	numbersByPictures: [ numbersByPicturesJSONSchema, numbersByPicturesSVG ],
 	rectArrayMarkable: [ rectArrayMarkableJSONSchema, rectArrayMarkableSVG ],
@@ -207,7 +220,9 @@ function updateEWK () {
 			const jsonData = editor.getValue('root');
 // console.log(jsonData);
 			const cfgData = clearCfgJson( jsonData );
-console.log(cfgData);
+/// #if __DEVELOP
+			console.log( '======= cfgData:', cfgData );
+/// #endif
 			if ( cfgData.dataSettings ) {
 				base.dataSettings = cfgData.dataSettings;
 			}
@@ -247,8 +262,12 @@ console.log(cfgData);
 				extres.statusVarDef();
 			}
 
-			window.getState = extres.getState.bind(extres);
-			window.setState = extres.setState.bind(extres);
+			if ( extres.getState ) {
+				window.getState = extres.getState.bind(extres);
+			}
+			if ( extres.setState ) {
+				window.setState = extres.setState.bind(extres);
+			}
 		}
 
 	} catch( error ) {

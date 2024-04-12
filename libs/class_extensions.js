@@ -165,7 +165,7 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 					}],
 			},
 		};
-		if ( hasMarker ) {
+		if ( hasMarker && ( opts.hasMarker===undefined || opts.hasMarker ) ) {
 			additionalDefaultOpts.modeIconBarDef.icons.splice( 1, 0, {
 				src: markericon,
 				cursor: `url(${markericon}), auto`,
@@ -205,7 +205,7 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 					} else {
 						this.kFreePaintLine = null;
 					}
-					if ( hasMarker ) {
+					if ( hasMarker && ( this.hasMarker===undefined || this.hasMarker ) ) {
 						if ( this.mode != 'brush' ) {
 							this.kFreePaintMarkerLine = new Konva.Line( Object.assign( {}, this.paintLines[ this.mode ], {
 								points: this.paintPoints,
@@ -283,7 +283,7 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 	freePaintInit () {
 
 		// init PaintLines
-		if ( hasMarker ) {
+		if ( hasMarker && ( this.hasMarker===undefined || this.hasMarker ) ) {
 			if ( !this.freePaintMarkerLayer ) {
 				this.freePaintMarkerLayer = new Konva.Layer();
 				this.stage.add( this.freePaintMarkerLayer );
@@ -318,7 +318,7 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 	///////////////////////////////////
 
 	freePaintClearAll ( notify=true ) {
-		if ( hasMarker ) {
+		if ( hasMarker && ( this.hasMarker===undefined || this.hasMarker ) ) {
 			this.kFreePaintMarkerGroup.destroyChildren();
 			this.freePaintMarkerLayer.batchDraw();
 		}
@@ -385,14 +385,14 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 					if ( mode != 'marker' ) {
 						this.kFreePaintBrushGroup.add( kLine );
 					}
-					if ( hasMarker && mode != 'brush' ) {
+					if ( hasMarker && ( this.hasMarker===undefined || this.hasMarker ) && mode != 'brush' ) {
 						this.kFreePaintMarkerGroup.add( mode != 'marker' ? kLine.clone() : kLine );
 					}
 				})
 				this.linesCopy = obj.lines;
 			}
 
-			if ( hasMarker ) {
+			if ( hasMarker && ( this.hasMarker===undefined || this.hasMarker ) ) {
 				this.freePaintMarkerLayer.draw();
 			}
 			this.freePaintLayer.draw();

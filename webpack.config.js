@@ -1,7 +1,10 @@
 const path = require('path');
+const fs = require('fs');
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
+const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
 
 const babel_loader = {
 	test: /\.(js)$/,
@@ -25,7 +28,9 @@ const babel_loader = {
 	}],
 }
 
-function getCfg ( env, argv ) {
+//////////////////////////////////////////////////////////////////////////////
+
+function getEditorCfg ( env, argv ) {
 
 	const outName = 'jsonEditor';
 	const srcDir = './json_editor';
@@ -44,6 +49,16 @@ function getCfg ( env, argv ) {
 		module: {
 			rules: [
 				{
+					test: /\.js$/,
+					use: [{
+						loader: 'ifdef-loader',
+						options: {
+							__DEVELOP: argv.mode==='production' ? false : true,
+							__item: '',
+						}
+					}],
+					exclude: /node_modules/,
+				},{
 					test: /\.css$/,
 					use: [ MiniCssExtractPlugin.loader, 'css-loader' ],
 					exclude: /node_modules/,
@@ -78,12 +93,131 @@ function getCfg ( env, argv ) {
 	};
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
+const ExtResFromSchema = {
+	filledBar: { version: "0.1.0" },
+	freePaint: { version: "0.1.0" },
+	numberLineWithAnnotations: { version: "0.1.0" },
+	numbersByPictures: { version: "0.1.0" },
+	rectArrayMarkable: { version: "0.1.0" },
+	inputInserts: { version: "0.1.0" },
+};
+
+const extres_subdir = 'dist/ext_res';
+const extres_dir = path.resolve( __dirname, extres_subdir );
+
+const manifest_default = {
+	"manifest_version": "V1",
+	"name": "example-plugin",
+	"version": "1.2.3",
+	"repository": "https://github.com/DIPFtba/msk-oc-externalpageframes.git",
+	"entryPoint": "main.html",
+	"branch": "jsonEditor",
+	"subdirectory": "dist/ext_res/",
+	"author": "blauwaldt.it UG (haftungsbeschraenkt)",
+	"license": "MIT",
+	"updatePolicy": {
+		"autoUpdateMinor": true,
+		"ignorePatchVersion": false
+	}
+};
+
+// get webpack config for online JSON editor
+const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
+
+	context: path.resolve( __dirname, 'json_editor/class_extensions' ),
+	entry: './main.js',
+	output: {
+		path: path.resolve( extres_dir, extres ),
+		filename: 'main.js' ,
+	},
+
+	module: {
+		rules: [
+			{
+				test: /\.js$/,
+				use: [{
+					loader: 'ifdef-loader',
+					options: {
+						__CLASS: extres,
+						__item: '',
+					}
+				}],
+				exclude: /node_modules/,
+			},{
+				test: /\.css$/,
+				use: [ MiniCssExtractPlugin.loader, 'css-loader' ],
+				exclude: /node_modules/,
+			},{
+				test: /\.(png|svg)$/,
+				type: 'asset/inline',
+			},{
+				test: /\.json$/i,
+				type: "asset/resource",
+			}
+		]
+	},
+
+	plugins: [
+
+		new HtmlWebpackPlugin({
+			filename: 'main.html',
+			template: '../main.html',
+		}),
+
+		new MiniCssExtractPlugin({
+			filename: 'main.css',
+		}),
+
+		new CopyPlugin({
+			patterns: [
+				{ from: path.resolve( __dirname, 'json_editor/schemes/', `${extres}.schema.json` ), to: path.resolve( extres_dir, extres, 'extres_cfg.schema.json' ) },
+			],
+		}),
+
+	],
+
+	optimization: {
+		minimizer: [
+			`...`,
+			new CssMinimizerPlugin(),
+			new JsonMinimizerPlugin(),
+		],
+	},
+
+	devtool: argv.mode==='production' ? undefined : 'inline-source-map',
+})
+
+//////////////////////////////////////////////////////////////////////////////
+
+function createManifestFile( extres, data ) {
+
+	fs.mkdirSync(
+		path.resolve( extres_dir, extres ),
+		{ recursive: true }
+	);
+
+	const manifest = Object.assign( {},
+		manifest_default,
+		{
+			name: extres,
+			subdirectory: `${extres_subdir}/${extres}`,
+		},
+		data
+	);
+
+	fs.writeFileSync( path.resolve( extres_dir, extres, "manifest.json" ), JSON.stringify( manifest ) );
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 module.exports = ( env, argv ) => {
 
-	const cfg = getCfg( env, argv );
+	let cfg = getEditorCfg( env, argv );
 
 	if ( env.WEBPACK_SERVE ) {
+
 		if ( Array.isArray(cfg) ) {
 			throw( "Error: Only one item must be selected for 'webpack serve'" );
 		}
@@ -100,6 +234,15 @@ module.exports = ( env, argv ) => {
 				}
 			}
 		}
+
+	} else {
+
+		cfg = [ cfg ];
+		Object.keys( ExtResFromSchema ).forEach( er =>{
+			cfg.push( getExtResFromSchemaWebPackConfig( argv, er ) );
+			createManifestFile( er, ExtResFromSchema[er] );
+		})
+
 	}
 
 	return cfg;

@@ -71,7 +71,13 @@ export class baseInits {
 
 	triggerInputValidationEvent () {
 		if ( this.fsm.triggerEvent ) {
+/// #if __item == ''
+			if ( this.dataSettings && this.dataSettings.variablePrefix ) {
+				this.fsm.triggerEvent( 'ev_InputValidation_' + this.dataSettings.variablePrefix );
+			}
+/// #else
 			this.fsm.triggerEvent( 'ev_InputValidation_' + __itemFN.replace("msk_","") );
+/// #endif
 			this.fsm.triggerEvent( 'ev_InputValidation_ExtRes' );
 		}
 	}

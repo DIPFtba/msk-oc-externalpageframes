@@ -11,7 +11,11 @@ import numberLineWithAnnotationsSVG from './svgs/numberLineWithAnnotations.svg';
 
 import { filledBarFromSchema } from './class_extensions/filledBar';
 import filledBarJSONSchema from './schemes/filledBar.schema.json';
-// import filledBarSVG from './svgs/filledBar.svg';
+import filledBarSVG from './svgs/filledBar.svg';
+
+import { freePaintFromSchema } from './class_extensions/freePaint';
+import freePaintJSONSchema from './schemes/freePaint.schema.json';
+import freePaintSVG from './svgs/freePaint.svg';
 
 import { numbersByPicturesFromSchema } from './class_extensions/numbersByPictures';
 import numbersByPicturesJSONSchema from './schemes/numbersByPictures.schema.json';
@@ -110,6 +114,10 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new filledBarFromSchema( base, cfgData );
 						break;
+					case 'freePaint':
+						initContainer(true);
+						creator = (cfgData) => new freePaintFromSchema( base, cfgData );
+						break;
 					case 'numberLineWithAnnotations':
 						initContainer(true);
 						creator = (cfgData) => new numberLineWithAnnotationsFromSchema( base, cfgData );
@@ -152,14 +160,15 @@ function loadSchema( schema ) {
 /// #if __DEVELOP
 
 // for Development: always load one JSON schema
-loadSchema( filledBarJSONSchema );
+loadSchema( freePaintJSONSchema );
 window.updateEWK = updateEWK;
 
 /// #else
 
 // load schema Links
 const templs = {
-	filledBar: [ filledBarJSONSchema ],
+	filledBar: [ filledBarJSONSchema, filledBarSVG ],
+	freePaint: [ freePaintJSONSchema, freePaintSVG ],
 	numberLineWithAnnotations: [ numberLineWithAnnotationsJSONSchema, numberLineWithAnnotationsSVG ],
 	numbersByPictures: [ numbersByPicturesJSONSchema, numbersByPicturesSVG ],
 	rectArrayMarkable: [ rectArrayMarkableJSONSchema, rectArrayMarkableSVG ],
@@ -198,7 +207,10 @@ function updateEWK () {
 			const jsonData = editor.getValue('root');
 // console.log(jsonData);
 			const cfgData = clearCfgJson( jsonData );
-// console.log(cfgData);
+console.log(cfgData);
+			if ( cfgData.dataSettings ) {
+				base.dataSettings = cfgData.dataSettings;
+			}
 
 			const extres = creator( cfgData );
 
@@ -265,7 +277,7 @@ function saveSVG () {
 		if ( layer !== svgLayer ) {
 			const chs = layer.getChildren();
 			while ( chs.length>0 ) {
-				chs[ chs.length-1 ].moveTo( svgLayer );
+				chs[0].moveTo( svgLayer );
 				stage.draw();
 			}
 		}

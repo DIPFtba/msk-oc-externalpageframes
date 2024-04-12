@@ -1,4 +1,4 @@
-import '../../main.css';
+import '../main.css';
 
 const cfgFile = "extres_cfg.json";
 const errMsg = `ExtRes: Error reading '${cfgFile}'!`;
@@ -49,6 +49,9 @@ function initJSON ( json ) {
 /// #else
 	const base = new baseInits( { container: 'container' } );
 /// #endif
+	if ( cfg.dataSettings ) {
+		base.dataSettings = cfg.dataSettings;
+	}
 
 /// #if __CLASS == 'numberLineWithAnnotations'
 	const io = new numberLineWithAnnotationsFromSchema( base, cfg );

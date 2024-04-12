@@ -720,13 +720,14 @@
 					}
 				},
 				"annotations": {
+					"title": "Eingabefelder",
 					"type": "array",
 					"format": "table",
 					"options": {
-						"titleHidden": true,
 						"disable_collapse": true,
 						"disable_edit_json": true,
-						"disable_properties": true
+						"disable_properties": true,
+						"infoText": "Wenn VKS (max. Vorkommastellen) oder NKS (max. Nachkommastellen) angegeben, dürfen nur Zahlen eingegeben werden"
 					},
 					"items": {
 						"title": "Label",
@@ -754,14 +755,26 @@
 								"format": "checkbox"
 							},
 							"y": {
-								"title": "Y Koord.",
+								"title": "Y",
 								"type": "integer",
 								"minimum": 0,
 								"default": 60
 							},
 							"xval": {
-								"title": "X Koord. (opt.)",
+								"title": "X (opt.)",
 								"type": "string"
+							},
+							"pdp": {
+								"title": "VKN",
+								"type": "integer",
+								"minimum": 0,
+								"default": 0
+							},
+							"dp": {
+								"title": "NKN",
+								"type": "integer",
+								"minimum": 0,
+								"default": 0
 							}
 						}
 					}

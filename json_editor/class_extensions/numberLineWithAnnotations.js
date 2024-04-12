@@ -2,6 +2,23 @@ import { numberLineWithAnnotations } from '../../libs/numberLineWithAnnotations'
 
 export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotations {
 
+	constructor ( base, opts = {} ) {
+
+		// pre-decimal places & decimal places --> inputRegexp
+		opts.annotations.forEach( ann => {
+			if ( ann.pdp || ann.dp ) {
+				let re = `^[0-9]${ ann.pdp ? `{0,${ann.pdp}}` : '*' }`;
+				if ( ann.dp ) {
+					re += `([,.][0-9]{0,${ann.dp}})?`;
+				}
+				ann.inputRegexp = re+'$';
+				delete ann.pdp;
+				delete ann.dp;
+			}
+		})
+		super( base, opts );
+	}
+
 	scoreDef () {
 		const settings = this.dataSettings;
 		const pref = settings.variablePrefix;

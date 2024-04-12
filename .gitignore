@@ -1,5 +1,6 @@
-dist
 node_modules
 *~
-examples/node_modules
-examples/dist
+/dist/examples
+/dist/jsonEditor
+/dist/libs
+/dist/ext_res

@@ -40,7 +40,8 @@ function getEditorCfg ( env, argv ) {
 		entry: `${srcDir}/main.js`,
 
 		output: {
-			path: path.resolve(__dirname, 'dist/jsonEditor'),
+			// path: path.resolve(__dirname, 'dist/jsonEditor'),
+			path: path.resolve(__dirname, 'docs'),
 			filename: `${outName}.js`,
 		},
 

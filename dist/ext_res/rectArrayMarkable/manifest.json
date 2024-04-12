@@ -1,0 +1,1 @@
+{"manifest_version":"V1","name":"rectArrayMarkable","version":"0.1.0","repository":"https://github.com/DIPFtba/msk-oc-externalpageframes.git","entryPoint":"main.html","branch":"jsonEditor","subdirectory":"dist/ext_res/rectArrayMarkable","author":"blauwaldt.it UG (haftungsbeschraenkt)","license":"MIT","updatePolicy":{"autoUpdateMinor":true,"ignorePatchVersion":false}}

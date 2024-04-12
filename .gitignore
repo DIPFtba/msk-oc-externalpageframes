@@ -1,6 +1,4 @@
 node_modules
 *~
 /dist/examples
-/dist/jsonEditor
 /dist/libs
-/dist/ext_res

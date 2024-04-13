@@ -125,7 +125,7 @@
 					"properties": {
 						"vals": {
 							"title": "Ticks Schrittweite",
-							"type": "integer",
+							"type": "number",
 							"minimum": 0,
 							"default": 1,
 							"options": {
@@ -217,7 +217,7 @@
 					"properties": {
 						"vals": {
 							"title": "Ticks Schrittweite",
-							"type": "integer",
+							"type": "number",
 							"minimum": 0,
 							"default": 5,
 							"options": {
@@ -309,7 +309,7 @@
 					"properties": {
 						"vals": {
 							"title": "Ticks Schrittweite",
-							"type": "integer",
+							"type": "number",
 							"minimum": 0,
 							"default": 10,
 							"options": {
@@ -572,7 +572,7 @@
 						},
 						"labelsEvery": {
 							"title": "Schrittweite",
-							"type": "integer",
+							"type": "number",
 							"minimum": 0,
 							"default": 10,
 							"options": {

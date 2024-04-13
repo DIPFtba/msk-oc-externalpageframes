@@ -59,7 +59,7 @@ export function clearCfgJson( json ) {
 export function addScoringValsParser (obj) {
 
 	obj.parseScoringVals = function (opts) {
-		if ( opts.dataSettings && opts.dataSettings.scoringVals ) {
+		if ( opts.dataSettings && opts.dataSettings.scoringVals && this.scoreDef ) {
 
 			const scoringVals = opts.dataSettings.scoringVals;
 			const pref = opts.dataSettings.variablePrefix;
@@ -73,7 +73,7 @@ export function addScoringValsParser (obj) {
 						let cond = sv.condition;
 						if ( cond ) {
 							let saveCond = cond;
-							const allVarsInCond = cond.matchAll( /\[([^\]]*)]/g );
+							const allVarsInCond = cond.matchAll( /\$\{([^}]*)}/g );
 							for ( const vn of allVarsInCond ) {
 								if ( vn[1].length == 0 ) {
 									console.error( `Variablen-Name '[]' in Scoring nicht zulässig` );
@@ -159,3 +159,18 @@ export const readRangeArray = function ( s ) {
 	return res;
 }
 
+//////////////////////////////////////
+
+export const dp2inputRegExp = function ( obj ) {
+
+	if ( obj.pdp || obj.dp ) {
+		let re = `^[0-9]${ obj.pdp ? `{0,${obj.pdp}}` : '*' }`;
+		if ( obj.dp ) {
+			re += `([,.][0-9]{0,${obj.dp}})?`;
+		}
+		obj.inputRegexp = re+'$';
+		delete obj.pdp;
+		delete obj.dp;
+	}
+
+}

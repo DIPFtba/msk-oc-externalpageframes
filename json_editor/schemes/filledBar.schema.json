@@ -328,8 +328,9 @@
 								"type": "integer"
 							},
 							"condition": {
-								"title": "Bedingung (VarNamen in [] setzen)",
-								"type": "string"
+								"title": "Bedingung (VarNamen in ${} setzen)",
+								"type": "string",
+								"format": "textarea"
 							}
 						}
 					}

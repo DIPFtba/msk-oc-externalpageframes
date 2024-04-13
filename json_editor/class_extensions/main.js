@@ -1,4 +1,4 @@
-import '../main.css';
+import '../../examples/main.css';
 
 const cfgFile = "extres_cfg.json";
 const errMsg = `ExtRes: Error reading '${cfgFile}'!`;
@@ -23,14 +23,23 @@ function loadJSON () {
 import { baseInits } from '../../libs/baseInits';
 import { clearCfgJson, addStatusVarDef } from '../common';
 
-/// #if __CLASS == 'numberLineWithAnnotations'
-import { numberLineWithAnnotationsFromSchema } from './numberLineWithAnnotations';
+/// #if __CLASS == 'filledBar'
+import { filledBarFromSchema } from './filledBar';
+/// #elif __CLASS == 'freePaint'
+import { freePaintFromSchema } from './freePaint';
 /// #elif __CLASS == 'numbersByPictures'
 import { numbersByPicturesFromSchema } from './numbersByPictures';
+/// #elif __CLASS == 'numberLine'
+import { numberLineFromSchema } from './numberLine';
+/// #elif __CLASS == 'numberLineWithAnnotations'
+import { numberLineWithAnnotationsFromSchema } from './numberLineWithAnnotations';
+/// #elif __CLASS == 'numberLineWithArcs'
+import { numberLineWithArcsFromSchema } from './numberLineWithArcs';
+/// #elif __CLASS == 'rectArrayMarkable'
+import { rectArrayMarkableFromSchema } from './rectArrayMarkable';
 /// #elif __CLASS == 'inputInserts'
 import { inputInsertsFromSchema } from './inputInserts';
 /// #endif
-
 
 function initJSON ( json ) {
 
@@ -53,10 +62,20 @@ function initJSON ( json ) {
 		base.dataSettings = cfg.dataSettings;
 	}
 
-/// #if __CLASS == 'numberLineWithAnnotations'
-	const io = new numberLineWithAnnotationsFromSchema( base, cfg );
+/// #if __CLASS == 'filledBar'
+	const io = new filledBarFromSchema( base, cfg );
+/// #elif __CLASS == 'freePaint'
+	const io = new freePaintFromSchema( base, cfg );
 /// #elif __CLASS == 'numbersByPictures'
 	const io = new numbersByPicturesFromSchema( base, cfg );
+/// #elif __CLASS == 'numberLine'
+	const io = new numberLineFromSchema( base, cfg );
+/// #elif __CLASS == 'numberLineWithAnnotations'
+	const io = new numberLineWithAnnotationsFromSchema( base, cfg );
+/// #elif __CLASS == 'numberLineWithArcs'
+	const io = new numberLineWithArcsFromSchema( base, cfg );
+/// #elif __CLASS == 'rectArrayMarkable'
+	const io = new rectArrayMarkableFromSchema( base, cfg );
 /// #elif __CLASS == 'inputInserts'
 	const io = new inputInsertsFromSchema( '#container', cfg, base );
 /// #endif

@@ -25,12 +25,16 @@ import { numberLineWithAnnotationsFromSchema } from './class_extensions/numberLi
 import numberLineWithAnnotationsJSONSchema from './schemes/numberLineWithAnnotations.schema.json';
 import numberLineWithAnnotationsSVG from './svgs/numberLineWithAnnotations.svg';
 
+import { numberLineWithArcsFromSchema } from './class_extensions/numberLineWithArcs';
+import numberLineWithArcsJSONSchema from './schemes/numberLineWithArcs.schema.json';
+import numberLineWithArcsSVG from './svgs/numberLineWithArcs.png';
+
 import { rectArrayMarkableFromSchema } from './class_extensions/rectArrayMarkable';
 import rectArrayMarkableJSONSchema from './schemes/rectArrayMarkable.schema.json';
 import rectArrayMarkableSVG from './svgs/rectArrayMarkable.svg';
 
 import { inputInsertsFromSchema } from './class_extensions/inputInserts';
-import inputInsertsJSONchema from './schemes/inputInserts.schema.json';
+import inputInsertsJSONSchema from './schemes/inputInserts.schema.json';
 import inputInsertsSVG from './svgs/inputInserts.svg';
 
 //////////////////////////////////////////////////////////////////////////////
@@ -43,7 +47,7 @@ let creator = null;
 let editor;
 let schemaData;
 
-import { JSONEditor } from '@json-editor/json-editor';
+// import { JSONEditor } from '@json-editor/json-editor';
 /// #if __DEVELOP
 	window.JSONEditor = JSONEditor;
 /// #endif
@@ -134,6 +138,10 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new numberLineWithAnnotationsFromSchema( base, cfgData );
 						break;
+					case 'numberLineWithArcs':
+						initContainer(true);
+						creator = (cfgData) => new numberLineWithArcsFromSchema( base, cfgData );
+						break;
 					case 'numbersByPictures':
 						initContainer(true);
 						creator = (cfgData) => new numbersByPicturesFromSchema( base, cfgData );
@@ -171,11 +179,11 @@ function loadSchema( schema ) {
 
 /// #if __DEVELOP
 
-// // for Development: always load one JSON schema
-// loadSchema( numberLineJSONSchema );
-// window.updateEWK = updateEWK;
+// for Development: always load one JSON schema
+loadSchema( numberLineWithArcsJSONSchema );
+window.updateEWK = updateEWK;
 
-// /// #else
+/// #else
 
 // load schema Links
 const templs = {
@@ -183,9 +191,10 @@ const templs = {
 	freePaint: [ freePaintJSONSchema, freePaintSVG ],
 	numberLine: [ numberLineJSONSchema, numberLineSVG ],
 	numberLineWithAnnotations: [ numberLineWithAnnotationsJSONSchema, numberLineWithAnnotationsSVG ],
+	numberLineWithArcs: [ numberLineWithArcsJSONSchema, numberLineWithArcsSVG ],
 	numbersByPictures: [ numbersByPicturesJSONSchema, numbersByPicturesSVG ],
 	rectArrayMarkable: [ rectArrayMarkableJSONSchema, rectArrayMarkableSVG ],
-	inputInsert: [ inputInsertsJSONchema, inputInsertsSVG ],
+	inputInsert: [ inputInsertsJSONSchema, inputInsertsSVG ],
 }
 
 const schSel = document.getElementById('schema_select');

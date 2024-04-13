@@ -87,7 +87,7 @@ export class numberLineWithArcs {
 		if ( !this.readonly ) {
 			this.numberLine.kHitLine.on( "mousedown touchstart", function (ev) {
 // console.log("click",this.stage.getPointerPosition(),this.numberLine.y);
-				if ( this.maxTicks===null || this.ticks.length<this.maxTicks ) {
+				if ( !this.maxTicks || this.ticks.length<this.maxTicks ) {
 					const newTick = this.createNewTick(ev);
 					if ( newTick ) {
 						newTick.startValue = newTick.value;

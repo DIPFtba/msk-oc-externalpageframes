@@ -1,5 +1,5 @@
 {
-	"title": "Zahlenstrahl mit Labels",
+	"title": "Zahlenstrahl mit Bögen",
 	"type": "object",
 	"format": "categories",
 	"options": {
@@ -37,7 +37,7 @@
 					"options": {
 						"grid_columns": 2
 					},
-					"default": 20
+					"default": 70
 				},
 				"width": {
 					"title": "Breite",
@@ -660,8 +660,8 @@
 			}
 		},
 
-		"___annotations": {
-			"title": "Labels",
+		"___arcs": {
+			"title": "Bögen",
 			"type": "object",
 			"format": "grid-strict",
 			"options": {
@@ -671,110 +671,390 @@
 				"disable_properties": true
 			},
 			"properties": {
-				"defaultAnnotation": {
-					"type": "object",
-					"format": "grid-strict",
+				"readonly": {
+					"title": "Alles unveränderbar",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
 					"options": {
-						"titleHidden": true,
-						"disable_collapse": true,
-						"disable_edit_json": true,
-						"disable_properties": true
-					},
-					"properties": {
-						"width": {
-							"title": "Eingabefelder Breite",
-							"type": "integer",
-							"minimum": 0,
-							"default": 60
-						},
-						"height": {
-							"title": "Eingabefelder Höhe",
-							"type": "integer",
-							"minimum": 0,
-							"default": 25,
-							"options": {
-								"grid_break": true
-							}
-						},
-						"annotationTickHeightTop": {
-							"title": "Ticks Höhe oben",
-							"type": "integer",
-							"minimum": 0,
-							"default": 10
-						},
-						"annotationTickHeightBottom": {
-							"title": "Ticks Höhe unten",
-							"type": "integer",
-							"minimum": 0,
-							"default": 25
-						},
-						"strokeWidth": {
-							"title": "Verb.-Linie Dicke",
-							"type": "integer",
-							"minimum": 0,
-							"default": 2,
-							"options": {
-								"grid_break": true
-							}
-						}
+						"grid_columns": 6,
+						"grid_break": true
 					}
 				},
-				"annotations": {
-					"title": "Eingabefelder",
-					"type": "array",
-					"format": "table",
+				"arcHeight": {
+					"title": "Bogenhöhe",
+					"type": "integer",
+					"minimum": 5,
+					"default": 40,
+					"options": {
+						"grid_columns": 2
+					}
+				},
+				"arcLabelDistance": {
+					"title": "Abstand Bogenlabel",
+					"type": "integer",
+					"minimum": 0,
+					"default": 2,
+					"options": {
+						"grid_columns": 2,
+						"grid_break": true
+					}
+				},
+				"arcWidth": {
+					"title": "Bogendicke",
+					"type": "integer",
+					"minimum": 1,
+					"default": 2,
+					"options": {
+						"grid_columns": 2
+					}
+				},
+				"arcMinWidth": {
+					"title": "Mindestbreite",
+					"type": "integer",
+					"minimum": 1,
+					"default": 1,
+					"options": {
+						"grid_columns": 2,
+						"grid_break": true,
+						"infoText": "Schmalere Bögen werden gelöscht, Bögen mit diesem Abstand werden zusammengeführt"
+					}
+				},
+				"defaultArcLabel": {
+					"title": "Bogenlabel",
+					"type": "object",
+					"format": "grid-strict",
 					"options": {
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"infoText": "Wenn VKS (max. Vorkommastellen) oder NKS (max. Nachkommastellen) angegeben, dürfen nur Zahlen eingegeben werden"
+						"grid_columns": 6
+					},
+					"properties": {
+						"width": {
+							"title": "Breite",
+							"type": "integer",
+							"minimum": 10,
+							"default": 50,
+							"options": {
+								"grid_columns": 4
+							}
+						},
+						"height": {
+							"title": "Höhe",
+							"type": "integer",
+							"minimum": 10,
+							"default": 25,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						},
+						"fontSize": {
+							"title": "Schriftgröße",
+							"type": "integer",
+							"minimum": 10,
+							"default": 15,
+							"options": {
+								"grid_columns": 4
+							}
+						},
+						"frameWidth": {
+							"title": "Rahmendicke",
+							"type": "integer",
+							"minimum": 0,
+							"default": 0,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						},
+						"pdp": {
+							"title": "Vorkommastellen",
+							"type": "integer",
+							"minimum": 0,
+							"default": 0,
+							"options": {
+								"grid_columns": 4,
+								"infoText": "Wenn >0: max. Stellenanzahl (nur Zahlenangaben erlaubt)"
+							}
+						},
+						"dp": {
+							"title": "Nachkommastellen",
+							"type": "integer",
+							"minimum": 0,
+							"default": 0,
+							"options": {
+								"grid_columns": 4,
+								"infoText": "Wenn >0: max. Nachkommastellen (nur Zahlenangaben erlaubt)"
+							}
+						}
+					}
+				},
+				"arcs": {
+					"title": "Vordefinierte Bögen",
+					"type": "array",
+					"uniqueItems": true,
+					"format": "table",
+					"options": {
+						"disable_collapse": true,
+						"grid_columns": 6,
+						"grid_break": true
+					},
+					"items": {
+						"title": "Bogen",
+						"type": "object",
+						"format": "grid-strict",
+						"options": {
+							"remove_empty_properties": true,
+							"disable_collapse": true,
+							"disable_edit_json": true,
+							"disable_properties": true
+						},
+						"properties": {
+							"from": {
+								"title": "Von",
+								"type": "integer",
+								"minimum": 0,
+								"default": 0
+							},
+							"to": {
+								"title": "Bis",
+								"type": "integer",
+								"minimum": 0,
+								"default": 0
+							},
+							"arcReadonly": {
+								"title": "Bogen fest",
+								"type": "boolean",
+								"format": "checkbox",
+								"default": false
+							},
+							"label": {
+								"title": "Label",
+								"type": "string",
+								"default": ""
+							},
+							"labelReadonly": {
+								"title": "Label fest",
+								"type": "boolean",
+								"format": "checkbox",
+								"default": false
+							}
+						}
+					}
+				},
+
+				"neverCreateArcs": {
+					"title": "Keine neuen Bögen zulassen",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 6,
+						"grid_break": true
+					}
+				},
+				"newArcsHLabels": {
+					"title": "Neue Bögen haben Labels",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": true,
+					"options": {
+						"grid_columns": 6,
+						"grid_break": true,
+						"dependencies": {
+							"neverCreateArcs": false
+						}
+					}
+				},
+				"newArcsHTicks": {
+					"title": "Neue Bögen haben Achsenlabels",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": true,
+					"options": {
+						"grid_columns": 6,
+						"grid_break": true,
+						"dependencies": {
+							"neverCreateArcs": false
+						}
+					}
+				}
+
+			}
+		},
+
+		"___ticks": {
+			"title": "Achsenlabels",
+			"type": "object",
+			"format": "grid-strict",
+			"options": {
+				"titleHidden": true,
+				"disable_collapse": true,
+				"disable_edit_json": true,
+				"disable_properties": true
+			},
+			"properties": {
+				"dontDelEmptyTicks": {
+					"title": "Leere Labels nicht löschen",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 6,
+						"grid_break": true
+					}
+				},
+				"maxTicks": {
+					"title": "Maximalzahl",
+					"type": "integer",
+					"minimum": 0,
+					"default": 0,
+					"options": {
+						"grid_columns": 2,
+						"grid_break": true,
+						"infoText": "Wenn >0: Begrenzt Zahl anlegbarer Labels"
+					}
+				},
+				"tickHeight": {
+					"title": "Höhe Tick",
+					"type": "integer",
+					"minimum": 5,
+					"default": 14,
+					"options": {
+						"grid_columns": 2
+					}
+				},
+				"tickLabelDistance": {
+					"title": "Abstand Achse",
+					"type": "integer",
+					"minimum": 5,
+					"default": 40,
+					"options": {
+						"grid_columns": 2
+					}
+				},
+				"tickFrameWidth": {
+					"title": "Rahmendicke",
+					"type": "integer",
+					"minimum": 0,
+					"default": 2,
+					"options": {
+						"grid_columns": 2,
+						"grid_break": true
+					}
+				},
+				"defaultTickLabel": {
+					"title": "Labels",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 6
+					},
+					"properties": {
+						"width": {
+							"title": "Breite",
+							"type": "integer",
+							"minimum": 10,
+							"default": 50,
+							"options": {
+								"grid_columns": 4
+							}
+						},
+						"height": {
+							"title": "Höhe",
+							"type": "integer",
+							"minimum": 10,
+							"default": 25,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						},
+						"fontSize": {
+							"title": "Schriftgröße",
+							"type": "integer",
+							"minimum": 5,
+							"default": 15,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						},
+						"pdp": {
+							"title": "Vorkommastellen",
+							"type": "integer",
+							"minimum": 0,
+							"default": 0,
+							"options": {
+								"grid_columns": 4,
+								"infoText": "Wenn >0: max. Stellenanzahl (nur Zahlenangaben erlaubt)"
+							}
+						},
+						"dp": {
+							"title": "Nachkommastellen",
+							"type": "integer",
+							"minimum": 0,
+							"default": 0,
+							"options": {
+								"grid_columns": 4,
+								"infoText": "Wenn >0: max. Nachkommastellen (nur Zahlenangaben erlaubt)"
+							}
+						}
+					}
+				},
+
+				"ticks": {
+					"title": "Vordefinierte Labels",
+					"type": "array",
+					"uniqueItems": true,
+					"format": "table",
+					"options": {
+						"disable_collapse": true,
+						"grid_columns": 6,
+						"grid_break": true
 					},
 					"items": {
 						"title": "Label",
 						"type": "object",
+						"format": "grid-strict",
 						"options": {
-							"remove_empty_properties": true
+							"disable_collapse": true,
+							"disable_edit_json": true,
+							"disable_properties": true
 						},
 						"properties": {
-							"text": {
+							"value": {
+								"title": "X-Wert",
+								"type": "integer",
+								"minimum": 0,
+								"default": 0
+							},
+							"width": {
+								"title": "Breite",
+								"type": "integer",
+								"minimum": 0,
+								"default": 50
+							},
+							"tickReadonly": {
+								"title": "Wert fest",
+								"type": "boolean",
+								"format": "checkbox",
+								"default": false
+							},
+							"label": {
 								"title": "Text",
 								"type": "string"
 							},
-							"textReadonly": {
-								"title": "Text fest",
+							"labelReadonly": {
+								"title": "Label fest",
 								"type": "boolean",
-								"format": "checkbox"
-							},
-							"toValue": {
-								"title": "Verbindung zu",
-								"type": "string"
-							},
-							"toValueReadonly": {
-								"title": "Verb. fest",
-								"type": "boolean",
-								"format": "checkbox"
-							},
-							"y": {
-								"title": "Y",
-								"type": "integer",
-								"minimum": 0,
-								"default": 60
-							},
-							"xval": {
-								"title": "X (opt.)",
-								"type": "string"
-							},
-							"pdp": {
-								"title": "VKN",
-								"type": "integer",
-								"minimum": 0,
-								"default": 0
-							},
-							"dp": {
-								"title": "NKN",
-								"type": "integer",
-								"minimum": 0,
-								"default": 0
+								"format": "checkbox",
+								"default": false
 							}
 						}
 					}
@@ -785,6 +1065,7 @@
 		"dataSettings": {
 			"title": "Daten",
 			"type": "object",
+			"format": "grid-strict",
 			"options": {
 				"titleHidden": true,
 				"disable_collapse": true,
@@ -798,7 +1079,7 @@
 					"properties": {
 						"___name": {
 							"type":"string",
-							"default":"numberLineWithAnnotations"
+							"default":"numberLineWithArcs"
 						},
 						"___version": {
 							"type":"number",
@@ -812,59 +1093,77 @@
 
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
+					"description": "Erzeugt werden 'S_&lt;pref&gt;_ArcCnt', 'S_&lt;pref&gt;_LabCnt' und 'S_&lt;pref&gt;_Status'",
 					"type": "string",
-					"default": "Aufg1"
-				},
-				"createConnSomeVars": {
-					"title": "Erzeuge S_[prefix]_Conn_Some Status-Variable",
-					"type": "boolean",
-					"format": "checkbox",
+					"default": "Aufg1",
 					"options": {
-						"infoText": "Erzeuge Status-Variable, die angibt, ob mind. eine Verbindung von Labels zum Strahl erstellt wurde"
+						"grid_columns": 8,
+						"grid_break": true
 					}
 				},
-				"createConnAllVars": {
-					"title": "Erzeuge S_[prefix]_Conn_All Status-Variable",
-					"type": "boolean",
-					"format": "checkbox",
+
+				"saveArcs": {
+					"title": "Die Daten wievieler Bögen sollen gespeichert werden?",
+					"description": "Erzeugt werden jeweils 'V_&lt;pref&gt;_ArcFrom_X', 'V_&lt;pref&gt;_ArcTo_X' und 'V_&lt;pref&gt;_ArcLab_X'",
+					"type": "integer",
+					"minimum": 0,
+					"default": 3,
 					"options": {
-						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Verbindungen von Labels zum Strahl erstellt wurde"
+						"grid_columns": 8,
+						"grid_break": true
 					}
 				},
-				"createInpSomeVars": {
-					"title": "Erzeuge S_[prefix]_Inp_Some Status-Variable",
-					"type": "boolean",
-					"format": "checkbox",
+				"saveTicks": {
+					"title": "Die Daten wievieler Achsenlabels sollen gespeichert werden?",
+					"description": "Erzeugt werden jeweils 'V_&lt;pref&gt;_LabVal_X' und 'V_&lt;pref&gt;_Lab_X'",
+					"type": "integer",
+					"minimum": 0,
+					"default": 3,
 					"options": {
-						"infoText": "Erzeuge Status-Variable, die angibt, ob mind. Label mit Text benannt wurde"
+						"grid_columns": 8,
+						"grid_break": true
 					}
 				},
-				"createInpAllVars": {
-					"title": "Erzeuge S_[prefix]_Inp_All Status-Variable",
-					"type": "boolean",
-					"format": "checkbox",
+				"xMult": {
+					"title": "X-Multiplikator",
+					"type": "integer",
+					"minimum": 0,
+					"default": 1,
 					"options": {
-						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Labels mit Text benannt wurden"
+						"grid_columns": 8,
+						"grid_break": true,
+						"infoText": "Multiplikator für X-Werte (um gebrochene Zahlen als Integer zu speichern)"
 					}
 				},
-				"createSomeVars": {
-					"title": "Erzeuge S_[prefix]_Some Status-Variable",
-					"type": "boolean",
-					"format": "checkbox",
-					"default": true,
+
+
+				"scoringVals": {
+					"title": "Scoring Werte",
+					"type": "array",
+					"format": "table",
 					"options": {
-						"infoText": "Erzeuge Status-Variable, die angibt, ob mind. eine Verbindung erstellt oder ein Label benannt wurde"
-					}
-				},
-				"createAllVars": {
-					"title": "Erzeuge S_[prefix]_All Status-Variable",
-					"type": "boolean",
-					"format": "checkbox",
-					"default": true,
-					"options": {
-						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Verbindungen erstellt und alle Labels benannt wurden"
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (||=oder, &&=und)"
+					},
+					"items": {
+						"title": "Scoring Wert",
+						"type": "object",
+						"properties": {
+							"val": {
+								"title": "Scoring-Wert",
+								"type": "integer"
+							},
+							"condition": {
+								"title": "Bedingung (VarNamen in ${} setzen)",
+								"type": "string",
+								"format": "textarea"
+							}
+						}
 					}
 				}
+
 			}
 		}
 	}

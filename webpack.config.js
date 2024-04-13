@@ -34,6 +34,7 @@ function getEditorCfg ( env, argv ) {
 
 	const outName = 'jsonEditor';
 	const srcDir = './json_editor';
+	const dst_dir = 'docs';
 
 	return {
 
@@ -41,7 +42,7 @@ function getEditorCfg ( env, argv ) {
 
 		output: {
 			// path: path.resolve(__dirname, 'dist/jsonEditor'),
-			path: path.resolve(__dirname, 'docs'),
+			path: path.resolve(__dirname, dst_dir),
 			filename: `${outName}.js`,
 		},
 
@@ -82,6 +83,11 @@ function getEditorCfg ( env, argv ) {
 				filename: `${outName}.css`,
 			}),
 
+			new CopyPlugin({
+				patterns: [
+					{ from: path.resolve( __dirname, 'json_editor/', 'jsoneditor-nightly.js' ), to: path.resolve( __dirname, dst_dir, 'jsoneditor-nightly.js' ) },
+				],
+			}),
 		],
 
 		optimization: {
@@ -142,6 +148,7 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 					loader: 'ifdef-loader',
 					options: {
 						__CLASS: extres,
+						__DEVELOP: argv.mode==='production' ? false : true,
 						__item: '',
 					}
 				}],
@@ -164,7 +171,7 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 
 		new HtmlWebpackPlugin({
 			filename: 'main.html',
-			template: '../main.html',
+			template: '../../examples/main.html',
 		}),
 
 		new MiniCssExtractPlugin({

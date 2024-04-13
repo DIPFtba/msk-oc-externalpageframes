@@ -20,7 +20,10 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 		})
 		this.layer.draw();
 
+		this.startListeningToGetImageRequests();
+/// #if __DEVELOP
 		window.getPngImage = this.getPngImage.bind(this);
+/// #endif
 	}
 
 	getPngImage () {
@@ -44,7 +47,7 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 				try {
 					const { callId } = JSON.parse(event.data);
 					if ( callId !== undefined && callId.includes("getImage") ) {
-						const image = this.getPngImage;
+						const image = this.getPngImage();
 						const pass_data = {
 							image,
 							callId

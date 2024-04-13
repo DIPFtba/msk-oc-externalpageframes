@@ -1,21 +1,12 @@
 import { numberLineWithAnnotations } from '../../libs/numberLineWithAnnotations'
-
+import { dp2inputRegExp } from '../common';
 export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotations {
 
 	constructor ( base, opts = {} ) {
 
 		// pre-decimal places & decimal places --> inputRegexp
-		opts.annotations.forEach( ann => {
-			if ( ann.pdp || ann.dp ) {
-				let re = `^[0-9]${ ann.pdp ? `{0,${ann.pdp}}` : '*' }`;
-				if ( ann.dp ) {
-					re += `([,.][0-9]{0,${ann.dp}})?`;
-				}
-				ann.inputRegexp = re+'$';
-				delete ann.pdp;
-				delete ann.dp;
-			}
-		})
+		opts.annotations.forEach( ann => dp2inputRegExp(ann) );
+
 		super( base, opts );
 	}
 

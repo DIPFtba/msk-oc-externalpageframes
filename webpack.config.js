@@ -46,7 +46,7 @@ function getEditorCfg ( env, argv ) {
 			filename: `${outName}.js`,
 		},
 
-		devtool: argv.mode==='production' ? undefined : 'source-map',
+		devtool: argv.mode==='production' ? undefined : 'inline-source-map',
 
 		module: {
 			rules: [
@@ -56,6 +56,7 @@ function getEditorCfg ( env, argv ) {
 						loader: 'ifdef-loader',
 						options: {
 							__DEVELOP: argv.mode==='production' ? false : true,
+							__EDITOR: true,
 							__item: '',
 						}
 					}],
@@ -109,6 +110,7 @@ const ExtResFromSchema = {
 	numbersByPictures: { version: "0.1.0" },
 	rectArrayMarkable: { version: "0.1.0" },
 	inputInserts: { version: "0.1.0" },
+	textareaInserts: { version: "0.1.0" },
 };
 
 const extres_subdir = 'dist/ext_res';
@@ -149,6 +151,7 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 					options: {
 						__CLASS: extres,
 						__DEVELOP: argv.mode==='production' ? false : true,
+						__EDITOR: false,
 						__item: '',
 					}
 				}],

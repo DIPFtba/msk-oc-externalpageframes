@@ -87,7 +87,7 @@ div.textareaInserts div.toolbar .frac {
 }
 div.textareaInserts div.toolbar .frac img {
     position: relative;
-    top: -0.55em;
-    left: -0.45em;
-    width: 1em;
+    top: -0.85rem;
+    left: -0.45rem;
+    width: 1rem;
 }

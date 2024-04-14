@@ -845,13 +845,17 @@ export const toolbarFraction = [{
 },
 ]
 
-export const toolbarMathOperatorsFraction = toolbarMathOperators.concat( toolbarFraction );
+export const toolbarPercent = [
+	{ display: "%", logName: "percent", },
+];
 
-export const toolbarMathOperatorsFractionComparison = [
+export const toolbarComparison = [
 	{ display: "&lt;", logName: "less", },
 	{ display: "&gt;", logName: "greater", },
-].concat( toolbarMathOperatorsFraction );
+]
 
-export const toolbarMathOperatorsFractionPercent = toolbarMathOperatorsFraction.concat([
-	{ display: "%", logName: "percent", },
-]);
+export const toolbarMathOperatorsFraction = toolbarMathOperators.concat( toolbarFraction );
+
+export const toolbarMathOperatorsFractionComparison = [].concat(toolbarFraction).concat( toolbarMathOperatorsFraction );
+
+export const toolbarMathOperatorsFractionPercent = toolbarMathOperatorsFraction.concat( toolbarPercent );

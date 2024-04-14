@@ -33,6 +33,10 @@ import { rectArrayMarkableFromSchema } from './class_extensions/rectArrayMarkabl
 import rectArrayMarkableJSONSchema from './schemes/rectArrayMarkable.schema.json';
 import rectArrayMarkableSVG from './svgs/rectArrayMarkable.svg';
 
+import { textareaInsertsFromSchema } from './class_extensions/textareaInserts';
+import textareaInsertsJSONSchema from './schemes/textareaInserts.schema.json';
+import textareaInsertsSVG from './svgs/textareaInserts.svg';
+
 import { inputInsertsFromSchema } from './class_extensions/inputInserts';
 import inputInsertsJSONSchema from './schemes/inputInserts.schema.json';
 import inputInsertsSVG from './svgs/inputInserts.svg';
@@ -150,6 +154,12 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new rectArrayMarkableFromSchema( base, cfgData );
 						break;
+					case 'textareaInserts':
+						creator = (cfgData) => {
+							initContainer(false);
+							return new textareaInsertsFromSchema( textContainer.firstChild, cfgData, base );
+						}
+						break;
 					case 'inputInserts':
 						creator = (cfgData) => {
 							initContainer(false);
@@ -180,7 +190,7 @@ function loadSchema( schema ) {
 /// #if __DEVELOP
 
 // for Development: always load one JSON schema
-loadSchema( numberLineWithArcsJSONSchema );
+loadSchema( textareaInsertsJSONSchema );
 window.updateEWK = updateEWK;
 
 /// #else
@@ -194,6 +204,7 @@ const templs = {
 	numberLineWithArcs: [ numberLineWithArcsJSONSchema, numberLineWithArcsSVG ],
 	numbersByPictures: [ numbersByPicturesJSONSchema, numbersByPicturesSVG ],
 	rectArrayMarkable: [ rectArrayMarkableJSONSchema, rectArrayMarkableSVG ],
+	textareaInserts: [ textareaInsertsJSONSchema, textareaInsertsSVG ],
 	inputInsert: [ inputInsertsJSONSchema, inputInsertsSVG ],
 }
 

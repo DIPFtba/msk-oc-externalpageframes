@@ -45,9 +45,9 @@
 					"options": {
 						"grid_columns": 2,
 						"grid_break": true,
-						"infoText": "Wenn negativ: relativ zu Screen-Breite"
+						"infoText": "Wenn negativ: relativ zu rechtem Rand"
 					},
-					"default": -50
+					"default": -45
 				},
 				"readonly": {
 					"title": "Daten unveränderbar (nicht interaktiv)",

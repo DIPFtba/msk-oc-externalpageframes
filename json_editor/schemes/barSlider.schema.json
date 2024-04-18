@@ -63,7 +63,7 @@
 							"options": {
 								"grid_columns": 4
 							},
-							"default": 3
+							"default": 5
 						},
 						"y": {
 							"title": "Y",
@@ -80,9 +80,9 @@
 							"type": "integer",
 							"options": {
 								"grid_columns": 4,
-								"infoText": "Wenn negativ: relativ zu Screen-Breite"
+								"infoText": "Wenn negativ: relativ zu rechtem Rand"
 							},
-							"default": -4
+							"default": -5
 						},
 						"height": {
 							"title": "Höhe Balken",

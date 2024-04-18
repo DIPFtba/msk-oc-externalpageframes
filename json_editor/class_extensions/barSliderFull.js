@@ -7,7 +7,7 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 
 		// BarSlider Defs
 		if ( opts.width<= 0 ) {
-			opts.width += base.width;
+			opts.width += base.width - opts.x;
 		}
 
 		// freePaint Defs

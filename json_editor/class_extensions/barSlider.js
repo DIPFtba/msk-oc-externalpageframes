@@ -6,7 +6,7 @@ export class barSliderFromSchema extends barSlider {
 	constructor ( base, opts = {} ) {
 
 		if ( opts.width<= 0 ) {
-			opts.width += base.width;
+			opts.width += base.width - opts.x;
 		}
 
 		super( base, opts );

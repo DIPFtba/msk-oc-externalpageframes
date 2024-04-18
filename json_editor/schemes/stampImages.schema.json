@@ -42,20 +42,20 @@
 				"width": {
 					"title": "Breite",
 					"type": "integer",
-					"default": -4,
+					"default": -2,
 					"options": {
 						"grid_columns": 2,
-						"infoText": "Wenn negativ: relativ zu Fensterbreite"
+						"infoText": "Wenn negativ: relativ zu rechtem Rand"
 					}
 				},
 				"height": {
 					"title": "Höhe",
 					"type": "integer",
-					"default": -4,
+					"default": -2,
 					"options": {
 						"grid_columns": 2,
 						"grid_break": true,
-						"infoText": "Wenn negativ: relativ zu FensterHöhe"
+						"infoText": "Wenn negativ: relativ zu unterem Rand"
 					}
 				},
 				"frameWidth": {
@@ -83,7 +83,7 @@
 					"default": -40,
 					"options": {
 						"grid_columns": 2,
-						"infoText": "Wenn negativ: relativ zu Rahmenbreite"
+						"infoText": "Wenn negativ: relativ zu rechtem Rand"
 					}
 				},
 				"iconBarY": {
@@ -93,7 +93,7 @@
 					"options": {
 						"grid_columns": 2,
 						"grid_break": true,
-						"infoText": "Wenn negativ: relativ zu Rahmenhöhe"
+						"infoText": "Wenn negativ: relativ zu unterem Rand"
 					}
 				}
 			}

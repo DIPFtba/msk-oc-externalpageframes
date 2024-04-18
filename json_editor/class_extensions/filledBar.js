@@ -15,7 +15,7 @@ export class filledBarFromSchema extends filledBar {
 		}
 
 		if ( opts.width<= 0 ) {
-			opts.width += base.width;
+			opts.width += base.width - opts.x;
 		}
 
 		super( base, opts );

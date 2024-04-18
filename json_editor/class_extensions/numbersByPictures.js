@@ -27,7 +27,7 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 		opts.x += iconWidth + 14;
 		opts.y += Math.max( 0, 4*22 + 3*2 - ( opts.pics.width + depth ) ) / 2 + depth;
 		if ( opts.width<= 0 ) {
-			opts.width += base.width;
+			opts.width += base.width - opts.x;
 		}
 
 		super( base, opts );

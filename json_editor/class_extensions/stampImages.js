@@ -8,16 +8,16 @@ export class stampImagesFromSchema extends stampImages {
 	constructor ( base, opts = {} ) {
 
 		if ( opts.width<0 ) {
-			opts.width += base.width;
+			opts.width += base.width - opts.x;
 		}
 		if ( opts.height<0 ) {
-			opts.height += base.height;
+			opts.height += base.height - opts.y;
 		}
 		if ( opts.iconBarX<0 ) {
-			opts.iconBarX += opts.x + opts.width;
+			opts.iconBarX += base.width;
 		}
 		if ( opts.iconBarY<0 ) {
-			opts.iconBarY += opts.y + opts.height;
+			opts.iconBarY += base.height;
 		}
 		if ( !opts.stamps ) {
 			opts.stamps = [ child, dot ];

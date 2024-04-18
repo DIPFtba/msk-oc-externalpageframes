@@ -80,9 +80,9 @@
 							"type": "integer",
 							"options": {
 								"grid_columns": 4,
-								"infoText": "Wenn negativ: relativ zu Screen-Breite"
+								"infoText": "Wenn negativ: relativ zu rechtem Rand"
 							},
-							"default": -200
+							"default": -100
 						},
 						"height": {
 							"title": "Höhe Balken",
@@ -681,7 +681,7 @@
 							"type": "integer",
 							"options": {
 								"grid_columns": 2,
-								"infoText": "Wenn <0: relativ zum rechten Rand"
+								"infoText": "Wenn negativ: relativ zum rechten Rand"
 							},
 							"default": -35
 						},
@@ -690,7 +690,7 @@
 							"type": "integer",
 							"options": {
 								"grid_columns": 2,
-								"infoText": "Wenn <0: relativ zum unteren Rand"
+								"infoText": "Wenn negativ: relativ zum unteren Rand"
 							},
 							"default": 15
 						},
@@ -910,7 +910,7 @@
 							"default": 2,
 							"options": {
 								"grid_columns": 4,
-								"infoText": "Wenn <0: relativ zum rechten Rand"
+								"infoText": "Wenn negativ: relativ zum rechten Rand"
 							}
 						},
 						"y": {
@@ -920,7 +920,7 @@
 							"default": 2,
 							"options": {
 								"grid_columns": 4,
-								"infoText": "Wenn <0: relativ zum unteren Rand"
+								"infoText": "Wenn negativ: relativ zum unteren Rand"
 							}
 						},
 						"spacing": {

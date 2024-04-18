@@ -43,7 +43,7 @@ export class numberLine {
 		if ( this.lineHeight ) {
 
 			if ( this.width<=0 ) {
-				this.width += layer.width();
+				this.width += layer.width() - this.x;
 			}
 
 			// Coord Calc

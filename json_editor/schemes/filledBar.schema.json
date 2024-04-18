@@ -45,7 +45,7 @@
 					"type": "integer",
 					"options": {
 						"grid_columns": 2,
-						"infoText": "Wenn negativ: relativ zu Screen-Breite"
+						"infoText": "Wenn negativ: relativ zu rechtem Rand"
 					},
 					"default": 500
 				},

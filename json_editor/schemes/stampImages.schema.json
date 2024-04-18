@@ -83,7 +83,7 @@
 					"default": -40,
 					"options": {
 						"grid_columns": 2,
-						"infoText": "Wenn negativ: relativ zu Rahmebreite"
+						"infoText": "Wenn negativ: relativ zu Rahmenbreite"
 					}
 				},
 				"iconBarY": {
@@ -93,7 +93,7 @@
 					"options": {
 						"grid_columns": 2,
 						"grid_break": true,
-						"infoText": "Wenn negativ: relativ zu Rahmehöhe"
+						"infoText": "Wenn negativ: relativ zu Rahmenhöhe"
 					}
 				}
 			}

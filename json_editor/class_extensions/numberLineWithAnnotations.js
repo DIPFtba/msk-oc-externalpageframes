@@ -13,6 +13,7 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 	scoreDef () {
 		const settings = this.dataSettings;
 		const pref = settings.variablePrefix;
+		const mult = settings.xMult;
 		const scores = {};
 
 		// Annotations
@@ -21,7 +22,7 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 
 		// Connections
 		const conns = this.annotations.filter( a => !a.toValueReadonly );
-		conns.forEach( (v,i) => scores[ `V_${pref}_Conn_${i+1}` ] = v.toValue === null ? null : v.toValue * 1000 );
+		conns.forEach( (v,i) => scores[ `V_${pref}_Conn_${i+1}` ] = v.toValue === null ? null : Math.round( v.toValue * mult ) );
 
 		// Status vars
 		let connSomeVars, connAllVars, inpSomeVars, inpAllVars;

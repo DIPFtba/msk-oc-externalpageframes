@@ -142,7 +142,12 @@ export function addStatusVarDef ( obj, json ) {
 //////////////////////////////////////
 
 // convert "1 34,5:6-9" to [1,34,5,6,7,8,9]
-export const readRangeArray = function ( s ) {
+/**
+ * Parses a string containing range values and returns an array of numbers.
+ * @param {string} s - The string containing the range values.
+ * @returns {number[]} - An array of numbers parsed from the range values.
+ */
+export const readRangeArray = (s) => {
 	const res = [];
 
 	for ( const rr of s.matchAll( /([0-9]+) *(?:- *([0-9]+))?/g ) ) {
@@ -161,16 +166,38 @@ export const readRangeArray = function ( s ) {
 
 //////////////////////////////////////
 
-export const dp2inputRegExp = function ( obj ) {
+/**
+ * Converts an object containing properties for decimal places, decimal precision, and units into a regular expression for input validation.
+ * @param {Object} obj - The object containing properties for decimal places, decimal precision, and units.
+ */
+export const dp2inputRegExp = (obj) => {
+
+	/**
+	 * Generates a regular expression pattern for a given unit.
+	 * @param {string} u - The unit string.
+	 * @returns {string} The regular expression pattern for the unit.
+	 */
+	const unitRegExp = (u) => {
+		let r = '';
+		for ( const c of u.trim() ) {
+			const u = c.toUpperCase();
+			const l = c.toLowerCase();
+			r += u != l ? `[${l}${u}]?` : `${c}?`;
+		}
+		return r;
+	};
 
 	if ( obj.pdp || obj.dp ) {
 		let re = `^[0-9]${ obj.pdp ? `{0,${obj.pdp}}` : '*' }`;
 		if ( obj.dp ) {
 			re += `([,.][0-9]{0,${obj.dp}})?`;
 		}
-		obj.inputRegexp = re+'$';
-		delete obj.pdp;
-		delete obj.dp;
+		if ( obj.units ) {
+			re += ` ?(${obj.units.split('|').map( u => unitRegExp(u) ).join('|')})?`;
+		}
+		obj.inputRegexp = re + '$';
 	}
-
+	delete obj.pdp;
+	delete obj.dp;
+	delete obj.units;
 }

@@ -28,6 +28,9 @@ export const addInsertButtonsTo = ( baseClass, extraDefaults=null, inputCallback
 	constructor ( base, opts = {} ) {
 
 		super( base, opts );
+		if ( !opts.insertIconDefs || !opts.insertIconDefs.length ) {
+			return;
+		}
 
 		// Merge addDefaults & opts into this
 		const additionalDefaultOpts = {
@@ -36,11 +39,10 @@ export const addInsertButtonsTo = ( baseClass, extraDefaults=null, inputCallback
 				// { x:, y:, (width:,) texts: [ '+', '-', ...] }
 			],
 
-			fontSize: 18,
-
 			insertIconBarDef: {
 				framePadding: 0,
 				frameFill: 'white',
+				fontSize: 18,
 				spacing: 0,
 				sticky: false,
 			},
@@ -56,25 +58,23 @@ export const addInsertButtonsTo = ( baseClass, extraDefaults=null, inputCallback
 		mergeAdditionalDefaultsToThis.call( this, additionalDefaultOpts, opts );
 
 		// insertion iconBar
-		if ( this.insertIconDefs.length ) {
-			this.insertIconBars = [];
+		this.insertIconBars = [];
 
-			this.insertIconDefs.forEach( t => {
-				const opts = Object.assign( {}, this.insertIconBarDef, t );
-				opts.icons = t.texts.map( t =>
-					( typeof t === 'object' ? t : {
-						text: {
-							text: t,
-							fontSize: this.fontSize,
-						},
-						on: () => {
-							this.base.postLog( 'insertButtonPressed', { text: t } );
-							this.insertButton(t);
-						},
-					}) );
-				this.insertIconBars.push( new iconBar( this.stage, opts ) );
-			})
-		}
+		this.insertIconDefs.forEach( t => {
+			const opts = Object.assign( {}, this.insertIconBarDef, t );
+			opts.icons = t.texts.map( t =>
+				( typeof t === 'object' ? t : {
+					text: {
+						text: t,
+						fontSize: this.insertIconBarDef.fontSize,
+					},
+					on: () => {
+						this.base.postLog( 'insertButtonPressed', { text: t } );
+						this.insertButton(t);
+					},
+				}) );
+			this.insertIconBars.push( new iconBar( this.stage, opts ) );
+		})
 
 	}
 
@@ -115,6 +115,9 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 	constructor ( base, opts = {} ) {
 
 		super( base, opts );
+		if ( opts.paintLines===null || opts.modeIconBarDef===null ) {
+			return;
+		}
 		const stage = this.stage;
 
 		const additionalDefaultOpts = {
@@ -429,6 +432,9 @@ export const addFreeLabelsTo = ( baseClass ) => class extends baseClass {
 	constructor ( base, opts = {} ) {
 
 		super( base, opts );
+		if ( !opts.freeLabels || !opts.freeLabels.length ) {
+			return;
+		}
 
 		const additionalDefaultOpts = {
 

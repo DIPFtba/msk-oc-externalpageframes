@@ -104,6 +104,8 @@ function getEditorCfg ( env, argv ) {
 //////////////////////////////////////////////////////////////////////////////
 
 const ExtResFromSchema = {
+	barSlider: { version: "0.1.0" },
+	barSliderFull: { version: "0.1.0" },
 	filledBar: { version: "0.1.0" },
 	freePaint: { version: "0.1.0" },
 	numberLineWithAnnotations: { version: "0.1.0" },

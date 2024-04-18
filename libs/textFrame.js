@@ -61,11 +61,12 @@ export class textFrame {
 		this.kGroup.add( kFrame );
 
 		// Text
+		const wRed = this.frameWidth ? this.frameWidth+1 : 0;
 		const kText = new Konva.Text({
 			text: this.insertThousandsSep( this.value ),
-			x: this.x,
+			x: this.x + wRed,
 			y: this.y,
-			width: this.width,
+			width: this.width - wRed*2,
 			height: this.height,
 			align: this.align,
 			verticalAlign: 'middle',

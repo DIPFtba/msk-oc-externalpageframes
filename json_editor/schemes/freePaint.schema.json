@@ -95,7 +95,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 5
+						"grid_columns": 6
 					},
 					"properties": {
 						"brush": {
@@ -115,7 +115,7 @@
 									"minimum": 1,
 									"default": 4,
 									"options": {
-										"grid_columns": 5
+										"grid_columns": 6
 									}
 								},
 								"stroke": {
@@ -124,7 +124,7 @@
 									"format": "color",
 									"default": "#0000ff",
 									"options": {
-										"grid_columns": 5
+										"grid_columns": 6
 									}
 								}
 							}
@@ -137,7 +137,10 @@
 								"disable_collapse": true,
 								"disable_edit_json": true,
 								"disable_properties": true,
-								"grid_columns": 12
+								"grid_columns": 12,
+								"dependencies": {
+									"root.___freePaint.hasMarker": true
+								}
 							},
 							"properties": {
 								"strokeWidth": {
@@ -146,7 +149,7 @@
 									"minimum": 1,
 									"default": 25,
 									"options": {
-										"grid_columns": 5
+										"grid_columns": 6
 									}
 								},
 								"stroke": {
@@ -155,7 +158,7 @@
 									"format": "color",
 									"default": "#6666ff",
 									"options": {
-										"grid_columns": 5
+										"grid_columns": 6
 									}
 								}
 							}
@@ -177,7 +180,7 @@
 									"minimum": 1,
 									"default": 15,
 									"options": {
-										"grid_columns": 5
+										"grid_columns": 6
 									}
 								}
 							}
@@ -192,7 +195,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 5
+						"grid_columns": 6
 					},
 					"properties": {
 						"x": {

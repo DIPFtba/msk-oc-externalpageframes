@@ -47,9 +47,17 @@ div#schema_select {
 
 div#schema_select div {
 	cursor: pointer;
+	padding: 10px;
 }
-div#schema_select div:hover {
+div#schema_select >div:hover {
 	color: red;
+}
+div#schema_select >div:hover {
+	border: 2px solid red;
+}
+div#schema_select img {
+	max-height: 100px;
+	max-width: 350px;
 }
 div#schema_select .templ {
 	text-align: center;

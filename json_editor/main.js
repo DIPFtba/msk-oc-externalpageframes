@@ -5,6 +5,14 @@ import C2S from "canvas2svg";
 
 //////////////////////////////////////////////////////////////////////////////
 
+import { barSliderFromSchema } from './class_extensions/barSlider';
+import barSliderJSONSchema from './schemes/barSlider.schema.json';
+import barSliderSVG from './svgs/barSlider.svg';
+
+import { barSliderFullFromSchema } from './class_extensions/barSliderFull';
+import barSliderFullJSONSchema from './schemes/barSliderFull.schema.json';
+import barSliderFullSVG from './svgs/barSliderFull.svg';
+
 import { filledBarFromSchema } from './class_extensions/filledBar';
 import filledBarJSONSchema from './schemes/filledBar.schema.json';
 import filledBarSVG from './svgs/filledBar.svg';
@@ -130,6 +138,14 @@ function loadSchema( schema ) {
 			if ( schemaData && schemaData.___name ) {
 				switch (schemaData.___name) {
 
+					case 'barSlider':
+						initContainer(true);
+						creator = (cfgData) => new barSliderFromSchema( base, cfgData );
+						break;
+					case 'barSliderFull':
+						initContainer(true);
+						creator = (cfgData) => new barSliderFullFromSchema( base, cfgData );
+						break;
 					case 'filledBar':
 						initContainer(true);
 						creator = (cfgData) => new filledBarFromSchema( base, cfgData );
@@ -198,13 +214,15 @@ function loadSchema( schema ) {
 /// #if __DEVELOP
 
 // for Development: always load one JSON schema
-loadSchema( stampImagesJSONSchema );
+loadSchema( barSliderFullJSONSchema );
 window.updateEWK = updateEWK;
 
 /// #else
 
 // load schema Links
 const templs = {
+	barSlider: [ barSliderJSONSchema, barSliderSVG ],
+	barSliderFull: [ barSliderFullJSONSchema, barSliderFullSVG ],
 	filledBar: [ filledBarJSONSchema, filledBarSVG ],
 	freePaint: [ freePaintJSONSchema, freePaintSVG ],
 	numberLine: [ numberLineJSONSchema, numberLineSVG ],
@@ -250,7 +268,7 @@ function updateEWK () {
 // console.log(jsonData);
 			const cfgData = clearCfgJson( jsonData );
 /// #if __DEVELOP
-			console.log( '======= cfgData:', cfgData );
+console.log( '======= cfgData:', cfgData );
 /// #endif
 			if ( cfgData.dataSettings ) {
 				base.dataSettings = cfgData.dataSettings;
@@ -339,7 +357,9 @@ function saveSVG () {
 	updateEWK();
 }
 
-// window.saveSVG = saveSVG;
+/// #if __DEVELOP
+	window.saveSVG = saveSVG;
+/// #endif
 
 function textOut( filename, text, type ) {
 	// https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-not-through-server

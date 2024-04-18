@@ -815,6 +815,17 @@
 					"type": "string",
 					"default": "Aufg1"
 				},
+				"xMult": {
+					"title": "X-Multiplikator",
+					"type": "integer",
+					"minimum": 0,
+					"default": 1,
+					"options": {
+						"grid_columns": 8,
+						"grid_break": true,
+						"infoText": "Multiplikator für X-Werte (um gebrochene Zahlen als Integer zu speichern)"
+					}
+				},
 				"createConnSomeVars": {
 					"title": "Erzeuge S_[prefix]_Conn_Some Status-Variable",
 					"type": "boolean",

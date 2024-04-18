@@ -23,7 +23,11 @@ function loadJSON () {
 import { baseInits } from '../../libs/baseInits';
 import { clearCfgJson, addStatusVarDef } from '../common';
 
-/// #if __CLASS == 'filledBar'
+/// #if __CLASS == 'barSlider'
+import { barSliderFromSchema } from './barSlider';
+/// #elif __CLASS == 'barSliderFull'
+import { barSliderFullFromSchema } from './barSliderFull';
+/// #elif __CLASS == 'filledBar'
 import { filledBarFromSchema } from './filledBar';
 /// #elif __CLASS == 'freePaint'
 import { freePaintFromSchema } from './freePaint';
@@ -57,7 +61,7 @@ function initJSON ( json ) {
 	}
 
 	const cfg = clearCfgJson( json );
-/// #if __CLASS == 'inputInserts'
+/// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts'
 	const base = new baseInits();
 /// #else
 	const base = new baseInits( { container: 'container' } );
@@ -66,7 +70,11 @@ function initJSON ( json ) {
 		base.dataSettings = cfg.dataSettings;
 	}
 
-/// #if __CLASS == 'filledBar'
+/// #if __CLASS == 'barSlider'
+	const io = new barSliderFromSchema( base, cfg );
+/// #elif __CLASS == 'barSliderFull'
+	const io = new barSliderFullFromSchema( base, cfg );
+/// #elif __CLASS == 'filledBar'
 	const io = new filledBarFromSchema( base, cfg );
 /// #elif __CLASS == 'freePaint'
 	const io = new freePaintFromSchema( base, cfg );

@@ -1,0 +1,330 @@
+{
+	"title": "BalkenSlider",
+	"type": "object",
+	"format": "categories",
+	"options": {
+		"disable_collapse": true,
+		"disable_edit_json": true,
+		"disable_properties": true
+	},
+	"properties": {
+
+		"___bar": {
+			"title": "Balken",
+			"type": "object",
+			"format": "grid-strict",
+			"options": {
+				"titleHidden": true,
+				"disable_collapse": true,
+				"disable_edit_json": true,
+				"disable_properties": true
+			},
+			"properties": {
+
+				"readonly": {
+					"title": "Komplett unveränderbar",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 6,
+						"grid_break": true
+					}
+				},
+				"pos": {
+					"title": "Eingestellter Wert (0 - 1.0)",
+					"type": "number",
+					"minimum": 0,
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true,
+						"dependencies": {
+							"readonly": true
+						}
+					},
+					"default": 0
+				},
+
+				"___balken": {
+					"title": "Balken",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 8
+					},
+					"properties": {
+						"x": {
+							"title": "X",
+							"type": "integer",
+							"minimum": 0,
+							"options": {
+								"grid_columns": 4
+							},
+							"default": 3
+						},
+						"y": {
+							"title": "Y",
+							"type": "integer",
+							"minimum": 0,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							},
+							"default": 12
+						},
+						"width": {
+							"title": "Breite Balken",
+							"type": "integer",
+							"options": {
+								"grid_columns": 4,
+								"infoText": "Wenn negativ: relativ zu Screen-Breite"
+							},
+							"default": -4
+						},
+						"height": {
+							"title": "Höhe Balken",
+							"type": "integer",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							},
+							"default": 20
+						},
+						"strokeWidth": {
+							"title": "Rahmendicke",
+							"type": "integer",
+							"default": 2,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						},
+						"fillColor": {
+							"title": "Farbe Hintergrund",
+							"type": "string",
+							"format": "color",
+							"default": "#f0f0f0",
+							"options": {
+								"grid_columns": 4
+							}
+						},
+						"markedFillColor": {
+							"title": "Farbe markiert",
+							"type": "string",
+							"format": "color",
+							"default": "#0000ff",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						}
+					}
+				},
+
+				"___slider": {
+					"title": "Slider",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 8
+					},
+					"properties": {
+						"sliderHeight": {
+							"title": "Höhe Slider",
+							"type": "integer",
+							"minimum": 5,
+							"options": {
+								"grid_columns": 4
+							},
+							"default": 40
+						},
+						"sliderWidth": {
+							"title": "Dicke Slider",
+							"type": "integer",
+							"minimum": 1,
+							"options": {
+								"grid_columns": 4
+							},
+							"default": 3
+						},
+						"sliderColor": {
+							"title": "Farbe",
+							"type": "string",
+							"format": "color",
+							"default": "#ffff00",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						}
+					}
+				},
+
+				"___labels": {
+					"title": "Beschriftung",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 6,
+						"grid_break": true
+					}
+				},
+
+				"___labelsDef": {
+					"title": "Beschriftung",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"grid_columns": 8,
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"dependencies": {
+							"___labels": true
+						}
+					},
+					"properties": {
+						"labelDistance": {
+							"title": "Abstand Balken",
+							"type": "integer",
+							"minimum": 2,
+							"options": {
+								"grid_columns": 4
+							},
+							"default": 5
+						},
+						"labelWidth": {
+							"title": "Breite",
+							"type": "integer",
+							"minimum": 0,
+							"options": {
+								"grid_columns": 4
+							},
+							"default": 50
+						},
+						"labelFontSize": {
+							"title": "Schriftgröße",
+							"type": "integer",
+							"minimum": 0,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							},
+							"default": 15
+						},
+						"labels": {
+							"title": "",
+							"type": "array",
+							"format": "table",
+							"options": {
+								"grid_columns": 12,
+								"titleHidden": true,
+								"disable_collapse": true,
+								"disable_edit_json": true,
+								"disable_properties": true
+							},
+							"items": {
+								"title": "Beschriftung",
+								"format": "object",
+								"properties": {
+									"val": {
+										"title": "Wert",
+										"type": "string",
+										"default": "0"
+									},
+									"text": {
+										"title": "Text",
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+
+		"dataSettings": {
+			"title": "Daten",
+			"type": "object",
+			"options": {
+				"disable_collapse": true,
+				"disable_edit_json": true,
+				"disable_properties": true
+			},
+			"properties": {
+
+				"__jsonSchemaData": {
+					"type": "object",
+					"properties": {
+						"___name": {
+							"type":"string",
+							"default":"barSlider"
+						},
+						"___version": {
+							"type":"number",
+							"default":0.1
+						}
+					},
+					"options": {
+						"hidden": true
+					}
+				},
+
+				"variablePrefix": {
+					"title": "Variablen-Prefix",
+					"description": "Erzeugt werden 'V_&lt;pref&gt;_Value' und 'S_&lt;pref&gt;_Status'",
+					"type": "string",
+					"default": "Aufg1"
+				},
+
+				"xMult": {
+					"title": "X-Multiplikator",
+					"type": "integer",
+					"minimum": 0,
+					"default": 100,
+					"options": {
+						"grid_columns": 8,
+						"grid_break": true,
+						"infoText": "Multiplikator für X-Werte (um gebrochene Zahlen als Integer zu speichern)"
+					}
+				},
+
+				"scoringVals": {
+					"title": "Scoring Werte",
+					"type": "array",
+					"format": "table",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (||=oder, &&=und)"
+					},
+					"items": {
+						"title": "Scoring Wert",
+						"type": "object",
+						"properties": {
+							"val": {
+								"title": "Scoring-Wert",
+								"type": "integer"
+							},
+							"condition": {
+								"title": "Bedingung (VarNamen in ${} setzen)",
+								"type": "string",
+								"format": "textarea"
+							}
+						}
+					}
+				}
+
+			}
+		}
+	}
+}

@@ -95,7 +95,7 @@ export class barSlider {
 				x: this.val2x( l.val )-this.labelWidth/2,
 				y: this.y+this.height+this.labelDistance,
 				value: l.text,
-				fontSize: this.fontSize,
+				fontSize: this.labelFontSize,
 				width: this.labelWidth,
 				frameWidth: 0,
 				readonly: 1,
@@ -227,6 +227,32 @@ export const barSlider_freePaint_freeLabels = addFreeLabelsTo( addFreePaintTo( b
 export const barSlider_freePaint_freeLabels_insertButtons = addInsertButtonsTo(
 	// class to extend
 	addFreeLabelsTo( addFreePaintTo( barSlider, 0 ) ),
+
+	// extra defaults
+	{},
+
+	// callback function
+	function () {
+		document.activeElement.dispatchEvent( new Event( 'input', { bubbles: true } ) );
+	}
+);
+
+export const barSlider_freePaintMarker_freeLabels_insertButtons = addInsertButtonsTo(
+	// class to extend
+	addFreeLabelsTo( addFreePaintTo( barSlider, 0, 1 ) ),
+
+	// extra defaults
+	{},
+
+	// callback function
+	function () {
+		document.activeElement.dispatchEvent( new Event( 'input', { bubbles: true } ) );
+	}
+);
+
+export const barSlider_freeLabels_insertButtons = addInsertButtonsTo(
+	// class to extend
+	addFreeLabelsTo( barSlider ),
 
 	// extra defaults
 	{},

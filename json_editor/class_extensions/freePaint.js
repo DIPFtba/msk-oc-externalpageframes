@@ -34,7 +34,7 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 			width: this.width - 2*this.frameWidth,
 			height: this.height - 2*this.frameWidth,
 		});
-		console.log(url);
+// console.log(url);
 	}
 
 	startListeningToGetImageRequests () {

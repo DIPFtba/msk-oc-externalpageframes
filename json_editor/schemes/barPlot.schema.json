@@ -148,7 +148,20 @@
 							"format": "checkbox",
 							"default": true,
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 4,
+								"dependencies": {
+									"root.___basic.readonly": false
+								}
+							}
+						},
+						"___alt_readonly": {
+							"type": "boolean",
+							"default": true,
+							"options": {
+								"hidden": true,
+								"dependencies": {
+									"root.___basic.readonly": true
+								}
 							}
 						},
 						"cornerRadius": {
@@ -599,7 +612,20 @@
 									"default": true,
 									"options": {
 										"grid_columns": 4,
-										"grid_break": true
+										"grid_break": true,
+										"dependencies": {
+											"root.___basic.readonly": false
+										}
+									}
+								},
+								"___alt_readonly": {
+									"type": "boolean",
+									"default": true,
+									"options": {
+										"hidden": true,
+										"dependencies": {
+											"root.___basic.readonly": true
+										}
 									}
 								},
 								"cornerRadius": {

@@ -22,6 +22,10 @@ export class rectArrayMarkableFromSchema extends rectArrayMarkable {
 	}
 
 	scoreDef () {
+		if ( this.readonly ) {
+			return {};
+		}
+
 		const res = super.scoreDef();
 
 		if ( this.computeScoringVals ) {

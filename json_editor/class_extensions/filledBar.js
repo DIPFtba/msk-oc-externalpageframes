@@ -26,6 +26,9 @@ export class filledBarFromSchema extends filledBar {
 
 	scoreDef () {
 		const res = {};
+		if ( this.readonly ) {
+			return res;
+		}
 
 		if ( this.dataSettings ) {
 			const pref = this.dataSettings.variablePrefix;

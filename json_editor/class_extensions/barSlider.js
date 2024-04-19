@@ -17,6 +17,9 @@ export class barSliderFromSchema extends barSlider {
 
 	scoreDef () {
 		const res = {};
+		if ( this.readonly ) {
+			return res;
+		}
 
 		if ( this.dataSettings ) {
 			const pref = this.dataSettings.variablePrefix;

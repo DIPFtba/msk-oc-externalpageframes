@@ -107,6 +107,9 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 
 	scoreDef () {
 		const res = {};
+		if ( this.readonly ) {
+			return res;
+		}
 
 		if ( this.dataSettings ) {
 			const pref = this.dataSettings.variablePrefix;
@@ -118,7 +121,7 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 				let i=1;
 				this.freeLabels.forEach( fl => {
 					if ( !fl.readonly ) {
-						res[`V_${pref}_Input${i++}`] = fl.textObj ? fl.textObj.value : '';
+						res[`V_${pref}_Input_${i++}`] = fl.textObj ? fl.textObj.value : '';
 					}
 				})
 			}

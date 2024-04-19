@@ -278,7 +278,8 @@
 					"type": "object",
 					"format": "grid-strict",
 					"options": {
-						"disable_collapse": true,
+						"disable_collapse": false,
+						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
 						"dependencies": {
@@ -328,7 +329,8 @@
 					"title": "Editierbare Labels",
 					"format": "grid-strict",
 					"options": {
-						"disable_collapse": true,
+						"disable_collapse": false,
+						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
 						"dependencies": {
@@ -770,7 +772,10 @@
 					"default": false,
 					"options": {
 						"grid_columns": 6,
-						"grid_break": true
+						"grid_break": true,
+						"dependencies": {
+							"root.___bar.readonly": false
+						}
 					}
 				},
 				"hasMarker": {
@@ -906,7 +911,6 @@
 						"x": {
 							"title": "X",
 							"type": "integer",
-							"minimum": 0,
 							"default": 2,
 							"options": {
 								"grid_columns": 4,
@@ -916,7 +920,6 @@
 						"y": {
 							"title": "Y",
 							"type": "integer",
-							"minimum": 0,
 							"default": 2,
 							"options": {
 								"grid_columns": 4,

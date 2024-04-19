@@ -5,6 +5,10 @@ import C2S from "canvas2svg";
 
 //////////////////////////////////////////////////////////////////////////////
 
+import { barPlotFromSchema } from './class_extensions/barPlot';
+import barPlotJSONSchema from './schemes/barPlot.schema.json';
+import barPlotSVG from './svgs/barPlot.svg';
+
 import { barSliderFromSchema } from './class_extensions/barSlider';
 import barSliderJSONSchema from './schemes/barSlider.schema.json';
 import barSliderSVG from './svgs/barSlider.svg';
@@ -138,6 +142,10 @@ function loadSchema( schema ) {
 			if ( schemaData && schemaData.___name ) {
 				switch (schemaData.___name) {
 
+					case 'barPlot':
+						initContainer(true);
+						creator = (cfgData) => new barPlotFromSchema( base, cfgData );
+						break;
 					case 'barSlider':
 						initContainer(true);
 						creator = (cfgData) => new barSliderFromSchema( base, cfgData );
@@ -214,13 +222,14 @@ function loadSchema( schema ) {
 /// #if __DEVELOP
 
 // for Development: always load one JSON schema
-loadSchema( barSliderFullJSONSchema );
+loadSchema( barPlotJSONSchema );
 window.updateEWK = updateEWK;
 
 /// #else
 
 // load schema Links
 const templs = {
+	barPlot: [ barPlotJSONSchema, barPlotSVG ],
 	barSlider: [ barSliderJSONSchema, barSliderSVG ],
 	barSliderFull: [ barSliderFullJSONSchema, barSliderFullSVG ],
 	filledBar: [ filledBarJSONSchema, filledBarSVG ],
@@ -275,6 +284,7 @@ console.log( '======= cfgData:', cfgData );
 			}
 
 			const extres = creator( cfgData );
+			// const extres = { getDefaultChangeState: () => ({}) };
 
 			// Patch scoreDef for output
 			if ( extres.scoreDef ) {

@@ -23,7 +23,9 @@ function loadJSON () {
 import { baseInits } from '../../libs/baseInits';
 import { clearCfgJson, addStatusVarDef } from '../common';
 
-/// #if __CLASS == 'barSlider'
+/// #if __CLASS == 'barPlot'
+import { barPlotFromSchema } from './barPlot';
+/// #elif __CLASS == 'barSlider'
 import { barSliderFromSchema } from './barSlider';
 /// #elif __CLASS == 'barSliderFull'
 import { barSliderFullFromSchema } from './barSliderFull';
@@ -70,7 +72,9 @@ function initJSON ( json ) {
 		base.dataSettings = cfg.dataSettings;
 	}
 
-/// #if __CLASS == 'barSlider'
+/// #if __CLASS == 'barPlot'
+	const io = new barPlotFromSchema( base, cfg );
+/// #elif __CLASS == 'barSlider'
 	const io = new barSliderFromSchema( base, cfg );
 /// #elif __CLASS == 'barSliderFull'
 	const io = new barSliderFullFromSchema( base, cfg );

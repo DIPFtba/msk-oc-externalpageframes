@@ -125,6 +125,8 @@ export class barPlot {
 				strokeWidth: 1,
 				fill: 'blue',
 			},
+
+			readonly: 0,
 		}
 		mergeDeep( Object.assign( this, defaultOpts ), opts );
 		this.base = base;
@@ -196,15 +198,16 @@ export class barPlot {
 		// title
 		if ( this.titleObj ) {
 			const titleObj = this.titleObj;
+			if ( !titleObj.width ) {
+				titleObj.width = this.xAxis.width;
+			}
 			if ( !titleObj.x ) {
-				titleObj.x = x;
+				titleObj.x = x + this.xAxis.width/2 - titleObj.width/2;
 			}
 			if ( !titleObj.y ) {
 				titleObj.y = y - ( titleObj.distance || this.defaultTitleOpts.distance ) - this.yAxis.height - titleObj.height;
 			}
-			if ( !titleObj.width ) {
-				titleObj.width = this.xAxis.width;
-			}
+			titleObj.readonly ||= this.readonly;
 			this.titleObj = new textFrame( this.base, backLayer, Object.assign( {}, this.defaultTitleOpts, titleObj ) ) ;
 		}
 
@@ -220,15 +223,19 @@ export class barPlot {
 
 		this.bars.forEach( ( bar, nr ) => {
 			const x = this.val2x( nr+0.5 );
+			const valOrDef = ( key ) => ( key in bar.labelObj ) ? bar.labelObj[key] : this.defaultBarLabelOpts[key];
 
 			// label
+			if ( bar.labelObj ) {
+				bar.labelObj.readonly ||= this.readonly;
+			}
 			const labelObj = new textFrame( this.base, backLayer, Object.assign(
 				{},
 				this.defaultBarLabelOpts,
 				bar.labelObj || {},
 				{
-					x: x - this.defaultBarLabelOpts.width/2,
-					y: this.origin.y + this.defaultBarLabelOpts.distance,
+					x: x - valOrDef('width')/2,
+					y: this.origin.y + valOrDef('distance'),
 					onChange: () => {
 						this.base.postLog( 'barLabelChanged', {
 							bar: nr+1,
@@ -244,6 +251,7 @@ export class barPlot {
 			bar.labelObj = labelObj;
 
 			// bar
+			bar.readonly ||= this.readonly;
 			if ( !bar.readonly ) {
 				backLayer.add( new Konva.Rect( Object.assign( {},
 					this.defaultBarBackgroundOpts, {
@@ -307,27 +315,32 @@ export class barPlot {
 		// y axis
 		addLine( this.defaultAxisLineOpts, [ x, y, x, y-this.yAxis.height ] );
 		if ( this.yAxis.lineInc ) {
-			for ( let yv=0; yv <= ( this.yAxis.lineMax || this.yAxis.maxVal ); yv += this.yAxis.lineInc ) {
+			for ( let yv=this.yAxis.lineInc; yv <= ( this.yAxis.lineMax || this.yAxis.maxVal ); yv += this.yAxis.lineInc ) {
 				const y = this.val2y(yv);
 				addLine( this.defautlGridLinesOpts, [ x, y, x+this.xAxis.width, y ] );
 			}
 		}
 		if ( this.yAxis.tickInc ) {
-			for ( let yv=0; yv <= ( this.yAxis.ticMax || this.yAxis.maxVal ); yv += this.yAxis.tickInc ) {
+			for ( let yv=0; yv <= ( this.yAxis.tickMax || this.yAxis.maxVal ); yv += this.yAxis.tickInc ) {
 				const y = this.val2y(yv);
 				addLine( this.defaultAxisLineOpts, [ x-this.axisTickWidth, y, x+this.axisTickWidth, y ] );
 			}
 		}
 		if ( this.yAxis.labelInc ) {
 			let labInd = 0;
-			for ( let yv = ( this.yAxis.labelsMin || 0); yv <= ( this.yAxis.labelMax || this.yAxis.maxVal ); yv += this.yAxis.labelInc ) {
-				 const labelObj = new textFrame( this.base, backLayer, Object.assign(
+			for ( let yv = ( this.yAxis.labelMin || 0); yv <= ( this.yAxis.labelMax || this.yAxis.maxVal ); yv += this.yAxis.labelInc ) {
+				const yAxisLabelObj = this.yAxis.labelObjs[ labInd ];
+				if ( yAxisLabelObj ) {
+					yAxisLabelObj.readonly ||= this.readonly;
+				}
+				const valOrDef = ( key ) => yAxisLabelObj && ( key in yAxisLabelObj ) ? yAxisLabelObj[key] : this.defaultYLabelOpts[key];
+				const labelObj = new textFrame( this.base, backLayer, Object.assign(
 					{},
 					this.defaultYLabelOpts,
-					this.yAxis.labelObjs[ labInd ] || {},
+					yAxisLabelObj || {},
 					{
-						x: x - this.defaultYLabelOpts.width - this.axisTickWidth - this.defaultYLabelOpts.distance,
-						y: this.val2y( yv ) - this.defaultYLabelOpts.height/2,
+						x: x - this.axisTickWidth - valOrDef('width') - valOrDef('distance'),
+						y: this.val2y( yv ) - valOrDef('height')/2,
 						onChange: () => {
 							this.base.postLog( 'yLabelChanged', {
 								yVal: yv,
@@ -336,23 +349,25 @@ export class barPlot {
 							this.base.sendChangeState( this );
 						},
 				}));
-				if ( this.yAxis.labelObjs[ labInd ] && this.yAxis.labelObjs[ labInd ].deleteAll ) {
-					this.yAxis.labelObjs[ labInd ].deleteAll();
+				if ( yAxisLabelObj && yAxisLabelObj.deleteAll ) {
+					yAxisLabelObj.deleteAll();
 				}
 				this.yAxis.labelObjs[ labInd++ ] = labelObj;
 			}
 		}
 		// axis label
-		if ( this.yAxis.axisLabelObj ) {
+		const yAxisLab = this.yAxis.axisLabelObj;
+		if ( yAxisLab ) {
+			yAxisLab.readonly ||= this.readonly;
+			const valOrDef = ( key ) => yAxisLab && ( key in yAxisLab ) ? yAxisLab[key] : this.defaultYAxisLabelOpts[key];
 			const labelObj = new textFrame( this.base, backLayer, Object.assign(
 				{},
 				this.defaultYAxisLabelOpts,
-				this.yAxis.axisLabelObj || {},
+				yAxisLab || {},
 				{
-					x: x - this.defaultYLabelOpts.width - this.axisTickWidth - this.defaultYLabelOpts.distance
-							- ( this.yAxis.axisLabelObj && this.yAxis.axisLabelObj.distance ? this.yAxis.axisLabelObj.distance : this.defaultYAxisLabelOpts.distance )
-							- this.defaultYAxisLabelOpts.height,
-					y: this.origin.y - this.yAxis.height/2 + this.defaultYAxisLabelOpts.width/2,
+					x: x - this.defaultYLabelOpts.width - this.defaultYLabelOpts.distance - this.axisTickWidth
+							- valOrDef('distance') - valOrDef('height'),
+					y: this.origin.y - this.yAxis.height/2 + valOrDef('width')/2,
 					onChange: () => {
 						this.base.postLog( 'yAxisLabelChanged', {
 							label: labelObj.value,
@@ -360,8 +375,8 @@ export class barPlot {
 						this.base.sendChangeState( this );
 					},
 				}));
-			if ( this.yAxis.axisLabelObj && this.yAxis.axisLabelObj.deleteAll ) {
-				this.yAxis.axisLabelObj.deleteAll();
+			if ( yAxisLab && yAxisLab.deleteAll ) {
+				yAxisLab.deleteAll();
 			}
 			this.yAxis.axisLabelObj = labelObj;
 		}

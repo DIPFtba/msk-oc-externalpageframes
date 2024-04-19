@@ -45,7 +45,18 @@ export function clearCfgJson( json ) {
 		} else {
 
 			if ( v !== undefined ) {
-				res[ k ] = clearCfgJson(v);
+				const subobj = k.match( /^(.*?)___(.*)/ );
+				if ( subobj ) {
+					// { abc___def: 123 } => { abc: { def: 123 } }
+					const newObj = clearCfgJson( { [ subobj[2] ]: v } );
+					if ( !( subobj[1] in res ) ) {
+						res[ subobj[1] ] = {};
+					}
+					Object.assign( res[ subobj[1] ], newObj );
+				} else {
+					// copy value
+					res[ k ] = clearCfgJson(v);
+				}
 			}
 
 		}

@@ -77,6 +77,16 @@
 						"grid_break": true
 					}
 				},
+				"fill": {
+					"title": "Füllung",
+					"type": "string",
+					"format": "color",
+					"default": "#ffffff",
+					"options": {
+						"grid_columns": 2,
+						"grid_break": true
+					}
+				},
 				"hasMarker": {
 					"title": "Marker",
 					"type": "boolean",

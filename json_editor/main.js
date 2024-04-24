@@ -25,6 +25,10 @@ import { freePaintFromSchema } from './class_extensions/freePaint';
 import freePaintJSONSchema from './schemes/freePaint.schema.json';
 import freePaintSVG from './svgs/freePaint.svg';
 
+import { inputGridFromSchema } from './class_extensions/inputGrid';
+import inputGridJSONSchema from './schemes/inputGrid.schema.json';
+import inputGridSVG from './svgs/inputGrid.svg';
+
 import { numbersByPicturesFromSchema } from './class_extensions/numbersByPictures';
 import numbersByPicturesJSONSchema from './schemes/numbersByPictures.schema.json';
 import numbersByPicturesSVG from './svgs/numbersByPictures.svg';
@@ -162,6 +166,10 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new freePaintFromSchema( base, cfgData );
 						break;
+					case 'inputGrid':
+						initContainer(true);
+						creator = (cfgData) => new inputGridFromSchema( base, cfgData );
+						break;
 					case 'numberLine':
 						initContainer(true);
 						creator = (cfgData) => new numberLineFromSchema( base, cfgData );
@@ -222,7 +230,7 @@ function loadSchema( schema ) {
 /// #if __DEVELOP
 
 // for Development: always load one JSON schema
-loadSchema( barPlotJSONSchema );
+loadSchema( inputGridJSONSchema );
 window.updateEWK = updateEWK;
 
 /// #else
@@ -234,6 +242,7 @@ const templs = {
 	barSliderFull: [ barSliderFullJSONSchema, barSliderFullSVG ],
 	filledBar: [ filledBarJSONSchema, filledBarSVG ],
 	freePaint: [ freePaintJSONSchema, freePaintSVG ],
+	inputGrid: [ inputGridJSONSchema, inputGridSVG ],
 	numberLine: [ numberLineJSONSchema, numberLineSVG ],
 	numberLineWithAnnotations: [ numberLineWithAnnotationsJSONSchema, numberLineWithAnnotationsSVG ],
 	numberLineWithArcs: [ numberLineWithArcsJSONSchema, numberLineWithArcsSVG ],

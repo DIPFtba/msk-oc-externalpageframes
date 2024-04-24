@@ -1041,9 +1041,15 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 	constructor ( base, opts = {} ) {
 
 		// default mode 'null'
-		opts.mode = null;
+		if ( !('mode' in opts) ) {
+			opts.mode = null;
+		}
 
 		super( base, opts );
+
+		if ( opts.switchModeBarDef === null ) {
+			return;
+		}
 
 		// component id used in triggerEvents
 		const udipa = this.base.fsm.userDefIdPath ? this.base.fsm.userDefIdPath.split('=') : [];

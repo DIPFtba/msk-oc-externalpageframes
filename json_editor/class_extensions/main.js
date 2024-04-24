@@ -33,6 +33,8 @@ import { barSliderFullFromSchema } from './barSliderFull';
 import { filledBarFromSchema } from './filledBar';
 /// #elif __CLASS == 'freePaint'
 import { freePaintFromSchema } from './freePaint';
+/// #elif __CLASS == 'inputGrid'
+import { inputGridFromSchema } from './inputGrid';
 /// #elif __CLASS == 'numbersByPictures'
 import { numbersByPicturesFromSchema } from './numbersByPictures';
 /// #elif __CLASS == 'numberLine'
@@ -82,6 +84,8 @@ function initJSON ( json ) {
 	const io = new filledBarFromSchema( base, cfg );
 /// #elif __CLASS == 'freePaint'
 	const io = new freePaintFromSchema( base, cfg );
+/// #elif __CLASS == 'inputGrid'
+	const io = new inputGridFromSchema( base, cfg );
 /// #elif __CLASS == 'numbersByPictures'
 	const io = new numbersByPicturesFromSchema( base, cfg );
 /// #elif __CLASS == 'numberLine'

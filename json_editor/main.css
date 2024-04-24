@@ -48,12 +48,11 @@ div#schema_select {
 div#schema_select div {
 	cursor: pointer;
 	padding: 10px;
-}
-div#schema_select >div:hover {
-	color: red;
+	border: 2px solid rgba(0,0,0,0);
 }
 div#schema_select >div:hover {
 	border: 2px solid red;
+	color: red;
 }
 div#schema_select img {
 	max-height: 100px;

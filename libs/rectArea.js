@@ -34,12 +34,14 @@ export class rectArea {
 			this.layer = new Konva.Layer();
 			stage.add( this.layer );
 
-			this.kRect = new Konva.Rect({
+			const rectOpts = {
 				x: this.x, y: this.y,
 				width: this.width, height: this.height,
 				stroke: this.frameColor,
 				strokeWidth: this.frameWidth,
-			});
+				fill: this.fill,
+			}
+			this.kRect = new Konva.Rect( rectOpts );
 			this.layer.add( this.kRect );
 
 			this.layer.draw();

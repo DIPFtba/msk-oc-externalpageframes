@@ -230,7 +230,7 @@ function loadSchema( schema ) {
 /// #if __DEVELOP
 
 // for Development: always load one JSON schema
-loadSchema( inputGridJSONSchema );
+loadSchema( freePaintJSONSchema );
 window.updateEWK = updateEWK;
 
 /// #else

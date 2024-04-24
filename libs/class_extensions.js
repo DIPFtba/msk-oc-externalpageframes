@@ -290,8 +290,8 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 			if ( !this.freePaintMarkerLayer ) {
 				this.freePaintMarkerLayer = new Konva.Layer();
 				this.stage.add( this.freePaintMarkerLayer );
-				this.freePaintMarkerLayer.moveToBottom();
 			}
+			this.freePaintMarkerLayer.moveToTop();
 
 			const bclip = ( this.freePaintMarkerClipFunc ? { clipFunc: this.freePaintMarkerClipFunc.bind(this) } : {} );
 			this.kFreePaintMarkerGroup = new Konva.Group( bclip );
@@ -304,6 +304,7 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 			this.freePaintLayer = new Konva.Layer();
 			this.stage.add( this.freePaintLayer );
 		}
+		this.freePaintLayer.moveToTop();
 
 		const fclip = ( this.freePaintBrushClipFunc ? { clipFunc:this.freePaintBrushClipFunc.bind(this) } : {} );
 		this.kFreePaintBrushGroup = new Konva.Group( fclip );

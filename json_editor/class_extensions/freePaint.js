@@ -22,18 +22,19 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 
 		this.startListeningToGetImageRequests();
 /// #if __DEVELOP
-		window.getPngImage = this.getPngImage.bind(this);
+		window.getRectPngImage = this.getRectPngImage.bind(this);
 /// #endif
 	}
 
-	getPngImage () {
+	getRectPngImage () {
 		const url = this.stage.toDataURL({
 			mimeType: "image/png",
-			x: this.x + 0.5*this.frameWidth,
-			y: this.y + 0.5*this.frameWidth,
-			width: this.width - 2*this.frameWidth,
-			height: this.height - 2*this.frameWidth,
+			x: Math.max( 0, this.x - Math.ceil( this.frameWidth/2 ) ),
+			y: Math.max( 0, this.y - Math.ceil( this.frameWidth/2 ) ),
+			width: this.width + 2*Math.ceil( this.frameWidth/2 ),
+			height: this.height + 2*Math.ceil( this.frameWidth/2 ),
 		});
+		return url;
 // console.log(url);
 	}
 
@@ -47,7 +48,7 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 				try {
 					const { callId } = JSON.parse(event.data);
 					if ( callId !== undefined && callId.includes("getImage") ) {
-						const image = this.getPngImage();
+						const image = this.getRectPngImage();
 						const pass_data = {
 							image,
 							callId

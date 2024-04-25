@@ -1,5 +1,5 @@
 import { numberLineWithAnnotations } from '../../libs/numberLineWithAnnotations'
-import { dp2inputRegExp } from '../common';
+import { dp2inputRegExp, addScoringValsParser } from '../common';
 export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotations {
 
 	constructor ( base, opts = {} ) {
@@ -8,6 +8,9 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 		opts.annotations.forEach( ann => dp2inputRegExp(ann) );
 
 		super( base, opts );
+
+		addScoringValsParser(this);
+		this.parseScoringVals(opts);
 	}
 
 	scoreDef () {
@@ -58,6 +61,9 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 			scores[ `S_${pref}_All` ] = +( connAllVars && inpAllVars );
 		}
 
+		if ( this.computeScoringVals ) {
+			this.computeScoringVals( scores );
+		}
 		return scores;
 	}
 

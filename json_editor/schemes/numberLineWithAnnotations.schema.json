@@ -875,7 +875,35 @@
 					"options": {
 						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Verbindungen erstellt und alle Labels benannt wurden"
 					}
+				},
+
+				"scoringVals": {
+					"title": "Scoring Werte",
+					"type": "array",
+					"format": "table",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (||=oder, &&=und)"
+					},
+					"items": {
+						"title": "Scoring Wert",
+						"type": "object",
+						"properties": {
+							"val": {
+								"title": "Scoring-Wert",
+								"type": "integer"
+							},
+							"condition": {
+								"title": "Bedingung (VarNamen in ${} setzen)",
+								"type": "string",
+								"format": "textarea"
+							}
+						}
+					}
 				}
+
 			}
 		}
 	}

@@ -43,6 +43,8 @@ import { numberLineFromSchema } from './numberLine';
 import { numberLineWithAnnotationsFromSchema } from './numberLineWithAnnotations';
 /// #elif __CLASS == 'numberLineWithArcs'
 import { numberLineWithArcsFromSchema } from './numberLineWithArcs';
+/// #elif __CLASS == 'pointArea'
+import { pointAreaFromSchema } from './pointArea';
 /// #elif __CLASS == 'rectArrayMarkable'
 import { rectArrayMarkableFromSchema } from './rectArrayMarkable';
 /// #elif __CLASS == 'stampImages'
@@ -94,6 +96,8 @@ function initJSON ( json ) {
 	const io = new numberLineWithAnnotationsFromSchema( base, cfg );
 /// #elif __CLASS == 'numberLineWithArcs'
 	const io = new numberLineWithArcsFromSchema( base, cfg );
+/// #elif __CLASS == 'pointArea'
+	const io = new pointAreaFromSchema( base, cfg );
 /// #elif __CLASS == 'rectArrayMarkable'
 	const io = new rectArrayMarkableFromSchema( base, cfg );
 /// #elif __CLASS == 'stampImages'

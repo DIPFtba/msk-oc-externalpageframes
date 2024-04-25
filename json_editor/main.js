@@ -45,6 +45,10 @@ import { numberLineWithArcsFromSchema } from './class_extensions/numberLineWithA
 import numberLineWithArcsJSONSchema from './schemes/numberLineWithArcs.schema.json';
 import numberLineWithArcsSVG from './svgs/numberLineWithArcs.png';
 
+import { pointAreaFromSchema } from './class_extensions/pointArea';
+import pointAreaJSONSchema from './schemes/pointArea.schema.json';
+import pointAreaSVG from './svgs/pointArea.svg';
+
 import { rectArrayMarkableFromSchema } from './class_extensions/rectArrayMarkable';
 import rectArrayMarkableJSONSchema from './schemes/rectArrayMarkable.schema.json';
 import rectArrayMarkableSVG from './svgs/rectArrayMarkable.svg';
@@ -186,6 +190,10 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new numbersByPicturesFromSchema( base, cfgData );
 						break;
+					case 'pointArea':
+						initContainer(true);
+						creator = (cfgData) => new pointAreaFromSchema( base, cfgData );
+						break;
 					case 'rectArrayMarkable':
 						initContainer(true);
 						creator = (cfgData) => new rectArrayMarkableFromSchema( base, cfgData );
@@ -230,7 +238,7 @@ function loadSchema( schema ) {
 /// #if __DEVELOP
 
 // for Development: always load one JSON schema
-loadSchema( freePaintJSONSchema );
+loadSchema( pointAreaJSONSchema );
 window.updateEWK = updateEWK;
 
 /// #else
@@ -247,6 +255,7 @@ const templs = {
 	numberLineWithAnnotations: [ numberLineWithAnnotationsJSONSchema, numberLineWithAnnotationsSVG ],
 	numberLineWithArcs: [ numberLineWithArcsJSONSchema, numberLineWithArcsSVG ],
 	numbersByPictures: [ numbersByPicturesJSONSchema, numbersByPicturesSVG ],
+	pointArea: [ pointAreaJSONSchema, pointAreaSVG ],
 	rectArrayMarkable: [ rectArrayMarkableJSONSchema, rectArrayMarkableSVG ],
 	stampImages: [ stampImagesJSONSchema, stampImagesSVG ],
 	textareaInserts: [ textareaInsertsJSONSchema, textareaInsertsSVG ],

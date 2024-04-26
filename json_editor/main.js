@@ -17,6 +17,10 @@ import { barSliderFullFromSchema } from './class_extensions/barSliderFull';
 import barSliderFullJSONSchema from './schemes/barSliderFull.schema.json';
 import barSliderFullSVG from './svgs/barSliderFull.svg';
 
+import { connectedFramesFromSchema } from './class_extensions/connectedFrames';
+import connectedFramesJSONSchema from './schemes/connectedFrames.schema.json';
+import connectedFramesSVG from './svgs/connectedFrames.svg';
+
 import { filledBarFromSchema } from './class_extensions/filledBar';
 import filledBarJSONSchema from './schemes/filledBar.schema.json';
 import filledBarSVG from './svgs/filledBar.svg';
@@ -162,6 +166,10 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new barSliderFullFromSchema( base, cfgData );
 						break;
+					case 'connectedFrames':
+						initContainer(true);
+						creator = (cfgData) => new connectedFramesFromSchema( base, cfgData );
+						break;
 					case 'filledBar':
 						initContainer(true);
 						creator = (cfgData) => new filledBarFromSchema( base, cfgData );
@@ -238,7 +246,7 @@ function loadSchema( schema ) {
 /// #if __DEVELOP
 
 // for Development: always load one JSON schema
-loadSchema( pointAreaJSONSchema );
+loadSchema( connectedFramesJSONSchema );
 window.updateEWK = updateEWK;
 
 /// #else
@@ -248,6 +256,7 @@ const templs = {
 	barPlot: [ barPlotJSONSchema, barPlotSVG ],
 	barSlider: [ barSliderJSONSchema, barSliderSVG ],
 	barSliderFull: [ barSliderFullJSONSchema, barSliderFullSVG ],
+	connectedFrames: [ connectedFramesJSONSchema, connectedFramesSVG ],
 	filledBar: [ filledBarJSONSchema, filledBarSVG ],
 	freePaint: [ freePaintJSONSchema, freePaintSVG ],
 	inputGrid: [ inputGridJSONSchema, inputGridSVG ],

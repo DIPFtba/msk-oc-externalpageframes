@@ -1,0 +1,207 @@
+{
+	"title": "Textfelder-Verbindungen",
+	"type": "object",
+	"format": "categories",
+	"options": {
+		"disable_collapse": true,
+		"disable_edit_json": true,
+		"disable_properties": true
+	},
+	"properties": {
+
+		"___basics": {
+			"title": "Felder & Verbindungen",
+			"type": "object",
+			"options": {
+				"titleHidden": true,
+				"disable_collapse": true,
+				"disable_edit_json": true,
+				"disable_properties": true
+			},
+			"properties": {
+
+				"frames": {
+					"title": "Felder",
+					"type": "array",
+					"uniqueItems": true,
+					"format": "table",
+					"options": {
+						"disable_collapse": true,
+						"grid_columns": 12,
+						"grid_break": true
+					},
+					"items": {
+						"title": "Feld",
+						"type": "object",
+						"format": "grid-strict",
+						"options": {
+							"remove_empty_properties": true,
+							"disable_collapse": true,
+							"disable_edit_json": true,
+							"disable_properties": true
+						},
+						"properties": {
+							"x": {
+								"title": "X",
+								"type": "integer",
+								"minimum": 0,
+								"default": 1
+							},
+							"y": {
+								"title": "Y",
+								"type": "integer",
+								"minimum": 0,
+								"default": 1
+							},
+							"width": {
+								"title": "Breite",
+								"type": "integer",
+								"minimum": 10,
+								"default": 100
+							},
+							"height": {
+								"title": "Höhe",
+								"type": "integer",
+								"minimum": 10,
+								"default": 60
+							},
+							"text": {
+								"title": "Text",
+								"type": "string",
+								"format": "textarea"
+							},
+							"fontSize": {
+								"title": "SGröße",
+								"type": "integer",
+								"minimum": 5,
+								"default": 20
+							},
+							"readonly": {
+								"title": "Text fest",
+								"type": "boolean",
+								"format": "checkbox",
+								"default": true
+							},
+							"connector": {
+								"title": "Connector",
+								"type": "string",
+								"enum": [ "t", "r", "b", "l" ],
+								"options": {
+									"enum_titles": [ "oben", "rechts", "unten", "links" ]
+								}
+							}
+						}
+					}
+				},
+
+				"connections": {
+					"title": "Vordefinierte Verbindungen",
+					"type": "array",
+					"uniqueItems": true,
+					"format": "table",
+					"options": {
+						"disable_collapse": true,
+						"grid_columns": 12,
+						"grid_break": true
+					},
+					"items": {
+						"title": "Verbindung",
+						"type": "object",
+						"format": "grid-strict",
+						"options": {
+							"remove_empty_properties": true,
+							"disable_collapse": true,
+							"disable_edit_json": true,
+							"disable_properties": true
+						},
+						"properties": {
+							"from": {
+								"title": "von Feld",
+								"type": "integer",
+								"minimum": 1,
+								"default": 1
+							},
+							"to": {
+								"title": "nach Feld",
+								"type": "integer",
+								"minimum": 1,
+								"default": 1
+							},
+							"readonly": {
+								"type": "boolean",
+								"options": {
+									"hidden": true
+								},
+								"default": true
+							}
+						}
+					}
+				}
+			}
+		},
+
+		"dataSettings": {
+			"title": "Daten",
+			"type": "object",
+			"options": {
+				"disable_collapse": true,
+				"disable_edit_json": true,
+				"disable_properties": true
+			},
+			"properties": {
+
+				"__jsonSchemaData": {
+					"type": "object",
+					"properties": {
+						"___name": {
+							"type":"string",
+							"default":"connectedFrames"
+						},
+						"___version": {
+							"type":"number",
+							"default":0.1
+						}
+					},
+					"options": {
+						"hidden": true
+					}
+				},
+
+				"variablePrefix": {
+					"title": "Variablen-Prefix",
+					"description": "Erzeugt wird 'S_&lt;pref&gt;_Status' und 'V_&lt;pref&gt;_Conn_X'",
+					"type": "string",
+					"default": "Aufg1"
+				},
+
+				"scoringVals": {
+					"title": "Scoring Werte",
+					"type": "array",
+					"format": "table",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (||=oder, &&=und)"
+					},
+					"items": {
+						"title": "Scoring Wert",
+						"type": "object",
+						"properties": {
+							"val": {
+								"title": "Scoring-Wert",
+								"type": "integer"
+							},
+							"condition": {
+								"title": "Bedingung (VarNamen in ${} setzen)",
+								"type": "string",
+								"format": "textarea"
+							}
+						}
+					}
+				}
+
+			}
+		}
+	}
+}

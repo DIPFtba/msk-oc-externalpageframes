@@ -29,6 +29,8 @@ import { barPlotFromSchema } from './barPlot';
 import { barSliderFromSchema } from './barSlider';
 /// #elif __CLASS == 'barSliderFull'
 import { barSliderFullFromSchema } from './barSliderFull';
+/// #elif __CLASS == 'connectedFrames'
+import { connectedFramesFromSchema } from './connectedFrames';
 /// #elif __CLASS == 'filledBar'
 import { filledBarFromSchema } from './filledBar';
 /// #elif __CLASS == 'freePaint'
@@ -82,6 +84,8 @@ function initJSON ( json ) {
 	const io = new barSliderFromSchema( base, cfg );
 /// #elif __CLASS == 'barSliderFull'
 	const io = new barSliderFullFromSchema( base, cfg );
+/// #elif __CLASS == 'connectedFrames'
+	const io = new connectedFramesFromSchema( base, cfg );
 /// #elif __CLASS == 'filledBar'
 	const io = new filledBarFromSchema( base, cfg );
 /// #elif __CLASS == 'freePaint'

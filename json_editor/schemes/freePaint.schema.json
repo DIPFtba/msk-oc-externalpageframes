@@ -262,7 +262,7 @@
 		},
 
 		"___extraLines": {
-			"title": "Linien",
+			"title": "Rechtecke / Linien",
 			"type": "object",
 			"format": "grid-strict",
 			"options": {
@@ -272,6 +272,91 @@
 				"disable_properties": true
 			},
 			"properties": {
+
+				"extraRects": {
+					"title": "Extra-Rechtecke",
+					"type": "array",
+					"format": "table",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 6,
+						"infoText": "Zusätzliche Rechtecke, die in Hintergrund gezeichnet werden"
+					},
+					"items": {
+						"title": "ExtraRechteck",
+						"type": "object",
+						"format": "grid-strict",
+						"options": {
+							"disable_collapse": true,
+							"disable_edit_json": true,
+							"disable_properties": true
+						},
+						"properties": {
+							"x": {
+								"title": "x",
+								"type": "integer",
+								"minimum": 0,
+								"default": 0
+							},
+							"y": {
+								"title": "y",
+								"type": "integer",
+								"minimum": 0,
+								"default": 0
+							},
+							"width": {
+								"title": "Breite",
+								"type": "integer",
+								"minimum": 1,
+								"default": 50
+							},
+							"height": {
+								"title": "Höhe",
+								"type": "integer",
+								"minimum": 1,
+								"default": 20
+							},
+							"w": {
+								"title": "Dicke",
+								"type": "integer",
+								"minimum": 1,
+								"default": 1
+							},
+							"c": {
+								"title": "Farbe",
+								"type": "string",
+								"format": "color",
+								"default": "#000000"
+							},
+							"f": {
+								"title": "Füllung",
+								"type": "string",
+								"format": "color",
+								"default": "#d3d3d3"
+							},
+							"clipBrush": {
+								"title": "begrenzt Pinsel",
+								"type": "boolean",
+								"format": "checkbox",
+								"default": false
+							},
+							"clipMarker": {
+								"title": "begrenzt Marker",
+								"type": "boolean",
+								"format": "checkbox",
+								"default": false,
+								"options": {
+									"dependencies": {
+										"root.___freePaint.hasMarker": true
+									}
+								}
+							}
+						}
+					}
+				},
+
 				"extraLines": {
 					"title": "Extra-Linien",
 					"type": "array",
@@ -281,12 +366,11 @@
 						"disable_edit_json": true,
 						"disable_properties": true,
 						"grid_columns": 6,
-						"infoText": "Feste Extra-Linien, die zusätzlich zum Rechteck-Rahmen gezeichnet werden"
+						"infoText": "Feste Extra-Linien, die zusätzlich gezeichnet werden"
 					},
 					"items": {
 						"title": "ExtraLinie",
 						"type": "object",
-						"format": "grid-strict",
 						"options": {
 							"disable_collapse": true,
 							"disable_edit_json": true,
@@ -297,55 +381,37 @@
 								"title": "x1",
 								"type": "integer",
 								"minimum": 0,
-								"default": 0,
-								"options": {
-									"grid_columns": 2
-								}
+								"default": 0
 							},
 							"y1": {
 								"title": "y1",
 								"type": "integer",
 								"minimum": 0,
-								"default": 0,
-								"options": {
-									"grid_columns": 2
-								}
+								"default": 0
 							},
 							"x2": {
 								"title": "x2",
 								"type": "integer",
 								"minimum": 0,
-								"default": 0,
-								"options": {
-									"grid_columns": 2
-								}
+								"default": 0
 							},
 							"y2": {
 								"title": "y2",
 								"type": "integer",
 								"minimum": 0,
-								"default": 0,
-								"options": {
-									"grid_columns": 2
-								}
+								"default": 0
 							},
 							"w": {
 								"title": "Dicke",
 								"type": "integer",
 								"minimum": 1,
-								"default": 1,
-								"options": {
-									"grid_columns": 2
-								}
+								"default": 1
 							},
 							"c": {
 								"title": "Farbe",
 								"type": "string",
 								"format": "color",
-								"default": "#000000",
-								"options": {
-									"grid_columns": 2
-								}
+								"default": "#000000"
 							}
 						}
 					}

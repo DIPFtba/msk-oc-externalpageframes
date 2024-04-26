@@ -7,7 +7,37 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 
 	constructor ( base, opts = {} ) {
 
+		// define clip Functions (if selected)
+		const clipBrush = opts.extraRects.filter( r => r.clipBrush );
+		if ( clipBrush.length>0 ) {
+			opts.freePaintBrushClipFunc = function ( ctx ) {
+				clipBrush.forEach( r => {
+					ctx.rect( r.x+r.w/2, r.y+r.w/2, r.width-r.w, r.height-r.w );
+				})
+			}
+		}
+		const clipMarker = opts.extraRects.filter( r => r.clipMarker );
+		if ( clipMarker.length>0 ) {
+			opts.freePaintMarkerClipFunc = function ( ctx ) {
+				clipMarker.forEach( r => {
+					ctx.rect( r.x+r.w/2, r.y+r.w/2, r.width-r.w, r.height-r.w );
+				})
+			}
+		}
+
 		super( base, opts );
+
+		// draw extra rects
+		opts.extraRects.forEach( r => {
+			const kLine = new Konva.Rect({
+				x: r.x, y: r.y,
+				width: r.width, height: r.height,
+				stroke: r.c,
+				strokeWidth: r.w,
+				fill: r.f,
+			})
+			this.layer.add( kLine );
+		})
 
 		// draw extra lines
 		opts.extraLines.forEach( l => {
@@ -18,8 +48,8 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 			})
 			this.layer.add( kLine );
 		})
-		this.layer.draw();
 
+		this.layer.draw();
 		this.startListeningToGetImageRequests();
 /// #if __DEVELOP
 		window.getRectPngImage = this.getRectPngImage.bind(this);

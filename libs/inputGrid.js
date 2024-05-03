@@ -1052,8 +1052,10 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 		}
 
 		// component id used in triggerEvents
-		const udipa = this.base.fsm.userDefIdPath ? this.base.fsm.userDefIdPath.split('=') : [];
-		this.componentId = udipa.length>1 && udipa[ udipa.length-1 ].length>1 ? `_${ udipa[ udipa.length-1 ] }` : '';
+		if ( !this.compEventId ) {
+			const udipa = this.base.fsm.userDefIdPath ? this.base.fsm.userDefIdPath.split('=') : [];
+			this.compEventId = udipa.length>1 && udipa[ udipa.length-1 ].length>1 ? `_${ udipa[ udipa.length-1 ] }` : '';
+		}
 
 		// Options for switchModeBar
 		const switchModeBarDef = Object.assign({
@@ -1152,7 +1154,7 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 		// send event on clik when no Mode active
 		this.kClickField.on( 'click tap', () => {
 			if ( this.switchModeBar.active === null ) {
-				this.base.fsm.triggerEvent( `EV_ClickWithoutIconBarMode${ this.componentId }` );
+				this.base.fsm.triggerEvent( `EV_ClickWithoutIconBarMode${ this.compEventId }` );
 				// if ( this.FSMVariableName ) {
 				// 	this.base.fsm.triggerEvent( `EV_ClickWithoutIconBarMode_${ this.FSMVariableName }` );
 				// }
@@ -1215,7 +1217,7 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 		} else {
 			event = 'Off';
 		}
-		this.base.fsm.triggerEvent( `EV_IconBarSwitch${ event }${ this.componentId }` );
+		this.base.fsm.triggerEvent( `EV_IconBarSwitch${ event }${ this.compEventId }` );
 		// if ( this.FSMVariableName ) {
 		// 	this.base.postVariable( `V_IconBarSwitch_${this.FSMVariableName}`, i>-1 ? i+1 : 0 );
 		// }

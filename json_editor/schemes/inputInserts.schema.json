@@ -40,6 +40,15 @@
 						"grid_columns": 4
 					}
 				},
+				"width": {
+					"title": "Breite Eingabezeile",
+					"type": "integer",
+					"default": 0,
+					"options": {
+						"grid_columns": 4,
+						"infoText": "0 = Fensterbreite, wenn <=0: relativ zu Fensterbreite"
+					}
+				},
 				"maxlength": {
 					"title": "Eingabe max. Zeichen",
 					"type": "integer",

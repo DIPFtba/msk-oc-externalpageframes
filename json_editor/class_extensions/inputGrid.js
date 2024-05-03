@@ -4,6 +4,8 @@ export class inputGridFromSchema extends inputGrid_freePaint_InsertButtons_switc
 
 	constructor ( base, opts = {} ) {
 
+		// opts.compEventId = '_' + opts.dataSettings.variablePrefix;
+
 		// insertButtons
 		const sp = { extraSpace: opts.toolbarSpace };
 		const insTexts = {

@@ -1,4 +1,8 @@
+/// #if __EDITOR
+// '../../examples/textareaInserts_2cols.css' is loaded dynamically in the editor
+/// #else
 import '../../examples/textareaInserts_2cols.css'
+/// #endif
 
 import { textareaInserts, toolbarMathOperators, toolbarFraction, toolbarComparison, toolbarPercent } from '../../libs/textareaInserts'
 

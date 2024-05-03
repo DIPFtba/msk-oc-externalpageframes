@@ -211,6 +211,7 @@ function loadSchema( schema ) {
 						creator = (cfgData) => new stampImagesFromSchema( base, cfgData );
 						break;
 					case 'textareaInserts':
+						import( '../examples/textareaInserts_2cols.css' );
 						creator = (cfgData) => {
 							initContainer(false);
 							return new textareaInsertsFromSchema( textContainer.firstChild, cfgData, base );

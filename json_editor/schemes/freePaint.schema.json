@@ -26,7 +26,7 @@
 					"minimum": 0,
 					"default": 50,
 					"options": {
-						"grid_columns": 2
+						"grid_columns": 4
 					}
 				},
 				"y": {
@@ -35,7 +35,7 @@
 					"minimum": 0,
 					"default": 2,
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true
 					}
 				},
@@ -45,7 +45,7 @@
 					"minimum": 100,
 					"default": 500,
 					"options": {
-						"grid_columns": 2
+						"grid_columns": 4
 					}
 				},
 				"height": {
@@ -54,7 +54,7 @@
 					"minimum": 10,
 					"default": 175,
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true
 					}
 				},
@@ -64,7 +64,7 @@
 					"minimum": 1,
 					"default": 3,
 					"options": {
-						"grid_columns": 2
+						"grid_columns": 4
 					}
 				},
 				"frameColor": {
@@ -73,7 +73,7 @@
 					"format": "color",
 					"default": "#000000",
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true
 					}
 				},
@@ -83,7 +83,7 @@
 					"format": "color",
 					"default": "#ffffff",
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true
 					}
 				},
@@ -93,7 +93,7 @@
 					"format": "checkbox",
 					"default": true,
 					"options": {
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"grid_break": true
 					}
 				},
@@ -105,7 +105,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 6
+						"grid_columns": 12
 					},
 					"properties": {
 						"brush": {
@@ -125,7 +125,7 @@
 									"minimum": 1,
 									"default": 4,
 									"options": {
-										"grid_columns": 6
+										"grid_columns": 12
 									}
 								},
 								"stroke": {
@@ -134,7 +134,7 @@
 									"format": "color",
 									"default": "#0000ff",
 									"options": {
-										"grid_columns": 6
+										"grid_columns": 12
 									}
 								}
 							}
@@ -159,7 +159,7 @@
 									"minimum": 1,
 									"default": 25,
 									"options": {
-										"grid_columns": 6
+										"grid_columns": 12
 									}
 								},
 								"stroke": {
@@ -168,7 +168,7 @@
 									"format": "color",
 									"default": "#6666ff",
 									"options": {
-										"grid_columns": 6
+										"grid_columns": 12
 									}
 								}
 							}
@@ -190,7 +190,7 @@
 									"minimum": 1,
 									"default": 15,
 									"options": {
-										"grid_columns": 6
+										"grid_columns": 12
 									}
 								}
 							}
@@ -205,7 +205,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 6
+						"grid_columns": 12
 					},
 					"properties": {
 						"x": {
@@ -281,7 +281,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"infoText": "Zusätzliche Rechtecke, die in Hintergrund gezeichnet werden"
 					},
 					"items": {
@@ -365,7 +365,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"infoText": "Feste Extra-Linien, die zusätzlich gezeichnet werden"
 					},
 					"items": {
@@ -422,6 +422,7 @@
 		"dataSettings": {
 			"title": "Daten",
 			"type": "object",
+			"format": "grid-strict",
 			"options": {
 				"disable_collapse": true,
 				"disable_edit_json": true,
@@ -450,7 +451,11 @@
 					"title": "Variablen-Prefix",
 					"description": "Erzeugt wird 'S_&lt;pref&gt;_Status'",
 					"type": "string",
-					"default": "Aufg1"
+					"default": "Aufg1",
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true
+					}
 				}
 			}
 		}

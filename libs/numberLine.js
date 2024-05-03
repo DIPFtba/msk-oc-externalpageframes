@@ -38,13 +38,12 @@ export class numberLine {
 		mergeDeep( Object.assign( this, defaultOpts, defTypeOpts[opts.type || 'ticks'] ), opts );
 		this.layer = layer;
 
+		if ( this.width<=0 ) {
+			this.width += layer.width() - this.x;
+		}
 
 		// this.numberLine
 		if ( this.lineHeight ) {
-
-			if ( this.width<=0 ) {
-				this.width += layer.width() - this.x;
-			}
 
 			// Coord Calc
 			this.unit = this.width / (this.valTo-this.valFrom);

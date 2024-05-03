@@ -26,7 +26,7 @@
 					"type": "integer",
 					"minimum": 0,
 					"options": {
-						"grid_columns": 2
+						"grid_columns": 4
 					},
 					"default": 5
 				},
@@ -35,7 +35,7 @@
 					"type": "integer",
 					"minimum": 0,
 					"options": {
-						"grid_columns": 2
+						"grid_columns": 4
 					},
 					"default": 10
 				},
@@ -43,7 +43,7 @@
 					"title": "Breite",
 					"type": "integer",
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true,
 						"infoText": "Wenn negativ: relativ zu rechtem Rand"
 					},
@@ -54,7 +54,7 @@
 					"type": "boolean",
 					"format": "checkbox",
 					"options": {
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"grid_break": true
 					}
 				},
@@ -105,6 +105,7 @@
 		"dataSettings": {
 			"title": "Daten",
 			"type": "object",
+			"format": "grid-strict",
 			"options": {
 				"disable_collapse": true,
 				"disable_edit_json": true,
@@ -133,7 +134,11 @@
 					"title": "Variablen-Prefix",
 					"description": "Erzeugt werden 'V_&lt;pref&gt;_Input_[T|H|Z|E]' und 'S_&lt;pref&gt;_Status'",
 					"type": "string",
-					"default": "Aufg1"
+					"default": "Aufg1",
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true
+					}
 				},
 
 				"scoringVals": {
@@ -144,6 +149,8 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
+						"grid_columns": 12,
+						"grid_break": true,
 						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (||=oder, &&=und)"
 					},
 					"items": {

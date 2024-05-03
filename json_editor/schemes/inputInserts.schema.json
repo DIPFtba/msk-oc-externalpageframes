@@ -27,7 +27,7 @@
 					"minimum": 0,
 					"default": 27,
 					"options": {
-						"grid_columns": 3,
+						"grid_columns": 4,
 						"grid_break": true
 					}
 				},
@@ -37,7 +37,7 @@
 					"minimum": 0,
 					"default": 25,
 					"options": {
-						"grid_columns": 3
+						"grid_columns": 4
 					}
 				},
 				"maxlength": {
@@ -46,7 +46,7 @@
 					"minimum": 0,
 					"default": 40,
 					"options": {
-						"grid_columns": 3,
+						"grid_columns": 4,
 						"grid_break": true
 					}
 				}
@@ -56,6 +56,7 @@
 		"dataSettings": {
 			"title": "Daten",
 			"type": "object",
+			"format": "grid-strict",
 			"options": {
 				"titleHidden": true,
 				"disable_collapse": true,
@@ -84,7 +85,11 @@
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
 					"type": "string",
-					"default": "Aufg1"
+					"default": "Aufg1",
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true
+					}
 				},
 
 				"scoringPattern": {
@@ -133,6 +138,8 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
+						"grid_columns": 12,
+						"grid_break": true,
 						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (||=oder, &&=und)"
 					},
 					"items": {

@@ -26,7 +26,7 @@
 					"format": "checkbox",
 					"default": false,
 					"options": {
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"grid_break": true
 					}
 				},
@@ -38,7 +38,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8,
+						"grid_columns": 12,
 						"grid_break": true
 					},
 					"properties": {
@@ -69,7 +69,7 @@
 					"format": "checkbox",
 					"default": true,
 					"options": {
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"grid_break": true
 					}
 				},
@@ -81,7 +81,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8,
+						"grid_columns": 12,
 						"dependencies": {
 							"___hasTitle": true
 						}
@@ -198,7 +198,7 @@
 						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8,
+						"grid_columns": 12,
 						"grid_break": true
 					},
 					"properties": {
@@ -281,7 +281,7 @@
 						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8,
+						"grid_columns": 12,
 						"grid_break": true,
 						"dependencies": {
 							"root.___basic.readonly": false
@@ -385,7 +385,7 @@
 					"type": "integer",
 					"minimum": 0,
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true
 					},
 					"default": 5
@@ -399,7 +399,7 @@
 						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8
+						"grid_columns": 12
 					},
 					"properties": {
 						"strokeWidth": {
@@ -431,7 +431,7 @@
 						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8
+						"grid_columns": 12
 					},
 					"properties": {
 						"strokeWidth": {
@@ -463,7 +463,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8
+						"grid_columns": 12
 					},
 					"properties": {
 						"width": {
@@ -486,7 +486,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8
+						"grid_columns": 12
 					},
 					"properties": {
 						"height": {
@@ -701,7 +701,7 @@
 							"type": "array",
 							"format": "table",
 							"options": {
-								"grid_columns": 8,
+								"grid_columns": 12,
 								"grid_break": true,
 								"disable_collapse": true,
 								"disable_edit_json": true,
@@ -751,7 +751,7 @@
 						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8
+						"grid_columns": 12
 					},
 					"properties": {
 						"strokeWidth": {
@@ -792,7 +792,7 @@
 						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8,
+						"grid_columns": 12,
 						"dependencies": {
 							"root.___basic.readonly": false
 						}
@@ -836,7 +836,7 @@
 						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8,
+						"grid_columns": 12,
 						"dependencies": {
 							"root.___basic.readonly": false
 						}
@@ -880,7 +880,7 @@
 						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8,
+						"grid_columns": 12,
 						"dependencies": {
 							"root.___basic.readonly": false
 						}
@@ -935,7 +935,7 @@
 						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8
+						"grid_columns": 12
 					},
 					"properties": {
 						"width": {
@@ -1017,7 +1017,7 @@
 						"collapsed": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8,
+						"grid_columns": 12,
 						"dependencies": {
 							"root.___basic.readonly": false
 						}
@@ -1120,7 +1120,7 @@
 					"type": "array",
 					"format": "table",
 					"options": {
-						"grid_columns": 8,
+						"grid_columns": 12,
 						"titleHidden": true,
 						"disable_collapse": true,
 						"disable_edit_json": true,
@@ -1160,6 +1160,7 @@
 		"dataSettings": {
 			"title": "Daten",
 			"type": "object",
+			"format": "grid-strict",
 			"options": {
 				"disable_collapse": true,
 				"disable_edit_json": true,
@@ -1187,7 +1188,11 @@
 					"title": "Variablen-Prefix",
 					"description": "Erzeugt wird 'S_&lt;pref&gt;_Status'",
 					"type": "string",
-					"default": "Aufg1"
+					"default": "Aufg1",
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true
+					}
 				},
 
 				"yMult": {
@@ -1196,7 +1201,7 @@
 					"minimum": 0,
 					"default": 10,
 					"options": {
-						"grid_columns": 8,
+						"grid_columns": 4,
 						"grid_break": true,
 						"infoText": "Multiplikator für Y-Werte (um gebrochene Zahlen als Integer zu speichern)"
 					}
@@ -1210,6 +1215,8 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
+						"grid_columns": 12,
+						"grid_break": true,
 						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (||=oder, &&=und)"
 					},
 					"items": {

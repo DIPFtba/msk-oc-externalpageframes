@@ -26,7 +26,7 @@
 					"type": "integer",
 					"minimum": 0,
 					"options": {
-						"grid_columns": 2
+						"grid_columns": 4
 					},
 					"default": 2
 				},
@@ -35,7 +35,7 @@
 					"type": "integer",
 					"minimum": 0,
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true
 					},
 					"default": 2
@@ -44,7 +44,7 @@
 					"title": "Breite Felder",
 					"type": "integer",
 					"options": {
-						"grid_columns": 2
+						"grid_columns": 4
 					},
 					"default": 50
 				},
@@ -52,7 +52,7 @@
 					"title": "Höhe Felder",
 					"type": "integer",
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true
 					},
 					"default": 30
@@ -62,7 +62,7 @@
 					"type": "integer",
 					"default": 3,
 					"options": {
-						"grid_columns": 2
+						"grid_columns": 4
 					}
 				},
 				"markColor": {
@@ -71,7 +71,7 @@
 					"format": "color",
 					"default": "#0000ff",
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true
 					}
 				},
@@ -82,7 +82,7 @@
 					"format": "checkbox",
 					"default": false,
 					"options": {
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"grid_break": true
 					}
 				},
@@ -93,7 +93,7 @@
 					"enum": [ "fix", "free" ],
 					"options": {
 						"enum_titles": [ "Festes Array", "Freie Rechtecke" ],
-						"grid_columns": 3,
+						"grid_columns": 4,
 						"grid_break": true
 					},
 					"default": "fix"
@@ -107,7 +107,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 8,
+						"grid_columns": 12,
 						"dependencies": {
 							"___type": "fix"
 						}
@@ -119,7 +119,7 @@
 							"minimum": 1,
 							"default": 5,
 							"options": {
-								"grid_columns": 3
+								"grid_columns": 4
 							}
 						},
 						"rows": {
@@ -128,7 +128,7 @@
 							"minimum": 1,
 							"default": 2,
 							"options": {
-								"grid_columns": 3,
+								"grid_columns": 4,
 								"grid_break": true
 							}
 						},
@@ -137,7 +137,7 @@
 							"type": "string",
 							"pattern": "^ *[0-9]+ *(- *[0-9]+)? *(, *[0-9]+ *(- *[0-9]+)? *)*$",
 							"options": {
-								"grid_columns": 10,
+								"grid_columns": 12,
 								"grid_break": true,
 								"infoText": "z.B. 3,4,5-8,10-12"
 							}
@@ -146,7 +146,7 @@
 							"title": "Unveränderbare FeldNr",
 							"type": "string",
 							"options": {
-								"grid_columns": 10,
+								"grid_columns": 12,
 								"dependencies": {
 									"root.___rects.readonly": false
 								},
@@ -164,7 +164,7 @@
 					"options": {
 						"titleHidden": true,
 						"disable_collapse": true,
-						"grid_columns": 10,
+						"grid_columns": 12,
 						"grid_break": true,
 						"dependencies": {
 							"___type": "free"
@@ -222,6 +222,7 @@
 		"dataSettings": {
 			"title": "Daten",
 			"type": "object",
+			"format": "grid-strict",
 			"options": {
 				"disable_collapse": true,
 				"disable_edit_json": true,
@@ -250,7 +251,11 @@
 					"title": "Variablen-Prefix",
 					"description": "Erzeugt werden 'V_&lt;pref&gt;_MarkCnt' und 'S_&lt;pref&gt;_Status'",
 					"type": "string",
-					"default": "Aufg1"
+					"default": "Aufg1",
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true
+					}
 				},
 
 				"scoringVals": {
@@ -261,6 +266,8 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
+						"grid_columns": 12,
+						"grid_break": true,
 						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (||=oder, &&=und)"
 					},
 					"items": {

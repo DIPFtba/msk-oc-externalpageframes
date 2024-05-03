@@ -59,7 +59,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 6
+						"grid_columns": 12
 					},
 					"properties": {
 						"comp": {
@@ -94,6 +94,7 @@
 		"dataSettings": {
 			"title": "Daten",
 			"type": "object",
+			"format": "grid-strict",
 			"options": {
 				"titleHidden": true,
 				"disable_collapse": true,
@@ -122,7 +123,11 @@
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
 					"type": "string",
-					"default": "Aufg1"
+					"default": "Aufg1",
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true
+					}
 				}
 
 			}

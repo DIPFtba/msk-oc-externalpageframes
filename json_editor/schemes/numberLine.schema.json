@@ -26,7 +26,7 @@
 					"type": "integer",
 					"minimum": 0,
 					"options": {
-						"grid_columns": 2
+						"grid_columns": 4
 					},
 					"default": 20
 				},
@@ -35,7 +35,7 @@
 					"type": "integer",
 					"minimum": 0,
 					"options": {
-						"grid_columns": 2
+						"grid_columns": 4
 					},
 					"default": 20
 				},
@@ -43,7 +43,7 @@
 					"title": "Breite",
 					"type": "integer",
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true,
 						"infoText": "Wenn negativ: relativ zu rechtem Rand"
 					},
@@ -53,7 +53,7 @@
 					"title": "Startwert",
 					"type": "number",
 					"options": {
-						"grid_columns": 2
+						"grid_columns": 4
 					},
 					"default": 0
 				},
@@ -61,7 +61,7 @@
 					"title": "Endwert",
 					"type": "number",
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true
 					},
 					"default": 100
@@ -70,10 +70,10 @@
 				"type": {
 					"title": "Zahlenstrahl Typ",
 					"type": "string",
-					"enum": [ "none", "ticks", "chain" ],
+					"enum": [ "ticks", "none", "chain" ],
 					"options": {
-						"enum_titles": [ "Linie", "Linie mit Ticks", "Kette" ],
-						"grid_columns": 2,
+						"enum_titles": [ "Linie mit Ticks", "Linie", "Kette" ],
+						"grid_columns": 4,
 						"grid_break": true
 					},
 					"default": "ticks"
@@ -84,7 +84,7 @@
 					"minimum": 0,
 					"default": 5,
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true,
 						"dependencies": {
 							"type": "none"
@@ -97,7 +97,7 @@
 					"minimum": 0,
 					"default": 1,
 					"options": {
-						"grid_columns": 2,
+						"grid_columns": 4,
 						"grid_break": true,
 						"dependencies": {
 							"type": "ticks"
@@ -111,7 +111,7 @@
 					"format": "checkbox",
 					"default": true,
 					"options": {
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"grid_break": true,
 						"dependencies": {
 							"type": "ticks"
@@ -129,7 +129,7 @@
 							"minimum": 0,
 							"default": 1,
 							"options": {
-								"grid_columns": 2
+								"grid_columns": 4
 							}
 						},
 						"height": {
@@ -138,7 +138,7 @@
 							"minimum": 0,
 							"default": 15,
 							"options": {
-								"grid_columns": 2
+								"grid_columns": 4
 							}
 						},
 						"width": {
@@ -147,7 +147,7 @@
 							"minimum": 0,
 							"default": 1,
 							"options": {
-								"grid_columns": 2,
+								"grid_columns": 4,
 								"grid_break": true
 							}
 						},
@@ -156,7 +156,7 @@
 							"type": "string",
 							"options": {
 								"infoText": "Erster Tick, (wenn leer, dann Strahl-Startwert)",
-								"grid_columns": 2
+								"grid_columns": 4
 							}
 						},
 						"max": {
@@ -164,7 +164,7 @@
 							"type": "string",
 							"options": {
 								"infoText": "Letzter Tick, (wenn leer, dann Strahl-Startwert)",
-								"grid_columns": 2,
+								"grid_columns": 4,
 								"grid_break": true
 							}
 						}
@@ -203,7 +203,7 @@
 					"format": "checkbox",
 					"default": true,
 					"options": {
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"grid_break": true,
 						"dependencies": {
 							"type": "ticks"
@@ -221,7 +221,7 @@
 							"minimum": 0,
 							"default": 5,
 							"options": {
-								"grid_columns": 2
+								"grid_columns": 4
 							}
 						},
 						"height": {
@@ -230,7 +230,7 @@
 							"minimum": 0,
 							"default": 27,
 							"options": {
-								"grid_columns": 2
+								"grid_columns": 4
 							}
 						},
 						"width": {
@@ -239,7 +239,7 @@
 							"minimum": 0,
 							"default": 1,
 							"options": {
-								"grid_columns": 2,
+								"grid_columns": 4,
 								"grid_break": true
 							}
 						},
@@ -248,7 +248,7 @@
 							"type": "string",
 							"options": {
 								"infoText": "Erster Tick, (wenn leer, dann Strahl-Startwert)",
-								"grid_columns": 2
+								"grid_columns": 4
 							}
 						},
 						"max": {
@@ -256,7 +256,7 @@
 							"type": "string",
 							"options": {
 								"infoText": "Letzter Tick, (wenn leer, dann Strahl-Startwert)",
-								"grid_columns": 2,
+								"grid_columns": 4,
 								"grid_break": true
 							}
 						}
@@ -295,7 +295,7 @@
 					"format": "checkbox",
 					"default": true,
 					"options": {
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"grid_break": true,
 						"dependencies": {
 							"type": "ticks"
@@ -313,7 +313,7 @@
 							"minimum": 0,
 							"default": 10,
 							"options": {
-								"grid_columns": 2
+								"grid_columns": 4
 							}
 						},
 						"height": {
@@ -322,7 +322,7 @@
 							"minimum": 0,
 							"default": 32,
 							"options": {
-								"grid_columns": 2
+								"grid_columns": 4
 							}
 						},
 						"width": {
@@ -331,7 +331,7 @@
 							"minimum": 0,
 							"default": 3,
 							"options": {
-								"grid_columns": 2,
+								"grid_columns": 4,
 								"grid_break": true
 							}
 						},
@@ -340,7 +340,7 @@
 							"type": "string",
 							"options": {
 								"infoText": "Erster Tick, (wenn leer, dann Strahl-Startwert)",
-								"grid_columns": 2
+								"grid_columns": 4
 							}
 						},
 						"max": {
@@ -348,7 +348,7 @@
 							"type": "string",
 							"options": {
 								"infoText": "Letzter Tick, (wenn leer, dann Strahl-Startwert)",
-								"grid_columns": 2,
+								"grid_columns": 4,
 								"grid_break": true
 							}
 						}
@@ -387,7 +387,7 @@
 					"format": "checkbox",
 					"default": false,
 					"options": {
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"grid_break": true,
 						"dependencies": {
 							"type": ["none","ticks"]
@@ -405,7 +405,7 @@
 							"minimum": 0,
 							"default": 12,
 							"options": {
-								"grid_columns": 2
+								"grid_columns": 4
 							}
 						},
 						"arrowWidth": {
@@ -414,7 +414,7 @@
 							"minimum": 0,
 							"default": 18,
 							"options": {
-								"grid_columns": 2
+								"grid_columns": 4
 							}
 						},
 						"arrowDist": {
@@ -423,7 +423,7 @@
 							"minimum": 0,
 							"default": 25,
 							"options": {
-								"grid_columns": 2,
+								"grid_columns": 4,
 								"grid_break": true
 							}
 						}
@@ -457,7 +457,7 @@
 					"format": "checkbox",
 					"default": false,
 					"options": {
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"grid_break": true
 					}
 				},
@@ -470,7 +470,7 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"grid_columns": 6,
+						"grid_columns": 12,
 						"grid_break": true,
 						"dependencies": {
 							"___labels": true
@@ -618,7 +618,7 @@
 							"options": {
 								"titleHidden": true,
 								"disable_collapse": true,
-								"grid_columns": 8,
+								"grid_columns": 12,
 								"grid_break": true,
 								"dependencies": {
 										"___type": "D"
@@ -648,7 +648,7 @@
 							"options": {
 								"titleHidden": true,
 								"disable_collapse": true,
-								"grid_columns": 10,
+								"grid_columns": 12,
 								"grid_break": true,
 								"dependencies": {
 										"___type": "L"

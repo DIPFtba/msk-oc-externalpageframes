@@ -9,6 +9,38 @@ html,body {
 	width: 100%;
 } */
 
+#all {
+	display: flex;
+	flex-direction: row;
+	height: 100%;
+}
+#left {
+	width: calc(100% - 250px);
+}
+#vruler {
+	width: 3px;
+	height: 100%;
+	background-color: gray;
+	cursor: col-resize;
+}
+#right {
+	width: 245px;
+}
+
+#debugOut {
+	font-size: 90%;
+	height: 100%;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-left: 5px;
+}
+/* #debugOut tr td:nth-child(1) {
+	text-align: right;
+} */
+/* #debugOut tr td:nth-child(1) {
+	padding:0 3px;
+	white-space: nowrap;
+} */
 div#EWK {
 	height: 200px;
 }

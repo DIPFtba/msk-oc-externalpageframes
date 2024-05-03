@@ -75,6 +75,15 @@ import { baseInits } from '../libs/baseInits';
 let base = getBase();
 const textContainer = document.getElementById('ewk_textcontainer');
 
+function getBase () {
+	const container = document.getElementById('ewk_container');
+	return new baseInits({
+		container,
+		width: container.offsetWidth,
+		height: container.offsetHeight,
+	});
+}
+
 let creator = null;
 let editor;
 let schemaData;
@@ -321,8 +330,7 @@ console.log( '======= cfgData:', cfgData );
 				extres.scoreDef = function () {
 					const res = oldScoreDef();
 					if ( typeof res === 'object' && !object_equals( res, oldScoreVals ) ) {
-						console.log( '----- New Scores:' );
-						Object.entries( res ).forEach( ([k,v]) => console.log( `${k}: ${JSON.stringify(v)}`) );
+						debugOutObj( 'Scores', res );
 						oldScoreVals = res;
 					}
 					return res;
@@ -338,8 +346,7 @@ console.log( '======= cfgData:', cfgData );
 				extres.statusVarDef = function () {
 					const res = oldStatusVarDef();
 					if ( typeof res === 'object' && !object_equals( res, oldStatusVar ) ) {
-						console.log( '----- New Status:' );
-						Object.entries( res ).forEach( ([k,v]) => console.log( `${k}: ${JSON.stringify(v)}`) );
+						debugOutObj( 'Status', res );
 						oldStatusVar = res;
 					}
 					return res;
@@ -466,6 +473,9 @@ loadButton.addEventListener( 'click', () => {
 loadButton.style.display = 'inline';
 
 //////////////////////////////////////////////////////////////////////////////
+//
+// Resize EWK
+//
 
 let hrPosY = null;
 const ewk_div = document.getElementById('EWK');
@@ -496,18 +506,64 @@ document.addEventListener( 'mouseup', () => {
 	}
 });
 
-function getBase () {
-	const container = document.getElementById('ewk_container');
-	return new baseInits({
-		container,
-		width: container.offsetWidth,
-		height: container.offsetHeight,
-	});
-}
-
 function updateSizeEwk () {
 	base = getBase();
 	updateEWK();
 }
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Resize debugOut
+//
+
+let vrPosX = null;
+const left_div = document.getElementById('left');
+const right_div = document.getElementById('right');
+
+function vrmove (ev) {
+	const diff = ev.clientX - vrPosX;
+	left_div.style.width = `${ left_div.offsetWidth + diff }px`;
+	right_div.style.width = `${ right_div.offsetWidth - diff }px`;
+	vrPosX = ev.clientX;
+	ev.stopPropagation();
+	ev.preventDefault();
+}
+
+const vr = document.getElementById( 'vruler' );
+vr.addEventListener( 'mousedown', (ev) => {
+	if ( vrPosX === null ) {
+		vrPosX = ev.clientX;
+		document.addEventListener( 'mousemove', vrmove );
+		ev.stopPropagation();
+	}
+});
+document.addEventListener( 'mouseup', () => {
+	if ( vrPosX !== null ) {
+		vrPosX = null;
+		document.removeEventListener( 'mousemove', vrmove );
+		updateSizeEwk();
+	}
+});
+
+function debugOutObj ( t, res ) {
+	// let dbg = `<span style="background-color:${ t == 'Scores' ? '#FADBD8' : '#FCF3CF'}">${t}:</span><br><table>`;
+	// Object.entries( res )
+	// 	// .sort( (a,b) => a[0]==b[0] ? NaN : a[0]<b[0] ? -1 : 1 )
+	// 	.forEach( ([k,v]) => dbg += `<tr><td>${k}:</td><td>${JSON.stringify(v)}</td></tr>` );
+	// debugOut( dbg + "</table><br>" );
+	let dbg = `<span style="background-color:${ t == 'Scores' ? '#FADBD8' : '#FCF3CF'}">${t}:</span><br>`;
+	Object.entries( res )
+		// .sort( (a,b) => a[0]==b[0] ? NaN : a[0]<b[0] ? -1 : 1 )
+		.forEach( ([k,v]) => dbg += `${k}: ${JSON.stringify(v)}<br>` );
+	debugOut( dbg + "<br>" );
+}
+
+const debugOutDiv = document.getElementById( 'debugOut' );
+function debugOut (s) {
+	debugOutDiv.innerHTML += "\n"+s;
+	debugOutDiv.scrollTop = debugOutDiv.scrollHeight;
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 window.onresize = updateSizeEwk;

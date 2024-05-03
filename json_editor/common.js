@@ -139,7 +139,7 @@ export function addScoringValsParser (obj) {
 export function addStatusVarDef ( obj, json ) {
 
 	if ( !obj.statusVarDef && json.dataSettings && json.dataSettings.variablePrefix ) {
-		const statVarName = `V_${json.dataSettings.variablePrefix}_Status`;
+		const statVarName = `S_${json.dataSettings.variablePrefix}_Status`;
 		obj.statusVarDef = function () {
 			return {
 				[statVarName]: +this.getDefaultChangeState(),

@@ -18,22 +18,32 @@
 
 </head>
 <body>
-	<div id="EWK">
-		<div id="ewk_container"></div>
-		<div id="ewk_textcontainer">
-			<div></div>
+	<div id="all">
+		<div id="left">
+
+			<div id="EWK">
+				<div id="ewk_container"></div>
+				<div id="ewk_textcontainer">
+					<div></div>
+				</div>
+			</div>
+			<hr id="ruler">
+			<div id="editor_container">
+				<div id="JSON_EDITOR"></div>
+				<div id="json_button">
+					<button id="save">Save JSON</button>
+					<button id="exportsvg">Export SVG</button>
+					<input type="file" id="json_upload" accept=".json">
+					<button id="load">Load JSON</button>
+				</div>
+				<div id="schema_select"></div>
+			</div>
+
 		</div>
-	</div>
-	<hr id="ruler">
-	<div id="editor_container">
-		<div id="JSON_EDITOR"></div>
-		<div id="json_button">
-			<button id="save">Save JSON</button>
-			<button id="exportsvg">Export SVG</button>
-			<input type="file" id="json_upload" accept=".json">
-			<button id="load">Load JSON</button>
+		<div id="vruler"></div>
+		<div id="right">
+			<div id="debugOut"></div>
 		</div>
-		<div id="schema_select"></div>
 	</div>
 </body>
 </html>

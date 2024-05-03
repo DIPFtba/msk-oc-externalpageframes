@@ -836,6 +836,8 @@
 					"type": "boolean",
 					"format": "checkbox",
 					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
 						"infoText": "Erzeuge Status-Variable, die angibt, ob mind. eine Verbindung von Labels zum Strahl erstellt wurde"
 					}
 				},
@@ -844,6 +846,8 @@
 					"type": "boolean",
 					"format": "checkbox",
 					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
 						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Verbindungen von Labels zum Strahl erstellt wurde"
 					}
 				},
@@ -852,6 +856,8 @@
 					"type": "boolean",
 					"format": "checkbox",
 					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
 						"infoText": "Erzeuge Status-Variable, die angibt, ob mind. Label mit Text benannt wurde"
 					}
 				},
@@ -860,6 +866,8 @@
 					"type": "boolean",
 					"format": "checkbox",
 					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
 						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Labels mit Text benannt wurden"
 					}
 				},
@@ -869,6 +877,8 @@
 					"format": "checkbox",
 					"default": true,
 					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
 						"infoText": "Erzeuge Status-Variable, die angibt, ob mind. eine Verbindung erstellt oder ein Label benannt wurde"
 					}
 				},
@@ -878,6 +888,8 @@
 					"format": "checkbox",
 					"default": true,
 					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
 						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Verbindungen erstellt und alle Labels benannt wurden"
 					}
 				},

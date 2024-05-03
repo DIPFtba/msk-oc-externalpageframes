@@ -245,11 +245,11 @@ function loadSchema( schema ) {
 
 /// #if __DEVELOP
 
-// for Development: always load one JSON schema
-loadSchema( connectedFramesJSONSchema );
-window.updateEWK = updateEWK;
+// // for Development: always load one JSON schema
+// loadSchema( connectedFramesJSONSchema );
+// window.updateEWK = updateEWK;
 
-/// #else
+// /// #else
 
 // load schema Links
 const templs = {

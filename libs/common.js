@@ -230,12 +230,17 @@ export const addArrow = function ( layer, opts ) {
 		x: p0.x + pointerLength * u.x - pointerWidth * v.x,
 		y: p0.y + pointerLength * u.y - pointerWidth * v.y
 	};
-	layer.add(
-		new Konva.Line({
+
+	const kOpts = Object.assign({
 			fill: "black",
-			...opts,
-			points: [p1.x, p1.y, p0.x, p0.y, p2.x, p2.y],
+		},
+			opts,
+		{
+			points: [p0.x, p0.y, p1.x, p1.y, p2.x, p2.y],
 			closed: true
-		})
+		}
+	);
+	layer.add(
+		new Konva.Line(kOpts)
 	);
 };

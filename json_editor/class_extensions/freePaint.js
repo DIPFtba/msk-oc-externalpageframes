@@ -50,7 +50,7 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 		})
 
 		this.layer.draw();
-		this.startListeningToGetImageRequests();
+		this.startGetImageListener();
 /// #if __DEVELOP
 		window.getRectPngImage = this.getRectPngImage.bind(this);
 /// #endif
@@ -64,11 +64,11 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 			width: this.width + 2*Math.ceil( this.frameWidth/2 ),
 			height: this.height + 2*Math.ceil( this.frameWidth/2 ),
 		});
-		return url;
 // console.log(url);
+		return url;
 	}
 
-	startListeningToGetImageRequests () {
+	startGetImageListener () {
 
 		// listener for providing image as BASE64 URL
 		window.addEventListener(

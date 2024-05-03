@@ -1,22 +1,67 @@
 import '../../examples/main.css';
 
-const cfgFile = "extres_cfg.json";
-const errMsg = `ExtRes: Error reading '${cfgFile}'!`;
+const configFileName = "extres_cfg.json";
+const schemaFileName = "extres_cfg.schema.json";
 
 function loadJSON () {
-	const xhr = new XMLHttpRequest();
-	xhr.open( "GET", cfgFile, true );
-	xhr.onload = () => {
-		if ( xhr.readyState === 4 ) {
-			if ( xhr.status === 200 ) {
-				initJSON( xhr.responseText );
-			} else {
-				console.error( errMsg );
+
+	fetch( configFileName )
+		.then( response => {
+			if ( !response.ok ) {
+				throw new Error( `ExtRes: Error reading '${configFileName}'!` );
 			}
-		}
-	};
-	xhr.onerror = () => console.error( errMsg );
-	xhr.send(null);
+			return response.json();
+		})
+		.then( json => initJSON( json ) )
+		.catch( error => console.error( error ) );
+
+}
+
+function startImportSchemaListener () {
+
+	// get the folder name of the EPF
+	const getEPFFolderName = () => {
+		const regexp = window.location.pathname.match( /\/([^/]+)\/[^/]*$/ );
+		return regexp ? regexp[1] : '.';
+	}
+
+	// listener for providing JSON SCHEMA to ItemBuilder
+	window.addEventListener(
+		"message",
+		(event) => {
+
+			try {
+				const { callId } = JSON.parse(event.data);
+				if ( callId !== undefined && callId.includes("importJsonData") ) {
+
+					fetch( schemaFileName )
+						.then( response => {
+							if ( !response.ok ) {
+								throw new Error( `ExtRes: Error reading '${schemaFileName}'!` );
+							}
+							return response.json();
+						})
+						.then( jsonSchema => {
+
+							const pass_data = {
+								jsonSchema,
+								configFileName: getEPFFolderName() + '/' + configFileName,
+								callId
+							};
+							window.parent.postMessage( JSON.stringify( pass_data ), '*' );
+
+						})
+						.catch( error => console.error( error ) );
+
+				}
+			} catch (e) {}
+		},
+		false );
+}
+
+function initExtRes () {
+	startImportSchemaListener();
+	loadJSON();
 }
 
 
@@ -63,7 +108,7 @@ function initJSON ( json ) {
 		try {
 			json = JSON.parse( json, true );
 		} catch (e) {
-			console.error( `Format-Error in JSON file '${cfgFile}'` );
+			console.error( `Format-Error in JSON file '${configFileName}'` );
 			return;
 		}
 	}
@@ -114,8 +159,12 @@ function initJSON ( json ) {
 
 	addStatusVarDef( io, json );
 
-	window.getState = io.getState.bind(io);
-	window.setState = io.setState.bind(io);
+	if ( io.getState ) {
+		window.getState = io.getState.bind(io);
+	}
+	if ( io.setState ) {
+		window.setState = io.setState.bind(io);
+	}
 }
 
-document.addEventListener( "DOMContentLoaded", loadJSON );
+document.addEventListener( "DOMContentLoaded", initExtRes );

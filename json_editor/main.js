@@ -255,11 +255,11 @@ function loadSchema( schema ) {
 
 /// #if __DEVELOP
 
-// // for Development: always load one JSON schema
-// loadSchema( connectedFramesJSONSchema );
-// window.updateEWK = updateEWK;
+// for Development: always load one JSON schema
+loadSchema( connectedFramesJSONSchema );
+window.updateEWK = updateEWK;
 
-// /// #else
+/// #else
 
 // load schema Links
 const templs = {
@@ -306,6 +306,7 @@ function updateEWK () {
 	// Alles löschen
 	base.stage.destroyChildren();
 	base.stage.setAttr( 'bw__IconBarLayer', null );
+	debugOutClear();
 
 	try {
 
@@ -329,10 +330,7 @@ console.log( '======= cfgData:', cfgData );
 				let oldScoreVals = {};
 				extres.scoreDef = function () {
 					const res = oldScoreDef();
-					if ( typeof res === 'object' && !object_equals( res, oldScoreVals ) ) {
-						debugOutObj( 'Scores', res );
-						oldScoreVals = res;
-					}
+					oldScoreVals = debugOutObj( 'Scores', res, oldScoreVals );
 					return res;
 				}
 				extres.scoreDef();
@@ -345,10 +343,7 @@ console.log( '======= cfgData:', cfgData );
 				let oldStatusVar = {};
 				extres.statusVarDef = function () {
 					const res = oldStatusVarDef();
-					if ( typeof res === 'object' && !object_equals( res, oldStatusVar ) ) {
-						debugOutObj( 'Status', res );
-						oldStatusVar = res;
-					}
+					oldStatusVar = debugOutObj( 'Status', res, oldStatusVar );
 					return res;
 				}
 				extres.statusVarDef();
@@ -545,17 +540,28 @@ document.addEventListener( 'mouseup', () => {
 	}
 });
 
-function debugOutObj ( t, res ) {
-	// let dbg = `<span style="background-color:${ t == 'Scores' ? '#FADBD8' : '#FCF3CF'}">${t}:</span><br><table>`;
-	// Object.entries( res )
-	// 	// .sort( (a,b) => a[0]==b[0] ? NaN : a[0]<b[0] ? -1 : 1 )
-	// 	.forEach( ([k,v]) => dbg += `<tr><td>${k}:</td><td>${JSON.stringify(v)}</td></tr>` );
-	// debugOut( dbg + "</table><br>" );
-	let dbg = `<span style="background-color:${ t == 'Scores' ? '#FADBD8' : '#FCF3CF'}">${t}:</span><br>`;
-	Object.entries( res )
-		// .sort( (a,b) => a[0]==b[0] ? NaN : a[0]<b[0] ? -1 : 1 )
-		.forEach( ([k,v]) => dbg += `${k}: ${JSON.stringify(v)}<br>` );
-	debugOut( dbg + "<br>" );
+function debugOutObj ( t, res, oldRes ) {
+
+	if ( typeof res === 'object' && !object_equals( res, oldRes ) ) {
+		// let dbg = `<span style="background-color:${ t == 'Scores' ? '#FADBD8' : '#FCF3CF'}">${t}:</span><br><table>`;
+		// Object.entries( res )
+		// 	// .sort( (a,b) => a[0]==b[0] ? NaN : a[0]<b[0] ? -1 : 1 )
+		// 	.forEach( ([k,v]) => dbg += `<tr><td>${k}:</td><td>${JSON.stringify(v)}</td></tr>` );
+		// debugOut( dbg + "</table><br>" );
+		let dbg = `<span class="${t}">${t}:</span>`;
+		Object.entries( res )
+			// .sort( (a,b) => a[0]==b[0] ? NaN : a[0]<b[0] ? -1 : 1 )
+			.forEach( ([k,v]) => dbg += `<span class="${ oldRes[k] !== v ? 'c' :'nc' }">${k}: ${JSON.stringify(v)}</span>` );
+		debugOut( dbg + "<br>" );
+
+		return res;
+	}
+
+	return oldRes;
+}
+
+function debugOutClear () {
+	debugOutDiv.innerHTML = '';
 }
 
 const debugOutDiv = document.getElementById( 'debugOut' );

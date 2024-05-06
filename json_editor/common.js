@@ -67,13 +67,27 @@ export function clearCfgJson( json ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-export function addScoringValsParser (obj) {
+function debugAndConsole (s) {
+	if ( debugOut )	{
+		debugOut( `<span class="error">${s}</span>` );
+	}
+	console.error(s);
+}
+
+import { Parser } from 'expr-eval';
+
+export function addScoringValsParser ( obj, addFncs={} ) {
+
+	// create Parser, add addFncs
+	const parser = new Parser();
+	for ( const fnc in addFncs ) {
+		parser.functions[fnc]( addFncs[fnc] );
+	}
 
 	obj.parseScoringVals = function (opts) {
 		if ( opts.dataSettings && opts.dataSettings.scoringVals && this.scoreDef ) {
 
 			const scoringVals = opts.dataSettings.scoringVals;
-			const pref = opts.dataSettings.variablePrefix;
 
 			const scores = this.scoreDef();
 			if ( typeof scores === 'object' ) {
@@ -87,18 +101,18 @@ export function addScoringValsParser (obj) {
 							const allVarsInCond = cond.matchAll( /\$\{([^}]*)}/g );
 							for ( const vn of allVarsInCond ) {
 								if ( vn[1].length == 0 ) {
-									console.error( `Variablen-Name '[]' in Scoring nicht zulässig` );
+									debugAndConsole( `Variablen-Name '\${}' in Scoring nicht zulässig` );
 								} else {
 									const re = new RegExp( vn[1], 'i' );
 									const selVarNames = varNames.filter( v => v.match(re) );
 									if ( selVarNames.length>1 ) {
-										console.error( `Variablen-Name '[${vn[1]}]' in Scoring ist nicht eindeutig`);
+										debugAndConsole( `Variablen-Name '\${${vn[1]}}' in Scoring ist nicht eindeutig`);
 										saveCond = '';
 									} else if ( selVarNames.length == 0 ) {
-										console.error( `Variablen-Name '[${vn[1]}]' in Scoring unbekannt`);
+										debugAndConsole( `Variablen-Name '\${${vn[1]}}' in Scoring unbekannt`);
 										saveCond = '';
 									} else {
-										saveCond = saveCond.replace( vn[0], `res.${selVarNames[0]}` );
+										saveCond = saveCond.replace( vn[0], selVarNames[0] );
 									}
 								}
 							}
@@ -106,7 +120,11 @@ export function addScoringValsParser (obj) {
 								if ( !( 'scoringVals' in this ) ) {
 									this.scoringVals = {};
 								}
-								this.scoringVals[ sv.val ] = saveCond;
+								try {
+									this.scoringVals[ sv.val ] = parser.parse( saveCond );
+								} catch (e) {
+									debugAndConsole( `Syntax-Fehler in Scoring-Condition: ${cond}` );
+								}
 							}
 						}
 					});
@@ -122,10 +140,12 @@ export function addScoringValsParser (obj) {
 			for ( let h=0; score==null && h<scoreDat.length; h++ ) {
 				const [v,c] = scoreDat[h];
 				try {
-					if ( eval(c) ) {
+					if ( c.evaluate( res ) ) {
 						score = v;
 					}
-				} catch (e) {}
+				} catch (e) {
+					debugAndConsole( `Error in scoring-condition` );
+				}
 			}
 			const n = Number(score)
 			res[ `S_${this.dataSettings.variablePrefix}` ] = score!== null && n!==NaN ? n : score;

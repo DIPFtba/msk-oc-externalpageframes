@@ -47,6 +47,13 @@ html,body {
 #debugOut span.nc {
 	color: #c0c0c0;
 }
+#debugOut span.error {
+	color: red;
+	background-color: yellow;
+	padding: 5px;
+	white-space: wrap;
+	font-weight: bold;
+}
 /* #debugOut tr td:nth-child(1) {
 	text-align: right;
 } */

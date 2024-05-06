@@ -14,8 +14,9 @@ export class inputInsertsFromSchema extends inputInserts {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
+		const div = typeof divSelector === 'string' ? document.querySelector( divSelector ) : divSelector;
 		opts.divStyles = {
-			width: `${ opts.width > 0 ? opts.width : window.innerWidth+opts.width }px`,
+			width: `${ opts.width > 0 ? opts.width : div.offsetWidth + opts.width }px`,
 		};
 		opts.toolbar = toolbarMathOperators;
 		opts.inputRegexp = '^([0-9]*(?:[,.][0-9]*)?|[ +*/:=-]|\u2212|\u22c5|\u2022|\u25cf|\u2236|\u003d)*$';

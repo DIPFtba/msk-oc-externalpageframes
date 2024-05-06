@@ -413,6 +413,7 @@ export class numberLineWithArcs {
 				readonly: ao.labelReadonly || this.readonly,
 				onChange: () => {
 					ao.label = ao.labelObj.value;	// for get/set State()
+					this.sendChangeState();
 				},
 			}) )
 		}

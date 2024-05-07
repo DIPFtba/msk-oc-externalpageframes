@@ -3,7 +3,7 @@ import { addScoringValsParser } from "../common";
 
 export class barSliderFromSchema extends barSlider {
 
-	constructor ( base, opts = {} ) {
+	constructor ( base, opts = {}, addMods={}  ) {
 
 		if ( opts.width<= 0 ) {
 			opts.width += base.width - opts.x;
@@ -11,7 +11,7 @@ export class barSliderFromSchema extends barSlider {
 
 		super( base, opts );
 
-		addScoringValsParser(this);
+		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
 	}
 

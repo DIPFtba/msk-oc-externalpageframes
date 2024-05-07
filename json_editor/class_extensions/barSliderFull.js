@@ -3,7 +3,7 @@ import { addScoringValsParser, dp2inputRegExp } from "../common";
 
 export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabels_insertButtons {
 
-	constructor ( base, opts = {} ) {
+	constructor ( base, opts = {}, addMods={}  ) {
 
 		// BarSlider Defs
 		if ( opts.width<= 0 ) {
@@ -101,7 +101,7 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 
 		super( base, opts );
 
-		addScoringValsParser(this);
+		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
 	}
 

@@ -3,7 +3,7 @@ import { addScoringValsParser } from "../common";
 
 export class filledBarFromSchema extends filledBar {
 
-	constructor ( base, opts = {} ) {
+	constructor ( base, opts = {}, addMods={}  ) {
 
 		if ( opts.stickyTo === 'no' ) {
 			opts.stickyTo = null;
@@ -20,7 +20,7 @@ export class filledBarFromSchema extends filledBar {
 
 		super( base, opts );
 
-		addScoringValsParser(this);
+		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
 	}
 

@@ -3,7 +3,7 @@ import { readRangeArray, addScoringValsParser } from "../common";
 
 export class rectArrayMarkableFromSchema extends rectArrayMarkable {
 
-	constructor ( base, opts = {} ) {
+	constructor ( base, opts = {}, addMods={}  ) {
 
 		const d = opts.rectArray;
 		if ( d ) {
@@ -17,7 +17,7 @@ export class rectArrayMarkableFromSchema extends rectArrayMarkable {
 
 		super( base, opts );
 
-		addScoringValsParser(this);
+		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
 	}
 

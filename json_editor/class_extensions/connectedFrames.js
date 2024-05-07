@@ -4,7 +4,7 @@ import { addScoringValsParser } from "../common";
 
 export class connectedFramesFromSchema extends connectedFrames {
 
-	constructor ( base, opts = {} ) {
+	constructor ( base, opts = {}, addMods={}  ) {
 
 		const getConnectorPos = {
 			t: (frame) => ({ x: frame.x + frame.width/2, y: frame.y }),
@@ -72,7 +72,7 @@ export class connectedFramesFromSchema extends connectedFrames {
 
 		super( base, opts );
 
-		addScoringValsParser(this);
+		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
 
 		this.__inpFrames = this.frames.filter( (frame) => !frame.readonly );

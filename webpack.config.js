@@ -147,6 +147,7 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 	context: path.resolve( __dirname, 'json_editor/class_extensions' ),
 	entry: './main.js',
 	output: {
+		chunkFilename: '[name].js',
 		path: path.resolve( extres_dir, extres ),
 		filename: 'main.js' ,
 	},

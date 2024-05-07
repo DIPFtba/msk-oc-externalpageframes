@@ -2,14 +2,14 @@ import { numberLineWithAnnotations } from '../../libs/numberLineWithAnnotations'
 import { dp2inputRegExp, addScoringValsParser } from '../common';
 export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotations {
 
-	constructor ( base, opts = {} ) {
+	constructor ( base, opts = {}, addMods={}  ) {
 
 		// pre-decimal places & decimal places --> inputRegexp
 		opts.annotations.forEach( ann => dp2inputRegExp(ann) );
 
 		super( base, opts );
 
-		addScoringValsParser(this);
+		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
 	}
 

@@ -93,6 +93,7 @@ let schemaData;
 	window.JSONEditor = JSONEditor;
 /// #endif
 import { object_equals } from '../libs/common';
+import { Parser } from 'expr-eval';
 
 function searchSchemaData( json ) {
 
@@ -159,29 +160,33 @@ function loadSchema( schema ) {
 	editor.on( 'ready', () => {
 		const json = editor.getValue('root');
 		schemaData = searchSchemaData(json);
+		const addMods = {
+			Parser
+		};
+
 		try {
 			if ( schemaData && schemaData.___name ) {
 				switch (schemaData.___name) {
 
 					case 'barPlot':
 						initContainer(true);
-						creator = (cfgData) => new barPlotFromSchema( base, cfgData );
+						creator = (cfgData) => new barPlotFromSchema( base, cfgData, addMods );
 						break;
 					case 'barSlider':
 						initContainer(true);
-						creator = (cfgData) => new barSliderFromSchema( base, cfgData );
+						creator = (cfgData) => new barSliderFromSchema( base, cfgData, addMods );
 						break;
 					case 'barSliderFull':
 						initContainer(true);
-						creator = (cfgData) => new barSliderFullFromSchema( base, cfgData );
+						creator = (cfgData) => new barSliderFullFromSchema( base, cfgData, addMods );
 						break;
 					case 'connectedFrames':
 						initContainer(true);
-						creator = (cfgData) => new connectedFramesFromSchema( base, cfgData );
+						creator = (cfgData) => new connectedFramesFromSchema( base, cfgData, addMods );
 						break;
 					case 'filledBar':
 						initContainer(true);
-						creator = (cfgData) => new filledBarFromSchema( base, cfgData );
+						creator = (cfgData) => new filledBarFromSchema( base, cfgData, addMods );
 						break;
 					case 'freePaint':
 						initContainer(true);
@@ -197,23 +202,23 @@ function loadSchema( schema ) {
 						break;
 					case 'numberLineWithAnnotations':
 						initContainer(true);
-						creator = (cfgData) => new numberLineWithAnnotationsFromSchema( base, cfgData );
+						creator = (cfgData) => new numberLineWithAnnotationsFromSchema( base, cfgData, addMods );
 						break;
 					case 'numberLineWithArcs':
 						initContainer(true);
-						creator = (cfgData) => new numberLineWithArcsFromSchema( base, cfgData );
+						creator = (cfgData) => new numberLineWithArcsFromSchema( base, cfgData, addMods );
 						break;
 					case 'numbersByPictures':
 						initContainer(true);
-						creator = (cfgData) => new numbersByPicturesFromSchema( base, cfgData );
+						creator = (cfgData) => new numbersByPicturesFromSchema( base, cfgData, addMods );
 						break;
 					case 'pointArea':
 						initContainer(true);
-						creator = (cfgData) => new pointAreaFromSchema( base, cfgData );
+						creator = (cfgData) => new pointAreaFromSchema( base, cfgData, addMods );
 						break;
 					case 'rectArrayMarkable':
 						initContainer(true);
-						creator = (cfgData) => new rectArrayMarkableFromSchema( base, cfgData );
+						creator = (cfgData) => new rectArrayMarkableFromSchema( base, cfgData, addMods );
 						break;
 					case 'stampImages':
 						initContainer(true);
@@ -229,7 +234,7 @@ function loadSchema( schema ) {
 					case 'inputInserts':
 						creator = (cfgData) => {
 							initContainer(false);
-							return new inputInsertsFromSchema( textContainer.firstChild, cfgData, base );
+							return new inputInsertsFromSchema( textContainer.firstChild, cfgData, base, addMods );
 						}
 						break;
 

@@ -3,7 +3,7 @@ import { addScoringValsParser } from '../common';
 
 export class numbersByPicturesFromSchema extends numbersByPictures {
 
-	constructor ( base, opts={} ) {
+	constructor ( base, opts={}, addMods={}  ) {
 
 		const iconWidth = 22;
 		const depth = 18;
@@ -32,7 +32,7 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 
 		super( base, opts );
 
-		addScoringValsParser(this);
+		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
 	}
 

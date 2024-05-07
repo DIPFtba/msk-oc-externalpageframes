@@ -3,7 +3,7 @@ import { dp2inputRegExp, addScoringValsParser } from "../common";
 
 export class barPlotFromSchema extends barPlot {
 
-	constructor ( base, opts = {} ) {
+	constructor ( base, opts = {}, addMods={} ) {
 
 		// basic
 		if ( opts.origin.x < 0 ) {
@@ -62,7 +62,7 @@ export class barPlotFromSchema extends barPlot {
 
 		super( base, opts );
 
-		addScoringValsParser(this);
+		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
 	}
 

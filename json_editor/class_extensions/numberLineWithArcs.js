@@ -2,7 +2,7 @@ import { numberLineWithArcs } from '../../libs/numberLineWithArcs'
 import { dp2inputRegExp, addScoringValsParser } from '../common';
 export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 
-	constructor ( base, opts = {} ) {
+	constructor ( base, opts = {}, addMods={}  ) {
 
 		// pre-decimal places & decimal places --> inputRegexp
 		[ opts.defaultArcLabel, opts.defaultTickLabel ].forEach( ann => dp2inputRegExp(ann) );
@@ -17,7 +17,7 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 
 		super( base, opts );
 
-		addScoringValsParser(this);
+		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
 	}
 

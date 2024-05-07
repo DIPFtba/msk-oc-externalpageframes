@@ -12,7 +12,7 @@ import { addScoringValsParser } from '../common';
 
 export class inputInsertsFromSchema extends inputInserts {
 
-	constructor ( divSelector, opts = {}, base = null ) {
+	constructor ( divSelector, opts = {}, base = null, addMods={}  ) {
 
 		const div = typeof divSelector === 'string' ? document.querySelector( divSelector ) : divSelector;
 		opts.divStyles = {
@@ -26,7 +26,7 @@ export class inputInsertsFromSchema extends inputInserts {
 		if ( opts.dataSettings && opts.dataSettings.scoringPattern ) {
 			this.parseScoringPattern( opts.dataSettings.scoringPattern, opts.dataSettings.variablePrefix );
 		}
-		addScoringValsParser(this);
+		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
 	}
 

@@ -4,13 +4,13 @@ import { addScoringValsParser } from "../common";
 
 export class pointAreaFromSchema extends pointArea {
 
-	constructor ( base, opts = {} ) {
+	constructor ( base, opts = {}, addMods={}  ) {
 
 		opts.colors.unshift( opts.dotColor );
 
 		super( base, opts );
 
-		addScoringValsParser(this);
+		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
 	}
 

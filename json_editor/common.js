@@ -67,21 +67,34 @@ export function clearCfgJson( json ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-function debugAndConsole (s) {
+import { isBetween, isNumUnit } from "../libs/common";
+
+function debugAndConsoleOut (s) {
 	if ( debugOut )	{
 		debugOut( `<span class="error">${s}</span>` );
 	}
 	console.error(s);
 }
 
-import { Parser } from 'expr-eval';
+export function addScoringValsParser ( obj, Parser=null, addFncs={} ) {
 
-export function addScoringValsParser ( obj, addFncs={} ) {
+	if ( !Parser ) {
+		obj.parseScoringVals = () => {};
+		obj.computeScoringVals = () => {};
+		return;
+	}
 
 	// create Parser, add addFncs
 	const parser = new Parser();
+	Object.assign( addFncs, {
+		isNumUnit,
+		isBetween,
+		match: (a,b) => a.match(b),
+		// regexp: (a,b) => a.match(b),
+		strEqual: (a,b) => a.toLowerCase == b.toLowerCase,
+	});
 	for ( const fnc in addFncs ) {
-		parser.functions[fnc]( addFncs[fnc] );
+		parser.functions[fnc]= addFncs[fnc];
 	}
 
 	obj.parseScoringVals = function (opts) {
@@ -101,15 +114,15 @@ export function addScoringValsParser ( obj, addFncs={} ) {
 							const allVarsInCond = cond.matchAll( /\$\{([^}]*)}/g );
 							for ( const vn of allVarsInCond ) {
 								if ( vn[1].length == 0 ) {
-									debugAndConsole( `Variablen-Name '\${}' in Scoring nicht zulässig` );
+									debugAndConsoleOut( `Variablen-Name '\${}' in Scoring nicht zulässig` );
 								} else {
 									const re = new RegExp( vn[1], 'i' );
 									const selVarNames = varNames.filter( v => v.match(re) );
 									if ( selVarNames.length>1 ) {
-										debugAndConsole( `Variablen-Name '\${${vn[1]}}' in Scoring ist nicht eindeutig`);
+										debugAndConsoleOut( `Variablen-Name '\${${vn[1]}}' in Scoring ist nicht eindeutig`);
 										saveCond = '';
 									} else if ( selVarNames.length == 0 ) {
-										debugAndConsole( `Variablen-Name '\${${vn[1]}}' in Scoring unbekannt`);
+										debugAndConsoleOut( `Variablen-Name '\${${vn[1]}}' in Scoring unbekannt`);
 										saveCond = '';
 									} else {
 										saveCond = saveCond.replace( vn[0], selVarNames[0] );
@@ -123,7 +136,7 @@ export function addScoringValsParser ( obj, addFncs={} ) {
 								try {
 									this.scoringVals[ sv.val ] = parser.parse( saveCond );
 								} catch (e) {
-									debugAndConsole( `Syntax-Fehler in Scoring-Condition: ${cond}` );
+									debugAndConsoleOut( `Syntax-Fehler in Scoring-Condition: ${cond}` );
 								}
 							}
 						}
@@ -144,7 +157,7 @@ export function addScoringValsParser ( obj, addFncs={} ) {
 						score = v;
 					}
 				} catch (e) {
-					debugAndConsole( `Error in scoring-condition` );
+					debugAndConsoleOut( `Error in scoring-condition` );
 				}
 			}
 			const n = Number(score)

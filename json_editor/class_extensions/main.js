@@ -114,6 +114,7 @@ function initJSON ( json ) {
 	}
 
 	const cfg = clearCfgJson( json );
+
 /// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts'
 	const base = new baseInits();
 /// #else
@@ -123,48 +124,61 @@ function initJSON ( json ) {
 		base.dataSettings = cfg.dataSettings;
 	}
 
+	// load Parser lazy or not
+	new Promise( resolve => {
+
+		if ( cfg.dataSettings && cfg.dataSettings.scoringVals && cfg.dataSettings.scoringVals.length>0 ) {
+			import( /* webpackChunkName: "sce" */ 'expr-eval' ).then( module => resolve( { Parser: module.Parser } ) );
+		} else {
+			resolve({});
+		}
+
+	}).then( addMods => {
+
 /// #if __CLASS == 'barPlot'
-	const io = new barPlotFromSchema( base, cfg );
+		const io = new barPlotFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'barSlider'
-	const io = new barSliderFromSchema( base, cfg );
+		const io = new barSliderFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'barSliderFull'
-	const io = new barSliderFullFromSchema( base, cfg );
+		const io = new barSliderFullFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'connectedFrames'
-	const io = new connectedFramesFromSchema( base, cfg );
+		const io = new connectedFramesFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'filledBar'
-	const io = new filledBarFromSchema( base, cfg );
+		const io = new filledBarFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'freePaint'
-	const io = new freePaintFromSchema( base, cfg );
+		const io = new freePaintFromSchema( base, cfg );
 /// #elif __CLASS == 'inputGrid'
-	const io = new inputGridFromSchema( base, cfg );
+		const io = new inputGridFromSchema( base, cfg );
 /// #elif __CLASS == 'numbersByPictures'
-	const io = new numbersByPicturesFromSchema( base, cfg );
+		const io = new numbersByPicturesFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'numberLine'
-	const io = new numberLineFromSchema( base, cfg );
+		const io = new numberLineFromSchema( base, cfg );
 /// #elif __CLASS == 'numberLineWithAnnotations'
-	const io = new numberLineWithAnnotationsFromSchema( base, cfg );
+		const io = new numberLineWithAnnotationsFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'numberLineWithArcs'
-	const io = new numberLineWithArcsFromSchema( base, cfg );
+		const io = new numberLineWithArcsFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'pointArea'
-	const io = new pointAreaFromSchema( base, cfg );
+		const io = new pointAreaFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'rectArrayMarkable'
-	const io = new rectArrayMarkableFromSchema( base, cfg );
+		const io = new rectArrayMarkableFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'stampImages'
-	const io = new stampImagesFromSchema( base, cfg );
+		const io = new stampImagesFromSchema( base, cfg );
 /// #elif __CLASS == 'inputInserts'
-	const io = new inputInsertsFromSchema( '#container', cfg, base );
+		const io = new inputInsertsFromSchema( '#container', cfg, base, addMods );
 /// #elif __CLASS == 'textareaInserts'
-	const io = new textareaInsertsFromSchema( '#container', cfg, base );
+		const io = new textareaInsertsFromSchema( '#container', cfg, base );
 /// #endif
 
-	addStatusVarDef( io, json );
+		addStatusVarDef( io, json );
 
-	if ( io.getState ) {
-		window.getState = io.getState.bind(io);
-	}
-	if ( io.setState ) {
-		window.setState = io.setState.bind(io);
-	}
+		if ( io.getState ) {
+			window.getState = io.getState.bind(io);
+		}
+		if ( io.setState ) {
+			window.setState = io.setState.bind(io);
+		}
+
+	});
 }
 
 document.addEventListener( "DOMContentLoaded", initExtRes );

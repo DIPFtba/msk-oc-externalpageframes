@@ -5,8 +5,6 @@ import { Line } from 'konva/lib/shapes/Line'
 import { Circle } from 'konva/lib/shapes/Circle'
 import { Text } from 'konva/lib/shapes/Text'
 
-import { addArrow } from './common'
-
 export class numberLine {
 
 	constructor ( layer, opts = {} ) {
@@ -54,23 +52,23 @@ export class numberLine {
 				return (x-this.x)/this.unit + this.valFrom;
 			}
 
-			// this.numberLine
-			layer.add( new Konva.Line( {
-				points: [ this.x, this.y, this.x+this.width, this.y ],
-				stroke: 'black',
-				strokeWidth: this.lineHeight,
-			}));
-
-			// arrow
 			if ( this.arrowDist ) {
-				addArrow( layer, {
-					points: [ this.x+this.width, this.y, this.x+this.width+this.arrowDist, this.y ],
+				// with arrow
+				layer.add( new Konva.Arrow({
+					points: [ this.x, this.y, this.x+this.width+this.arrowDist, this.y ],
 					pointerLength: this.arrowWidth,
 					pointerWidth: this.arrowHeight,
 					fill: 'black',
 					stroke: 'black',
 					strokeWidth: this.lineHeight,
-				})
+				}) );
+			} else {
+				// without arrow
+				layer.add( new Konva.Line( {
+					points: [ this.x, this.y, this.x+this.width, this.y ],
+					stroke: 'black',
+					strokeWidth: this.lineHeight,
+				}));
 			}
 
 			// Ticks

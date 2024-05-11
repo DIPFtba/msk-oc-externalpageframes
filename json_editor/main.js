@@ -1,8 +1,6 @@
 import './main.css';
 import { clearCfgJson, addStatusVarDef } from './common';
 
-import C2S from "canvas2svg";
-
 //////////////////////////////////////////////////////////////////////////////
 
 import { barPlotFromSchema } from './class_extensions/barPlot';
@@ -94,6 +92,7 @@ let schemaData;
 /// #endif
 import { object_equals } from '../libs/common';
 import { Parser } from 'expr-eval';
+import { konva2svg } from './konva2svg';
 
 function searchSchemaData( json ) {
 
@@ -373,33 +372,11 @@ console.log( '======= cfgData:', cfgData );
 
 function saveSVG () {
 
-	const stage = base.stage;
+	let svg = konva2svg( base.stage );
 
-	const svgLayer = new Konva.Layer();
-	const orgContext = svgLayer.canvas.context._context;
-	const c2s = svgLayer.canvas.context._context = C2S({
-			width: base.stage.width(),
-			height: base.stage.height(),
-			ctx: orgContext,
-		});
-
-	stage.add( svgLayer );
-	stage.getLayers().forEach( layer => {
-		if ( layer !== svgLayer ) {
-			const chs = layer.getChildren();
-			while ( chs.length>0 ) {
-				chs[0].moveTo( svgLayer );
-				stage.draw();
-			}
-		}
-	})
-
-	let svg = c2s.getSerializedSvg();
-	// replace all scales by scale(1,1) (correct dpi distortion)
-	svg = svg.replaceAll( /scale\([^)]+\)/g, 'scale(1,1)' );
 	textOut( "extres.svg", svg, "image/svg" );
 
-	updateEWK();
+	// updateEWK();
 }
 
 /// #if __DEVELOP

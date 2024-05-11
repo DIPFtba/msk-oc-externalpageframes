@@ -35,7 +35,7 @@
     "canvas2svg": "^1.0.16",
     "core-js": "^3.26.1",
     "expr-eval": "^2.0.2",
-    "konva": "^8.3.2"
+    "konva": "^9.3.6"
   },
   "sideEffects": [
     "**/*.css"

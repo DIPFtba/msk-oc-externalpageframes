@@ -208,39 +208,3 @@ export const getAbsPosition = function (element) {
 	}
 }
 
-
-//////////////////////////////////////
-
-export const addArrow = function ( layer, opts ) {
-	layer.add(new Konva.Line(opts));
-	const pointerLength = opts.pointerLength || 10;
-	const pointerWidth = opts.pointerWidth/2 || 3;
-	const s = { x: opts.points[0], y: opts.points[1] };
-	const p0 = { x: opts.points[2], y: opts.points[3] };
-	const dx = s.x - p0.x;
-	const dy = s.y - p0.y;
-	const norm = Math.sqrt(dx * dx + dy * dy);
-	const u = { x: dx / norm, y: dy / norm };
-	const v = { x: -u.y, y: u.x };
-	const p1 = {
-		x: p0.x + pointerLength * u.x + pointerWidth * v.x,
-		y: p0.y + pointerLength * u.y + pointerWidth * v.y
-	};
-	const p2 = {
-		x: p0.x + pointerLength * u.x - pointerWidth * v.x,
-		y: p0.y + pointerLength * u.y - pointerWidth * v.y
-	};
-
-	const kOpts = Object.assign({
-			fill: "black",
-		},
-			opts,
-		{
-			points: [p0.x, p0.y, p1.x, p1.y, p2.x, p2.y],
-			closed: true
-		}
-	);
-	layer.add(
-		new Konva.Line(kOpts)
-	);
-};

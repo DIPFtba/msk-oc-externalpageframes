@@ -7,12 +7,9 @@ const CopyPlugin = require("copy-webpack-plugin");
 const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
 
 const babel_loader = {
-	test: /\.(js)$/,
-	exclude: /node_modules/,
-	use: [{
-		loader: "babel-loader",
-		options: {
-			presets: [
+	loader: "babel-loader",
+	options: {
+		presets: [
 			[
 				'@babel/preset-env',
 				{
@@ -20,12 +17,17 @@ const babel_loader = {
 					'useBuiltIns': 'usage',
 					// 'corejs': { version: 3.26, proposals: true },
 					'corejs': { version: 3.26 },
-					'targets': [ "last 2 years", "not dead"  ]
+					'targets': [ "last 10 years", "not dead" ]
 				},
 			],
-			],
-		},
-	}],
+		],
+	},
+}
+
+const babel_plugin = {
+	test: /\.(js)$/,
+	exclude: /node_modules/,
+	use: [ babel_loader ],
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -69,7 +71,6 @@ function getEditorCfg ( env, argv ) {
 					test: /\.(png|svg)$/,
 					type: 'asset/inline',
 				},
-				babel_loader,
 			],
 		},
 
@@ -156,15 +157,18 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 		rules: [
 			{
 				test: /\.js$/,
-				use: [{
-					loader: 'ifdef-loader',
-					options: {
-						__CLASS: extres,
-						__DEVELOP: argv.mode==='production' ? false : true,
-						__EDITOR: false,
-						__item: '',
-					}
-				}],
+				use: [
+					babel_loader,
+					{
+						loader: 'ifdef-loader',
+						options: {
+							__CLASS: extres,
+							__DEVELOP: argv.mode==='production' ? false : true,
+							__EDITOR: false,
+							__item: '',
+						}
+					},
+				],
 				exclude: /node_modules/,
 			},{
 				test: /\.css$/,
@@ -176,7 +180,7 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 			},{
 				test: /\.json$/i,
 				type: "asset/resource",
-			}
+			},
 		]
 	},
 

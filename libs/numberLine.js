@@ -2,6 +2,7 @@ import { mergeDeep } from './common'
 
 import Konva from 'konva/lib/Core'
 import { Line } from 'konva/lib/shapes/Line'
+import { Arrow } from 'konva/lib/shapes/Arrow'
 import { Circle } from 'konva/lib/shapes/Circle'
 import { Text } from 'konva/lib/shapes/Text'
 

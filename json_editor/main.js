@@ -99,6 +99,10 @@ function searchSchemaData( json ) {
 	if ( json.___jsonSchemaData ) {
 		return json.___jsonSchemaData;
 	}
+	// fix old version
+	if ( json.__jsonSchemaData ) {
+		return json.__jsonSchemaData;
+	}
 
 	for ( const v of Object.values(json) ) {
 		if ( typeof v === 'object' && !Array.isArray(v) ) {

@@ -17,7 +17,7 @@ const babel_loader = {
 					'useBuiltIns': 'usage',
 					// 'corejs': { version: 3.26, proposals: true },
 					'corejs': { version: 3.26 },
-					'targets': [ "last 10 years", "not dead" ]
+					'targets': [ "last 2 years", "not dead" ]
 				},
 			],
 		],
@@ -197,7 +197,7 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 
 		new CopyPlugin({
 			patterns: [
-				{ from: path.resolve( __dirname, 'json_editor/schemes/', `${extres}.schema.json` ), to: path.resolve( extres_dir, extres, 'extres_cfg.schema.json' ) },
+				{ from: path.resolve( __dirname, 'json_editor/schemes/', `${extres}.schema.json` ), to: path.resolve( extres_dir, extres, 'extres_config.schema.json' ) },
 			],
 		}),
 

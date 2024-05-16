@@ -1,7 +1,7 @@
 import '../../examples/main.css';
 
-const configFileName = "extres_cfg.json";
-const schemaFileName = "extres_cfg.schema.json";
+const configFileName = "extres_config.json";
+const schemaFileName = "extres_config.schema.json";
 
 function loadJSON () {
 

@@ -151,7 +151,7 @@
 			},
 			"properties": {
 
-				"__jsonSchemaData": {
+				"___jsonSchemaData": {
 					"type": "object",
 					"properties": {
 						"___name": {

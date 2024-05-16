@@ -96,8 +96,8 @@ import { konva2svg } from './konva2svg';
 
 function searchSchemaData( json ) {
 
-	if ( json.__jsonSchemaData ) {
-		return json.__jsonSchemaData;
+	if ( json.___jsonSchemaData ) {
+		return json.___jsonSchemaData;
 	}
 
 	for ( const v of Object.values(json) ) {

@@ -89,7 +89,7 @@ export function addScoringValsParser ( obj, Parser=null, addFncs={} ) {
 	Object.assign( addFncs, {
 		isNumUnit,
 		isBetween,
-		match: (a,b) => a.match(b),
+		match: (a,b) => a.toString().match(b),
 		// regexp: (a,b) => a.match(b),
 		strEqual: (a,b) => a.toLowerCase == b.toLowerCase,
 	});
@@ -130,6 +130,18 @@ export function addScoringValsParser ( obj, Parser=null, addFncs={} ) {
 								}
 							}
 							if ( saveCond ) {
+								// check errors
+								[
+									[ /(?<![=!><])=(?![=!])/g, `Wertzuweisung ()=) statt Vergleichsoperator (==) in "${cond}" gefunden! Ist das beabsichtigt?` ],
+									[ /<>/g, `Zeichenkette (<>) stat (!=) in "${cond}" gefunden! Ist das beabsichtigt?` ],
+									[ /(?<!\|)(\|)(?!\|)/g, `Einzelnes | statt || in "${cond}" gefunden! Ist das beabsichtigt?`],
+									[ /(?<!&)&(?!\&)/g, `Einzelnes & statt && in "${cond}" gefunden! Ist das beabsichtigt?`],
+								].forEach( ([re, msg]) => {
+									if ( saveCond.match( re ) ) {
+										debugAndConsoleOut(msg);
+									}
+								});
+
 								if ( !( 'scoringVals' in this ) ) {
 									this.scoringVals = {};
 								}

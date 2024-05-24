@@ -54,7 +54,8 @@ export class inputInserts extends textareaInserts {
 		const mrs = `(?:${mult.map( m => `(?:${m.map( d => d.toString().replace( /[.,]/, "[.,]" ) ).join(`\\s*(?:${Ops})\\s*`)})` ).join('|')})`;
 		if ( res !== null && res !== undefined ) {
 			res = res.toString().replace( /[.,]/, "[.,]" );
-			return new RegExp( `^(?:(?:(?:${res}\\s*)?(=|\u003d)\\s*)${mrs}|${mrs}(?:\\s*(=|\u003d)(?:\\s*${res})?)${ resOpt ? '?' : ''})$` );
+			const rOpt = resOpt ? '?' : '';
+			return new RegExp( `^(?:(?:(?:${res}\\s*)${rOpt}(=|\u003d)\\s*)${mrs}|${mrs}(?:\\s*(=|\u003d)(?:\\s*${res})${rOpt})${rOpt})$` );
 		}
 		return new RegExp( res === null ? `^${mrs}$` : `(?:^|\\s|[^0-9,.])${mrs}(?:\\s|[^0-9,.]|$)` );
 	}

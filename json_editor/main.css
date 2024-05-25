@@ -38,7 +38,7 @@ html,body {
 	display: block;
 	white-space: nowrap;
 }
-#debugOut span.Scores {
+#debugOut span.Variables {
 	background-color: #FADBD8;
 }
 #debugOut span.Status {

@@ -24,7 +24,7 @@ export class barSliderFromSchema extends barSlider {
 		if ( this.dataSettings ) {
 			const pref = this.dataSettings.variablePrefix;
 			if ( pref ) {
-				res[`V_${pref}_Value`] = Math.round( this.pos * this.dataSettings.xMult );
+				res[`V_Input_${pref}_Val`] = Math.round( this.pos * this.dataSettings.xMult );
 			}
 		}
 

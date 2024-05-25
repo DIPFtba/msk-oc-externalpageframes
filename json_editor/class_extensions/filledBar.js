@@ -33,7 +33,7 @@ export class filledBarFromSchema extends filledBar {
 		if ( this.dataSettings ) {
 			const pref = this.dataSettings.variablePrefix;
 			if ( pref ) {
-				res[`V_${pref}_MarkVal`] = this.markedValue;
+				res[`V_Input_${pref}_MarkVal`] = this.markedValue;
 			}
 		}
 

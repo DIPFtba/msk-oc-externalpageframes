@@ -17,12 +17,17 @@ export class textareaInsertsFromSchema extends textareaInserts {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
-		let wWidth = opts.width;
-		if ( wWidth==0 ) {
-			wWidth = window.innerWidth;
-		} else if ( wWidth<0 ) {
-			wWidth += window.innerWidth;
-		}
+		let width;
+/// #if ! __EDITOR
+		width = window.innerWidth;
+/// #else
+		const div = typeof divSelector === 'string' ? document.querySelector( divSelector ) : divSelector;
+		width = div.offsetWidth;
+/// #endif
+		let wWidth =  opts.width;
+		if ( wWidth<=0 ) {
+			wWidth += width;
+		};
 
 		// height is container height or window.height
 		let height;
@@ -32,9 +37,7 @@ export class textareaInsertsFromSchema extends textareaInserts {
 		height = document.getElementById('EWK').offsetHeight;
 /// #endif
 		let wHeight = opts.height;
-		if ( wHeight==0 ) {
-			wHeight = height;
-		} else if ( wHeight<0 ) {
+		if ( wHeight<=0 ) {
 			wHeight += height;
 		}
 		const toolbarCellWidth = opts.toolbarCellWidth;
@@ -78,7 +81,7 @@ export class textareaInsertsFromSchema extends textareaInserts {
 
 		const pref = this.dataSettings.variablePrefix;
 		const res ={
-			[`V_${pref}_Input`]: this.extract(),
+			[`V_Input_${pref}`]: this.extract(),
 		};
 		return res;
 	}

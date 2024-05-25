@@ -16,6 +16,10 @@ export class fsmSend {
 
 	setFSMVariable ( variableName, newValue ) {
 
+		if ( typeof newValue === 'object' && Array.isArray(newValue) ) {
+			newValue = newValue.join(',');
+		}
+
 		if ( process.env.NODE_ENV !== 'production' ) {
 			this.debugOut( `Set FSM variable: ${variableName} to value >${newValue}< (${typeof newValue})` );
 		}

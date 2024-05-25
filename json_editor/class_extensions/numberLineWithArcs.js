@@ -29,21 +29,21 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 		const edArcs = this.arcs.filter( a => !a.arcReadonly || !a.labelReadonly );
 		const edTicks = this.ticks.filter( t => !t.tickReadonly || !t.labelReadonly );
 		const scores = {
-			[`S_${pref}_ArcCnt`]: edArcs.length,
-			[`S_${pref}_LabCnt`]: edTicks.length,
+			[`V_Input_${pref}_ArcCnt`]: edArcs.length,
+			[`V_Input_${pref}_LabCnt`]: edTicks.length,
 		};
 
 		// save Arcs
 		for ( let i=0; i<settings.saveArcs; i++ ) {
-			scores[`S_${pref}_ArcFrom_${i+1}`] = i<edArcs.length ? Math.round( edArcs[i].from*mult ) : null;
-			scores[`S_${pref}_ArcTo_${i+1}`] = i<edArcs.length ? Math.round( edArcs[i].to*mult ) : null;
-			scores[`S_${pref}_ArcLab_${i+1}`] = i<edArcs.length && edArcs[i].labelObj ? edArcs[i].labelObj.value : '';
+			scores[`V_Input_${pref}_ArcFrom_${i+1}`] = i<edArcs.length ? Math.round( edArcs[i].from*mult ) : null;
+			scores[`V_Input_${pref}_ArcTo_${i+1}`] = i<edArcs.length ? Math.round( edArcs[i].to*mult ) : null;
+			scores[`V_Input_${pref}_ArcLab_${i+1}`] = i<edArcs.length && edArcs[i].labelObj ? edArcs[i].labelObj.value : '';
 		}
 
 		// save Ticks
 		for ( let i=0; i<settings.saveTicks; i++ ) {
-			scores[`S_${pref}_LabVal_${i+1}`] = i<edTicks.length ? Math.round( edTicks[i].value*mult ) : null;
-			scores[`S_${pref}_Lab_${i+1}`] = i<edTicks.length && edTicks[i].labelObj ? edTicks[i].labelObj.value : '';
+			scores[`V_Input_${pref}_LabVal_${i+1}`] = i<edTicks.length ? Math.round( edTicks[i].value*mult ) : null;
+			scores[`V_Input_${pref}_Lab_${i+1}`] = i<edTicks.length && edTicks[i].labelObj ? edTicks[i].labelObj.value : '';
 		}
 
 		if ( this.computeScoringVals ) {

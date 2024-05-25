@@ -81,30 +81,30 @@ export class barPlotFromSchema extends barPlot {
 					let i=1;
 					this.bars.forEach( bar => {
 						if ( !bar.readonly ) {
-							res[`V_${pref}_Value_${i++}`] = Math.round( bar.value * yMult );
+							res[`V_Input_${pref}_Val_${i++}`] = Math.round( bar.value * yMult );
 						}
 					});
 					i=1;
 					this.bars.forEach( bar => {
 						if ( bar.labelObj && !bar.labelObj.readonly ) {
-							res[`V_${pref}_Label_${i++}`] = bar.labelObj.value || '';
+							res[`V_Input_${pref}_Lab_${i++}`] = bar.labelObj.value || '';
 						}
 					});
 				}
 
 				if ( this.titleObj && !this.titleObj.readonly ) {
-					res[`V_${pref}_Title`] = this.titleObj.value || '';
+					res[`V_Input_${pref}_Title`] = this.titleObj.value || '';
 				}
 
 				if ( this.yAxis.axisLabelObj && !this.yAxis.axisLabelObj.readonly )	{
-					res[`V_${pref}_yTitle`] = this.yAxis.axisLabelObj.value || '';
+					res[`V_Input_${pref}_yTitle`] = this.yAxis.axisLabelObj.value || '';
 				}
 
 				if ( this.yAxis.labelObjs && this.yAxis.labelObjs.length > 0 ) {
 					let i=1;
 					this.yAxis.labelObjs.forEach( lab => {
 						if ( !lab.readonly ) {
-							res[`V_${pref}_yLabel_${i++}`] = lab.value || '';
+							res[`V_Input_${pref}_yLab_${i++}`] = lab.value || '';
 						}
 					});
 				}

@@ -21,11 +21,11 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 
 		// Annotations
 		const anns = this.annotations.filter( a => !a.textReadonly );
-		anns.forEach( (v,i) => scores[ `V_${pref}_Inp_${i+1}` ] = v.text );
+		anns.forEach( (v,i) => scores[ `V_Input_${pref}_Lab_${i+1}` ] = v.text );
 
 		// Connections
 		const conns = this.annotations.filter( a => !a.toValueReadonly );
-		conns.forEach( (v,i) => scores[ `V_${pref}_Conn_${i+1}` ] = v.toValue === null ? null : Math.round( v.toValue * mult ) );
+		conns.forEach( (v,i) => scores[ `V_Input_${pref}_Conn_${i+1}` ] = v.toValue === null ? null : Math.round( v.toValue * mult ) );
 
 		// Status vars
 		let connSomeVars, connAllVars, inpSomeVars, inpAllVars;
@@ -33,32 +33,32 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 		if ( settings.createInpSomeVars || settings.createSomeVars ) {
 			inpSomeVars = anns.length>0 && anns.some( v => v.text.trim().length>0 );
 			if ( settings.createInpSomeVars ) {
-				scores[ `S_${pref}_Inp_Some` ] = +inpSomeVars;
+				scores[ `V_Status_${pref}_Lab_Any` ] = +inpSomeVars;
 			}
 		}
 		if ( settings.createInpAllVars || settings.createAllVars ) {
 			inpAllVars = anns.length>0 && anns.every( v => v.text.trim().length>0 );
 			if ( settings.createInpAllVars ) {
-				scores[ `S_${pref}_Inp_All` ] = +inpAllVars;
+				scores[ `V_Status_${pref}_Lab_All` ] = +inpAllVars;
 			}
 		}
 		if ( settings.createConnSomeVars || settings.createSomeVars ) {
 			connSomeVars = conns.length>0 && conns.some( v => v.toValue!==null );
 			if ( settings.createConnSomeVars ) {
-				scores[ `S_${pref}_Conn_Some` ] = +connSomeVars;
+				scores[ `V_Status_${pref}_Conn_Any` ] = +connSomeVars;
 			}
 		}
 		if ( settings.createConnAllVars || settings.createAllVars ) {
 			connAllVars = conns.length>0 && conns.every( v => v.toValue!==null );
 			if ( settings.createConnAllVars ) {
-				scores[ `S_${pref}_Conn_All` ] = +connAllVars;
+				scores[ `V_Status_${pref}_Conn_All` ] = +connAllVars;
 			}
 		}
 		if ( settings.createSomeVars ) {
-			scores[ `S_${pref}_Some` ] = +( connSomeVars || inpSomeVars );
+			scores[ `V_Status_${pref}_Any` ] = +( connSomeVars || inpSomeVars );
 		}
 		if ( settings.createAllVars ) {
-			scores[ `S_${pref}_All` ] = +( connAllVars && inpAllVars );
+			scores[ `V_Status_${pref}_All` ] = +( connAllVars && inpAllVars );
 		}
 
 		if ( this.computeScoringVals ) {

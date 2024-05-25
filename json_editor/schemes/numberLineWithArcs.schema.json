@@ -1093,29 +1093,29 @@
 
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
-					"description": "Erzeugt werden 'S_&lt;pref&gt;_ArcCnt', 'S_&lt;pref&gt;_LabCnt' und 'S_&lt;pref&gt;_Status'",
+					"description": "Erzeugt werden 'V_Status_&lt;pref&gt;', 'V_Input_&lt;pref&gt;_ArcCnt', 'V_Input_&lt;pref&gt;_LabCnt' und ",
 					"type": "string",
-					"default": "Aufg1",
+					"default": "1a",
 					"options": {
-						"grid_columns": 4,
+						"grid_columns": 12,
 						"grid_break": true
 					}
 				},
 
 				"saveArcs": {
 					"title": "Die Daten wievieler Bögen sollen gespeichert werden?",
-					"description": "Erzeugt werden jeweils 'V_&lt;pref&gt;_ArcFrom_X', 'V_&lt;pref&gt;_ArcTo_X' und 'V_&lt;pref&gt;_ArcLab_X'",
+					"description": "Erzeugt werden jeweils 'V_Input_&lt;pref&gt;_ArcFrom_X', 'V_Input_&lt;pref&gt;_ArcTo_X' und 'V_Input_&lt;pref&gt;_ArcLab_X'",
 					"type": "integer",
 					"minimum": 0,
 					"default": 3,
 					"options": {
-						"grid_columns": 4,
+						"grid_columns": 12,
 						"grid_break": true
 					}
 				},
 				"saveTicks": {
 					"title": "Die Daten wievieler Achsenlabels sollen gespeichert werden?",
-					"description": "Erzeugt werden jeweils 'V_&lt;pref&gt;_LabVal_X' und 'V_&lt;pref&gt;_Lab_X'",
+					"description": "Erzeugt werden jeweils 'V_Input_&lt;pref&gt;_LabVal_X' und 'V_Input_&lt;pref&gt;_Lab_X'",
 					"type": "integer",
 					"minimum": 0,
 					"default": 3,

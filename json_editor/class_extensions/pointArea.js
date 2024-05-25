@@ -22,7 +22,7 @@ export class pointAreaFromSchema extends pointArea {
 		if ( pref ) {
 			const entries = [];
 			for ( let h=1; h<this.colors.length; h++ ) {
-				entries.push( [ `V_${pref}_Color_${h}`, this.reportedColorSums[h] ] );
+				entries.push( [ `V_Input_${pref}_Color_${h}`, this.reportedColorSums[h] ] );
 			}
 			res = Object.fromEntries( entries );
 		}

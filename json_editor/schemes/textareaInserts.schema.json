@@ -123,9 +123,10 @@
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
 					"type": "string",
-					"default": "Aufg1",
+					"description": "Erzeugt wird 'V_Status_&lt;pref&gt;' und 'V_Input_&lt;pref&gt;'",
+					"default": "1a",
 					"options": {
-						"grid_columns": 4,
+						"grid_columns": 12,
 						"grid_break": true
 					}
 				}

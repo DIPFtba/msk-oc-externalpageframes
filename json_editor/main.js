@@ -314,6 +314,7 @@ function updateEWK () {
 	// Alles löschen
 	base.stage.destroyChildren();
 	base.stage.setAttr( 'bw__IconBarLayer', null );
+	base.stage.off();
 	debugOutClear();
 
 	try {
@@ -338,7 +339,7 @@ console.log( '======= cfgData:', cfgData );
 				let oldScoreVals = {};
 				extres.scoreDef = function () {
 					const res = oldScoreDef();
-					oldScoreVals = debugOutObj( 'Scores', res, oldScoreVals );
+					oldScoreVals = debugOutObj( 'Variables', res, oldScoreVals );
 					return res;
 				}
 				extres.scoreDef();

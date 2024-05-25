@@ -72,7 +72,7 @@ export class textareaBase extends textareaContainer {
 			// (e.g. toolbar.extractReplace are inserted here)
 			extractReplaces: [
 				// { from: /regexp/, to: "replace" },
-				{ from: /([^*])\*([^*])/g, to: "$1\u22c5$2" },	// replace '*' to \u22c5
+				{ from: /(?<!\*)\*(?!\*)/g, to: "\u22c5" },	// replace '*' to \u22c5
 				{ from: /\u2022|\u25cf/g, to: "\u22c5" },	// replace • and ● to \u22c5
 			]
 		}
@@ -656,7 +656,7 @@ export class textareaBase extends textareaContainer {
 		let s = this.div.innerHTML;
 
 		this.extractReplaces.forEach( r => {
-			s = s.replace( r.from, r.to );
+			s = s.replaceAll( r.from, r.to );
 		})
 
 		return s.trim();

@@ -148,7 +148,7 @@ export function addScoringValsParser ( obj, Parser=null, addFncs={} ) {
 								try {
 									this.scoringVals[ sv.val ] = parser.parse( saveCond );
 								} catch (e) {
-									debugAndConsoleOut( `Syntax-Fehler in Scoring-Condition: ${cond}` );
+									debugAndConsoleOut( `Fehler (${e}) in Scoring-Condition: ${cond}` );
 								}
 							}
 						}
@@ -184,7 +184,7 @@ export function addScoringValsParser ( obj, Parser=null, addFncs={} ) {
 export function addStatusVarDef ( obj, json ) {
 
 	if ( !obj.statusVarDef && json.dataSettings && json.dataSettings.variablePrefix ) {
-		const statVarName = `S_${json.dataSettings.variablePrefix}_Status`;
+		const statVarName = `V_Status_${json.dataSettings.variablePrefix}`;
 		obj.statusVarDef = function () {
 			return {
 				[statVarName]: +this.getDefaultChangeState(),

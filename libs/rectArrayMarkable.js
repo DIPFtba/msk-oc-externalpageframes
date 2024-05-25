@@ -150,7 +150,7 @@ export class rectArrayMarkable {
 	scoreDef () {
 		if ( this.dataSettings && this.dataSettings.variablePrefix ) {
 			return {
-				[`V_${this.dataSettings.variablePrefix}_MarkCnt`]: this.rects.reduce( (a,c) => a += +c.marked, 0 ),
+				[`V_Input_${this.dataSettings.variablePrefix}_MarkCnt`]: this.rects.reduce( (a,c) => a += +c.marked, 0 ),
 			}
 		}
 		return {};

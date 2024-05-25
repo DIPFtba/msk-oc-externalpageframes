@@ -89,10 +89,10 @@ export class connectedFramesFromSchema extends connectedFrames {
 		if ( pref ) {
 			const inpFrames = this.__inpFrames;
 			inpFrames.forEach( (frame,i) => {
-				res[ `V_${pref}_Input_${i+1}` ] = frame.textFrame.value;
+				res[ `V_Input_${pref}_Lab_${i+1}` ] = frame.textFrame.value;
 			});
 
-			const connAr = Array( this.frames.length ).fill( [] );
+			const connAr = Array( this.frames.length ).fill(0).map( () => [] );
 
 			const inpConns = this.connections.filter( (conn) => !conn.readonly );
 			inpConns.forEach( (conn) => {
@@ -104,7 +104,7 @@ export class connectedFramesFromSchema extends connectedFrames {
 				if ( ar.length>0 ) {
 					ar.sort();
 				}
-				res[ `V_${pref}_Conn_${i+1}` ] = ar;
+				res[ `V_Input_${pref}_Conn_${i+1}` ] = ar.map( i => i+1 );
 			});
 		}
 

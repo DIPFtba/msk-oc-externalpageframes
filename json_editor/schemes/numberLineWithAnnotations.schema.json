@@ -814,9 +814,10 @@
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
 					"type": "string",
-					"default": "Aufg1",
+					"description": "Erzeugt werden 'V_Status_&lt;pref&gt;', 'V_Input_&lt;pref&gt;_Lab_X' und 'V_Input_&lt;pref&gt;_Conn_X'",
+					"default": "1a",
 					"options": {
-						"grid_columns": 4,
+						"grid_columns": 12,
 						"grid_break": true
 					}
 				},
@@ -832,7 +833,7 @@
 					}
 				},
 				"createConnSomeVars": {
-					"title": "Erzeuge S_[prefix]_Conn_Some Status-Variable",
+					"title": "Erzeuge V_Status_&lt;pref&gt;_Conn_Any Status-Variable",
 					"type": "boolean",
 					"format": "checkbox",
 					"options": {
@@ -842,7 +843,7 @@
 					}
 				},
 				"createConnAllVars": {
-					"title": "Erzeuge S_[prefix]_Conn_All Status-Variable",
+					"title": "Erzeuge V_Status_&lt;pref&gt;_Conn_All Status-Variable",
 					"type": "boolean",
 					"format": "checkbox",
 					"options": {
@@ -852,7 +853,7 @@
 					}
 				},
 				"createInpSomeVars": {
-					"title": "Erzeuge S_[prefix]_Inp_Some Status-Variable",
+					"title": "Erzeuge V_Status_&lt;pref&gt;_Lab_Any Status-Variable",
 					"type": "boolean",
 					"format": "checkbox",
 					"options": {
@@ -862,7 +863,7 @@
 					}
 				},
 				"createInpAllVars": {
-					"title": "Erzeuge S_[prefix]_Inp_All Status-Variable",
+					"title": "Erzeuge V_Status_&lt;pref&gt;_Lab_All Status-Variable",
 					"type": "boolean",
 					"format": "checkbox",
 					"options": {
@@ -872,7 +873,7 @@
 					}
 				},
 				"createSomeVars": {
-					"title": "Erzeuge S_[prefix]_Some Status-Variable",
+					"title": "Erzeuge V_Status_&lt;pref&gt;_Any Status-Variable",
 					"type": "boolean",
 					"format": "checkbox",
 					"default": true,
@@ -883,7 +884,7 @@
 					}
 				},
 				"createAllVars": {
-					"title": "Erzeuge S_[prefix]_All Status-Variable",
+					"title": "Erzeuge V_Status_&lt;pref&gt;_All Status-Variable",
 					"type": "boolean",
 					"format": "checkbox",
 					"default": true,

@@ -114,14 +114,14 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 		if ( this.dataSettings ) {
 			const pref = this.dataSettings.variablePrefix;
 			if ( pref ) {
-				res[`V_${pref}_Value`] = Math.round( this.pos * this.dataSettings.xMult );
+				res[`V_Input_${pref}_Val`] = Math.round( this.pos * this.dataSettings.xMult );
 			}
 
 			if ( this.freeLabels ) {
 				let i=1;
 				this.freeLabels.forEach( fl => {
 					if ( !fl.readonly ) {
-						res[`V_${pref}_Input_${i++}`] = fl.textObj ? fl.textObj.value : '';
+						res[`V_Input_${pref}_${i++}`] = fl.textObj ? fl.textObj.value : '';
 					}
 				})
 			}

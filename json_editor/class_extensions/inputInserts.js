@@ -64,7 +64,7 @@ export class inputInsertsFromSchema extends inputInserts {
 				}
 
 				const re = this.getOpRE( ops, p.perm ? this.perm( mult ) : [mult], res, resOpt);
-				this.scoringPattern[ `S_${pref}_${p.name}` ] = re;
+				this.scoringPattern[ `V_Score_${pref}_${p.name}` ] = re;
 			}
 		})
 	}
@@ -73,7 +73,7 @@ export class inputInsertsFromSchema extends inputInserts {
 
 		const pref = this.dataSettings.variablePrefix;
 		const res ={
-			[`V_${pref}_Input`]: this.extract(),
+			[`V_Input_${pref}`]: this.extract(),
 		};
 
 		if ( this.scoringPattern ) {

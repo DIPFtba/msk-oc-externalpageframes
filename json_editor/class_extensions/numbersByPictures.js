@@ -43,10 +43,10 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 
 		const pref = this.dataSettings.variablePrefix;
 		const res = {
-			[`V_${pref}_Input_T`]: this.data.reduce( (acc, cur) => acc += cur.c || 0, 0 ),
-			[`V_${pref}_Input_H`]: this.data.reduce( (acc, cur) => acc += cur.r || 0, 0 ),
-			[`V_${pref}_Input_Z`]: this.data.reduce( (acc, cur) => acc += cur.b || 0, 0 ),
-			[`V_${pref}_Input_E`]: this.data.reduce( (acc, cur) => acc += cur.d || 0, 0 ),
+			[`V_Input_${pref}_T`]: this.data.reduce( (acc, cur) => acc += cur.c || 0, 0 ),
+			[`V_Input_${pref}_H`]: this.data.reduce( (acc, cur) => acc += cur.r || 0, 0 ),
+			[`V_Input_${pref}_Z`]: this.data.reduce( (acc, cur) => acc += cur.b || 0, 0 ),
+			[`V_Input_${pref}_E`]: this.data.reduce( (acc, cur) => acc += cur.d || 0, 0 ),
 		};
 
 		if ( this.computeScoringVals ) {

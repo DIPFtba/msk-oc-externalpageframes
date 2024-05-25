@@ -281,11 +281,11 @@
 
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
-					"description": "Erzeugt werden 'V_&lt;pref&gt;_Value' und 'S_&lt;pref&gt;_Status'",
+					"description": "Erzeugt werden 'V_Status_&lt;pref&gt;' und 'V_Input_&lt;pref&gt;_Val'",
 					"type": "string",
-					"default": "Aufg1",
+					"default": "1a",
 					"options": {
-						"grid_columns": 4,
+						"grid_columns": 12,
 						"grid_break": true
 					}
 				},

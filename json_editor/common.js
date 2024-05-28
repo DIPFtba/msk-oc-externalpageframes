@@ -173,7 +173,7 @@ export function addScoringValsParser ( obj, Parser=null, addFncs={} ) {
 				}
 			}
 			const n = Number(score)
-			res[ `S_${this.dataSettings.variablePrefix}` ] = score!== null && n!==NaN ? n : score;
+			res[ `V_Score_${this.dataSettings.variablePrefix}` ] = score!== null && n!==NaN ? n : score;
 		}
 	}
 

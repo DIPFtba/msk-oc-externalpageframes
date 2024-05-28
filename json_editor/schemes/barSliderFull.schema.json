@@ -439,7 +439,7 @@
 							"format": "checkbox",
 							"default": false,
 							"options": {
-								"grid_columns": 12,
+								"grid_columns": 4,
 								"grid_break": true,
 								"dependencies": {
 									"top": true,

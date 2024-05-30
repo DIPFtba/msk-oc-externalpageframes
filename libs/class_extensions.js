@@ -27,6 +27,10 @@ export const addInsertButtonsTo = ( baseClass, extraDefaults=null, inputCallback
 
 	constructor ( base, opts = {} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		super( base, opts );
 		if ( !opts.insertIconDefs || !opts.insertIconDefs.length ) {
 			return;
@@ -76,6 +80,9 @@ export const addInsertButtonsTo = ( baseClass, extraDefaults=null, inputCallback
 			this.insertIconBars.push( new iconBar( this.stage, opts ) );
 		})
 
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////
@@ -113,6 +120,10 @@ import markericon from './img/markericon.png'
 export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extraDefaults=null ) => class extends baseClass {
 
 	constructor ( base, opts = {} ) {
+
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
 
 		super( base, opts );
 		if ( opts.paintLines===null || opts.modeIconBarDef===null ) {
@@ -279,6 +290,10 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 				}
 			})
 		}
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////
@@ -432,6 +447,10 @@ export const addFreeLabelsTo = ( baseClass ) => class extends baseClass {
 
 	constructor ( base, opts = {} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		super( base, opts );
 		if ( !opts.freeLabels || !opts.freeLabels.length ) {
 			return;
@@ -464,6 +483,10 @@ export const addFreeLabelsTo = ( baseClass ) => class extends baseClass {
 
 		this.initData = this.getChState();
 		this.base.sendChangeState( this );	// init & send changeState & score
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////

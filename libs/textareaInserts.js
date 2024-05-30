@@ -6,6 +6,10 @@ export class textareaContainer {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		const defaults = {
 			outerDivStyles: {	// styles of created outer div (containing textarea and toolbar)
 			},
@@ -29,6 +33,10 @@ export class textareaContainer {
 
 		this.outerDiv.appendChild( this.div );
 		this.initData = this.div.innerHTML.trim();
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	ev_input () {
@@ -61,6 +69,10 @@ export class textareaContainer {
 export class textareaBase extends textareaContainer {
 
 	constructor ( divSelector, opts = {}, base = null ) {
+
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
 
 		const defaults = {
 			multiLine: true,
@@ -111,6 +123,10 @@ export class textareaBase extends textareaContainer {
 		// Save initData & init StateVars
 		this.initData = this.div.innerHTML.trim();
 		this.base.sendChangeState( this );	// init & send changeState & score
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////
@@ -696,6 +712,10 @@ export class textareaInserts extends textareaBase {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		const insertsDefaults = {
 
 			// toolbarX, toolbarY   // position relative to div (top,left)
@@ -777,6 +797,10 @@ export class textareaInserts extends textareaBase {
 				() => this.toolbarContainer.classList.add('disabled'),
 				{ capture: true } );
 
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////

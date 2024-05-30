@@ -11,6 +11,10 @@ export class numberLineWithArcs {
 
 	constructor ( base, opts = {} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		// Options
 		const defaults = {
 			// numberLine = {}
@@ -170,6 +174,10 @@ export class numberLineWithArcs {
 
 		stage.draw();
 		this.getLastLog();
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////

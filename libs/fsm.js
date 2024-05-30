@@ -9,6 +9,12 @@ export class fsmSend {
 		// Trace Counter
 		this.traceCount = 0;
 
+		// Init done promise
+		this.prInitDone = new Promise( (resolve) => {
+			this.prInitDoneResolve = resolve;
+		});
+		this.initDoneCnt = 0;
+
 		if ( process.env.NODE_ENV !== 'production' ) {
 			window.bw__debugOut = this.debugOut.bind(this);
 		}
@@ -78,7 +84,21 @@ export class fsmSend {
 		return parsedUrl.searchParams.get(variable);
 	}
 
-	startListeningToVariableDeclarationRequests (declareVariableCallback) {
+	startListeningToVarDeclReq (declareVariableCallback) {
+
+		const prInitDone = this.getInitDonePromise();
+
+		this.answerVarDeclReq = function (callId) {
+			prInitDone.then( () => {
+				const variables = declareVariableCallback();
+				const pass_data = {
+					initialVariables: variables,
+					callId
+				}
+
+				window.parent.postMessage( JSON.stringify( pass_data ), '*' );
+			});
+		}
 
 		// listener for providing initial variable data signal.
 		window.addEventListener(
@@ -88,13 +108,7 @@ export class fsmSend {
 				try {
 					const { callId } = JSON.parse(event.data);
 					if ( callId !== undefined && callId.includes("importVariables") ) {
-						const variables = declareVariableCallback();
-						const pass_data = {
-							initialVariables: variables,
-							callId
-						}
-
-						window.parent.postMessage( JSON.stringify( pass_data ), '*' );
+						this.answerVarDeclReq(callId);
 					}
 				} catch (error) {
 					if ( process.env.NODE_ENV !== 'production' ) {
@@ -136,4 +150,25 @@ export class fsmSend {
 
 		}
 	 }
+
+	///////////////////////////////////
+
+	getInitDonePromise () {
+		return this.prInitDone;
+	}
+
+	incInitCnt () {
+		return ++this.initDoneCnt;
+	}
+
+	decInitCnt () {
+		if ( this.initDoneCnt > 0 ) {
+			this.initDoneCnt--;
+			if (this.initDoneCnt === 0) {
+				this.prInitDoneResolve();
+			}
+		}
+		return this.initDoneCnt;
+	}
+
 }

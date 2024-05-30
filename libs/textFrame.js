@@ -14,6 +14,10 @@ export class textFrame {
 				throw( `textFrame: parameter '${o}' not specified!` );
 			}
 		})
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		const defaultOpts = {
 			width: 75, height: 25,
 			align: 'center',
@@ -217,6 +221,10 @@ export class textFrame {
 				}
 			});
 
+		}
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
 		}
 	}
 

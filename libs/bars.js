@@ -12,6 +12,10 @@ export class bars {
 
 	constructor ( base, opts = {} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		const defaultOpts = {
 
 			bars: [		// bars
@@ -64,6 +68,10 @@ export class bars {
 		this.base.sendChangeState( this );	// init & send changeState & score
 
 		stage.draw();
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////

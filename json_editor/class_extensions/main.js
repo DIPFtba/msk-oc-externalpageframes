@@ -102,6 +102,9 @@ import { inputInsertsFromSchema } from './inputInserts';
 import { textareaInsertsFromSchema } from './textareaInserts';
 /// #endif
 
+let baseLoadedResolve;
+const prBaseLoaded = new Promise( resolve => baseLoadedResolve = resolve );
+
 function initJSON ( json ) {
 
 	if ( typeof json === 'string' ) {
@@ -120,6 +123,8 @@ function initJSON ( json ) {
 /// #else
 	const base = new baseInits( { container: 'container' } );
 /// #endif
+	baseLoadedResolve( base );
+
 	if ( cfg.dataSettings ) {
 		base.dataSettings = cfg.dataSettings;
 	}
@@ -182,3 +187,22 @@ function initJSON ( json ) {
 }
 
 document.addEventListener( "DOMContentLoaded", initExtRes );
+
+//////////////////////////////////////////////////////////////////////////////
+
+// hack for early IB request "importVariables"
+
+function sendVarDecl (event) {
+
+	try {
+		const { callId } = JSON.parse(event.data);
+		if ( callId !== undefined && callId.includes("importVariables") ) {
+			// answer message when base is initialized
+			prBaseLoaded.then( base => base.fsm.answerVarDeclReq(callId) );
+		}
+	} catch (e) {}
+
+}
+
+window.addEventListener( "message", sendVarDecl, false );
+prBaseLoaded.then( () => window.removeEventListener( "message", sendVarDecl ) );

@@ -9,6 +9,10 @@ export class connectedFrames {
 
 	constructor ( base, opts = {} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		// Defaults to opts
 		this.defaultFrameOpts = {
 			// x, y
@@ -115,6 +119,10 @@ export class connectedFrames {
 					this.hideNewLine();
 				}
 			})
+		}
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
 		}
 	}
 

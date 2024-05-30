@@ -18,7 +18,7 @@ export class baseInits {
 		// create fsm object, if not provided
 		if ( !this.fsm ) {
 			this.fsm = new fsmSend();
-			this.fsm.startListeningToVariableDeclarationRequests( this.declareVariables.bind(this) );
+			this.fsm.startListeningToVarDeclReq( this.declareVariables.bind(this) );
 		}
 
 		// init stage & layer
@@ -174,7 +174,7 @@ export class baseInits {
 			const vdef = {
 				name: vname,
 				type: val===null ? 'Integer' : typetrans[ typeof val ],
-				defaultValue: val,
+				defaultValue: val===null ? 0 : val,
 				namedValues: [],
 			}
 			varDefs.push( vdef );

@@ -4,6 +4,10 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 
 	constructor ( base, opts = {}, addMods={}  ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		// pre-decimal places & decimal places --> inputRegexp
 		opts.annotations.forEach( ann => dp2inputRegExp(ann) );
 
@@ -11,6 +15,10 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 
 		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	scoreDef () {

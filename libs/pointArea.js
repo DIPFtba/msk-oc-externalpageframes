@@ -18,8 +18,11 @@ export class pointArea {
 				throw( `pointArea: parameter '${o}' not specified!` );
 			}
 		})
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
 
-   		// Defaults to opts
+		// Defaults to opts
 		const defaultOpts = {
 
 			// // paintArea
@@ -254,6 +257,10 @@ export class pointArea {
 					ev.cancelBubble = true;
 				}
 			})
+		}
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
 		}
 	}
 

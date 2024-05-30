@@ -7,6 +7,10 @@ export class stampImagesFromSchema extends stampImages {
 
 	constructor ( base, opts = {} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		if ( opts.width<0 ) {
 			opts.width += base.width - opts.x;
 		}
@@ -24,6 +28,10 @@ export class stampImagesFromSchema extends stampImages {
 		}
 
 		super( base, opts );
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 }

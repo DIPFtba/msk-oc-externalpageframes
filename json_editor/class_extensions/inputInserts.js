@@ -14,6 +14,10 @@ export class inputInsertsFromSchema extends inputInserts {
 
 	constructor ( divSelector, opts = {}, base = null, addMods={}  ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		const div = typeof divSelector === 'string' ? document.querySelector( divSelector ) : divSelector;
 		opts.divStyles = {
 			width: `${ opts.width > 0 ? opts.width : div.offsetWidth + opts.width }px`,
@@ -28,6 +32,10 @@ export class inputInsertsFromSchema extends inputInserts {
 		}
 		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	parseScoringPattern ( pattern, pref ) {

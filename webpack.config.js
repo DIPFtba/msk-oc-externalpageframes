@@ -17,7 +17,7 @@ const babel_loader = {
 					'useBuiltIns': 'usage',
 					// 'corejs': { version: 3.26, proposals: true },
 					'corejs': { version: 3.26 },
-					'targets': [ "last 2 years", "not dead" ]
+					'targets': [ "last 5 years", "not dead" ]
 					// 'targets': { chrome: "20" }
 				},
 			],

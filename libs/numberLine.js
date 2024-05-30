@@ -9,6 +9,7 @@ import { Text } from 'konva/lib/shapes/Text'
 export class numberLine {
 
 	constructor ( layer, opts = {} ) {
+
 		// Defaults to opts
 		const defaultOpts = {
 			//type: 'none'|'ticks'|'chain'
@@ -153,7 +154,6 @@ export class numberLine {
 			hitStrokeWidth: this.annotationTickHeight(),
 		})
 		layer.add( this.kHitLine );
-
 	}
 
 	///////////////////////////////////

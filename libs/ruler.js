@@ -16,6 +16,10 @@ export class ruler {
 
 	constructor ( base, opts = {} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		// Defaults to opts
 		const defaultOpts = {
 
@@ -216,6 +220,10 @@ export class ruler {
 		}
 
 		this.rulerLayer.draw();
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////

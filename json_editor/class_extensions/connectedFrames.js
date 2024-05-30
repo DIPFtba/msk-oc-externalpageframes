@@ -6,6 +6,10 @@ export class connectedFramesFromSchema extends connectedFrames {
 
 	constructor ( base, opts = {}, addMods={}  ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		const getConnectorPos = {
 			t: (frame) => ({ x: frame.x + frame.width/2, y: frame.y }),
 			r: (frame) => ({ x: frame.x + frame.width, y: frame.y + frame.height/2 }),
@@ -76,6 +80,10 @@ export class connectedFramesFromSchema extends connectedFrames {
 		this.parseScoringVals(opts);
 
 		this.__inpFrames = this.frames.filter( (frame) => !frame.readonly );
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 

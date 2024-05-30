@@ -5,6 +5,10 @@ export class barSliderFromSchema extends barSlider {
 
 	constructor ( base, opts = {}, addMods={}  ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		if ( opts.width<= 0 ) {
 			opts.width += base.width - opts.x;
 		}
@@ -13,6 +17,10 @@ export class barSliderFromSchema extends barSlider {
 
 		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	scoreDef () {

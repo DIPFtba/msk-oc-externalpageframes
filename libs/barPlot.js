@@ -15,6 +15,10 @@ export class barPlot {
 				throw( `barPlot: parameter '${o}' not specified!` );
 			}
 		})
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		// Defaults to opts
 		const defaultOpts = {
 
@@ -178,6 +182,9 @@ export class barPlot {
 			// 	}
 			// }.bind(this) );
 
+			if ( base.fsm && base.fsm.decInitCnt ) {
+				base.fsm.decInitCnt();
+			}
 		}
 	}
 

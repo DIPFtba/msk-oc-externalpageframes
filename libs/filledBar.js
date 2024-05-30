@@ -8,6 +8,10 @@ export class filledBar {
 
 	constructor ( base, opts = {} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		// Defaults to opts
 		const defaultOpts = {
 			x: 20, y: 20,
@@ -113,6 +117,10 @@ export class filledBar {
 				}
 				this.endSticky();
 		 	});
+		}
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
 		}
 	}
 

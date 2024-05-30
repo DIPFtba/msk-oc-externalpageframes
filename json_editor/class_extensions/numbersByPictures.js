@@ -5,6 +5,10 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 
 	constructor ( base, opts={}, addMods={}  ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		const iconWidth = 22;
 		const depth = 18;
 
@@ -34,6 +38,10 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 
 		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	scoreDef () {

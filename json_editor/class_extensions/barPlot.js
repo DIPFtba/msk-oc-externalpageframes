@@ -5,6 +5,10 @@ export class barPlotFromSchema extends barPlot {
 
 	constructor ( base, opts = {}, addMods={} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		// basic
 		if ( opts.origin.x < 0 ) {
 			opts.origin.x += base.width;
@@ -64,6 +68,10 @@ export class barPlotFromSchema extends barPlot {
 
 		addScoringValsParser( this, addMods.Parser );
 		this.parseScoringVals(opts);
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	scoreDef () {

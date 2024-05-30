@@ -19,6 +19,10 @@ export class stampImages {
 				throw( `stampImages: parameter '${o}' not specified!` );
 			}
 		})
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		// Defaults to opts
 		const defaultOpts = {
 			// x, y
@@ -101,6 +105,10 @@ export class stampImages {
 			}
 			this.base.sendChangeState( this );
 		})
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////

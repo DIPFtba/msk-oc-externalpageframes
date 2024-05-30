@@ -13,6 +13,10 @@ export class inputGrid {
 
 	constructor ( base, opts = {} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		// Defaults to opts
 		const defaultOpts = {
 			x: 0,
@@ -255,6 +259,10 @@ export class inputGrid {
 		}
 
 		this.stage.draw();
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////
@@ -986,6 +994,10 @@ export class inputGrid_freePaint_InsertButtons_grayOut extends inputGrid_freePai
 
 	constructor ( base, opts = {} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		super( base, opts );
 
 		// Gray out all draw/non-draw Icons
@@ -1029,6 +1041,9 @@ export class inputGrid_freePaint_InsertButtons_grayOut extends inputGrid_freePai
 				.then( me.grayOutAll.bind(me) );
 		}
 
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 }
 
@@ -1039,6 +1054,10 @@ import penicon from './img/penicon.png'
 export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePaint_InsertButtons {
 
 	constructor ( base, opts = {} ) {
+
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
 
 		// default mode 'null'
 		if ( !('mode' in opts) ) {
@@ -1182,6 +1201,10 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 				} catch(e) {}
 			}
 		});
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	setAllOff () {

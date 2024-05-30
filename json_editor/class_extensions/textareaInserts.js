@@ -17,6 +17,10 @@ export class textareaInsertsFromSchema extends textareaInserts {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		let width;
 /// #if ! __EDITOR
 		width = window.innerWidth;
@@ -75,6 +79,10 @@ export class textareaInsertsFromSchema extends textareaInserts {
 		}
 
 		super( divSelector, defs, base );
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	scoreDef () {

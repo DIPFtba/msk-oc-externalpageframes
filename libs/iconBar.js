@@ -17,6 +17,10 @@ export class iconBar {
 				throw( `iconBar: parameter '${o}' not specified!` );
 			}
 		})
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		const defaults = {
 			// x, y
 			// width, height	// w&h of icon, total dimension += 2*(frameWidth+framePadding)
@@ -276,6 +280,10 @@ export class iconBar {
 				me.setDefault();
 				me.layer.draw();
 			});
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////

@@ -15,6 +15,10 @@ export class barSlider {
 				throw( `barSlider: parameter '${o}' not specified!` );
 			}
 		})
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		// Defaults to opts
 		const defaultOpts = {
 			// x: 20, y: 20,
@@ -73,6 +77,10 @@ export class barSlider {
 				this.base.sendChangeState( this );
 			}
 		})
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////

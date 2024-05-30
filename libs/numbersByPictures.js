@@ -14,6 +14,10 @@ export class numbersByPictures {
 
 	constructor ( base, opts = {} ) {
 
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
+		}
+
 		const defaults = {
 
 			// x, y
@@ -147,6 +151,10 @@ export class numbersByPictures {
 
 		this.initData = delDefaults( this.data );
 		this.base.sendChangeState( this );	// init & send changeState & score
+
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	}
 
 	///////////////////////////////////

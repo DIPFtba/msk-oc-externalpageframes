@@ -130,15 +130,18 @@ function initJSON ( json ) {
 	}
 
 	// load Parser lazy or not
-	new Promise( resolve => {
+	(
 
-		if ( cfg.dataSettings && cfg.dataSettings.scoringVals && cfg.dataSettings.scoringVals.length>0 ) {
-			import( /* webpackChunkName: "sce" */ 'expr-eval' ).then( module => resolve( { Parser: module.Parser } ) );
-		} else {
-			resolve({});
+		( cfg.dataSettings && cfg.dataSettings.scoringVals && cfg.dataSettings.scoringVals.length>0 ) ?
+			import( /* webpackChunkName: "sce" */ 'expr-eval' ).then( ({ Parser }) => ({ Parser }) ) :
+			Promise.resolve({})
+
+	).then( addMods => {
+
+		// there will be subsequent inits
+		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.incInitCnt();
 		}
-
-	}).then( addMods => {
 
 /// #if __CLASS == 'barPlot'
 		const io = new barPlotFromSchema( base, cfg, addMods );
@@ -175,6 +178,8 @@ function initJSON ( json ) {
 /// #endif
 
 		addStatusVarDef( io, json );
+		base.sendChangeState( io );
+
 
 		if ( io.getState ) {
 			window.getState = io.getState.bind(io);
@@ -183,6 +188,9 @@ function initJSON ( json ) {
 			window.setState = io.setState.bind(io);
 		}
 
+		if ( base.fsm && base.fsm.decInitCnt ) {
+			base.fsm.decInitCnt();
+		}
 	});
 }
 
@@ -190,7 +198,7 @@ document.addEventListener( "DOMContentLoaded", initExtRes );
 
 //////////////////////////////////////////////////////////////////////////////
 
-// hack for early IB request "importVariables"
+// hack for IB request "importVariables" before base is initialized
 
 function sendVarDecl (event) {
 

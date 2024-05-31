@@ -1,6 +1,6 @@
 import { pointArea } from "../../libs/pointArea";
 
-import { addScoringValsParser } from "../common";
+import { addScoring } from "../common";
 
 export class pointAreaFromSchema extends pointArea {
 
@@ -14,8 +14,7 @@ export class pointAreaFromSchema extends pointArea {
 
 		super( base, opts );
 
-		addScoringValsParser( this, addMods.Parser );
-		this.parseScoringVals(opts);
+		addScoring( this, opts, addMods.Parser );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();

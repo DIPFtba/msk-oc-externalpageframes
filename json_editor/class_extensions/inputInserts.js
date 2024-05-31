@@ -8,7 +8,7 @@ import { inputInserts } from '../../libs/inputInserts'
 // 	baseFractPerc: toolbarMathOperatorsFractionPercent
 // }
 import { toolbarMathOperators } from '../../libs/textareaInserts'
-import { addScoringValsParser } from '../common';
+import { addScoring } from '../common';
 
 export class inputInsertsFromSchema extends inputInserts {
 
@@ -30,8 +30,7 @@ export class inputInsertsFromSchema extends inputInserts {
 		if ( opts.dataSettings && opts.dataSettings.scoringPattern ) {
 			this.parseScoringPattern( opts.dataSettings.scoringPattern, opts.dataSettings.variablePrefix );
 		}
-		addScoringValsParser( this, addMods.Parser );
-		this.parseScoringVals(opts);
+		addScoring( this, opts, addMods.Parser );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();

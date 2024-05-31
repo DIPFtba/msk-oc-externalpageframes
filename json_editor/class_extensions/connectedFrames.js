@@ -1,6 +1,6 @@
 import { connectedFrames } from "../../libs/connectedFrames";
 
-import { addScoringValsParser } from "../common";
+import { addScoring } from "../common";
 
 export class connectedFramesFromSchema extends connectedFrames {
 
@@ -76,8 +76,7 @@ export class connectedFramesFromSchema extends connectedFrames {
 
 		super( base, opts );
 
-		addScoringValsParser( this, addMods.Parser );
-		this.parseScoringVals(opts);
+		addScoring( this, opts, addMods.Parser );
 
 		this.__inpFrames = this.frames.filter( (frame) => !frame.readonly );
 

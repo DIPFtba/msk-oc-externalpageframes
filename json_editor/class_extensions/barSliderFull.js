@@ -1,5 +1,5 @@
 import { barSlider_freePaintMarker_freeLabels_insertButtons } from "../../libs/barSlider";
-import { addScoringValsParser, dp2inputRegExp } from "../common";
+import { addScoring, dp2inputRegExp } from "../common";
 
 export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabels_insertButtons {
 
@@ -105,8 +105,7 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 
 		super( base, opts );
 
-		addScoringValsParser( this, addMods.Parser );
-		this.parseScoringVals(opts);
+		addScoring( this, opts, addMods.Parser );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();

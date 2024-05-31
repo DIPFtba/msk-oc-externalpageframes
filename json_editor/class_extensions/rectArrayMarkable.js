@@ -1,5 +1,5 @@
 import { rectArrayMarkable } from "../../libs/rectArrayMarkable";
-import { readRangeArray, addScoringValsParser } from "../common";
+import { readRangeArray, addScoring } from "../common";
 
 export class rectArrayMarkableFromSchema extends rectArrayMarkable {
 
@@ -21,8 +21,7 @@ export class rectArrayMarkableFromSchema extends rectArrayMarkable {
 
 		super( base, opts );
 
-		addScoringValsParser( this, addMods.Parser );
-		this.parseScoringVals(opts);
+		addScoring( this, opts, addMods.Parser );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();

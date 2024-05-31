@@ -76,11 +76,10 @@ function debugAndConsoleOut (s) {
 	console.error(s);
 }
 
-export function addScoringValsParser ( obj, Parser=null, addFncs={} ) {
+export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 
+	obj.computeScoringVals = () => {};
 	if ( !Parser ) {
-		obj.parseScoringVals = () => {};
-		obj.computeScoringVals = () => {};
 		return;
 	}
 
@@ -97,69 +96,83 @@ export function addScoringValsParser ( obj, Parser=null, addFncs={} ) {
 		parser.functions[fnc]= addFncs[fnc];
 	}
 
-	obj.parseScoringVals = function (opts) {
-		if ( opts.dataSettings && opts.dataSettings.scoringVals && this.scoreDef ) {
+	if ( opts.dataSettings && opts.dataSettings.scoringVals && obj.scoreDef ) {
 
-			const scoringVals = opts.dataSettings.scoringVals;
+		const scoringVals = opts.dataSettings.scoringVals;
 
-			const scores = this.scoreDef();
-			if ( typeof scores === 'object' ) {
-				const varNames = Object.keys( scores );
-				if ( varNames.length>0 ) {
+		const scores = obj.scoreDef();
+		if ( typeof scores === 'object' ) {
+			const varNames = Object.keys( scores );
+			if ( varNames.length>0 ) {
 
-					scoringVals.forEach( sv => {
-						let cond = sv.condition;
-						if ( cond ) {
-							let saveCond = cond;
-							const allVarsInCond = cond.matchAll( /\$\{([^}]*)}/g );
-							for ( const vn of allVarsInCond ) {
-								if ( vn[1].length == 0 ) {
-									debugAndConsoleOut( `Variablen-Name '\${}' in Scoring nicht zulässig` );
+				scoringVals.forEach( sv => {
+					let cond = sv.condition;
+					if ( cond ) {
+						let saveCond = cond;
+						const allVarsInCond = cond.matchAll( /\$\{([^}]*)}/g );
+						for ( const vn of allVarsInCond ) {
+							if ( vn[1].length == 0 ) {
+								debugAndConsoleOut( `Variablen-Name '\${}' in Scoring nicht zulässig` );
+							} else {
+								const re = new RegExp( vn[1], 'i' );
+								const selVarNames = varNames.filter( v => v.match(re) );
+								if ( selVarNames.length>1 ) {
+									debugAndConsoleOut( `Variablen-Name '\${${vn[1]}}' in Scoring ist nicht eindeutig`);
+									saveCond = '';
+								} else if ( selVarNames.length == 0 ) {
+									debugAndConsoleOut( `Variablen-Name '\${${vn[1]}}' in Scoring unbekannt`);
+									saveCond = '';
 								} else {
-									const re = new RegExp( vn[1], 'i' );
-									const selVarNames = varNames.filter( v => v.match(re) );
-									if ( selVarNames.length>1 ) {
-										debugAndConsoleOut( `Variablen-Name '\${${vn[1]}}' in Scoring ist nicht eindeutig`);
-										saveCond = '';
-									} else if ( selVarNames.length == 0 ) {
-										debugAndConsoleOut( `Variablen-Name '\${${vn[1]}}' in Scoring unbekannt`);
-										saveCond = '';
-									} else {
-										saveCond = saveCond.replace( vn[0], selVarNames[0] );
-									}
-								}
-							}
-							if ( saveCond ) {
-								// check errors
-								[
-									[ /(?<![=!><])=(?![=!])/g, `Wertzuweisung ()=) statt Vergleichsoperator (==) in "${cond}" gefunden! Ist das beabsichtigt?` ],
-									[ /<>/g, `Zeichenkette (<>) stat (!=) in "${cond}" gefunden! Ist das beabsichtigt?` ],
-									[ /(?<!\|)(\|)(?!\|)/g, `Einzelnes | statt || in "${cond}" gefunden! Ist das beabsichtigt?`],
-									[ /(?<!&)&(?!\&)/g, `Einzelnes & statt && in "${cond}" gefunden! Ist das beabsichtigt?`],
-								].forEach( ([re, msg]) => {
-									if ( saveCond.match( re ) ) {
-										debugAndConsoleOut(msg);
-									}
-								});
-
-								if ( !( 'scoringVals' in this ) ) {
-									this.scoringVals = {};
-								}
-								try {
-									this.scoringVals[ sv.val ] = parser.parse( saveCond );
-								} catch (e) {
-									debugAndConsoleOut( `Fehler (${e}) in Scoring-Condition: ${cond}` );
+									saveCond = saveCond.replace( vn[0], selVarNames[0] );
 								}
 							}
 						}
-					});
-				}
+						if ( saveCond ) {
+							// check errors
+
+							// [
+							// 	[ /(?<![=!><])=(?![=!])/g, `Wertzuweisung ()=) statt Vergleichsoperator (==) in "${cond}" gefunden! Ist das beabsichtigt?` ],
+							// 	[ /<>/g, `Zeichenkette (<>) stat (!=) in "${cond}" gefunden! Ist das beabsichtigt?` ],
+							// 	[ /||/g, `Doppeltes "||" statt "or" in "${cond}" gefunden! Ist das beabsichtigt?` ],
+							// 	[ /&&/g, `Doppeltes "&&" statt "and" in "${cond}" gefunden! Ist das beabsichtigt?` ],
+							// 	// [ /(?<!\|)(\|)(?!\|)/g, `Einzelnes | statt || in "${cond}" gefunden! Ist das beabsichtigt?` ],
+							// 	// [ /(?<!&)&(?!\&)/g, `Einzelnes & statt && in "${cond}" gefunden! Ist das beabsichtigt?` ],
+							// ].forEach( ([re,msg]) => {
+							// 	if ( saveCond.match(re) ) {
+							// 		debugAndConsoleOut(msg);
+							// 	}
+							// });
+							// HotFix for IB ImportExternalVariables: internal browser does not support RegExp look-behind/-forward
+							if ( Array.from( saveCond.matchAll( /=+/g ) ).includes('=') ) {
+								debugAndConsoleOut( `Wertzuweisung ()=) statt Vergleichsoperator (==) in "${cond}" gefunden! Ist das beabsichtigt?` );
+							}
+							if ( saveCond.includes('<>') ) {
+								debugAndConsoleOut( `Zeichenkette (<>) stat (!=) in "${cond}" gefunden! Ist das beabsichtigt?` );
+							}
+							if ( saveCond.includes('||') ) {
+								debugAndConsoleOut( `Doppeltes "||" statt "or" in "${cond}" gefunden! Ist das beabsichtigt?` );
+							}
+							if ( saveCond.includes('&&') ) {
+								debugAndConsoleOut( `Doppeltes "&&" statt "and" in "${cond}" gefunden! Ist das beabsichtigt?` );
+							}
+
+							if ( !( 'scoringVals' in obj ) ) {
+								obj.scoringVals = {};
+							}
+							try {
+								obj.scoringVals[ sv.val ] = parser.parse( saveCond );
+							} catch (e) {
+								debugAndConsoleOut( `Fehler (${e}) in Scoring-Condition: ${cond}` );
+							}
+						}
+					}
+				});
 			}
 		}
 	}
 
-	obj.computeScoringVals = function (res) {
-		if ( this.scoringVals ) {
+	if ( obj.scoringVals ) {
+		obj.computeScoringVals = function (res) {
 			let score = null;
 			const scoreDat = Object.entries( this.scoringVals );
 			for ( let h=0; score==null && h<scoreDat.length; h++ ) {
@@ -174,6 +187,10 @@ export function addScoringValsParser ( obj, Parser=null, addFncs={} ) {
 			}
 			const n = Number(score)
 			res[ `V_Score_${this.dataSettings.variablePrefix}` ] = score!== null && n!==NaN ? n : score;
+		}
+
+		if ( obj.scoreDef && obj.base ) {
+			obj.base.sendChangeState( obj );
 		}
 	}
 

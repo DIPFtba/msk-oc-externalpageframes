@@ -1,5 +1,5 @@
 import { filledBar } from "../../libs/filledBar";
-import { addScoringValsParser } from "../common";
+import { addScoring } from "../common";
 
 export class filledBarFromSchema extends filledBar {
 
@@ -24,8 +24,7 @@ export class filledBarFromSchema extends filledBar {
 
 		super( base, opts );
 
-		addScoringValsParser( this, addMods.Parser );
-		this.parseScoringVals(opts);
+		addScoring( this, opts, addMods.Parser );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();

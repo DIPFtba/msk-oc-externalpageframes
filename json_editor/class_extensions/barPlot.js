@@ -1,5 +1,5 @@
 import { barPlot } from "../../libs/barPlot";
-import { dp2inputRegExp, addScoringValsParser } from "../common";
+import { dp2inputRegExp, addScoring } from "../common";
 
 export class barPlotFromSchema extends barPlot {
 
@@ -66,8 +66,7 @@ export class barPlotFromSchema extends barPlot {
 
 		super( base, opts );
 
-		addScoringValsParser( this, addMods.Parser );
-		this.parseScoringVals(opts);
+		addScoring( this, opts, addMods.Parser );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();

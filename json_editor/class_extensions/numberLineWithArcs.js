@@ -1,5 +1,5 @@
 import { numberLineWithArcs } from '../../libs/numberLineWithArcs'
-import { dp2inputRegExp, addScoringValsParser } from '../common';
+import { dp2inputRegExp, addScoring } from '../common';
 export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 
 	constructor ( base, opts = {}, addMods={}  ) {
@@ -21,8 +21,7 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 
 		super( base, opts );
 
-		addScoringValsParser( this, addMods.Parser );
-		this.parseScoringVals(opts);
+		addScoring( this, opts, addMods.Parser );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();

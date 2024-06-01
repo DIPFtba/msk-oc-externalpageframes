@@ -6,7 +6,7 @@
       - [Vergleichsoperatoren](#vergleichsoperatoren)
       - [Logische Operatoren](#logische-operatoren)
       - [Math. Operatoren](#math-operatoren)
-  - [Funktionen](#funktionen)
+      - [Funktionen](#funktionen)
 - [Markierbarer Balken (filledBar)](#markierbarer-balken-filledbar)
 
 # Scoring (alle EWK)
@@ -55,7 +55,7 @@
 | / | Der Divisions-Operator teilt einen Wert durch einen anderen. |
 | % | Der Modulo-Operator gibt den Rest der Division zweier Werte zurück. |
 
-## Funktionen
+#### Funktionen
 
 folgende Funktionen sind in allen EWK definiert:
 
@@ -70,7 +70,7 @@ folgende Funktionen sind in allen EWK definiert:
 
 # Markierbarer Balken (filledBar)
 
-- "**Markierbar nur Vielfache von**" spezifiziert, welche Werte markeirt werden können. Zur Auswahl stehen "kleine Ticks" (dann können nur kleine Ticks markiert werden, je nachdem, wie diese definiert sind), "1er", "10er" oder "(frei)" (dann ist Markierung frei wählbar, auch alle Zwischenwerte)
+- "**Markierbar nur Vielfache von**" spezifiziert, welche Werte markiert werden können. Zur Auswahl stehen "kleine Ticks" (dann können nur kleine Ticks markiert werden, je nachdem, wie diese definiert sind), "1er", "10er" oder "(frei)" (dann ist Markierung frei wählbar, auch alle Zwischenwerte)
 
 -   Um statt der voreingestellten 100 markierbaren Felder z.B. nur 10 zu haben, gibt es folgende Möglichkeiten:
 

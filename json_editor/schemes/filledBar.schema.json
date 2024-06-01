@@ -121,13 +121,13 @@
 					"type": "string",
 					"enum": [ "ticks", "1", "10", "no" ],
 					"options": {
-						"enum_titles": [ "ticks", "1er", "10er", "(frei)" ],
+						"enum_titles": [ "kleine Ticks", "1er", "10er", "(frei)" ],
 						"grid_columns": 4,
 						"grid_break": true,
 						"dependencies": {
 							"readonly": false
 						}
-						},
+					},
 					"default": "ticks"
 				},
 
@@ -324,7 +324,7 @@
 						"disable_properties": true,
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (||=oder, &&=und)"
+						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (or, and)"
 					},
 					"items": {
 						"title": "Scoring Wert",

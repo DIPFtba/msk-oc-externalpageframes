@@ -27,6 +27,12 @@ html,body {
 	width: 245px;
 }
 
+#doku {
+	text-align: center;
+	font-weight: bold;
+	font-size: 120%;
+	padding: 10px;
+}
 #debugOut {
 	font-size: 90%;
 	height: 100%;

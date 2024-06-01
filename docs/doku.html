@@ -1,0 +1,164 @@
+<h1 id="table-of-contents">Table of Contents</h1>
+<ul>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#scoring-alle-ewk">Scoring (alle EWK)</a></li>
+<li><a href="#scoring-bedingungen">Scoring: Bedingungen</a><ul>
+<li><a href="#vergleichsoperatoren">Vergleichsoperatoren</a></li>
+<li><a href="#logische-operatoren">Logische Operatoren</a></li>
+<li><a href="#math-operatoren">Math. Operatoren</a></li></ul></li>
+<li><a href="#funktionen">Funktionen</a></li>
+<li><a href="#markierbarer-balken-filledbar">Markierbarer Balken (filledBar)</a></li>
+</ul>
+<h1 id="scoring-alle-ewk">Scoring (alle EWK)</h1>
+<ul>
+<li><p>In den meisten Komponenten unter Reiter "Daten", Abschnitt "Scoring-Werte"</p></li>
+<li><p>Weist <code>V_Score_&lt;pref&gt;</code> einen Wert zu, wenn entsprechende Bedingung WAHR ist</p></li>
+<li><p>Werte und Bedingungen werden in Reihenfolge der Definition abgearbeitet, bei erster zutreffender Bedingung wird abgebrochen, darauf folgende Werte/Bedingungen werden <strong>nicht</strong> ausgewertet. Reihenfolge der Definition muss daran angepasst werden und muss nicht z.B. nach aufsteigendem Wert sortiert sein</p></li>
+</ul>
+<h2 id="scoring-bedingungen">Scoring: Bedingungen</h2>
+<ul>
+<li><p>Klammern "( )" können beliebig zur Gruppierung verwendet werden</p></li>
+<li><p>Variablen müssen durch <code>${ XYZ }</code> gekennzeichnet, wobei "XYZ" der letzte Teil eines Variablennamens sein muss, so dass dieser Variablenname eindeutig ist, z.B. <code>${Lab_1}</code>, <code>${ArcCnt}</code> oder <code>${Val}</code>. Nur <code>${_1}</code> zu verwenden, wenn es z.B. <code>V_Variable_1a_Lab_1</code> und <code>V_Variable_1a_Val_1</code> in einer Komponente gitb, reicht nicht aus. Der "Prefix" der Komponente sollte nicht mit in <code>${ }</code> vorkommen</p></li>
+<li><p>Zur Evaluation wird die Bibliothek <code>expr-eval</code> verwendet, s. <a href="https://github.com/silentmatt/expr-eval?tab=readme-ov-file#expression-syntax">Doku</a></p></li>
+</ul>
+<h4 id="vergleichsoperatoren">Vergleichsoperatoren</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">Operator</th>
+<th style="text-align:left;">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">==</td>
+<td style="text-align:left;">Gleichheitsoperator</td>
+</tr>
+<tr>
+<td style="text-align:center;">!=</td>
+<td style="text-align:left;">Ungleichheitsoperator</td>
+</tr>
+<tr>
+<td style="text-align:center;">&gt;</td>
+<td style="text-align:left;">Größer-als-Operator</td>
+</tr>
+<tr>
+<td style="text-align:center;">&lt;</td>
+<td style="text-align:left;">Kleiner-als-Operator</td>
+</tr>
+<tr>
+<td style="text-align:center;">&gt;=</td>
+<td style="text-align:left;">Größer-oder-gleich-Operator</td>
+</tr>
+<tr>
+<td style="text-align:center;">&lt;=</td>
+<td style="text-align:left;">Kleiner-oder-gleich-Operator</td>
+</tr>
+<tr>
+<td style="text-align:center;">in</td>
+<td style="text-align:left;">IN-Operator, ergibt TRUE, wenn linker Operand in rechtem Array-Operand enthalten ist</td>
+</tr>
+</tbody>
+</table>
+<h4 id="logische-operatoren">Logische Operatoren</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">Operator</th>
+<th style="text-align:left;">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">and</td>
+<td style="text-align:left;">Der logische UND-Operator gibt <code>true</code> zurück, wenn beide Operanden <code>true</code> sind.</td>
+</tr>
+<tr>
+<td style="text-align:center;">or</td>
+<td style="text-align:left;">Der logische ODER-Operator gibt <code>true</code> zurück, wenn mindestens einer der Operanden <code>true</code> ist.</td>
+</tr>
+<tr>
+<td style="text-align:center;">not</td>
+<td style="text-align:left;">Der logische NICHT-Operator invertiert den Wert eines Operanden.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="math-operatoren">Math. Operatoren</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:center;">Operand</th>
+<th style="text-align:left;">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">+</td>
+<td style="text-align:left;">Der Addition-Operator addiert zwei Werte.</td>
+</tr>
+<tr>
+<td style="text-align:center;">-</td>
+<td style="text-align:left;">Der Subtraktions-Operator subtrahiert einen Wert von einem anderen.</td>
+</tr>
+<tr>
+<td style="text-align:center;">*</td>
+<td style="text-align:left;">Der Multiplikations-Operator multipliziert zwei Werte.</td>
+</tr>
+<tr>
+<td style="text-align:center;">/</td>
+<td style="text-align:left;">Der Divisions-Operator teilt einen Wert durch einen anderen.</td>
+</tr>
+<tr>
+<td style="text-align:center;">%</td>
+<td style="text-align:left;">Der Modulo-Operator gibt den Rest der Division zweier Werte zurück.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="funktionen">Funktionen</h2>
+<p>folgende Funktionen sind in allen EWK definiert:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Funktion</th>
+<th style="text-align:left;">Bsp</th>
+<th style="text-align:left;">Beschreibung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>length( s )</code></td>
+<td style="text-align:left;"><code>length( ${Val} ) &gt; 5</code></td>
+<td style="text-align:left;">Ergibt Länge des Strings s</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>strEqual( s1, s2 )</code></td>
+<td style="text-align:left;"><code>strEqual( ${Input_1}, "text" )</code></td>
+<td style="text-align:left;">Überprüft Gleichheit von s1 und s2 ohne Groß-/Kleinschreibung</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>isBetween( v, w1, w2 )</code></td>
+<td style="text-align:left;"><code>isBetween( ${Value_1}, 50, 80 )</code></td>
+<td style="text-align:left;">Überprüft, ob w1 &lt;= v &lt;= w2</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>match( s, r )</code></td>
+<td style="text-align:left;"><code>match( ${Input}, /^Ganzer Text$/i )</code></td>
+<td style="text-align:left;">Testet String s mit RegExp r</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>isNumUnit( s, num, unitRE, unitOpt, orEmpty )</code></td>
+<td style="text-align:left;"><code>isNumUnit( ${Input_1}, 80, "[mM][bB]", true, false )</code></td>
+<td style="text-align:left;">Überprüft, ob String s die numerischen Wert num und die Einheit unitRE (als RegExp) als "num Unit" oder "Unit num" enthält (unitOpt=true bedeutet, die Einheit ist optional; orEmpty=true bedeutet, der ganze String darf leer sein)</td>
+</tr>
+</tbody>
+</table>
+<h1 id="markierbarer-balken-filledbar">Markierbarer Balken (filledBar)</h1>
+<ul>
+<li><p>"<strong>Markierbar nur Vielfache von</strong>" spezifiziert, welche Werte markeirt werden können. Zur Auswahl stehen "kleine Ticks" (dann können nur kleine Ticks markiert werden, je nachdem, wie diese definiert sind), "1er", "10er" oder "(frei)" (dann ist Markierung frei wählbar, auch alle Zwischenwerte)</p></li>
+<li><p>Um statt der voreingestellten 100 markierbaren Felder z.B. nur 10 zu haben, gibt es folgende Möglichkeiten:</p>
+<ol>
+<li>Die Schrittweite der kleinen Ticks auf 10 stellen und die großen Ticks ausschalten</li>
+<li>Den Maximalwert auf 10 setzen, Schrittweite der kleinen Ticks auf 1 lassen</li>
+<li>Die kleinen Ticks ausschalten und "Markierung nur Vielfache von" auf 10er setzen</li></ol>
+<p>Das sind alles gleichwertige Lösungen, nur der Wertebereich des gespeicherten "markierten Wert" ist unterschiedlich</p></li>
+</ul>

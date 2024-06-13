@@ -15,8 +15,8 @@ const babel_loader = {
 				{
 					// 'debug': true,
 					'useBuiltIns': 'usage',
-					// 'corejs': { version: 3.26, proposals: true },
-					'corejs': { version: 3.26 },
+					// 'corejs': { version: 3.37, proposals: true },
+					'corejs': 3,
 					'targets': [ "last 5 years", "not dead" ]
 					// 'targets': { chrome: "20" }
 				},

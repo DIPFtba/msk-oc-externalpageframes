@@ -6,6 +6,7 @@ import { numberLine } from './numberLine'
 import Konva from 'konva/lib/Core'
 import { Line } from 'konva/lib/shapes/Line'
 import { Ellipse } from 'konva/lib/shapes/Ellipse'
+import { Group } from 'konva/lib/Group'
 
 export class numberLineWithArcs {
 
@@ -82,6 +83,7 @@ export class numberLineWithArcs {
 		this.numberLine = new numberLine( this.base_layer, opts.numberLine );
 
 		// Create Arcs
+		this.sortArcsTicks( opts.arcs, opts.ticks )
 		this.setArcs( opts.arcs, opts.ticks );
 
 		this.initData = this.getChState();
@@ -178,6 +180,19 @@ export class numberLineWithArcs {
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();
 		}
+	}
+
+	sortArcsTicks ( arcs, ticks ) {
+
+		ticks.sort( (a,b) => a.value - b.value );
+
+		arcs.forEach( a => {
+			if ( a.from > a.to ) {
+				[ a.from, a.to ] = [ a.to, a.from ];
+			}
+		});
+		arcs.sort( (a,b) => a.from - b.from );
+
 	}
 
 	///////////////////////////////////
@@ -340,6 +355,7 @@ export class numberLineWithArcs {
 		if ( !this.arcs.some( a => a.from<=val && a.to >=val ) ) {
 
 			// find insert pos (last pos < val)
+			// ticks must be sorted at all times!
 			let insertPos = this.ticks.length;
 			while ( insertPos>0 && this.ticks[insertPos-1].value>val ) {
 					insertPos--;
@@ -494,10 +510,12 @@ export class numberLineWithArcs {
 
 	createNewArc ( t1, t2 ) {
 
+		// from/to of arcs must be sorted at all times! (from < to)
 		const a = Object.assign( {}, this.newArcDefaults, { from: Math.min( t1.value, t2.value ), to: Math.max( t1.value, t2.value ) } );
 		const newArc = this.newArc(a);
 
 		// find insert pos (last pos < val)
+		// arcs must be sorted at all times!
 		let insertPos = this.arcs.length;
 		while ( insertPos>0 && this.arcs[insertPos-1].to>newArc.to ) {
 				insertPos--;

@@ -324,7 +324,7 @@ function updateEWK () {
 // console.log(jsonData);
 			const cfgData = clearCfgJson( jsonData );
 /// #if __DEVELOP
-console.log( '======= cfgData:', cfgData );
+// console.log( '======= cfgData:', cfgData );
 /// #endif
 			if ( cfgData.dataSettings ) {
 				base.dataSettings = cfgData.dataSettings;

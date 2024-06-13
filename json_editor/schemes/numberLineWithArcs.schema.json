@@ -897,7 +897,7 @@
 			},
 			"properties": {
 				"dontDelEmptyTicks": {
-					"title": "Leere Labels nicht löschen",
+					"title": "Labels ohne Bogen nicht löschen",
 					"type": "boolean",
 					"format": "checkbox",
 					"default": false,

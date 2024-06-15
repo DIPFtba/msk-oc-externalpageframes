@@ -18,8 +18,10 @@
 <h2 id="scoring-bedingungen">Scoring: Bedingungen</h2>
 <ul>
 <li><p>Klammern "( )" können beliebig zur Gruppierung verwendet werden</p></li>
-<li><p>Variablen müssen durch <code>${ XYZ }</code> gekennzeichnet, wobei "XYZ" der letzte Teil eines Variablennamens sein muss, so dass dieser Variablenname eindeutig ist, z.B. <code>${Lab_1}</code>, <code>${ArcCnt}</code> oder <code>${Val}</code>. Nur <code>${_1}</code> zu verwenden, wenn es z.B. <code>V_Variable_1a_Lab_1</code> und <code>V_Variable_1a_Val_1</code> in einer Komponente gitb, reicht nicht aus. Der "Prefix" der Komponente sollte nicht mit in <code>${ }</code> vorkommen</p></li>
-<li><p>Zur Evaluation wird die Bibliothek <code>expr-eval</code> verwendet, s. <a href="https://github.com/silentmatt/expr-eval?tab=readme-ov-file#expression-syntax">Doku</a></p></li>
+<li><p>Variablen müssen durch <code>${ XYZ }</code> gekennzeichnet, wobei "XYZ" der komplette oder der letzte Teil eines Variablennamens sein muss, so dass dieser Variablenname eindeutig ist, z.B. <code>${Lab_1}</code>, <code>${ArcCnt}</code> oder <code>${Val}</code>. Nur <code>${_1}</code> zu verwenden, wenn es z.B. <code>V_Variable_1a_Lab_1</code> und <code>V_Variable_1a_Val_1</code> in einer Komponente gibt, reicht nicht aus</p></li>
+<li><p>Soll der "Variablen-Prefix" der Komponente mit in einer Variablen-Referfenz enthalten sein (weil der komplette Variablenname angegeben wird), dann nicht den Prefix selbst einsetzen, sondern statt dessen <code>&lt;pref&gt;</code> verwenden. Wenn also z.B. der Variablen-Prefix der Komponente <code>1a</code> lautet und die Variable <code>V_Input_1a_Lab_1</code> referenziert werden soll, dann muss <code>${V_Input_&lt;pref&gt;_Lab_1}</code> in der Bedingung verwendet werden</p></li>
+<li><p>Um die Eingabe der Variablen zu vereinfachen, wird die komplette Variablen-Referenz in die Zwischenablage kopiert, wenn in der Variablen-Liste rechts auf eine Variable geklickt wird</p></li>
+<li><p>Zur Evaluation der Bedingung wird die Bibliothek <code>expr-eval</code> verwendet, s. <a href="https://github.com/silentmatt/expr-eval?tab=readme-ov-file#expression-syntax">Doku</a></p></li>
 </ul>
 <h4 id="vergleichsoperatoren">Vergleichsoperatoren</h4>
 <table>

@@ -309,6 +309,8 @@ Object.entries(templs).forEach( ([templ,[schema,svg]]) => {
 
 //////////////////////////////////////////////////////////////////////////////
 
+let dataSettingsVariablePrefix = '';
+
 function updateEWK () {
 
 	// Alles löschen
@@ -328,6 +330,7 @@ function updateEWK () {
 /// #endif
 			if ( cfgData.dataSettings ) {
 				base.dataSettings = cfgData.dataSettings;
+				dataSettingsVariablePrefix = cfgData.dataSettings.variablePrefix;
 			}
 
 			const extres = creator( cfgData );
@@ -527,6 +530,17 @@ document.addEventListener( 'mouseup', () => {
 	}
 });
 
+function var2clip( ev, k ) {
+	const e = ev.target;
+	if ( e.classList.contains('clipboard') ) {
+		e.classList.remove('clipboard');
+	}
+	window.setTimeout( () => e.classList.add('clipboard'), 0 );
+
+	navigator.clipboard.writeText( `\${${k.replace( `_${dataSettingsVariablePrefix}_`, '_<pref>_' )}}` );
+}
+window.var2clip = var2clip;
+
 function debugOutObj ( t, res, oldRes ) {
 
 	if ( typeof res === 'object' && !object_equals( res, oldRes ) ) {
@@ -538,7 +552,9 @@ function debugOutObj ( t, res, oldRes ) {
 		let dbg = `<span class="${t}">${t}:</span>`;
 		Object.entries( res )
 			// .sort( (a,b) => a[0]==b[0] ? NaN : a[0]<b[0] ? -1 : 1 )
-			.forEach( ([k,v]) => dbg += `<span class="${ oldRes[k] !== v ? 'c' :'nc' }">${k}: ${JSON.stringify(v)}</span>` );
+			.forEach( ([k,v]) => {
+				dbg += `<span class="${ oldRes[k] !== v ? 'c' :'nc' }" onclick="var2clip(event,'${k}')">${k}: ${JSON.stringify(v)}</span>`
+			});
 		debugOut( dbg + "<br>" );
 
 		return res;
@@ -553,7 +569,7 @@ function debugOutClear () {
 
 const debugOutDiv = document.getElementById( 'debugOut' );
 function debugOut (s) {
-	debugOutDiv.innerHTML += "\n"+s;
+	debugOutDiv.innerHTML += "\n"+s.replace("<pref>","&lt;pref&gt;");
 	debugOutDiv.scrollTop = debugOutDiv.scrollHeight;
 }
 window.debugOut = debugOut;

@@ -34,6 +34,18 @@ html,body {
 	padding: 10px;
 	height: 50px;
 }
+.clipboard {
+	background-color: lightgreen; /* Startfarbe */
+	animation: gruenFadeOut 1s forwards; /* Animation, Dauer: 1 Sekunde, behält den Endzustand bei */
+}
+@keyframes gruenFadeOut {
+	from {
+	  background-color: lightgreen;
+	}
+	to {
+	  background-color: transparent;
+	}
+}
 #debugOut {
 	font-size: 90%;
 	height: calc( 100% - 50px );

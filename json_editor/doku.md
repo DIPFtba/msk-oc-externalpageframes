@@ -21,9 +21,13 @@
 
 - Klammern "( )" können beliebig zur Gruppierung verwendet werden
 
-- Variablen müssen durch ```${ XYZ }``` gekennzeichnet, wobei "XYZ" der letzte Teil eines Variablennamens sein muss, so dass dieser Variablenname eindeutig ist, z.B. ```${Lab_1}```, ```${ArcCnt}``` oder ```${Val}```. Nur ```${_1}``` zu verwenden, wenn es z.B. ```V_Variable_1a_Lab_1``` und ```V_Variable_1a_Val_1``` in einer Komponente gitb, reicht nicht aus. Der "Prefix" der Komponente sollte nicht mit in ```${ }``` vorkommen
+- Variablen müssen durch ```${ XYZ }``` gekennzeichnet, wobei "XYZ" der komplette oder der letzte Teil eines Variablennamens sein muss, so dass dieser Variablenname eindeutig ist, z.B. ```${Lab_1}```, ```${ArcCnt}``` oder ```${Val}```. Nur ```${_1}``` zu verwenden, wenn es z.B. ```V_Variable_1a_Lab_1``` und ```V_Variable_1a_Val_1``` in einer Komponente gibt, reicht nicht aus
 
-- Zur Evaluation wird die Bibliothek ``expr-eval`` verwendet, s. [Doku](https://github.com/silentmatt/expr-eval?tab=readme-ov-file#expression-syntax)
+- Soll der "Variablen-Prefix" der Komponente mit in einer Variablen-Referfenz enthalten sein (weil der komplette Variablenname angegeben wird), dann nicht den Prefix selbst einsetzen, sondern statt dessen ```<pref>``` verwenden. Wenn also z.B. der Variablen-Prefix der Komponente ```1a``` lautet und die Variable ```V_Input_1a_Lab_1``` referenziert werden soll, dann muss ```${V_Input_<pref>_Lab_1}``` in der Bedingung verwendet werden
+
+- Um die Eingabe der Variablen zu vereinfachen, wird die komplette Variablen-Referenz in die Zwischenablage kopiert, wenn in der Variablen-Liste rechts auf eine Variable geklickt wird
+
+- Zur Evaluation der Bedingung wird die Bibliothek ``expr-eval`` verwendet, s. [Doku](https://github.com/silentmatt/expr-eval?tab=readme-ov-file#expression-syntax)
 
 #### Vergleichsoperatoren
 

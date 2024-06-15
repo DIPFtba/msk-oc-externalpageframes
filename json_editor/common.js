@@ -114,7 +114,8 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 							if ( vn[1].length == 0 ) {
 								debugAndConsoleOut( `Variablen-Name '\${}' in Scoring nicht zulässig` );
 							} else {
-								const re = new RegExp( vn[1], 'i' );
+								const varsearch = opts.dataSettings.variablePrefix ? vn[1].replace( /<pref>/i, opts.dataSettings.variablePrefix ) : vn[1];
+								const re = new RegExp( `${varsearch}$`, 'i' );
 								const selVarNames = varNames.filter( v => v.match(re) );
 								if ( selVarNames.length>1 ) {
 									debugAndConsoleOut( `Variablen-Name '\${${vn[1]}}' in Scoring ist nicht eindeutig`);
@@ -143,8 +144,8 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 							// 	}
 							// });
 							// HotFix for IB ImportExternalVariables: internal browser does not support RegExp look-behind/-forward
-							if ( Array.from( saveCond.matchAll( /=+/g ) ).includes('=') ) {
-								debugAndConsoleOut( `Wertzuweisung ()=) statt Vergleichsoperator (==) in "${cond}" gefunden! Ist das beabsichtigt?` );
+							if ( Array.from( saveCond.matchAll( /=+/g ) ).some( m => m[0]=='=' ) ) {
+								debugAndConsoleOut( `Wertzuweisung (=) statt Vergleichsoperator (==) in "${cond}" gefunden! Ist das beabsichtigt?` );
 							}
 							if ( saveCond.includes('<>') ) {
 								debugAndConsoleOut( `Zeichenkette (<>) stat (!=) in "${cond}" gefunden! Ist das beabsichtigt?` );

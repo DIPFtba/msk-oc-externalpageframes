@@ -271,7 +271,91 @@
 							"default": 0
 						}
 					}
+				},
+
+				"___labels": {
+					"title": "Beschriftung",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true
+					}
+				},
+
+				"___labelsDef": {
+					"title": "Beschriftung",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"grid_columns": 12,
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"dependencies": {
+							"___labels": true
+						}
+					},
+					"properties": {
+						"labelDistance": {
+							"title": "Abstand Balken",
+							"type": "integer",
+							"minimum": 2,
+							"options": {
+								"grid_columns": 4
+							},
+							"default": 5
+						},
+						"labelWidth": {
+							"title": "Breite",
+							"type": "integer",
+							"minimum": 0,
+							"options": {
+								"grid_columns": 4
+							},
+							"default": 50
+						},
+						"labelFontSize": {
+							"title": "Schriftgröße",
+							"type": "integer",
+							"minimum": 0,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							},
+							"default": 15
+						},
+						"labels": {
+							"title": "",
+							"type": "array",
+							"format": "table",
+							"options": {
+								"grid_columns": 12,
+								"titleHidden": true,
+								"disable_collapse": true,
+								"disable_edit_json": true,
+								"disable_properties": true
+							},
+							"items": {
+								"title": "Beschriftung",
+								"format": "object",
+								"properties": {
+									"val": {
+										"title": "Wert",
+										"type": "string",
+										"default": "0"
+									},
+									"text": {
+										"title": "Text",
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
 				}
+
 			}
 		},
 

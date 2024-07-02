@@ -4,6 +4,8 @@ import Konva from 'konva/lib/Core'
 import { Rect } from 'konva/lib/shapes/Rect'
 import { Line } from 'konva/lib/shapes/Line'
 
+import { textFrame } from './textFrame'
+
 export class filledBar {
 
 	constructor ( base, opts = {} ) {
@@ -29,6 +31,13 @@ export class filledBar {
 			markedValue: 0,
 			stickyTo: 'ticks', // null | <int>| 'tick' = minTicks.vals || majTicks.vals
 			markedColor: 'lightblue',
+
+			labelDistance: 5,
+			labelFontSize: 15,
+			labelWidth: 50,
+			labels: [
+				// { val: 0-1, text:}
+			],
 
 			readonly: 0,
 			logObjectId: 1,
@@ -86,6 +95,19 @@ export class filledBar {
 		this.stage.add( this.frameLayer );
 
 		this.drawValue();
+
+		// labels
+		this.labels.forEach( l => {
+			new textFrame( this.base, this.frameLayer, {
+				x: this.val2x( l.val )-this.labelWidth/2,
+				y: this.y+this.height+this.labelDistance,
+				value: l.text,
+				fontSize: this.labelFontSize,
+				width: this.labelWidth,
+				frameWidth: 0,
+				readonly: 1,
+			})
+		})
 
 		// interactivity
 		if ( !this.readonly ) {

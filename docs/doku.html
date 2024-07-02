@@ -8,6 +8,7 @@
 <li><a href="#math-operatoren">Math. Operatoren</a></li>
 <li><a href="#funktionen">Funktionen</a></li></ul></li>
 <li><a href="#markierbarer-balken-filledbar">Markierbarer Balken (filledBar)</a></li>
+<li><a href="#zahlenstrahl-mit-bögen-numberlinewitharcs">Zahlenstrahl mit Bögen (numberLineWithArcs)</a></li>
 </ul>
 <h1 id="scoring-alle-ewk">Scoring (alle EWK)</h1>
 <ul>
@@ -163,4 +164,10 @@
 <li>Den Maximalwert auf 10 setzen, Schrittweite der kleinen Ticks auf 1 lassen</li>
 <li>Die kleinen Ticks ausschalten und "Markierung nur Vielfache von" auf 10er setzen</li></ol>
 <p>Das sind alles gleichwertige Lösungen, nur der Wertebereich des gespeicherten "markierten Wert" ist unterschiedlich</p></li>
+</ul>
+<h1 id="zahlenstrahl-mit-bögen-numberlinewitharcs">Zahlenstrahl mit Bögen (numberLineWithArcs)</h1>
+<ul>
+<li><p>Alle Labels und Bögen werden in aufsteigender Reihenfolge sortiert, diese Reihenfolge bestimmt die Zuordnung der Variablen <code>XYZ_1</code>, <code>XYZ_2</code> etc. So geben <code>V_Input_&lt;pref&gt;_ArcFrom_1</code> und <code>V_Input_&lt;pref&gt;_ArcTo_1</code> den am weitesten links befindlichen Bogen wieder, nicht den in der JSON Config als ersten definierten Bogen. Falls ein User ein Bogen weiter links definiert, wird der erste Bogen automatisch zu <code>V_Input_&lt;pref&gt;_ArcFrom_2</code> und <code>V_Input_&lt;pref&gt;_ArcTo_2</code>. Das muss auch beim Scoring beachtet werden.</p></li>
+<li><p>Auch die <code>Von</code> (<code>_ArcFom_X</code>) und <code>Bis</code> (<code>_ArcTo_X</code>) Werte werden sortiert, sodass immer <code>Von &lt; Bis</code> gilt. Die Definition im JSON Configfile ist nicht entscheidend, ebenso ist egal, ob der Bogen von links nach rechts oder von rechts nach links erstellt wird</p></li>
+<li><p>Damit die Zuordnung der Variablen klarer ist, sollten also die Labels und Bögen bereits sortiert (Reihenfolge in der Tabelle) im JSON Configfile definiert werden</p></li>
 </ul>

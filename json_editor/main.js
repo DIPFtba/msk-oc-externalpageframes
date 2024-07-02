@@ -84,7 +84,6 @@ function getBase () {
 
 let creator = null;
 let editor;
-let schemaData;
 
 // import { JSONEditor } from '@json-editor/json-editor';
 /// #if __DEVELOP
@@ -162,7 +161,7 @@ function loadSchema( schema ) {
 
 	editor.on( 'ready', () => {
 		const json = editor.getValue('root');
-		schemaData = searchSchemaData(json);
+		const schemaData = searchSchemaData(json);
 		const addMods = {
 			Parser
 		};
@@ -408,6 +407,44 @@ function textOut( filename, text, type ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
+function loadJsonFromStorage () {
+	const json = sessionStorage.getItem('jsonData');
+	if ( json ) {
+		sessionStorage.removeItem('jsonData');
+
+		try {
+// console.log(reader.result);
+			const configJson = JSON.parse( json );
+			const schemaData = searchSchemaData(configJson);
+// console.log(configJson);
+			if ( !schemaData || !schemaData.___name || !( schemaData.___name in templs ) ) {
+				throw new Error( 'Diese JSON hat kein bekanntes Schema!' );
+			}
+
+			// Schema selection ausblenden
+			const schSel = document.getElementById('schema_select');
+			schSel.style.display = 'none';
+
+			// schema laden
+			const [ schema ] = templs[schemaData.___name];
+			loadSchema( schema );
+
+			editor.on( 'ready', () => {
+				// JSON laden
+				editor.setValue( configJson );
+			});
+
+		} catch(e) {
+			console.error( "Fehler beim JSON laden:", e );
+			alert(e);
+		}
+	}
+}
+
+document.addEventListener( 'DOMContentLoaded', loadJsonFromStorage );
+
+//////////////////////////////////////////////////////////////////////////////
+
 function saveJson () {
 	const json = editor.getValue('root');
 	const text = JSON.stringify(json);
@@ -422,16 +459,12 @@ function uploadJson () {
 		const reader = new FileReader();
 		reader.addEventListener( 'load', () => {
 			try {
-// console.log(reader.result);
-				const json = JSON.parse( reader.result );
-// console.log(json);
-				if ( schemaData && schemaData.___name ) {
-					const loadSchemaData = searchSchemaData( json );
-					if ( loadSchemaData && loadSchemaData.___name && schemaData.___name!=loadSchemaData.___name ) {
-						throw new Error( 'Diese JSON ist hat ein anderes Schema!' );
-					}
-				}
-				editor.setValue( json );
+				// direktes einlesen klappt nicht, also in Session Storage speichern und Reload!
+				// Save reader.result in session storage
+				sessionStorage.setItem('jsonData', reader.result);
+				// relaod page
+				location.reload();
+
 			} catch(e) {
 				console.error( "Fehler beim Upload:", e );
 				alert(e);

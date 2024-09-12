@@ -602,26 +602,38 @@ export class textareaBase extends textareaContainer {
 		}
 	}
 
-	// call this.div.normalize() and try to save/restore cursor position (safari puts cursor to end of text sometimes)
+	// call this.div.normalize() and try to save/restore cursor position
 	normalize () {
 
 		// try to save cursor position in textnode(s)
-		let curPos = null, prevElmnt, parentElmnt;
+		let curPos = null, prevElment, parentElment;
 		const sel = window.getSelection();
-		if ( sel && sel.getRangeAt && sel.rangeCount ) {
+		if ( sel && sel.rangeCount==1 ) {
 			let focus = sel.focusNode;
-			if ( focus && focus.nodeType==Node.TEXT_NODE &&
-					( ( focus.previousSibling && focus.previousSibling.nodeType==Node.TEXT_NODE ) ||
-						( focus.nextSibling && focus.nextSibling.nodeType==Node.TEXT_NODE ) ) ) {
-
-				curPos = sel.focusOffset;
-				parentElmnt = focus.parentElement;
-				// Add length of all previous text elements to position
-				while ( focus.previousSibling && focus.previousSibling.nodeType==Node.TEXT_NODE ) {
-					focus = focus.previousSibling;
-					curPos += focus.textContent.length;
+			let focusOffset = sel.focusOffset;
+			if ( focus ) {
+				if ( focus.nodeType==Node.ELEMENT_NODE && focusOffset>0 ) {
+					// If focusNode is an element, focusOffset is the number of child nodes of the
+					// focusNode preceding the focus
+					focus = focus.childNodes[ focusOffset ];
+					focusOffset = 0;
 				}
-				prevElmnt = focus.previousSibling;
+				if ( focus.nodeType==Node.TEXT_NODE &&
+						( ( focus.previousSibling && focus.previousSibling.nodeType==Node.TEXT_NODE ) ||
+							( focus.nextSibling && focus.nextSibling.nodeType==Node.TEXT_NODE ) ) ) {
+					// cursor is part of several consecutive text elements that are combined by nomalize()
+					// -> save position in text & previousSibling/parentElement
+
+					curPos = focusOffset;
+					parentElment = focus.parentElement;
+
+					// Add length of all previous text elements to position
+					while ( focus.previousSibling && focus.previousSibling.nodeType==Node.TEXT_NODE ) {
+						focus = focus.previousSibling;
+						curPos += focus.textContent.length;
+					}
+					prevElment = focus.previousSibling;
+				}
 			}
 		}
 
@@ -629,7 +641,7 @@ export class textareaBase extends textareaContainer {
 
 		// restore position in (concatenated) text
 		if ( curPos!==null ) {
-			const newElem = prevElmnt ? prevElmnt.nextSibling : parentElmnt.firstChild;
+			const newElem = prevElment ? prevElment.nextSibling : parentElment.firstChild;
 			const newRange = document.createRange();
 			newRange.setStart( newElem, curPos );
 			newRange.collapse( true );

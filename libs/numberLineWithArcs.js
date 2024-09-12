@@ -77,6 +77,8 @@ export class numberLineWithArcs {
 		const stage = base.stage;
 		this.stage = stage;
 
+		this.dontCreateNewArc = this.neverCreateArcs;
+
 		// NumberLine
 		this.base_layer = new Konva.Layer();
 		stage.add( this.base_layer );

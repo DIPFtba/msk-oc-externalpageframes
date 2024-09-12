@@ -99,5 +99,5 @@ folgende Funktionen sind in allen EWK definiert:
 
 - Damit die Zuordnung der Variablen klarer ist, sollten also die Labels und Bögen bereits sortiert (Reihenfolge in der Tabelle) im JSON Configfile definiert werden
 
-
+- Die Option `Keine neuen Bögen zulassen` macht nur Sinn, wenn keine Bögen vordefiniert werden und im Reiter `Achsenlabels` die Option `Labels ohne Bögen nicht löschen` aktiviert wird. Dann können Labels bzw. Beschriftungen am Zahlenstrahl erzeugt, bewegt und beschriftet werden (ohne Bögen). Die Option `Maximalzahl` im Reiter `Achsenlabels` begrenzt dann die mögliche Anzahl
 

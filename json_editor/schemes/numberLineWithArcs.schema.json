@@ -720,6 +720,37 @@
 						"infoText": "Schmalere Bögen werden gelöscht, Bögen mit diesem Abstand werden zusammengeführt"
 					}
 				},
+				"defaultrc":{
+					"title": "Bogenfarben",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 12
+					},
+					"properties": {
+						"arcColorReadonly": {
+							"title": "Farbe feste Bögen",
+							"type": "string",
+							"format": "color",
+							"options": {
+								"grid_columns": 4
+							},
+							"default": "#000000"
+						},
+						"arcColorEditable": {
+							"title": "Farbe freie Bögen",
+							"type": "string",
+							"format": "color",
+							"options": {
+								"grid_columns": 4
+							},
+							"default": "#0000FF"
+						}
+					}
+				},
 				"defaultArcLabel": {
 					"title": "Bogenlabel",
 					"type": "object",

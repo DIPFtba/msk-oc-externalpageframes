@@ -656,7 +656,21 @@
 							}
 						}
 					}
-				},
+				}
+			}
+		},
+
+		"dataSettings": {
+			"title": "Daten",
+			"type": "object",
+			"format": "grid-strict",
+			"options": {
+				"titleHidden": true,
+				"disable_collapse": true,
+				"disable_edit_json": true,
+				"disable_properties": true
+			},
+			"properties": {
 
 				"___jsonSchemaData": {
 					"type": "object",
@@ -673,8 +687,20 @@
 					"options": {
 						"hidden": true
 					}
-				}
+				},
 
+				"i18nKeysCtxs": {
+					"type": "object",
+					"options": {
+						"hidden": true
+					},
+					"properties": {
+						"___numberLine.___labels_data.___arelvals_labels.label": {
+							"type": "string",
+							"default": "Ein Label für einen Wert des Zahlenstrahls ${}"
+						}
+					}
+				}
 			}
 		}
 	}

@@ -17,13 +17,9 @@ function loadJSON () {
 
 }
 
-function startImportSchemaListener () {
+import { getEPFFolderName } from '../common';
 
-	// get the folder name of the EPF
-	const getEPFFolderName = () => {
-		const regexp = window.location.pathname.match( /\/([^/]+)\/[^/]*$/ );
-		return regexp ? regexp[1] : '.';
-	}
+function startImportSchemaListener () {
 
 	// listener for providing JSON SCHEMA to ItemBuilder
 	window.addEventListener(
@@ -102,8 +98,9 @@ import { inputInsertsFromSchema } from './inputInserts';
 import { textareaInsertsFromSchema } from './textareaInserts';
 /// #endif
 
-let baseLoadedResolve;
-const prBaseLoaded = new Promise( resolve => baseLoadedResolve = resolve );
+import { ResolvablePromise } from '../common';
+let baseInitialized = new ResolvablePromise();
+let jsonLoaded = new ResolvablePromise();
 
 function initJSON ( json ) {
 
@@ -115,6 +112,7 @@ function initJSON ( json ) {
 			return;
 		}
 	}
+	jsonLoaded.resolvePromise( json );
 
 	const cfg = clearCfgJson( json );
 
@@ -123,7 +121,7 @@ function initJSON ( json ) {
 /// #else
 	const base = new baseInits( { container: 'container' } );
 /// #endif
-	baseLoadedResolve( base );
+	baseInitialized.resolvePromise( base );
 
 	if ( cfg.dataSettings ) {
 		base.dataSettings = cfg.dataSettings;
@@ -191,7 +189,7 @@ function initJSON ( json ) {
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();
 		}
-	});
+	})
 }
 
 document.addEventListener( "DOMContentLoaded", initExtRes );
@@ -206,11 +204,90 @@ function sendVarDecl (event) {
 		const { callId } = JSON.parse(event.data);
 		if ( callId !== undefined && callId.includes("importVariables") ) {
 			// answer message when base is initialized
-			prBaseLoaded.then( base => base.fsm.answerVarDeclReq(callId) );
+			baseInitialized.promise.then( base => base.fsm.answerVarDeclReq(callId) );
 		}
 	} catch (e) {}
 
 }
 
-window.addEventListener( "message", sendVarDecl, false );
-prBaseLoaded.then( () => window.removeEventListener( "message", sendVarDecl ) );
+function handleIBearlyVarImport () {
+	window.addEventListener( "message", sendVarDecl, false );
+	baseInitialized.promise.then( () => window.removeEventListener( "message", sendVarDecl ) );
+}
+
+handleIBearlyVarImport();
+
+// //////////////////////////////////////////////////////////////////////////////
+
+// // I18N support
+
+// import { getI18nDescr } from '../common';
+
+// async function sendI18nDescr (callId) {
+
+// 	const json = await jsonLoaded.promise;
+
+// 	const i18nData = getI18nDescr( json );
+
+// 	// Send Message
+// 	const data = {
+// 		callId,
+// 		i18nData,
+// 	}
+// 	baseInitialized.promise.then( base => base.fsm.postMessage( JSON.stringify( data ) ) );
+
+// }
+
+// ///////////////////////////////////////
+
+// import { patchCfgI18n } from '../common';
+
+// async function loadI18n ( i18n ) {
+
+// 	// Wenn json geladen
+// 	const json = await jsonLoaded.promise;
+// 	// patch the CFG-JSON with the I18N-Strings
+// 	patchCfgI18n( json, i18n );
+// // console.log(json);
+
+// 	// Wenn alles fertig initialisiert
+// 	const base = await baseInitialized.promise;
+// 	await base.fsm.getInitDonePromise();
+
+// 	// dann als nächster Schritt die I18N-Strings laden
+// 	setTimeout( () => {
+// 		baseInitialized = new ResolvablePromise();
+// 		jsonLoaded = new ResolvablePromise();
+// 		handleIBearlyVarImport();
+
+// 		let state = null;
+// 		if ( window.getState ) {
+// 			state = window.getState();
+// 		}
+// 		initJSON( json );
+// 		if ( state ) {
+// 			window.setState( state );
+// 		}
+// 	})
+// }
+
+// ///////////////////////////////////////
+
+// function i18nListener (event) {
+
+// 	try {
+// 		const { callId, i18n } = JSON.parse(event.data);
+// 		if ( callId !== undefined && callId.includes("importI18n") ) {
+// 			sendI18nDescr( callId );
+// 		} else if ( callId !== undefined && callId.includes("setI18n") ) {
+// 			loadI18n( i18n );
+// 		}
+// 	}
+// 	catch (e) {}
+
+// }
+
+// window.addEventListener( "message", i18nListener, false );
+
+// // window.sendI18nDescr = sendI18nDescr;
+// // window.loadI18n = loadI18n;

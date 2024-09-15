@@ -275,3 +275,155 @@ export const dp2inputRegExp = (obj) => {
 	delete obj.dp;
 	delete obj.units;
 }
+
+//////////////////////////////////////
+
+export class ResolvablePromise {
+
+	constructor() {
+		this.prom = new Promise( (res,rej) => {
+			this.res = res;
+			this.rej = rej;
+		});
+	}
+
+	resolvePromise( res ) {
+		this.res( res );
+	}
+
+	rejectPromise( rej ) {
+		this.rej( rej );
+	}
+
+	get promise() {
+		return this.prom;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+
+// get the folder name of the EPF
+export const getEPFFolderName = ( emptyVal='.' ) => {
+	const regexp = window.location.pathname.match( /\/([^/]+)\/[^/]*$/ );
+	return regexp ? regexp[1] : emptyVal;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+// I18N support
+
+export function getI18nDescr ( json, nameFnc=getEPFFolderName ) {
+
+	const name = nameFnc('').replaceAll( '/', '_' );
+
+	if ( !json.dataSettings || !json.dataSettings.i18nKeysCtxs ) {
+		return [];
+	}
+
+	const i18nData = [];
+
+	// Collect Info
+	Object.entries( json.dataSettings.i18nKeysCtxs ).forEach( ([key, ctx]) => {
+
+		// Pfad in JSON suchen
+		const keyParts = key.split( '.' );
+		let val = json;
+		while (1) {
+			const k = keyParts.shift();
+			if ( !( k in val ) ) {
+				// PFad nicht gefunden
+				val = null;
+				break;
+			}
+			val = val[ k ];
+			if ( keyParts.length === 0 ) {
+				// Einzelner Wert gefunden
+				break;
+			}
+			if ( typeof val !== 'object' ) {
+				// Pfad geht nicht weiter
+				val = null;
+				break;
+			}
+			if ( Array.isArray(val) ) {
+				if ( keyParts.length<=1 ) {
+					// Array gefunden
+					break;
+				} else {
+					// array mittendrin, Fehler
+					val = null;
+					break;
+				}
+			}
+		}
+
+		const add = (text,currkey) => {
+			// Einen Wert adden, wenn wirklich Text
+			text = text.trim();
+			if ( text && !text.match( /^[0-9,. %]+$/ ) ){
+				const descr = ctx.replaceAll( '${}', name ).trim();
+				const entry = {
+					key: name.length>0 ? `${name}_${currkey}` : currkey,
+					text,
+					descr,
+				}
+				i18nData.push( entry );
+			}
+		}
+
+		if ( val !== null ) {
+			if ( typeof val !== 'object' ) {
+				// Einzelnen Wert schreiben
+				add( val, key );
+			} else {
+				// Array-Werte schreiben
+				const k = keyParts.pop();
+				const stammKey = k ? key.substring( 0, key.length-k.length-1 ) : key;
+				val.forEach( (v,i) => {
+					if ( k ) {
+						if ( k in v ) {
+							add( v[k], `${stammKey}.${i}.${k}` );
+						}
+					} else {
+						add( v, `${stammKey}.${i}` );
+					}
+				});
+			}
+		}
+	})
+// console.log( "============== i18nData", i18nData );
+
+	return i18nData;
+}
+
+///////////////////////////////////////
+
+export function patchCfgI18n ( json, i18n, nameFnc=getEPFFolderName ) {
+
+	const name = nameFnc('').replaceAll( '/', '_' );
+
+	i18n.forEach( ({ key, text }) => {
+
+		// EPF Name + '_' am Anfang wegnehmen
+		if ( name.length>0 && key.startsWith( name + '_' ) ) {
+			key = key.substring( name.length+1 );
+		}
+		const keyParts = key.split( '.' );
+		let val = json;
+
+		while (1) {
+			const k = keyParts.shift();
+			if ( !( k in val ) ) {
+				// PFad nicht gefunden
+				break;
+			}
+			if ( keyParts.length === 0 ) {
+				// Einzelner Wert gefunden
+				val[ k ] = text;
+				break;
+			}
+			val = val[ k ];
+		}
+	})
+}

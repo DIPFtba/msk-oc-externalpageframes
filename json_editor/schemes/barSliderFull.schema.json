@@ -993,6 +993,47 @@
 					}
 				},
 
+				"i18nKeysCtxs": {
+					"type": "object",
+					"options": {
+						"hidden": true
+					},
+					"properties": {
+						"___bar.___labelsDef.labels.text": {
+							"type": "string",
+							"default": "Ein Label für einen Wert des Balkens ${}"
+						},
+						"freeLabelDefs.left.topText": {
+							"type": "string",
+							"default": "Beschriftung oben am Minimalwert des Balkens ${}"
+						},
+						"freeLabelDefs.left.bottomText": {
+							"type": "string",
+							"default": "Beschriftung unten am Minimalwert des Balkens ${}"
+						},
+						"freeLabelDefs.middle.topText": {
+							"type": "string",
+							"default": "Beschriftung oben am Schieberegler des Balkens ${}"
+						},
+						"freeLabelDefs.middle.bottomText": {
+							"type": "string",
+							"default": "Beschriftung unten am Schieberegler des Balkens ${}"
+						},
+						"freeLabelDefs.right.topText": {
+							"type": "string",
+							"default": "Beschriftung oben am Maximalwert des Balkens ${}"
+						},
+						"freeLabelDefs.right.bottomText": {
+							"type": "string",
+							"default": "Beschriftung unten am Maximalwert des Balkens ${}"
+						},
+						"freeLabelDefs.insertButtons.texts": {
+							"type": "string",
+							"default": "Beschriftung eines Text-Einfügebuttons des Balkens ${}"
+						}
+					}
+				},
+
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
 					"description": "Erzeugt werden 'V_Status_&lt;pref&gt;', 'V_Input_&lt;pref&gt;_Val' und 'V_Input_&lt;pref&gt;_X'",

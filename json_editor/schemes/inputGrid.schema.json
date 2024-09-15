@@ -359,6 +359,23 @@
 						"grid_break": true
 					},
 					"default": 10
+				},
+
+				"txts": {
+					"type": "object",
+					"options": {
+						"hidden": true
+					},
+					"properties": {
+						"tippen": {
+							"type": "string",
+							"default": "Tippen"
+						},
+						"stift": {
+							"type": "string",
+							"default": "Stift"
+						}
+					}
 				}
 			}
 		},
@@ -373,6 +390,7 @@
 				"disable_properties": true
 			},
 			"properties": {
+
 				"___jsonSchemaData": {
 					"type": "object",
 					"properties": {
@@ -389,6 +407,24 @@
 						"hidden": true
 					}
 				},
+
+				"i18nKeysCtxs": {
+					"type": "object",
+					"options": {
+						"hidden": true
+					},
+					"properties": {
+						"___basic.txts.tippen": {
+							"type": "string",
+							"default": "Übersetzung des Wortes 'Tippen'"
+						},
+						"___basic.txts.stift": {
+							"type": "string",
+							"default": "Übersetzung des Wortes 'Stift'"
+						}
+					}
+				},
+
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
 					"description": "Erzeugt wird 'V_Status_&lt;pref&gt;'",

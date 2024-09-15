@@ -238,6 +238,25 @@ function createManifestFile( extres, data ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
+function getToolsCfg () {
+
+	return {
+
+		entry: './json_editor/tools/collectI18nData.js',
+		output: {
+			path: path.resolve(__dirname, 'dist/tools'),
+			filename: 'collectI18nData.js',
+		},
+		externals: {
+			fs: 'commonjs fs',
+			path: 'commonjs path',
+		},
+
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 module.exports = ( env, argv ) => {
 
 	let cfg = getEditorCfg( env, argv );
@@ -268,6 +287,8 @@ module.exports = ( env, argv ) => {
 			cfg.push( getExtResFromSchemaWebPackConfig( argv, er ) );
 			createManifestFile( er, ExtResFromSchema[er] );
 		})
+
+		cfg.push( getToolsCfg() );
 
 	}
 

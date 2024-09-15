@@ -811,6 +811,23 @@
 					}
 				},
 
+				"i18nKeysCtxs": {
+					"type": "object",
+					"options": {
+						"hidden": true
+					},
+					"properties": {
+						"numberLine.___labels_data.___arelvals_labels.label": {
+							"type": "string",
+							"default": "Ein Label für einen Wert des Zahlenstrahls ${}"
+						},
+						"___annotations.annotations.text": {
+							"type": "string",
+							"default": "Eine Kommentierung eines Wertes am Zahlenstrahl ${}"
+						}
+					}
+				},
+
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
 					"type": "string",

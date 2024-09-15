@@ -1122,6 +1122,27 @@
 					}
 				},
 
+				"i18nKeysCtxs": {
+					"type": "object",
+					"options": {
+						"hidden": true
+					},
+					"properties": {
+						"numberLine.___labels_data.___arelvals_labels.label": {
+							"type": "string",
+							"default": "Ein Label für einen Wert des Zahlenstrahls ${}"
+						},
+						"___arcs.arcs.label": {
+							"type": "string",
+							"default": "Ein Label für einen Bogen am Zahlenstrahl ${}"
+						},
+						"___ticks.ticks.label": {
+							"type": "string",
+							"default": "Ein Label für einen Start oder Endwert eines Bogens am Zahlenstrahls ${}"
+						}
+					}
+				},
+
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
 					"description": "Erzeugt werden 'V_Status_&lt;pref&gt;', 'V_Input_&lt;pref&gt;_ArcCnt', 'V_Input_&lt;pref&gt;_LabCnt' und ",

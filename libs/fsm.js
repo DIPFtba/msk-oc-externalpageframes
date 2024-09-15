@@ -70,12 +70,16 @@ export class fsmSend {
 			payload.userDefIdPath = this.userDefIdPath;
 			payload.traceCount = this.traceCount++;
 
-			window.parent.postMessage( JSON.stringify( payload ), '*' );
+			this.postMessage( JSON.stringify( payload ) );
 
 		} catch (e) {
 			console.error(e);
 		}
 
+	}
+
+	postMessage ( payload ) {
+		window.parent.postMessage( payload, '*' );
 	}
 
 	// Helper
@@ -96,7 +100,7 @@ export class fsmSend {
 					callId
 				}
 
-				window.parent.postMessage( JSON.stringify( pass_data ), '*' );
+				this.postMessage( JSON.stringify( pass_data ) );
 			});
 		}
 

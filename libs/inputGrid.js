@@ -134,6 +134,12 @@ export class inputGrid {
 				sticky: false,
 				icons: []
 			},
+
+			// used Txts, exchangeable for i18n
+			txts: {
+				tippen: "Tippen",
+				stift: "Stift",
+			},
 		}
 		mergeDeep( Object.assign( this, defaultOpts ), opts );
 		this.base = base;
@@ -1101,6 +1107,8 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 				fontSize: 16,
 			}
 			const imgWidth = switchModeBarDef.height;
+			const txtTippen = this.txts && this.txts.tippen ? this.txts.tippen : 'Tippen';
+			const txtStift = this.txts && this.txts.stift ? this.txts.stift : 'Stift';
 			switchModeBarDef.icons = [
 				{
 					// A tippen
@@ -1118,7 +1126,7 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 						})),
 
 						new Konva.Text( Object.assign( {}, defaultTextOptions, {
-							text: 'Tippen',
+							text: txtTippen,
 							x: x + imgWidth -1,
 							y: y + 1,
 							width: switchModeBarDef.width - imgWidth,
@@ -1152,7 +1160,7 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 						})),
 
 						new Konva.Text( Object.assign( {}, defaultTextOptions, {
-							text: 'Stift',
+							text: txtStift,
 							x: x + imgWidth +1,
 							y: y + 1,
 							width: switchModeBarDef.width - imgWidth,

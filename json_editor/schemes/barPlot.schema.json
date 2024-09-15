@@ -1184,6 +1184,31 @@
 					}
 				},
 
+				"i18nKeysCtxs": {
+					"type": "object",
+					"options": {
+						"hidden": true
+					},
+					"properties": {
+						"___basic.titleObj.value": {
+							"type": "string",
+							"default": "Titel des Säulendiagramms ${}"
+						},
+						"___axis.yAxis.axisLabelObj.value": {
+							"type": "string",
+							"default": "Achsentitel der Y-Achse des Säulendiagramms ${}"
+						},
+						"___axis.yAxis.labelObjs.value": {
+							"type": "string",
+							"default": "Ein Label an einem Y-Wert des Säulendiagramms ${}"
+						},
+						"___bars.bars.labelObj___value": {
+							"type": "string",
+							"default": "Ein Label einer Säule des Säulendiagramms ${}"
+						}
+					}
+				},
+
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
 					"description": "Erzeugt werden 'V_Status_&lt;pref&gt;', 'V_Input_&lt;pref&gt;_Val_X', 'V_Input_&lt;pref&gt;_Lab_X', 'V_Input_&lt;pref&gt;_Title', 'V_Input_&lt;pref&gt;_yTitle', 'V_Input_&lt;pref&gt;_yLab_X'",

@@ -168,6 +168,19 @@
 					}
 				},
 
+				"i18nKeysCtxs": {
+					"type": "object",
+					"options": {
+						"hidden": true
+					},
+					"properties": {
+						"___basics.frames.text": {
+							"type": "string",
+							"default": "Ein Label für ein Textfeld ${}"
+						}
+					}
+				},
+
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
 					"description": "Erzeugt wird 'V_Status_&lt;pref&gt;' und 'V_Input_&lt;pref&gt;_Conn_X', ggf. 'V_Input_&lt;pref&gt;_Lab_X'",

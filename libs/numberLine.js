@@ -197,4 +197,7 @@ export class numberLine {
 		return ( this.radius*2 || (this.minTicks || {}).vals*this.unit || this.width/100 )*3;
 	}
 
+	getDefaultChangeState () {
+		return false;
+	}
 }

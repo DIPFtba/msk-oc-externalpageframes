@@ -33,6 +33,9 @@ export const addInsertButtonsTo = ( baseClass, extraDefaults=null, inputCallback
 
 		super( base, opts );
 		if ( !opts.insertIconDefs || !opts.insertIconDefs.length ) {
+			if ( base.fsm && base.fsm.decInitCnt ) {
+				base.fsm.decInitCnt();
+			}
 			return;
 		}
 
@@ -127,6 +130,9 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 
 		super( base, opts );
 		if ( opts.paintLines===null || opts.modeIconBarDef===null ) {
+			if ( base.fsm && base.fsm.decInitCnt ) {
+				base.fsm.decInitCnt();
+			}
 			return;
 		}
 		const stage = this.stage;
@@ -366,7 +372,7 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 
 		const superState = super.getState();
 
-		if ( this.linesCopy.length ) {
+		if ( this.linesCopy && this.linesCopy.length ) {
 
 			const state = JSON.parse( superState );
 			state.lines = this.linesCopy;
@@ -409,12 +415,12 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 					}
 				})
 				this.linesCopy = obj.lines;
-			}
 
-			if ( hasMarker && ( this.hasMarker===undefined || this.hasMarker ) ) {
-				this.freePaintMarkerLayer.draw();
+				if ( hasMarker && ( this.hasMarker===undefined || this.hasMarker ) ) {
+					this.freePaintMarkerLayer.draw();
+				}
+				this.freePaintLayer.draw();
 			}
-			this.freePaintLayer.draw();
 
 		} catch (e) {
 			console.error(e);
@@ -453,6 +459,9 @@ export const addFreeLabelsTo = ( baseClass ) => class extends baseClass {
 
 		super( base, opts );
 		if ( !opts.freeLabels || !opts.freeLabels.length ) {
+			if ( base.fsm && base.fsm.decInitCnt ) {
+				base.fsm.decInitCnt();
+			}
 			return;
 		}
 
@@ -577,7 +586,7 @@ export const addFreeLabelsTo = ( baseClass ) => class extends baseClass {
 
 		const superState = super.getState();
 
-		if ( this.freeLabels.length ) {
+		if ( this.freeLabels && this.freeLabels.length ) {
 
 			let hasData = false;
 			const data = this.freeLabels.map( l => {
@@ -614,10 +623,11 @@ export const addFreeLabelsTo = ( baseClass ) => class extends baseClass {
 			// merge Label-Defs
 			if ( obj.freeLabels ) {
 				obj.freeLabels.forEach( ( l, n ) => Object.assign( this.freeLabels[n], l ) );
-			}
-			this.freeLabelsInit();
 
-			this.freeLabelsLayer.draw();
+				this.freeLabelsInit();
+
+				this.freeLabelsLayer.draw();
+			}
 
 		} catch (e) {
 			console.error(e);

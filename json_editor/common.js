@@ -364,7 +364,7 @@ export function getI18nDescr ( json, nameFnc=getEPFFolderName ) {
 			if ( text && !text.match( /^[0-9,. %]+$/ ) ){
 				const descr = ctx.replaceAll( '${}', name ).trim();
 				const entry = {
-					key: name.length>0 ? `${name}_${currkey}` : currkey,
+					key: name.length>0 ? `${name}.${currkey}` : currkey,
 					text,
 					descr,
 				}
@@ -405,8 +405,11 @@ export function patchCfgI18n ( json, i18n, nameFnc=getEPFFolderName ) {
 
 	i18n.forEach( ({ key, text }) => {
 
-		// EPF Name + '_' am Anfang wegnehmen
-		if ( name.length>0 && key.startsWith( name + '_' ) ) {
+		// EPF Name + '.' muss am Anfang wegnehmen
+		if ( name.length>0 ) {
+			if ( !key.startsWith( name + '.' ) ) {
+				return;
+			}
 			key = key.substring( name.length+1 );
 		}
 		const keyParts = key.split( '.' );

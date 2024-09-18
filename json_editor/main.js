@@ -285,7 +285,7 @@ const templs = {
 	rectArrayMarkable: [ rectArrayMarkableJSONSchema, rectArrayMarkableSVG ],
 	stampImages: [ stampImagesJSONSchema, stampImagesSVG ],
 	textareaInserts: [ textareaInsertsJSONSchema, textareaInsertsSVG ],
-	inputInsert: [ inputInsertsJSONSchema, inputInsertsSVG ],
+	inputInserts: [ inputInsertsJSONSchema, inputInsertsSVG ],
 }
 
 const schSel = document.getElementById('schema_select');
@@ -334,6 +334,9 @@ function updateEWK () {
 
 			const extres = creator( cfgData );
 			// const extres = { getDefaultChangeState: () => ({}) };
+			if ( process.env.NODE_ENV !== 'production' ) {
+				window.extres = extres;
+			}
 
 			// Patch scoreDef for output
 			if ( extres.scoreDef ) {

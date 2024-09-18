@@ -70,7 +70,7 @@ export function clearCfgJson( json ) {
 import { isBetween, isNumUnit } from "../libs/common";
 
 function debugAndConsoleOut (s) {
-	if ( debugOut )	{
+	if ( typeof debugOut !== 'undefined' )	{
 		debugOut( `<span class="error">${s}</span>` );
 	}
 	console.error(s);

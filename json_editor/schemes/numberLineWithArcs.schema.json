@@ -720,7 +720,7 @@
 						"infoText": "Schmalere Bögen werden gelöscht, Bögen mit diesem Abstand werden zusammengeführt"
 					}
 				},
-				"defaultrc":{
+				"defaultArc":{
 					"title": "Bogenfarben",
 					"type": "object",
 					"format": "grid-strict",

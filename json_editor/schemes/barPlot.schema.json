@@ -342,18 +342,18 @@
 							"default": 0,
 							"options": {
 								"grid_columns": 4,
-								"infoText": "Wenn >0: max. Stellenanzahl (nur Zahlenangaben erlaubt)"
+								"infoText": "Wenn >0: max. Stellenanzahl (dann nur Zahleneingaben erlaubt)"
 							}
 						},
 						"dp": {
-							"title": "Nachkommastellen",
+							"title": "Nachkomma-Stellen",
 							"type": "integer",
 							"minimum": 0,
 							"default": 0,
 							"options": {
 								"grid_columns": 4,
 								"grid_break": true,
-								"infoText": "Wenn >0: max. Nachkommastellen (nur Zahlenangaben erlaubt)"
+								"infoText": "Wenn >0: max. Nachkomma-Stellen (dann nur Zahleneingaben erlaubt)"
 							}
 						},
 						"readonly": {
@@ -1077,18 +1077,18 @@
 							"default": 0,
 							"options": {
 								"grid_columns": 4,
-								"infoText": "Wenn >0: max. Stellenanzahl (nur Zahlenangaben erlaubt)"
+								"infoText": "Wenn >0: max. Stellenanzahl (dann nur Zahleneingaben erlaubt)"
 							}
 						},
 						"dp": {
-							"title": "Nachkommastellen",
+							"title": "Nachkomma-Stellen",
 							"type": "integer",
 							"minimum": 0,
 							"default": 0,
 							"options": {
 								"grid_columns": 4,
 								"grid_break": true,
-								"infoText": "Wenn >0: max. Nachkommastellen (nur Zahlenangaben erlaubt)"
+								"infoText": "Wenn >0: max. Nachkomma-Stellen (dann nur Zahleneingaben erlaubt)"
 							}
 						},
 						"readonly": {

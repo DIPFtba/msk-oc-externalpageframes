@@ -133,6 +133,7 @@ export class baseInits {
 		if ( obj.scoreDef ) {
 
 			const score = obj.scoreDef.call(obj);
+			this.scoreObj = obj;
 
 			if ( typeof obj.oldScore === 'undefined' || !object_equals( score, obj.oldScore ) ) {
 				if ( typeof score === 'object' ) {
@@ -166,14 +167,23 @@ export class baseInits {
 		const typetrans = {
 			'string': 'String',
 			'number': 'Integer',
+			'boolean': 'Boolean',
 		}
 
 		for ( const vname in this.FSMVarsSent ) {
 
 			const val = this.FSMVarsSent[vname];
+			let type = '';
+			if ( this.scoreObj && this.scoreObj.scoreDefType ) {
+				type = this.scoreObj.scoreDefType.call(this.scoreObj, vname);
+			}
+			if ( !type ) {
+				type = val===null ? 'Integer' : typetrans[ typeof val ];
+			}
+
 			const vdef = {
 				name: vname,
-				type: val===null ? 'Integer' : typetrans[ typeof val ],
+				type,
 				defaultValue: val===null ? 0 : val,
 				namedValues: [],
 			}

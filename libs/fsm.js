@@ -79,7 +79,10 @@ export class fsmSend {
 	}
 
 	postMessage ( payload ) {
-		window.parent.postMessage( payload, '*' );
+		this.debugOut( `Posting message: ${payload}` );
+		if ( window.parent !== window ) {
+			window.parent.postMessage( payload, '*' );
+		}
 	}
 
 	// Helper

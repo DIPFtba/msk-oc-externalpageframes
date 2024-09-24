@@ -247,7 +247,7 @@ export const readRangeArray = (s) => {
 export const dp2inputRegExp = (obj) => {
 
 	/**
-	 * Generates a regular expression pattern for a given unit.
+	 * Generates a regular expression pattern for a given unit. (case insensitive concatenation of upper and lower case characters)
 	 * @param {string} u - The unit string.
 	 * @returns {string} The regular expression pattern for the unit.
 	 */
@@ -274,6 +274,42 @@ export const dp2inputRegExp = (obj) => {
 	delete obj.pdp;
 	delete obj.dp;
 	delete obj.units;
+}
+
+export const dp2labFncInputRegExp = ( obj, opts, nam='' ) => {
+	let lVF, lT;
+	if ( !obj ) {
+		return
+	}
+
+	if ( obj.dp ) {
+		lVF = strToNum;
+		lT = 'Number';
+	} else if ( obj.pdp ) {
+		lVF = strToInt;
+		lT = 'Integer';
+	} else {
+		lVF = v => v;
+		lT = 'String';
+	}
+	opts[`lab${nam}ValFnc`] = lVF;
+	opts[`lab${nam}Type`] = lT;
+
+	dp2inputRegExp(obj);
+}
+
+//////////////////////////////////////
+
+export const strToInt = (s) => {
+	const n = parseInt(s);
+	return isNaN(n) ? 0 : n;
+}
+
+export const strToNum = (s) => {
+	s = s.replace( ',', '.' );
+	return parseFloat( s );
+	// const n = parseFloat( s );
+	// return isNaN(n) ? 0 : n;
 }
 
 //////////////////////////////////////

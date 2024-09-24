@@ -1,5 +1,5 @@
 import { barSlider_freePaintMarker_freeLabels_insertButtons } from "../../libs/barSlider";
-import { addScoring, dp2inputRegExp } from "../common";
+import { addScoring, dp2labFncInputRegExp } from "../common";
 
 export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabels_insertButtons {
 
@@ -32,10 +32,11 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 		if ( opts.freeLabelDefs ) {
 			const defEd = opts.freeLabelDefs.defEd;
 			if ( defEd ) {
+				// inputRegexp erzeugen
 				if ( ( defEd.pdp || defEd.dp ) && opts.freeLabelDefs.insertButtons && opts.freeLabelDefs.insertButtons.texts && opts.freeLabelDefs.insertButtons.texts.length>0 ) {
 					defEd.units = opts.freeLabelDefs.insertButtons.texts.join('|');
 				}
-				dp2inputRegExp( defEd );
+				dp2labFncInputRegExp( defEd, opts );
 			}
 			opts.freeLabels = [];
 
@@ -112,6 +113,10 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 		}
 	}
 
+	scoreDefType (varName) {
+		return varName.match( /^V_Input_\w+_\d+$/ ) ? this.labType : 'Integer';
+	}
+
 	scoreDef () {
 		const res = {};
 		if ( this.readonly ) {
@@ -128,7 +133,7 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 				let i=1;
 				this.freeLabels.forEach( fl => {
 					if ( !fl.readonly ) {
-						res[`V_Input_${pref}_${i++}`] = fl.textObj ? fl.textObj.value : '';
+						res[`V_Input_${pref}_${i++}`] = this.labValFnc( fl.textObj ? fl.textObj.value : '' );
 					}
 				})
 			}

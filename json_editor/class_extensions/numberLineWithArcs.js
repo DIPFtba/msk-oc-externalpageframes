@@ -1,5 +1,5 @@
 import { numberLineWithArcs } from '../../libs/numberLineWithArcs'
-import { dp2inputRegExp, addScoring } from '../common';
+import { dp2labFncInputRegExp, addScoring } from '../common';
 export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 
 	constructor ( base, opts = {}, addMods={}  ) {
@@ -9,7 +9,10 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 		}
 
 		// pre-decimal places & decimal places --> inputRegexp
-		[ opts.defaultArcLabel, opts.defaultTickLabel ].forEach( ann => dp2inputRegExp(ann) );
+		[ /*opts.default*/'Arc'/*Label*/, /*opts.default*/'Tick'/*Label*/ ].forEach( nam => {
+			dp2labFncInputRegExp( opts[`default${nam}Label`], opts, nam );
+		});
+
 		opts.newArcDefaults = { label: opts.newArcsHLabels ? '' : null };
 		if ( opts.newArcsHTicks || opts.neverCreateArcs ) {
 			opts.newTickLabelDefaults = { label: '' };
@@ -28,6 +31,16 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 		}
 	}
 
+	scoreDefType (varName) {
+		if ( varName.match( /^V_Input_\w+_ArcLab_\d+$/ ) ) {
+			return this.labArcType;
+		}
+		if ( varName.match( /^V_Input_\w+_Lab_\d+$/ ) ) {
+			return this.labTickType;
+		}
+		return 'Integer';
+	}
+
 	scoreDef () {
 		const settings = this.dataSettings;
 		const pref = settings.variablePrefix;
@@ -44,13 +57,13 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 		for ( let i=0; i<settings.saveArcs; i++ ) {
 			scores[`V_Input_${pref}_ArcFrom_${i+1}`] = i<edArcs.length ? Math.round( edArcs[i].from*mult ) : null;
 			scores[`V_Input_${pref}_ArcTo_${i+1}`] = i<edArcs.length ? Math.round( edArcs[i].to*mult ) : null;
-			scores[`V_Input_${pref}_ArcLab_${i+1}`] = i<edArcs.length && edArcs[i].labelObj ? edArcs[i].labelObj.value : '';
+			scores[`V_Input_${pref}_ArcLab_${i+1}`] = this.labArcValFnc( i<edArcs.length && edArcs[i].labelObj ? edArcs[i].labelObj.value : '' );
 		}
 
 		// save Ticks
 		for ( let i=0; i<settings.saveTicks; i++ ) {
 			scores[`V_Input_${pref}_LabVal_${i+1}`] = i<edTicks.length ? Math.round( edTicks[i].value*mult ) : null;
-			scores[`V_Input_${pref}_Lab_${i+1}`] = i<edTicks.length && edTicks[i].labelObj ? edTicks[i].labelObj.value : '';
+			scores[`V_Input_${pref}_Lab_${i+1}`] = this.labTickValFnc( i<edTicks.length && edTicks[i].labelObj ? edTicks[i].labelObj.value : '' );
 		}
 
 		if ( this.computeScoringVals ) {

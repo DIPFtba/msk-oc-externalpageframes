@@ -430,12 +430,12 @@ export class numberLineWithArcs {
 		}
 
 		// arc label
-		if ( ao.label!==null ) {
+		if ( ao.label!==null || !ao.labelReadonly ) {
 			let lo = Object.assign( {}, this.defaultArcLabel, this.newArcLabelDefaults );
 			ao.labelObj = new textFrame( this.base, this.arcs_layer, Object.assign( lo, {
 				x: xm-lo.width/2,
 				y: this.numberLine.y - this.arcDistance - this.arcHeight - this.arcLabelDistance - lo.height,
-				value: ao.label.toString(),
+				value: ao.label ? ao.label.toString() : '',
 				readonly: ao.labelReadonly || this.readonly,
 				onChange: () => {
 					ao.label = ao.labelObj.value;	// for get/set State()

@@ -1,5 +1,5 @@
 import { barPlot } from "../../libs/barPlot";
-import { dp2inputRegExp, addScoring } from "../common";
+import { dp2labFncInputRegExp, addScoring } from "../common";
 
 export class barPlotFromSchema extends barPlot {
 
@@ -22,7 +22,7 @@ export class barPlotFromSchema extends barPlot {
 
 		// Axis
 		if ( opts.labYDefEd ) {
-			dp2inputRegExp( opts.labYDefEd );
+			dp2labFncInputRegExp( opts.labYDefEd, opts, 'Y' );
 		}
 		if ( opts.xAxis.width <= 0 ) {
 			opts.xAxis.width += base.width - opts.origin.x;
@@ -52,7 +52,7 @@ export class barPlotFromSchema extends barPlot {
 
 		// Bars
 		if ( opts.labBarDefEd ) {
-			dp2inputRegExp( opts.labBarDefEd );
+			dp2labFncInputRegExp( opts.labBarDefEd, opts, 'B' );
 		}
 		if ( opts.bars && opts.bars.length > 0 ) {
 			opts.bars.forEach( bar => {
@@ -71,6 +71,19 @@ export class barPlotFromSchema extends barPlot {
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();
 		}
+	}
+
+	scoreDefType (varName) {
+		if ( varName.match( /^V_Input_\w+_Lab_\d+$/ ) ) {
+			return this.labBType;
+		}
+		if ( varName.match( /^V_Input_\w+_yLab_\d+$/ ) ) {
+			return this.labYType;
+		}
+		if ( varName.match( /^V_Input_\w+_y?Title$/ ) ) {
+			return 'String';
+		}
+		return 'Integer';
 	}
 
 	scoreDef () {
@@ -94,7 +107,7 @@ export class barPlotFromSchema extends barPlot {
 					i=1;
 					this.bars.forEach( bar => {
 						if ( bar.labelObj && !bar.labelObj.readonly ) {
-							res[`V_Input_${pref}_Lab_${i++}`] = bar.labelObj.value || '';
+							res[`V_Input_${pref}_Lab_${i++}`] = this.labBValFnc( bar.labelObj.value || '' );
 						}
 					});
 				}
@@ -111,7 +124,7 @@ export class barPlotFromSchema extends barPlot {
 					let i=1;
 					this.yAxis.labelObjs.forEach( lab => {
 						if ( !lab.readonly ) {
-							res[`V_Input_${pref}_yLab_${i++}`] = lab.value || '';
+							res[`V_Input_${pref}_yLab_${i++}`] = this.labYValFnc( lab.value || '' );
 						}
 					});
 				}

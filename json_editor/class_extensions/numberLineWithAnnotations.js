@@ -1,5 +1,5 @@
 import { numberLineWithAnnotations } from '../../libs/numberLineWithAnnotations'
-import { dp2inputRegExp, addScoring } from '../common';
+import { dp2labFncInputRegExp, addScoring } from '../common';
 export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotations {
 
 	constructor ( base, opts = {}, addMods={}  ) {
@@ -9,7 +9,11 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 		}
 
 		// pre-decimal places & decimal places --> inputRegexp
-		opts.annotations.forEach( ann => dp2inputRegExp(ann) );
+		dp2labFncInputRegExp( opts, opts );
+		if ( opts.inputRegexp ) {
+			opts.annotations.forEach( a => a.inputRegexp = opts.inputRegexp );
+			delete opts.inputRegexp;
+		}
 
 		super( base, opts );
 
@@ -20,6 +24,10 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 		}
 	}
 
+	scoreDefType (varName) {
+		return varName.match( /^V_Input_\w+_Lab_\d+$/ ) ? this.labType : 'Integer';
+	}
+
 	scoreDef () {
 		const settings = this.dataSettings;
 		const pref = settings.variablePrefix;
@@ -28,7 +36,7 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 
 		// Annotations
 		const anns = this.annotations.filter( a => !a.textReadonly );
-		anns.forEach( (v,i) => scores[ `V_Input_${pref}_Lab_${i+1}` ] = v.text );
+		anns.forEach( (v,i) => scores[ `V_Input_${pref}_Lab_${i+1}` ] = this.labValFnc( v.text ) );
 
 		// Connections
 		const conns = this.annotations.filter( a => !a.toValueReadonly );

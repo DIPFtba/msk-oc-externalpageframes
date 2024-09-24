@@ -719,6 +719,25 @@
 						}
 					}
 				},
+				"pdp": {
+					"title": "Vorkommastellen",
+					"type": "integer",
+					"minimum": 0,
+					"default": 0,
+					"options": {
+						"infoText": "Wenn >0: max. Stellenanzahl (dann nur Zahleneingaben erlaubt)"
+					}
+				},
+				"dp": {
+					"title": "Nachkomma-Stellen",
+					"type": "integer",
+					"minimum": 0,
+					"default": 0,
+					"options": {
+						"grid_break": true,
+						"infoText": "Wenn >0: max. Nachkomma-Stellen (dann nur Zahleneingaben erlaubt)"
+					}
+				},
 				"annotations": {
 					"title": "Eingabefelder",
 					"type": "array",
@@ -726,8 +745,7 @@
 					"options": {
 						"disable_collapse": true,
 						"disable_edit_json": true,
-						"disable_properties": true,
-						"infoText": "Wenn VKS (max. Vorkommastellen) oder NKS (max. Nachkommastellen) angegeben, dürfen nur Zahlen eingegeben werden"
+						"disable_properties": true
 					},
 					"items": {
 						"title": "Label",
@@ -763,18 +781,6 @@
 							"xval": {
 								"title": "X (opt.)",
 								"type": "string"
-							},
-							"pdp": {
-								"title": "VKN",
-								"type": "integer",
-								"minimum": 0,
-								"default": 0
-							},
-							"dp": {
-								"title": "NKN",
-								"type": "integer",
-								"minimum": 0,
-								"default": 0
 							}
 						}
 					}

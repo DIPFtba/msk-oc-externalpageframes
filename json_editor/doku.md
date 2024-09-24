@@ -9,6 +9,9 @@
       - [Funktionen](#funktionen)
 - [Markierbarer Balken (filledBar)](#markierbarer-balken-filledbar)
 - [Zahlenstrahl mit Bögen (numberLineWithArcs)](#zahlenstrahl-mit-bögen-numberlinewitharcs)
+- [Eingabefeld mit Buttons (inputInserts)](#eingabefeld-mit-buttons-inputinserts)
+
+
 
 # Scoring (alle EWK)
 
@@ -101,3 +104,18 @@ folgende Funktionen sind in allen EWK definiert:
 
 - Die Option `Keine neuen Bögen zulassen` macht nur Sinn, wenn keine Bögen vordefiniert werden und im Reiter `Achsenlabels` die Option `Labels ohne Bögen nicht löschen` aktiviert wird. Dann können Labels bzw. Beschriftungen am Zahlenstrahl erzeugt, bewegt und beschriftet werden (ohne Bögen). Die Option `Maximalzahl` im Reiter `Achsenlabels` begrenzt dann die mögliche Anzahl
 
+
+
+# Eingabefeld mit Buttons (inputInserts)
+
+- Im Reiter `Daten` können `Scoring-Muster` angegeben werden, die dann unter `Scoring-Werte` beliebig kombiniert werden können
+
+- Ein `Scoring-Muster` besteht aus einem `VarName`, einem `Term` und Optionen. Die Variable mit dem angegebenen Namen wird auf `1` gesetzt, wenn die Eingabe dem `Term` entspricht, ansonsten auf 0
+
+- Ein `Term` besteht aus einer Operation mit zwei oder mehreren Operanden, und optional einem obligatorischem/optionalem Ergebnis. Wird ein obligatorisches Ergebnis mit angegeben `= <Wert>`, muss das Ergebnis auch in der Eingabe enthalten sein, wird ein optionales Ergebnis angegeben `[ = <Wert>]`, dann kann dieses (aber kein anderes) Ergebnis in der EIngabe enthalten sein, um die Variable auf `1` zu setzen. Beispiele: `1+3`, `4*5*2`, `20/4[=5]`, `10-6=4`
+
+- Wird einem Operand ein `!` vorangestellt, bedeutet dies, das hier JEDER AUßER DEM SPEZIFIZIERTEN Operand als richtig gewertet wird. So können z.B. Muster wie "3 mal [irgendwas außer 4]" gewertet weren: `3 * !4`
+
+- Die Option `OP-Perm` gibt an, ob die Operanden beliebig vertauscht sein dürfen
+
+- Die Option `Mehr erlaubt` gibt an, ob vor/hinter dem Term auch noch weitere Eingabe erlaubt sind, die die Bewertung nicht beeinflussen

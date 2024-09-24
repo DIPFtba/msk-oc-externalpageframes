@@ -40,8 +40,9 @@ export class inputInsertsFromSchema extends inputInserts {
 	parseScoringPattern ( pattern, pref ) {
 
 		this.scoringPattern = {};
-		const re1 = new RegExp( "(\\d+(?:[,.]\\d+)?) *((?:([\\-+*\\/]) *(?:\\d+(?:[,.]\\d+)?) *)+)(\\[ *= *(\\d+(?:[,.]\\d+)?) *\\] *|= *(\\d+(?:[,.]\\d+)?) *)?" );
-		const re2 = new RegExp( "(\\d+(?:[,.]\\d+)?)", "g" );
+		const numRe = '(?:(?<!!)!)?\\d+(?:\\.\\d+)?'; // number, optionally prepended by one '!'
+		const re1 = new RegExp( `(${numRe}) *((?:([\\-+*\\/]) *${numRe} *)+)(\\[ *= *(${numRe}) *\\] *|= *(${numRe}) *)?` );
+		const re2 = new RegExp( `(${numRe})`, "g" );
 
 		pattern.forEach( p => {
 
@@ -71,6 +72,7 @@ export class inputInsertsFromSchema extends inputInserts {
 				}
 
 				const re = this.getOpRE( ops, p.perm ? this.perm( mult ) : [mult], res, resOpt);
+// console.log( ops, mult, res, resOpt, re.toString() );
 				this.scoringPattern[ `V_Score_${pref}_${p.name}` ] = re;
 			}
 		})

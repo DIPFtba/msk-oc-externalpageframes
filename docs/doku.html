@@ -9,6 +9,7 @@
 <li><a href="#funktionen">Funktionen</a></li></ul></li>
 <li><a href="#markierbarer-balken-filledbar">Markierbarer Balken (filledBar)</a></li>
 <li><a href="#zahlenstrahl-mit-bögen-numberlinewitharcs">Zahlenstrahl mit Bögen (numberLineWithArcs)</a></li>
+<li><a href="#eingabefeld-mit-buttons-inputinserts">Eingabefeld mit Buttons (inputInserts)</a></li>
 </ul>
 <h1 id="scoring-alle-ewk">Scoring (alle EWK)</h1>
 <ul>
@@ -171,4 +172,13 @@
 <li><p>Auch die <code>Von</code> (<code>_ArcFom_X</code>) und <code>Bis</code> (<code>_ArcTo_X</code>) Werte werden sortiert, sodass immer <code>Von &lt; Bis</code> gilt. Die Definition im JSON Configfile ist nicht entscheidend, ebenso ist egal, ob der Bogen von links nach rechts oder von rechts nach links erstellt wird</p></li>
 <li><p>Damit die Zuordnung der Variablen klarer ist, sollten also die Labels und Bögen bereits sortiert (Reihenfolge in der Tabelle) im JSON Configfile definiert werden</p></li>
 <li><p>Die Option <code>Keine neuen Bögen zulassen</code> macht nur Sinn, wenn keine Bögen vordefiniert werden und im Reiter <code>Achsenlabels</code> die Option <code>Labels ohne Bögen nicht löschen</code> aktiviert wird. Dann können Labels bzw. Beschriftungen am Zahlenstrahl erzeugt, bewegt und beschriftet werden (ohne Bögen). Die Option <code>Maximalzahl</code> im Reiter <code>Achsenlabels</code> begrenzt dann die mögliche Anzahl</p></li>
+</ul>
+<h1 id="eingabefeld-mit-buttons-inputinserts">Eingabefeld mit Buttons (inputInserts)</h1>
+<ul>
+<li><p>Im Reiter <code>Daten</code> können <code>Scoring-Muster</code> angegeben werden, die dann unter <code>Scoring-Werte</code> beliebig kombiniert werden können</p></li>
+<li><p>Ein <code>Scoring-Muster</code> besteht aus einem <code>VarName</code>, einem <code>Term</code> und Optionen. Die Variable mit dem angegebenen Namen wird auf <code>1</code> gesetzt, wenn die Eingabe dem <code>Term</code> entspricht, ansonsten auf 0</p></li>
+<li><p>Ein <code>Term</code> besteht aus einer Operation mit zwei oder mehreren Operanden, und optional einem obligatorischem/optionalem Ergebnis. Wird ein obligatorisches Ergebnis mit angegeben <code>= &lt;Wert&gt;</code>, muss das Ergebnis auch in der Eingabe enthalten sein, wird ein optionales Ergebnis angegeben <code>[ = &lt;Wert&gt;]</code>, dann kann dieses (aber kein anderes) Ergebnis in der EIngabe enthalten sein, um die Variable auf <code>1</code> zu setzen. Beispiele: <code>1+3</code>, <code>4*5*2</code>, <code>20/4[=5]</code>, <code>10-6=4</code></p></li>
+<li><p>Wird einem Operand ein <code>!</code> vorangestellt, bedeutet dies, das hier JEDER AUßER DEM SPEZIFIZIERTEN Operand als richtig gewertet wird. So können z.B. Muster wie "3 mal [irgendwas außer 4]" gewertet weren: <code>3 * !4</code></p></li>
+<li><p>Die Option <code>OP-Perm</code> gibt an, ob die Operanden beliebig vertauscht sein dürfen</p></li>
+<li><p>Die Option <code>Mehr erlaubt</code> gibt an, ob vor/hinter dem Term auch noch weitere Eingabe erlaubt sind, die die Bewertung nicht beeinflussen</p></li>
 </ul>

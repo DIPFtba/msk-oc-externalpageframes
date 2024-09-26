@@ -59,12 +59,20 @@ export class inputInserts extends textareaInserts {
 	getOpRE( Ops, mult, res, resOpt ) {
 		// res===null means "no result/extra text specified"
 		// res===undefined means "result/extra text not checked"
-		const numRe = num => num.startsWith( '!' ) ? `\\b(?!0*${num.slice(1)}${ !num.includes('.') ? '(?:[,.]0+)?' : '0*' }\\b)\\d+(?:[.,]\\d*)?` : `0*${num}${ !num.includes('.') ? '(?:[,.]0+)?' : '0*' }`;
-		const mrs = `(?:${mult.map( m => `(?:${m.map( d => numRe( d.toString().replace( /[.,]/, "[.,]" ) ) ).join(`\\s*(?:${Ops})\\s*`)})` ).join('|')})`;
+		const numRe = num => {
+			if ( num == '.' ) {
+				return `\\d+(?:[,.]\\d+)?`
+			}
+			num = num.toString().replace( /[.,]/, "[.,]" )
+			return num.startsWith( '!' ) ?
+				`\\b(?!0*${num.slice(1)}${ !num.includes('.') ? '(?:[,.]0+)?' : '0*' }\\b)\\d+(?:[.,]\\d*)?` :
+				`0*${num}${ !num.includes('.') ? '(?:[,.]0+)?' : '0*' }`;
+		}
+		const mrs = `(?:${mult.map( m => `(?:${m.map( d => numRe(d) ).join(`\\s*(?:${Ops})\\s*`)})` ).join('|')})`;
 		if ( res !== null && res !== undefined ) {
-			res = numRe( res.toString().replace( /[.,]/, "[.,]" ) );
+			res = numRe(res);
 			const rOpt = resOpt ? '?' : '';
-			return new RegExp( `^(?:(?:(?:${res}\\s*)${rOpt}(=|\u003d)\\s*)${mrs}|${mrs}(?:\\s*(=|\u003d)(?:\\s*${res})${rOpt})${rOpt})$` );
+			return new RegExp( `^(?:(?:(?:${res}\\s*)${rOpt}(?:=|\u003d)\\s*)${mrs}|${mrs}(?:\\s*(?:=|\u003d)(?:\\s*${res})${rOpt})${rOpt})$` );
 		}
 		return new RegExp( res === null ? `^${mrs}$` : `(?:^|\\s|[^0-9,.])${mrs}(?:\\s|[^0-9,.]|$)` );
 	}

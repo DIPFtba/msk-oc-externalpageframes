@@ -50,7 +50,7 @@ function gen () {
 						}
 						check( { name:"chk", pattern, perm, add:false }, operator, operanden, result, res, resOpt );
 
-						// zufällig ! einstruen
+						// zufällig ! in Pattern einstreuen
 						let notAr;
 						do {
 							notAr = operanden.map( () => Math.random() < 0.5 );
@@ -63,6 +63,20 @@ function gen () {
 						check( { name:"chk", pattern, perm, add:false }, operator,
 							operanden.map( (op,i) => notAr[i] ? '!'+op : op ),
 							result, res, resOpt );
+
+						// zufällig . in Pattern einstreuen
+						do {
+							notAr = operanden.map( () => Math.random() < 0.5 );
+						} while ( notAr.every( x => !x ) );
+
+						pattern = operanden.map( (op,i) => notAr[i] ? '.' : op ).join(`${space}${operator}${space}`);
+						const resTmp = Math.random() < 0.2 ? '.' : result.toString();
+						if ( res ) {
+							pattern += resOpt ? `${space}[${space}=${space}${resTmp}${space}]${space}` : `${space}=${space}${resTmp}${space}`;
+						}
+						check( { name:"chk", pattern, perm, add:false }, operator,
+							operanden.map( (op,i) => notAr[i] ? '.' : op ),
+							resTmp, res, resOpt );
 
 					});
 				});
@@ -97,6 +111,17 @@ function createOperand( operand, opCorr ) {
 	}
 
 	let op = operand.toString();
+
+	if ( operand === '.' ) {
+		if ( !opCorr ) {
+			console.error( "Fehler: Operand '.' soll falsch sein!" );
+			return '';
+		}
+		op = Math.floor( Math.random() * 10 ).toString();
+		if ( Math.random() < 0.5 ) {
+			op += '.' + Math.floor( Math.random() * 10 ).toString();
+		}
+	}
 
 // console.log("operand,opCorr", op, opCorr,opi2);
 	if (!opCorr) {
@@ -167,17 +192,22 @@ console.log("patternObj", patternObj.pattern, patternObj.perm, patternObj.add);
 		let allOperanden = patternObj.perm ? [ getRandomArrayElement( extres.perm( operanden ) ) ] : [ operanden ];
 		allOperanden.forEach( nowOperanden => {
 
-// if ( patternObj.perm ) console.log("nowOperanden", nowOperanden);
+			if ( opCorr.some( (x,j) => !x && nowOperanden[j] == '.' ) ) {
+				// Ein Operand '.' soll falsch sein -> das geht nicht
+				return;
+			}
+	// if ( patternObj.perm ) console.log("nowOperanden", nowOperanden);
 
 			const isNot = nowOperanden.map( operand => operand.toString().startsWith('!') );
 			const hasNot = isNot.some( x => x );
 			const notNot = isNot.map( (x,i) => isNot[i] ? nowOperanden[i].slice(1) : nowOperanden[i] );
+			const hasDot = nowOperanden.some( x => x == '.' );
 
 			let myops;
 			try {
 				do {
 					myops = notNot.map( ( operand, j ) => createOperand( operand, isNot[j] ^ opCorr[j] ) );
-				} while ( !hasNot && ( ( eval( myops.map( o => parseFloat(o).toString() ).join(operator) ) == result ) !== allOpCorr ) );
+				} while ( !hasDot && !hasNot && ( ( eval( myops.map( o => parseFloat(o).toString() ).join(operator) ) == result ) !== allOpCorr ) );
 			} catch (e) {
 				console.error( myops.join(operator) );
 				throw(e);
@@ -195,6 +225,10 @@ console.log("patternObj", patternObj.pattern, patternObj.perm, patternObj.add);
 
 			// Mit Res testen
 			[0,1].forEach( resCorr => {
+				if ( result=='.' && !resCorr ) {
+					// Ein Result '.' soll falsch sein -> das geht nicht
+					return;
+				}
 				const resOp = createOperand( result, resCorr );
 				const correct = ( allOpCorr && ( ( !res && patternObj.add ) || ( res && resCorr ) ) );
 

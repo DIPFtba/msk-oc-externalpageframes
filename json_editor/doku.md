@@ -112,9 +112,11 @@ folgende Funktionen sind in allen EWK definiert:
 
 - Ein `Scoring-Muster` besteht aus einem `VarName`, einem `Term` und Optionen. Die Variable mit dem angegebenen Namen wird auf `1` gesetzt, wenn die Eingabe dem `Term` entspricht, ansonsten auf 0
 
-- Ein `Term` besteht aus einer Operation mit zwei oder mehreren Operanden, und optional einem obligatorischem/optionalem Ergebnis. Wird ein obligatorisches Ergebnis mit angegeben `= <Wert>`, muss das Ergebnis auch in der Eingabe enthalten sein, wird ein optionales Ergebnis angegeben `[ = <Wert>]`, dann kann dieses (aber kein anderes) Ergebnis in der EIngabe enthalten sein, um die Variable auf `1` zu setzen. Beispiele: `1+3`, `4*5*2`, `20/4[=5]`, `10-6=4`
+- Ein `Term` besteht aus einer Operation mit zwei oder mehreren Operanden, und optional einem obligatorischem/optionalem Ergebnis. Wird ein obligatorisches Ergebnis mit angegeben `= <Wert>`, muss das Ergebnis auch in der Eingabe enthalten sein, wird ein optionales Ergebnis angegeben `[ = <Wert>]`, dann kann dieses (aber kein anderes) Ergebnis in der EIngabe enthalten sein, um die Variable auf `1` zu setzen. Beispiele: `1 + 3`, `4 * 5 * 2`, `20 / 4 [ = 5]`, `10 - 6 = 4`
 
-- Wird einem Operand ein `!` vorangestellt, bedeutet dies, das hier JEDER AUßER DEM SPEZIFIZIERTEN Operand als richtig gewertet wird. So können z.B. Muster wie "3 mal [irgendwas außer 4]" gewertet weren: `3 * !4`
+- Wird einem Operand/Ergebnis ein `!` vorangestellt, bedeutet dies, das hier JEDER AUßER DEM SPEZIFIZIERTEN Operand als richtig gewertet wird. So können z.B. Muster wie "3 mal [irgendwas außer 4]" geprüft werden: `3 * !4`
+
+- Wird statt eines Zahlen-Operanden/Ergebnisses ein `.` verwendet, bedeutet dies JEDE ZAHL. So können z.B. Muster wie "Irgendeine Multiplikation": `. * .` oder "Multiplikation mit Ergebnis": `. * . = .` oder "3 mal [irgendwas]": `3 * .` geprüft werden
 
 - Die Option `OP-Perm` gibt an, ob die Operanden beliebig vertauscht sein dürfen
 

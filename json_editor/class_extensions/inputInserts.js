@@ -40,7 +40,7 @@ export class inputInsertsFromSchema extends inputInserts {
 	parseScoringPattern ( pattern, pref ) {
 
 		this.scoringPattern = {};
-		const numRe = '(?:(?<!!)!)?\\d+(?:\\.\\d+)?'; // number, optionally prepended by one '!'
+		const numRe = '(?:\\.|(?:(?<!!)!)?\\d+(?:\\.\\d+)?)'; // number, optionally prepended by one '!'
 		const re1 = new RegExp( `(${numRe}) *((?:([\\-+*\\/]) *${numRe} *)+)(\\[ *= *(${numRe}) *\\] *|= *(${numRe}) *)?` );
 		const re2 = new RegExp( `(${numRe})`, "g" );
 

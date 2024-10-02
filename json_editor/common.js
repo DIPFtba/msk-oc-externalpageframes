@@ -282,10 +282,10 @@ export const dp2labFncInputRegExp = ( obj, opts, nam='' ) => {
 		return
 	}
 
-	if ( obj.dp ) {
+	if ( obj.dp && !obj.units ) {
 		lVF = strToNum;
 		lT = 'Number';
-	} else if ( obj.pdp ) {
+	} else if ( obj.pdp && !obj.units ) {
 		lVF = strToInt;
 		lT = 'Integer';
 	} else {

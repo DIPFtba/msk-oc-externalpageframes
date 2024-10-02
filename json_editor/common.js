@@ -144,7 +144,7 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 							// 	}
 							// });
 							// HotFix for IB ImportExternalVariables: internal browser does not support RegExp look-behind/-forward
-							if ( Array.from( saveCond.matchAll( /=+/g ) ).some( m => m[0]=='=' ) ) {
+							if ( Array.from( saveCond.matchAll( /[!<>]?=+/g ) ).some( m => m[0]=='=' ) ) {
 								debugAndConsoleOut( `Wertzuweisung (=) statt Vergleichsoperator (==) in "${cond}" gefunden! Ist das beabsichtigt?` );
 							}
 							if ( saveCond.includes('<>') ) {

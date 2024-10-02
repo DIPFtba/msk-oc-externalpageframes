@@ -900,7 +900,7 @@
 					}
 				},
 				"newArcsHTicks": {
-					"title": "Neue Bögen haben Achsenlabels",
+					"title": "Bögenenden haben immer Achsenlabels",
 					"type": "boolean",
 					"format": "checkbox",
 					"default": true,

@@ -13,14 +13,8 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 			dp2labFncInputRegExp( opts[`default${nam}Label`], opts, nam );
 		});
 
-		opts.newArcDefaults = { label: opts.newArcsHLabels ? '' : null };
-		if ( opts.newArcsHTicks || opts.neverCreateArcs ) {
-			opts.newTickLabelDefaults = { label: '' };
-		} else {
-			opts.newTickLabelDefaults = { label: null };
-			opts.tickHeight = 0;
-			opts.tickFrameWidth = 0;
-		}
+		opts.newArcDefaults = opts.newArcsHLabels ? { label: '', labelReadonly: false } : { labels : null, labelReadonly: true };
+		opts.newTickLabelDefaults = ( opts.newArcsHTicks || opts.neverCreateArcs ) ? { label: '', labelReadonly: false } : { labels : null, labelReadonly: true };
 
 		super( base, opts );
 

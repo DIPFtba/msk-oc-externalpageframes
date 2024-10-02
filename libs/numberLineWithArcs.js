@@ -254,11 +254,11 @@ export class numberLineWithArcs {
 		}
 
 		// Label
-		if ( to.label!==null ) {
+		if ( to.label!==null || !to.labelReadonly ) {
 			to.labelObj = new textFrame( this.base, this.arcs_layer, {
 				x: xa-to.width/2,
 				y: this.numberLine.y+this.tickLabelDistance,
-				value: to.label.toString(),
+				value: to.label ? to.label.toString() : '',
 				width: to.width,
 				height: to.height,
 				fontSize: to.fontSize,
@@ -275,14 +275,15 @@ export class numberLineWithArcs {
 				logRef: () => ({ atValue: to.value }),
 				base: this.base,
 			})
-		}
-		if ( this.tickFrameWidth ) {
-			to.kLabelLine = new Konva.Line({
-				points: [ xa, this.numberLine.y, xa, this.numberLine.y+this.tickLabelDistance ],
-				stroke: 'black',
-				strokeWidth: this.tickFrameWidth,
-			})
-			this.arcs_layer.add( to.kLabelLine );
+
+			if ( this.tickFrameWidth ) {
+				to.kLabelLine = new Konva.Line({
+					points: [ xa, this.numberLine.y, xa, this.numberLine.y+this.tickLabelDistance ],
+					stroke: 'black',
+					strokeWidth: this.tickFrameWidth,
+				})
+				this.arcs_layer.add( to.kLabelLine );
+			}
 		}
 
 		// Tick

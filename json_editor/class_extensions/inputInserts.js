@@ -30,7 +30,16 @@ export class inputInsertsFromSchema extends inputInserts {
 		if ( opts.dataSettings && opts.dataSettings.scoringPattern ) {
 			this.parseScoringPattern( opts.dataSettings.scoringPattern, opts.dataSettings.variablePrefix );
 		}
-		addScoring( this, opts, addMods.Parser );
+		const addFnc = {
+			perm: (arr) => this.perm(arr),
+			combinations: (arr) => this.combinations(arr),
+			allCombPerm: ( arr, minLength=2 ) => this.allCombPerm(arr, minLength),
+			isSumRE: ( mult, res=undefined, resOpt=true ) => this.isSumRE( mult, res, resOpt ),
+			isDiffRE: ( mult, res=undefined, resOpt=true ) => this.isDiffRE( mult, res, resOpt ),
+			isMultRE: ( mult, res=undefined, resOpt=true ) => this.isMultRE( mult, res, resOpt ),
+			isDivRE: ( mult, res=undefined, resOpt=true ) => this.isDivRE( mult, res, resOpt ),
+		}
+		addScoring( this, opts, addMods.Parser, addFnc );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();

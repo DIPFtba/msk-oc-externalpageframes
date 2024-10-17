@@ -100,7 +100,7 @@ import { textareaInsertsFromSchema } from './textareaInserts';
 
 import { ResolvablePromise } from '../common';
 let baseInitialized = new ResolvablePromise();
-let jsonLoaded = new ResolvablePromise();
+// let jsonLoaded = new ResolvablePromise();	// for I18N
 
 function initJSON ( json ) {
 
@@ -112,7 +112,7 @@ function initJSON ( json ) {
 			return;
 		}
 	}
-	jsonLoaded.resolvePromise( json );
+	// jsonLoaded.resolvePromise( json );	// for I18N
 
 	const cfg = clearCfgJson( json );
 

@@ -11,7 +11,14 @@ export class fsmSend {
 
 		// Init done promise
 		this.prInitDone = new Promise( (resolve) => {
-			this.prInitDoneResolve = resolve;
+			if ( process.env.NODE_ENV === 'production' ) {
+				this.prInitDoneResolve = resolve;
+			} else {
+				this.prInitDoneResolve = () => {
+					this.debugOut( "fsmSend: Init done promise resolved" );
+					resolve();
+				};
+			}
 		});
 		this.initDoneCnt = 0;
 
@@ -79,10 +86,12 @@ export class fsmSend {
 	}
 
 	postMessage ( payload ) {
-		this.debugOut( `Posting message: ${payload}` );
-		if ( window.parent !== window ) {
-			window.parent.postMessage( payload, '*' );
+		if ( process.env.NODE_ENV !== 'production' ) {
+			this.debugOut( `Posting message: ${payload}` );
 		}
+		// if ( window.parent !== window ) {
+			window.parent.postMessage( payload, '*' );
+		// }
 	}
 
 	// Helper

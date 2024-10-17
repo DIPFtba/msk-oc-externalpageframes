@@ -1,6 +1,6 @@
 import './textareaInserts.css'
 
-import { mergeDeep, setStatePostProc } from './common'
+import { mergeDeep, setStatePostProc, regexCanLookBehind } from './common'
 
 export class textareaContainer {
 
@@ -84,7 +84,13 @@ export class textareaBase extends textareaContainer {
 			// (e.g. toolbar.extractReplace are inserted here)
 			extractReplaces: [
 				// { from: /regexp/, to: "replace" },
-				{ from: /(?<!\*)\*(?!\*)/g, to: "\u22c5" },	// replace '*' to \u22c5
+
+				regexCanLookBehind() ?
+					{ from:  /(?<!\*)\*(?!\*)/g , to: "\u22c5" } :	// replace '*' to \u22c5
+					// IB internal browser does not support negative look-behind/-forward
+					// workaround:
+					{ from: /(^|[^*])\*([^*]|$)/g, to: "$1\u22c5$2" },	// replace '*' to \u22c5
+
 				{ from: /\u2022|\u25cf/g, to: "\u22c5" },	// replace • and ● to \u22c5
 			]
 		}

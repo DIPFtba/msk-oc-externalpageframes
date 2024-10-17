@@ -208,3 +208,18 @@ export const getAbsPosition = function (element) {
 	}
 }
 
+//////////////////////////////////////
+
+export function regexCanLookBehind() {
+	if ( regexCanLookBehind.r !== undefined ) {
+		return regexCanLookBehind.r;
+	}
+	try {
+		new RegExp( '(?<!a)b' );
+		regexCanLookBehind.r = true;
+		return true;
+	} catch (e) {
+		regexCanLookBehind.r = false;
+		return false;
+	}
+}

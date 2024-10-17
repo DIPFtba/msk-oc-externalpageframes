@@ -132,7 +132,7 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 							// check errors
 
 							// [
-							// 	[ /(?<![=!><])=(?![=!])/g, `Wertzuweisung ()=) statt Vergleichsoperator (==) in "${cond}" gefunden! Ist das beabsichtigt?` ],
+							// 	[ /(?<![=!><])=(?![=!])/g, `Wertzuweisung (=) statt Vergleichsoperator (==) in "${cond}" gefunden! Ist das beabsichtigt?` ],
 							// 	[ /<>/g, `Zeichenkette (<>) stat (!=) in "${cond}" gefunden! Ist das beabsichtigt?` ],
 							// 	[ /||/g, `Doppeltes "||" statt "or" in "${cond}" gefunden! Ist das beabsichtigt?` ],
 							// 	[ /&&/g, `Doppeltes "&&" statt "and" in "${cond}" gefunden! Ist das beabsichtigt?` ],
@@ -183,7 +183,7 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 						score = v;
 					}
 				} catch (e) {
-					debugAndConsoleOut( `Error in scoring-condition` );
+					debugAndConsoleOut( `Error in scoring-condition: ${e}, ${res}` );
 				}
 			}
 			const n = Number(score)

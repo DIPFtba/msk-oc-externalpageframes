@@ -9,6 +9,7 @@ import { inputInserts } from '../../libs/inputInserts'
 // }
 import { toolbarMathOperators } from '../../libs/textareaInserts'
 import { addScoring } from '../common';
+import { regexCanLookBehind } from '../../libs/common';
 
 export class inputInsertsFromSchema extends inputInserts {
 
@@ -21,7 +22,7 @@ export class inputInsertsFromSchema extends inputInserts {
 		const div = typeof divSelector === 'string' ? document.querySelector( divSelector ) : divSelector;
 		opts.divStyles = {
 			width: `${ opts.width > 0 ? opts.width : div.offsetWidth + opts.width }px`,
-		};
+		}
 		opts.toolbar = toolbarMathOperators;
 		opts.inputRegexp = '^([0-9]*(?:[,.][0-9]*)?|[ +*/:=-]|\u2212|\u22c5|\u2022|\u25cf|\u2236|\u003d)*$';
 
@@ -30,14 +31,15 @@ export class inputInsertsFromSchema extends inputInserts {
 		if ( opts.dataSettings && opts.dataSettings.scoringPattern ) {
 			this.parseScoringPattern( opts.dataSettings.scoringPattern, opts.dataSettings.variablePrefix );
 		}
+		const me = this;
 		const addFnc = {
-			perm: (arr) => this.perm(arr),
-			combinations: (arr) => this.combinations(arr),
-			allCombPerm: ( arr, minLength=2 ) => this.allCombPerm(arr, minLength),
-			isSumRE: ( mult, res=undefined, resOpt=true ) => this.isSumRE( mult, res, resOpt ),
-			isDiffRE: ( mult, res=undefined, resOpt=true ) => this.isDiffRE( mult, res, resOpt ),
-			isMultRE: ( mult, res=undefined, resOpt=true ) => this.isMultRE( mult, res, resOpt ),
-			isDivRE: ( mult, res=undefined, resOpt=true ) => this.isDivRE( mult, res, resOpt ),
+			perm: (arr) => me.perm(arr),
+			combinations: (arr) => me.combinations(arr),
+			allCombPerm: ( arr, minLength=2 ) => me.allCombPerm(arr, minLength),
+			isSumRE: ( mult, res, resOpt ) => me.isSumRE( mult, res || undefined, resOpt || true ),
+			isDiffRE: ( mult, res=undefined, resOpt=true ) => me.isDiffRE( mult, res, resOpt ),
+			isMultRE: ( mult, res=undefined, resOpt=true ) => me.isMultRE( mult, res, resOpt ),
+			isDivRE: ( mult, res=undefined, resOpt=true ) => me.isDivRE( mult, res, resOpt ),
 		}
 		addScoring( this, opts, addMods.Parser, addFnc );
 
@@ -49,7 +51,12 @@ export class inputInsertsFromSchema extends inputInserts {
 	parseScoringPattern ( pattern, pref ) {
 
 		this.scoringPattern = {};
-		const numRe = '(?:\\.|(?:(?<!!)!)?\\d+(?:\\.\\d+)?)'; // number, optionally prepended by one '!'
+
+		const numRe = regexCanLookBehind() ?
+			'(?:\\.|(?:(?<!!)!)?\\d+(?:\\.\\d+)?)' : // number, optionally prepended by one '!'
+			// IB internal browser does not support negative look-behind/-forward
+			// workaround: don't look behind ...
+			'(?:\\.|!?\\d+(?:\\.\\d+)?)'; // number, optionally prepended by '!'
 		const re1 = new RegExp( `(${numRe}) *((?:([\\-+*\\/]) *${numRe} *)+)(\\[ *= *(${numRe}) *\\] *|= *(${numRe}) *)?` );
 		const re2 = new RegExp( `(${numRe})`, "g" );
 

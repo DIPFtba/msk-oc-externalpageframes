@@ -8,8 +8,9 @@
 <li><a href="#math-operatoren">Math. Operatoren</a></li>
 <li><a href="#funktionen">Funktionen</a></li></ul></li>
 <li><a href="#markierbarer-balken-filledbar">Markierbarer Balken (filledBar)</a></li>
-<li><a href="#zahlenstrahl-mit-bögen-numberlinewitharcs">Zahlenstrahl mit Bögen (numberLineWithArcs)</a></li>
+<li><a href="#freihand-malenmarkieren-freepaint">Freihand Malen/Markieren (freePaint)</a></li>
 <li><a href="#eingabefeld-mit-buttons-inputinserts">Eingabefeld mit Buttons (inputInserts)</a></li>
+<li><a href="#zahlenstrahl-mit-bögen-numberlinewitharcs">Zahlenstrahl mit Bögen (numberLineWithArcs)</a></li>
 </ul>
 <h1 id="scoring-alle-ewk">Scoring (alle EWK)</h1>
 <ul>
@@ -166,12 +167,12 @@
 <li>Die kleinen Ticks ausschalten und "Markierung nur Vielfache von" auf 10er setzen</li></ol>
 <p>Das sind alles gleichwertige Lösungen, nur der Wertebereich des gespeicherten "markierten Wert" ist unterschiedlich</p></li>
 </ul>
-<h1 id="zahlenstrahl-mit-bögen-numberlinewitharcs">Zahlenstrahl mit Bögen (numberLineWithArcs)</h1>
+<h1 id="freihand-malenmarkieren-freepaint">Freihand Malen/Markieren (freePaint)</h1>
 <ul>
-<li><p>Alle Labels und Bögen werden in aufsteigender Reihenfolge sortiert, diese Reihenfolge bestimmt die Zuordnung der Variablen <code>XYZ_1</code>, <code>XYZ_2</code> etc. So geben <code>V_Input_&lt;pref&gt;_ArcFrom_1</code> und <code>V_Input_&lt;pref&gt;_ArcTo_1</code> den am weitesten links befindlichen Bogen wieder, nicht den in der JSON Config als ersten definierten Bogen. Falls ein User ein Bogen weiter links definiert, wird der erste Bogen automatisch zu <code>V_Input_&lt;pref&gt;_ArcFrom_2</code> und <code>V_Input_&lt;pref&gt;_ArcTo_2</code>. Das muss auch beim Scoring beachtet werden.</p></li>
-<li><p>Auch die <code>Von</code> (<code>_ArcFom_X</code>) und <code>Bis</code> (<code>_ArcTo_X</code>) Werte werden sortiert, sodass immer <code>Von &lt; Bis</code> gilt. Die Definition im JSON Configfile ist nicht entscheidend, ebenso ist egal, ob der Bogen von links nach rechts oder von rechts nach links erstellt wird</p></li>
-<li><p>Damit die Zuordnung der Variablen klarer ist, sollten also die Labels und Bögen bereits sortiert (Reihenfolge in der Tabelle) im JSON Configfile definiert werden</p></li>
-<li><p>Die Option <code>Keine neuen Bögen zulassen</code> macht nur Sinn, wenn keine Bögen vordefiniert werden und im Reiter <code>Achsenlabels</code> die Option <code>Labels ohne Bögen nicht löschen</code> aktiviert wird. Dann können Labels bzw. Beschriftungen am Zahlenstrahl erzeugt, bewegt und beschriftet werden (ohne Bögen). Die Option <code>Maximalzahl</code> im Reiter <code>Achsenlabels</code> begrenzt dann die mögliche Anzahl</p></li>
+<li><p>Im Reiter <code>PaintArea</code> wird der Bereich spezifiziert, in dem Pinsel/Marker verwendet werden können. Der sollte die Icons nicht beinhalten.</p></li>
+<li><p>Die PaintArea kann einen Rahmen haben (Rahmendicke&gt;0) und/oder eine Füllung ("Füllung" einschalten). Rahmen/Füllung werden immer im Hintergrund gemalt und sind durch Marker/Pinsel übermalbar. Marker/Pinsel sind standardmäßig aber nur innerhalb des Rahmens verwendbar, sodass der Rahmen der PaintArea normalerweise nicht übermalbar ist.</p></li>
+<li><p>Im Reiter <code>Rechteck / Linien</code> sind zusätzliche Rechtecke und/oder Linien definierbar. Die Rahmen der Rechtecke und die Linien sind <strong>IMMER im Vordergund</strong>, also nicht mit Pinsel/Marker übermalbar. <code>Füllg. Ebene</code> gibt bei Rechtecken an, ob diese keine Füllung haben (=0), oder Füllung im Hintergund (=1, mit Pinsel/Marker übermalbar) oder Füllung im Vordergrund (=2, nicht übermalbar) haben</p></li>
+<li><p>Bei Rechtecken kann durch <code>begr. Pinsel</code> und/oder <code>begr. Marker</code> eingeschaltet werden, dass Pinsel/Marker nur in diesem (und allen anderen mit dieser aktivierten Option) Rechtecken malen und <strong>NICHT</strong> (wie Standard) innerhalb der PaintArea</p></li>
 </ul>
 <h1 id="eingabefeld-mit-buttons-inputinserts">Eingabefeld mit Buttons (inputInserts)</h1>
 <ul>
@@ -182,4 +183,11 @@
 <li><p>Wird statt eines Zahlen-Operanden/Ergebnisses ein <code>.</code> verwendet, bedeutet dies JEDE ZAHL. So können z.B. Muster wie "Irgendeine Multiplikation": <code>. * .</code> oder "Multiplikation mit Ergebnis": <code>. * . = .</code> oder "3 mal [irgendwas]": <code>3 * .</code> geprüft werden</p></li>
 <li><p>Die Option <code>OP-Perm</code> gibt an, ob die Operanden beliebig vertauscht sein dürfen</p></li>
 <li><p>Die Option <code>Mehr erlaubt</code> gibt an, ob vor/hinter dem Term auch noch weitere Eingabe erlaubt sind, die die Bewertung nicht beeinflussen</p></li>
+</ul>
+<h1 id="zahlenstrahl-mit-bögen-numberlinewitharcs">Zahlenstrahl mit Bögen (numberLineWithArcs)</h1>
+<ul>
+<li><p>Alle Labels und Bögen werden in aufsteigender Reihenfolge sortiert, diese Reihenfolge bestimmt die Zuordnung der Variablen <code>XYZ_1</code>, <code>XYZ_2</code> etc. So geben <code>V_Input_&lt;pref&gt;_ArcFrom_1</code> und <code>V_Input_&lt;pref&gt;_ArcTo_1</code> den am weitesten links befindlichen Bogen wieder, nicht den in der JSON Config als ersten definierten Bogen. Falls ein User ein Bogen weiter links definiert, wird der erste Bogen automatisch zu <code>V_Input_&lt;pref&gt;_ArcFrom_2</code> und <code>V_Input_&lt;pref&gt;_ArcTo_2</code>. Das muss auch beim Scoring beachtet werden.</p></li>
+<li><p>Auch die <code>Von</code> (<code>_ArcFom_X</code>) und <code>Bis</code> (<code>_ArcTo_X</code>) Werte werden sortiert, sodass immer <code>Von &lt; Bis</code> gilt. Die Definition im JSON Configfile ist nicht entscheidend, ebenso ist egal, ob der Bogen von links nach rechts oder von rechts nach links erstellt wird</p></li>
+<li><p>Damit die Zuordnung der Variablen klarer ist, sollten also die Labels und Bögen bereits sortiert (Reihenfolge in der Tabelle) im JSON Configfile definiert werden</p></li>
+<li><p>Die Option <code>Keine neuen Bögen zulassen</code> macht nur Sinn, wenn keine Bögen vordefiniert werden und im Reiter <code>Achsenlabels</code> die Option <code>Labels ohne Bögen nicht löschen</code> aktiviert wird. Dann können Labels bzw. Beschriftungen am Zahlenstrahl erzeugt, bewegt und beschriftet werden (ohne Bögen). Die Option <code>Maximalzahl</code> im Reiter <code>Achsenlabels</code> begrenzt dann die mögliche Anzahl</p></li>
 </ul>

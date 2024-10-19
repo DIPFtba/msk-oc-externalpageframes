@@ -33,11 +33,11 @@ export class rectArea {
 		const stage = base.stage;
 		this.stage = stage;
 
-		// Init paintArea
-		if ( this.frameColor && this.frameWidth ) {
-			this.layer = new Konva.Layer();
-			stage.add( this.layer );
+		this.layer = new Konva.Layer();
+		stage.add( this.layer );
 
+		// Init paintArea
+		if ( this.frameColor && this.frameWidth || this.fill ) {
 			const rectOpts = {
 				x: this.x, y: this.y,
 				width: this.width, height: this.height,

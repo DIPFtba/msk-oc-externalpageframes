@@ -31,29 +31,58 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 
 		super( base, opts );
 
-		// draw extra rects
-		opts.extraRects.forEach( r => {
-			const kLine = new Konva.Rect({
-				x: r.x, y: r.y,
-				width: r.width, height: r.height,
-				stroke: r.c,
-				strokeWidth: r.w,
-				fill: r.f,
-			})
-			this.layer.add( kLine );
-		})
+		// extra Rects and Lines
+		if ( opts.extraRects.length>0 || opts.extraLines.length>0 ) {
 
-		// draw extra lines
-		opts.extraLines.forEach( l => {
-			const kLine = new Konva.Line({
-				points: [ l.x1, l.y1, l.x2, l.y2 ],
-				stroke: l.c,
-				strokeWidth: l.w,
-			})
-			this.layer.add( kLine );
-		})
+			let fgLayer;
+			// Frame or Rect Fill im Hintergrund?
+			if ( opts.frameWidth || opts.doFill || opts.extraRects.some( r => r.fl==1 ) ) {
+				// neuer Layer für Vordergrund
+				fgLayer = new Konva.Layer();
+				this.stage.add( fgLayer );
+			} else {
+				// Bisherigen layer (leer) für Vordergrund nutzen
+				fgLayer = this.layer;
+				fgLayer.moveToTop();
+			}
 
-		this.layer.draw();
+			// draw extra rects
+			opts.extraRects.forEach( r => {
+				const kOpts = {
+					x: r.x, y: r.y,
+					width: r.width, height: r.height,
+				};
+				if ( r.fl==1 ) {
+					const kRect = new Konva.Rect({
+						...kOpts,
+						fill: r.f,
+					})
+					this.layer.add( kRect );
+				}
+				if ( r.fl==2 || r.w>0 ) {
+					const kRect = new Konva.Rect({
+						...kOpts,
+						stroke: r.c,
+						strokeWidth: r.w,
+						fill: r.fl==2 ? r.f : null,
+					})
+					fgLayer.add( kRect );
+				}
+			})
+
+			// draw extra lines
+			opts.extraLines.forEach( l => {
+				const kLine = new Konva.Line({
+					points: [ l.x1, l.y1, l.x2, l.y2 ],
+					stroke: l.c,
+					strokeWidth: l.w,
+				})
+				fgLayer.add( kLine );
+			})
+
+			this.stage.draw();
+		}
+
 		this.startGetImageListener();
 /// #if __DEVELOP
 		window.getRectPngImage = this.getRectPngImage.bind(this);

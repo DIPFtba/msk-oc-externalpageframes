@@ -8,8 +8,9 @@
       - [Math. Operatoren](#math-operatoren)
       - [Funktionen](#funktionen)
 - [Markierbarer Balken (filledBar)](#markierbarer-balken-filledbar)
-- [Zahlenstrahl mit Bögen (numberLineWithArcs)](#zahlenstrahl-mit-bögen-numberlinewitharcs)
+- [Freihand Malen/Markieren (freePaint)](#freihand-malenmarkieren-freepaint)
 - [Eingabefeld mit Buttons (inputInserts)](#eingabefeld-mit-buttons-inputinserts)
+- [Zahlenstrahl mit Bögen (numberLineWithArcs)](#zahlenstrahl-mit-bögen-numberlinewitharcs)
 
 
 
@@ -93,16 +94,15 @@ folgende Funktionen sind in allen EWK definiert:
 
 
 
+# Freihand Malen/Markieren (freePaint)
 
-# Zahlenstrahl mit Bögen (numberLineWithArcs)
+- Im Reiter `PaintArea` wird der Bereich spezifiziert, in dem Pinsel/Marker verwendet werden können. Der sollte die Icons nicht beinhalten.
 
-- Alle Labels und Bögen werden in aufsteigender Reihenfolge sortiert, diese Reihenfolge bestimmt die Zuordnung der Variablen `XYZ_1`, `XYZ_2` etc. So geben `V_Input_<pref>_ArcFrom_1` und `V_Input_<pref>_ArcTo_1` den am weitesten links befindlichen Bogen wieder, nicht den in der JSON Config als ersten definierten Bogen. Falls ein User ein Bogen weiter links definiert, wird der erste Bogen automatisch zu `V_Input_<pref>_ArcFrom_2` und `V_Input_<pref>_ArcTo_2`. Das muss auch beim Scoring beachtet werden.
+- Die PaintArea kann einen Rahmen haben (Rahmendicke>0) und/oder eine Füllung ("Füllung" einschalten). Rahmen/Füllung werden immer im Hintergrund gemalt und sind durch Marker/Pinsel übermalbar. Marker/Pinsel sind standardmäßig aber nur innerhalb des Rahmens verwendbar, sodass der Rahmen der PaintArea normalerweise nicht übermalbar ist.
 
-- Auch die `Von` (`_ArcFom_X`) und `Bis` (`_ArcTo_X`) Werte werden sortiert, sodass immer `Von < Bis` gilt. Die Definition im JSON Configfile ist nicht entscheidend, ebenso ist egal, ob der Bogen von links nach rechts oder von rechts nach links erstellt wird
+- Im Reiter `Rechteck / Linien` sind zusätzliche Rechtecke und/oder Linien definierbar. Die Rahmen der Rechtecke und die Linien sind **IMMER im Vordergund**, also nicht mit Pinsel/Marker übermalbar. `Füllg. Ebene` gibt bei Rechtecken an, ob diese keine Füllung haben (=0), oder Füllung im Hintergund (=1, mit Pinsel/Marker übermalbar) oder Füllung im Vordergrund (=2, nicht übermalbar) haben
 
-- Damit die Zuordnung der Variablen klarer ist, sollten also die Labels und Bögen bereits sortiert (Reihenfolge in der Tabelle) im JSON Configfile definiert werden
-
-- Die Option `Keine neuen Bögen zulassen` macht nur Sinn, wenn keine Bögen vordefiniert werden und im Reiter `Achsenlabels` die Option `Labels ohne Bögen nicht löschen` aktiviert wird. Dann können Labels bzw. Beschriftungen am Zahlenstrahl erzeugt, bewegt und beschriftet werden (ohne Bögen). Die Option `Maximalzahl` im Reiter `Achsenlabels` begrenzt dann die mögliche Anzahl
+- Bei Rechtecken kann durch `begr. Pinsel` und/oder `begr. Marker` eingeschaltet werden, dass Pinsel/Marker nur in diesem (und allen anderen mit dieser aktivierten Option) Rechtecken malen und **NICHT** (wie Standard) innerhalb der PaintArea
 
 
 
@@ -121,3 +121,16 @@ folgende Funktionen sind in allen EWK definiert:
 - Die Option `OP-Perm` gibt an, ob die Operanden beliebig vertauscht sein dürfen
 
 - Die Option `Mehr erlaubt` gibt an, ob vor/hinter dem Term auch noch weitere Eingabe erlaubt sind, die die Bewertung nicht beeinflussen
+
+
+
+
+# Zahlenstrahl mit Bögen (numberLineWithArcs)
+
+- Alle Labels und Bögen werden in aufsteigender Reihenfolge sortiert, diese Reihenfolge bestimmt die Zuordnung der Variablen `XYZ_1`, `XYZ_2` etc. So geben `V_Input_<pref>_ArcFrom_1` und `V_Input_<pref>_ArcTo_1` den am weitesten links befindlichen Bogen wieder, nicht den in der JSON Config als ersten definierten Bogen. Falls ein User ein Bogen weiter links definiert, wird der erste Bogen automatisch zu `V_Input_<pref>_ArcFrom_2` und `V_Input_<pref>_ArcTo_2`. Das muss auch beim Scoring beachtet werden.
+
+- Auch die `Von` (`_ArcFom_X`) und `Bis` (`_ArcTo_X`) Werte werden sortiert, sodass immer `Von < Bis` gilt. Die Definition im JSON Configfile ist nicht entscheidend, ebenso ist egal, ob der Bogen von links nach rechts oder von rechts nach links erstellt wird
+
+- Damit die Zuordnung der Variablen klarer ist, sollten also die Labels und Bögen bereits sortiert (Reihenfolge in der Tabelle) im JSON Configfile definiert werden
+
+- Die Option `Keine neuen Bögen zulassen` macht nur Sinn, wenn keine Bögen vordefiniert werden und im Reiter `Achsenlabels` die Option `Labels ohne Bögen nicht löschen` aktiviert wird. Dann können Labels bzw. Beschriftungen am Zahlenstrahl erzeugt, bewegt und beschriftet werden (ohne Bögen). Die Option `Maximalzahl` im Reiter `Achsenlabels` begrenzt dann die mögliche Anzahl

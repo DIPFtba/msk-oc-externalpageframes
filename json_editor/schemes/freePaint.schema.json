@@ -61,7 +61,7 @@
 				"frameWidth": {
 					"title": "Rahmendicke",
 					"type": "integer",
-					"minimum": 1,
+					"minimum": 0,
 					"default": 3,
 					"options": {
 						"grid_columns": 4
@@ -77,6 +77,15 @@
 						"grid_break": true
 					}
 				},
+				"doFill": {
+					"title": "Füllung",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 4
+					}
+				},
 				"fill": {
 					"title": "Füllung",
 					"type": "string",
@@ -84,7 +93,10 @@
 					"default": "#ffffff",
 					"options": {
 						"grid_columns": 4,
-						"grid_break": true
+						"grid_break": true,
+						"dependencies": {
+							"doFill": true
+						}
 					}
 				},
 				"hasMarker": {
@@ -232,28 +244,33 @@
 							"minimum": 0,
 							"default": 0,
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						},
 						"width": {
+							"title": "Breite",
 							"type": "integer",
 							"default": 32,
 							"options": {
-								"hidden": true
+								"grid_columns": 4
 							}
 						},
 						"height": {
+							"title": "Höhe",
 							"type": "integer",
 							"default": 32,
 							"options": {
-								"hidden": true
+								"grid_columns": 4
 							}
 						},
 						"framePadding": {
+							"title": "Innenabstand",
 							"type": "integer",
 							"default": 2,
 							"options": {
-								"hidden": true
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						}
 					}
@@ -282,7 +299,7 @@
 						"disable_edit_json": true,
 						"disable_properties": true,
 						"grid_columns": 12,
-						"infoText": "Zusätzliche Rechtecke, die in Hintergrund gezeichnet werden"
+						"infoText": "Zusätzliche Rechtecke. 'Füllg. Ebene' gibt die Ebene für Füllung an: 0=Keine Füllung, 1=Hintergund (Marker und Pen darüber), 2=Vordergrund. 'begr. Marker/Pinsel' gibt an, ob Marker/Pinsel nur in diesem Rechteck malen"
 					},
 					"items": {
 						"title": "ExtraRechteck",
@@ -321,7 +338,7 @@
 							"w": {
 								"title": "Dicke",
 								"type": "integer",
-								"minimum": 1,
+								"minimum": 0,
 								"default": 1
 							},
 							"c": {
@@ -330,20 +347,27 @@
 								"format": "color",
 								"default": "#000000"
 							},
+							"fl": {
+								"title": "Füllg. Ebene",
+								"type": "integer",
+								"minimum": 0,
+								"maximum": 2,
+								"default": 0
+							},
 							"f": {
-								"title": "Füllung",
+								"title": "Füllg. Farbe",
 								"type": "string",
 								"format": "color",
 								"default": "#d3d3d3"
 							},
 							"clipBrush": {
-								"title": "begrenzt Pinsel",
+								"title": "begr. Pinsel",
 								"type": "boolean",
 								"format": "checkbox",
 								"default": false
 							},
 							"clipMarker": {
-								"title": "begrenzt Marker",
+								"title": "begr. Marker",
 								"type": "boolean",
 								"format": "checkbox",
 								"default": false,

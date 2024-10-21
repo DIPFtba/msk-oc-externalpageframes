@@ -88,10 +88,12 @@ export class fsmSend {
 	postMessage ( payload ) {
 		if ( process.env.NODE_ENV !== 'production' ) {
 			this.debugOut( `Posting message: ${payload}` );
-		}
-		// if ( window.parent !== window ) {
+			if ( window.parent !== window ) {
+				window.parent.postMessage( payload, '*' );
+			}
+		} else {
 			window.parent.postMessage( payload, '*' );
-		// }
+		}
 	}
 
 	// Helper

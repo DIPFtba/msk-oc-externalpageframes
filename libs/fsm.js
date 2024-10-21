@@ -40,7 +40,7 @@ export class fsmSend {
 		this.postMessageWithPathsAndTraceCount({
 			setVariable: {
 				variableName,
-				newValue,
+				newValue: isNaN(newValue) ? 0 : newValue,
 			},
 		})
 	}

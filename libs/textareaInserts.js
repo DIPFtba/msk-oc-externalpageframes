@@ -891,6 +891,10 @@ export const toolbarPercent = [
 	{ display: "%", logName: "percent", },
 ];
 
+export const toolbarEuro = [
+	{ display: "€", logName: "euro", },
+];
+
 export const toolbarComparison = [
 	{ display: "&lt;", logName: "less", },
 	{ display: "&gt;", logName: "greater", },

@@ -4,13 +4,14 @@
 import '../../examples/textareaInserts_2cols.css'
 /// #endif
 
-import { textareaInserts, toolbarMathOperators, toolbarFraction, toolbarComparison, toolbarPercent } from '../../libs/textareaInserts'
+import { textareaInserts, toolbarMathOperators, toolbarFraction, toolbarComparison, toolbarPercent, toolbarEuro } from '../../libs/textareaInserts'
 
 const toolbars = {
 	comp: toolbarComparison,
 	math: toolbarMathOperators,
 	fract: toolbarFraction,
 	perc: toolbarPercent,
+	euro: toolbarEuro,
 }
 
 export class textareaInsertsFromSchema extends textareaInserts {

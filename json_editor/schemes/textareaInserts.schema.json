@@ -85,6 +85,12 @@
 							"type": "boolean",
 							"format": "checkbox",
 							"default": false
+						},
+						"euro": {
+							"title": "€ Zeichen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": false
 						}
 					}
 				}

@@ -33,19 +33,29 @@ find . -type f -name "*.zip" | while read -r zipfile; do
         if [ "$name" != "null" ]; then
             # echo "File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
 
-            # freePaint:
-            if [[ "$name" = "freePaint" ]]
+            # # freePaint:
+            # if [[ "$name" = "freePaint" ]]
+            # then
+            #     echo
+            #     echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            #     # ___freePaint.doFill=true hinzufügen
+            #     patch "$jsonfile" '.___freePaint.doFill = true'
+            #     #{ .fl=0 } in .___extraLines.extraRects[] hinzufügen
+            #     if [[ $( jq -r '.___extraLines.extraRects | length' "$jsonfile" ) -gt 0 ]]
+            #     then
+            #         patch "$jsonfile" '.___extraLines.extraRects |= map(. + {"fl": 0})'
+            #     fi
+
+            #     pack=1
+            # fi
+
+            # textareaInserts
+            if [[ "$name" = "textareaInserts" ]]
             then
                 echo
                 echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
-                # ___freePaint.doFill=true hinzufügen
-                patch "$jsonfile" '.___freePaint.doFill = true'
-                #{ .fl=0 } in .___extraLines.extraRects[] hinzufügen
-                if [[ $( jq -r '.___extraLines.extraRects | length' "$jsonfile" ) -gt 0 ]]
-                then
-                    patch "$jsonfile" '.___extraLines.extraRects |= map(. + {"fl": 0})'
-                fi
-
+                # ___options.toolbar.euro=false hinzufügen
+                patch "$jsonfile" '.___options.toolbar.euro = false'
                 pack=1
             fi
 

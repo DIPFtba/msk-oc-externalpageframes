@@ -158,10 +158,10 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 							}
 
 							if ( !( 'scoringVals' in obj ) ) {
-								obj.scoringVals = {};
+								obj.scoringVals = [];
 							}
 							try {
-								obj.scoringVals[ sv.val ] = parser.parse( saveCond );
+								obj.scoringVals.push( [ sv.val, parser.parse( saveCond ) ] );
 							} catch (e) {
 								debugAndConsoleOut( `Fehler (${e}) in Scoring-Condition: ${cond}` );
 							}
@@ -175,8 +175,8 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 	if ( obj.scoringVals ) {
 		obj.computeScoringVals = function (res) {
 			let score = null;
-			const scoreDat = Object.entries( this.scoringVals );
-			for ( let h=0; score==null && h<scoreDat.length; h++ ) {
+			const scoreDat = this.scoringVals;
+			for ( let h=0; score===null && h<scoreDat.length; h++ ) {
 				const [v,c] = scoreDat[h];
 				try {
 					if ( c.evaluate( res ) ) {

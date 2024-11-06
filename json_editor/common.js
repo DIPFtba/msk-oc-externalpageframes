@@ -86,6 +86,7 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 	// create Parser, add addFncs
 	const parser = new Parser();
 	Object.assign( addFncs, {
+		isNull: v => v===null,
 		isNumUnit,
 		isBetween,
 		match: (a,b) => a.toString().match(b),

@@ -76,9 +76,9 @@ export class connectedFramesFromSchema extends connectedFrames {
 
 		super( base, opts );
 
-		addScoring( this, opts, addMods.Parser );
-
 		this.__inpFrames = this.frames.filter( (frame) => !frame.readonly );
+
+		addScoring( this, opts, addMods.Parser );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();

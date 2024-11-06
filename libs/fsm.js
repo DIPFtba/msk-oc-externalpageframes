@@ -91,6 +91,9 @@ export class fsmSend {
 			if ( window.parent !== window ) {
 				window.parent.postMessage( payload, '*' );
 			}
+			if ( window.__BW__callback ) {
+				window.__BW__callback( payload );
+			}
 		} else {
 			window.parent.postMessage( payload, '*' );
 		}

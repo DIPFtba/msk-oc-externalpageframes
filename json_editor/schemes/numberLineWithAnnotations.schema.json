@@ -764,7 +764,7 @@
 								"format": "checkbox"
 							},
 							"toValue": {
-								"title": "Verbindung zu",
+								"title": "Verb. zu",
 								"type": "string"
 							},
 							"toValueReadonly": {
@@ -780,6 +780,10 @@
 							},
 							"xval": {
 								"title": "X (opt.)",
+								"type": "string"
+							},
+							"width": {
+								"title": "Breite (opt.)",
 								"type": "string"
 							}
 						}

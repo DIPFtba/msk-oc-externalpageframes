@@ -120,15 +120,16 @@ function initContainer (graph) {
 	document.getElementById('ewk_container').style.display = graph ? 'block' : 'none';
 
 
-	const exportsvg = document.getElementById('exportsvg');
-	exportsvg.removeEventListener( 'click', saveSVG );
-	exportsvg.removeAttribute( 'disabled' );
-	if (graph) {
-		exportsvg.addEventListener( 'click', saveSVG );
-	} else {
-		exportsvg.setAttribute( 'disabled', 'disabled' );
-	}
-
+	[ [ 'exportsvg', saveSVG ], [ 'exportpng', savePNG ] ].forEach( ([idstr,fn]) => {
+		const btn = document.getElementById(idstr);
+		btn.removeEventListener( 'click', fn );
+		btn.removeAttribute( 'disabled' );
+		if (graph) {
+			btn.addEventListener( 'click', fn );
+		} else {
+			btn.setAttribute( 'disabled', 'disabled' );
+		}
+	});
 
 	textContainer.style.display = graph ? 'none' : 'block';
 	while ( textContainer.firstChild ) {
@@ -382,21 +383,17 @@ function updateEWK () {
 
 function saveSVG () {
 
-	let svg = konva2svg( base.stage );
+	const svg = konva2svg( base.stage );
 
 	textOut( "extres.svg", svg, "image/svg" );
 
 	// updateEWK();
 }
 
-/// #if __DEVELOP
-	window.saveSVG = saveSVG;
-/// #endif
-
 function textOut( filename, text, type ) {
 	// https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-not-through-server
 	var element = document.createElement('a');
-	element.setAttribute( 'href', `data:${type};charset=utf-8,${encodeURIComponent(text)}` );
+	element.setAttribute( 'href', `data:${type};${encodeURIComponent(text)}` );
 	element.setAttribute( 'download', filename );
 
 	element.style.display = 'none';
@@ -406,6 +403,33 @@ function textOut( filename, text, type ) {
 
 	document.body.removeChild(element);
 }
+
+
+
+function savePNG () {
+
+	const png = base.stage.toDataURL({ /*pixelRatio: 3*/ });
+
+	downloadURI(png, 'extres.png');
+
+	// updateEWK();
+}
+
+function downloadURI(uri, name) {
+	const link = document.createElement('a');
+	link.download = name;
+	link.href = uri;
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+}
+
+
+/// #if __DEVELOP
+	window.saveSVG = saveSVG;
+	window.savePNG = savePNG;
+/// #endif
+
 
 
 //////////////////////////////////////////////////////////////////////////////

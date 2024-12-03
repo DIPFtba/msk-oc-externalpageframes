@@ -141,14 +141,19 @@
 <td style="text-align:left;">Überprüft Gleichheit von s1 und s2 ohne Groß-/Kleinschreibung</td>
 </tr>
 <tr>
+<td style="text-align:left;"><code>isNull( v )</code></td>
+<td style="text-align:left;"><code>isNull( ${Value_1} )</code></td>
+<td style="text-align:left;">Überprüft, ob v===null ist</td>
+</tr>
+<tr>
 <td style="text-align:left;"><code>isBetween( v, w1, w2 )</code></td>
 <td style="text-align:left;"><code>isBetween( ${Value_1}, 50, 80 )</code></td>
 <td style="text-align:left;">Überprüft, ob w1 &lt;= v &lt;= w2</td>
 </tr>
 <tr>
-<td style="text-align:left;"><code>match( s, r )</code></td>
-<td style="text-align:left;"><code>match( ${Input}, /^Ganzer Text$/i )</code></td>
-<td style="text-align:left;">Testet String s mit RegExp r</td>
+<td style="text-align:left;"><code>match( s, r, fl )</code></td>
+<td style="text-align:left;"><code>match( ${Input}, '^Ganzer Text$' ,'i' )</code></td>
+<td style="text-align:left;">Testet String s mit RegExp r und RegExp-Flags fl</td>
 </tr>
 <tr>
 <td style="text-align:left;"><code>isNumUnit( s, num, unitRE, unitOpt, orEmpty )</code></td>

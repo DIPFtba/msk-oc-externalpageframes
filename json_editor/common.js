@@ -89,7 +89,7 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 		isNull: v => v===null,
 		isNumUnit,
 		isBetween,
-		match: (a,b) => a.toString().match(b),
+		match: (a,r,fl='') => a.toString().match( new RegExp(r,fl) ),
 		// regexp: (a,b) => a.match(b),
 		strEqual: (a,b) => a.toLowerCase == b.toLowerCase,
 	});
@@ -303,7 +303,7 @@ export const dp2labFncInputRegExp = ( obj, opts, nam='' ) => {
 
 export const strToInt = (s) => {
 	const n = parseInt(s);
-	return isNaN(n) ? 0 : n;
+	return Number.isNaN(n) ? 0 : n;
 }
 
 export const strToNum = (s) => {

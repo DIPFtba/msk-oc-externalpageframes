@@ -29,7 +29,7 @@ export class fsmSend {
 
 	setFSMVariable ( variableName, newValue ) {
 
-		if ( typeof newValue === 'object' && Array.isArray(newValue) ) {
+		if ( Array.isArray(newValue) ) {
 			newValue = newValue.join(',');
 		}
 
@@ -40,7 +40,7 @@ export class fsmSend {
 		this.postMessageWithPathsAndTraceCount({
 			setVariable: {
 				variableName,
-				newValue: isNaN(newValue) ? 0 : newValue,
+				newValue: Number.isNaN(newValue) ? 0 : newValue,
 			},
 		})
 	}

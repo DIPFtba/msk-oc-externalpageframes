@@ -145,5 +145,5 @@ hr#ruler {
 	background-color: gray;
 	cursor: row-resize;
 	z-index: 10000;
-	margin: 5px 0;
+	margin: 0 0 5px 0;
 }

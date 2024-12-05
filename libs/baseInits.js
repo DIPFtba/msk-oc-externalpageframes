@@ -184,7 +184,7 @@ export class baseInits {
 			const vdef = {
 				name: vname,
 				type,
-				defaultValue: Number.isNaN(val) || val===null ? 0 : val,
+				defaultValue: Number.isNaN(val) || val===null ? 0 : ( val === '' ? 'EMPTY' : val ),
 				namedValues: [],
 			}
 			varDefs.push( vdef );

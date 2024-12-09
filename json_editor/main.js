@@ -393,7 +393,7 @@ function saveSVG () {
 function textOut( filename, text, type ) {
 	// https://stackoverflow.com/questions/3665115/how-to-create-a-file-in-memory-for-user-to-download-but-not-through-server
 	var element = document.createElement('a');
-	element.setAttribute( 'href', `data:${type};${encodeURIComponent(text)}` );
+	element.setAttribute( 'href', `data:${type};charset=utf-8,${encodeURIComponent(text)}` );
 	element.setAttribute( 'download', filename );
 
 	element.style.display = 'none';

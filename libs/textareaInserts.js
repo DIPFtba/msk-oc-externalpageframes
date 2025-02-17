@@ -74,7 +74,6 @@ export class textareaBase extends textareaContainer {
 			base.fsm.incInitCnt();
 		}
 
-console.log("*+*+*+*+*+*+",regexCanLookBehind())
 		const defaults = {
 			multiLine: true,
 			stripTags: false,	// true: only allow text-node, delete all HTML-tags (fireofx inserts <br> sometimes)
@@ -87,8 +86,8 @@ console.log("*+*+*+*+*+*+",regexCanLookBehind())
 				// { from: /regexp/, to: "replace" },
 
 				regexCanLookBehind() ?
-					{ from:  new RegExp('(?<!\\*)\\*(?!\\*)','g') , to: "\u22c5" } :	// replace '*' to \u22c5
-					// IB internal browser does not support negative look-behind/-forward
+					{ from: new RegExp('(?<!\\*)\\*(?!\\*)','g') , to: "\u22c5" } :	// replace '*' to \u22c5
+					// iOS 16 & IB internal browser does not support negative look-behind/-forward
 					// workaround:
 					{ from: /(^|[^*])\*([^*]|$)/g, to: "$1\u22c5$2" },	// replace '*' to \u22c5
 

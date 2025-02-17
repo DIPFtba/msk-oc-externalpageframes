@@ -54,7 +54,7 @@ export class inputInsertsFromSchema extends inputInserts {
 
 		const numRe = regexCanLookBehind() ?
 			'(?:\\.|(?:(?<!!)!)?\\d+(?:\\.\\d+)?)' : // number, optionally prepended by one '!'
-			// IB internal browser does not support negative look-behind/-forward
+			// iOS 16 & IB internal browser does not support negative look-behind/-forward
 			// workaround: don't look behind ...
 			'(?:\\.|!?\\d+(?:\\.\\d+)?)'; // number, optionally prepended by '!'
 		const re1 = new RegExp( `(${numRe}) *((?:([\\-+*\\/]) *${numRe} *)+)(\\[ *= *(${numRe}) *\\] *|= *(${numRe}) *)?` );

@@ -87,7 +87,7 @@ console.log("*+*+*+*+*+*+",regexCanLookBehind())
 				// { from: /regexp/, to: "replace" },
 
 				regexCanLookBehind() ?
-					{ from:  /(?<!\*)\*(?!\*)/g , to: "\u22c5" } :	// replace '*' to \u22c5
+					{ from:  new RegExp('(?<!\\*)\\*(?!\\*)','g') , to: "\u22c5" } :	// replace '*' to \u22c5
 					// IB internal browser does not support negative look-behind/-forward
 					// workaround:
 					{ from: /(^|[^*])\*([^*]|$)/g, to: "$1\u22c5$2" },	// replace '*' to \u22c5

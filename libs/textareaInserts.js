@@ -74,6 +74,7 @@ export class textareaBase extends textareaContainer {
 			base.fsm.incInitCnt();
 		}
 
+console.log("*+*+*+*+*+*+",regexCanLookBehind())
 		const defaults = {
 			multiLine: true,
 			stripTags: false,	// true: only allow text-node, delete all HTML-tags (fireofx inserts <br> sometimes)

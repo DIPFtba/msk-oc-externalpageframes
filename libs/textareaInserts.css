@@ -51,9 +51,9 @@ div.textareaInserts div.toolbar.tirow > div:not(:first-child) {
 }
 
 div.textareaInserts div.toolbar > div > span {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 div.textareaInserts div.toolbar.disabled > div > span {
@@ -81,13 +81,6 @@ div.textareaInserts .frac span:empty:before {
     content: "⬚";
 }
 
-div.textareaInserts div.toolbar .frac {
-    margin-bottom: 0em;
-    position: absolute;
-}
 div.textareaInserts div.toolbar .frac img {
-    position: relative;
-    top: -0.85rem;
-    left: -0.45rem;
     width: 1rem;
 }

@@ -119,8 +119,11 @@ export class textareaBase extends textareaContainer {
 		}
 
 		this.div.addEventListener( 'focus',
-				() => setTimeout( () => this.base.postLog( 'textareaFocus', this.getTextPos() ), 0 ) );
-		this.div.addEventListener( 'blur', () => this.base.postLog( 'textareaBlur' ) );
+				() => setTimeout( () => this.base.postLog( 'textareaFocus', this.getTextPos() ), 0 ),
+				{ capture: true } );
+		this.div.addEventListener( 'blur',
+				() => this.base.postLog( 'textareaBlur' ),
+				{ capture: true } );
 
 
 		this.oldValue = "";
@@ -132,6 +135,36 @@ export class textareaBase extends textareaContainer {
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();
+		}
+	}
+
+	///////////////////////////////////
+
+	getSelection () {
+		// Allow only the last selection! (no multiple selections in Firefox)
+		const selection = window.getSelection();
+		if (selection.rangeCount > 1) {
+			const currentRange = selection.getRangeAt(selection.rangeCount - 1); // The current (last) range
+			selection.removeAllRanges(); // Removes all ranges
+			selection.addRange(currentRange); // Adds the current range back
+		}
+
+		return selection;
+	}
+
+	getNodePos ( node, pos ) {
+		if ( node.nodeType==Node.TEXT_NODE ) {
+			return [ node, pos ];
+		} else if ( node.nodeType==Node.ELEMENT_NODE ) {
+			const n = node.childNodes[ pos ];
+			if ( n ) {
+				return [ n, 0 ];
+			}
+			if ( node.childNodes.length ) {
+				const nc = node.childNodes[ node.childNodes.length-1 ];
+				return [ nc, nc.textContent.length ];
+			}
+			return [ node, 0 ];
 		}
 	}
 
@@ -243,7 +276,7 @@ export class textareaBase extends textareaContainer {
 		let saveNewValue = false;
 
 // console.log( window.getSelection() );
-		const sel = window.getSelection();
+		const sel = this.getSelection();
 
 		// was "inserted" node saved for deletion and was backspace processed?
 		if ( event && event.inputType=='deleteContentBackward' && this.delPosElement ) {
@@ -263,7 +296,7 @@ export class textareaBase extends textareaContainer {
 			if ( inserted )  {
 // console.log(this.delPosText,this.delPosElement)
 				// pos cursor
-				if ( sel.getRangeAt && sel.rangeCount ) {
+				if ( sel.rangeCount ) {
 					const range = sel.getRangeAt(0).cloneRange();
 					range.setStartBefore(inserted);
 					range.collapse(true);
@@ -432,13 +465,13 @@ export class textareaBase extends textareaContainer {
 	// https://stackoverflow.com/questions/6690752/insert-html-at-caret-in-a-contenteditable-div
 	pasteHtmlAtCaret ( html, insertSpaces, logName ) {
 
-		const sel = window.getSelection();
+		const sel = this.getSelection();
 		// only insert if selection is within this.div
 		if ( !sel || !sel.focusNode || !this.div.contains( sel.focusNode ) ) {
 			return false;
 		}
 
-		if (sel.getRangeAt && sel.rangeCount) {
+		if (sel.rangeCount) {
 			let range = sel.getRangeAt(0);
 			range.deleteContents();
 
@@ -492,7 +525,7 @@ export class textareaBase extends textareaContainer {
 
 	delIfDiv ( offs, event ) {
 
-		const sel = window.getSelection();
+		const sel = this.getSelection();
 		if ( sel && sel.isCollapsed ) {
 			const focus = sel.focusNode;
 // console.log(sel,offs,focus==this.div,this.div.childNodes.length,this.div.childNodes);
@@ -537,8 +570,8 @@ export class textareaBase extends textareaContainer {
 	// is cursor within .inputfield? tab to nextSibling
 	tabToNextInputField (event) {
 
-		const sel = window.getSelection();
-		if ( sel && sel.isCollapsed && sel.focusNode && sel.getRangeAt && sel.rangeCount ) {
+		const sel = this.getSelection();
+		if ( sel && sel.isCollapsed && sel.focusNode && sel.rangeCount ) {
 
 			// in .inputfield?
 			let node;
@@ -572,7 +605,7 @@ export class textareaBase extends textareaContainer {
 	saveValue () {
 		this.oldValue = this.div.innerHTML;
 		// save cursor position
-		const sel = window.getSelection();
+		const sel = this.getSelection();
 		if ( sel && sel.focusNode ) {
 			const nodes = Array.from( this.div.childNodes );
 			this.oldFocusElemIndex = nodes.findIndex( i => i===sel.focusNode );
@@ -586,7 +619,7 @@ export class textareaBase extends textareaContainer {
 		if ( this.oldValue!==null ) {
 			this.div.innerHTML = this.oldValue;
 			// restore old cursor position
-			const sel = window.getSelection();
+			const sel = this.getSelection();
 			if ( sel ) {
 				sel.removeAllRanges();
 				if ( this.oldFocusElemIndex!==null && this.oldFocusElemIndex>-1 ) {
@@ -597,7 +630,7 @@ export class textareaBase extends textareaContainer {
 	}
 
 	setCurPos ( node, offset ) {
-		const sel = window.getSelection();
+		const sel = this.getSelection();
 		if ( sel ) {
 			const range = document.createRange();
 			range.setStart( node, offset );
@@ -613,33 +646,24 @@ export class textareaBase extends textareaContainer {
 
 		// try to save cursor position in textnode(s)
 		let curPos = null, prevElment, parentElment;
-		const sel = window.getSelection();
-		if ( sel && sel.rangeCount==1 ) {
-			let focus = sel.focusNode;
-			let focusOffset = sel.focusOffset;
-			if ( focus ) {
-				if ( focus.nodeType==Node.ELEMENT_NODE && focusOffset>0 ) {
-					// If focusNode is an element, focusOffset is the number of child nodes of the
-					// focusNode preceding the focus
-					focus = focus.childNodes[ focusOffset ];
-					focusOffset = 0;
-				}
-				if ( focus.nodeType==Node.TEXT_NODE &&
-						( ( focus.previousSibling && focus.previousSibling.nodeType==Node.TEXT_NODE ) ||
-							( focus.nextSibling && focus.nextSibling.nodeType==Node.TEXT_NODE ) ) ) {
-					// cursor is part of several consecutive text elements that are combined by nomalize()
-					// -> save position in text & previousSibling/parentElement
+		const sel = this.getSelection();
+		if ( sel && sel.rangeCount && sel.focusNode ) {
+			let [ focus, focusOffset ] = this.getNodePos( sel.focusNode, sel.focusOffset );
+			if ( focus.nodeType==Node.TEXT_NODE &&
+					( ( focus.previousSibling && focus.previousSibling.nodeType==Node.TEXT_NODE ) ||
+						( focus.nextSibling && focus.nextSibling.nodeType==Node.TEXT_NODE ) ) ) {
+				// cursor is part of several consecutive text elements that are combined by nomalize()
+				// -> save position in text & previousSibling/parentElement
 
-					curPos = focusOffset;
-					parentElment = focus.parentElement;
+				curPos = focusOffset;
+				parentElment = focus.parentElement;
 
-					// Add length of all previous text elements to position
-					while ( focus.previousSibling && focus.previousSibling.nodeType==Node.TEXT_NODE ) {
-						focus = focus.previousSibling;
-						curPos += focus.textContent.length;
-					}
-					prevElment = focus.previousSibling;
+				// Add length of all previous text elements to position
+				while ( focus.previousSibling && focus.previousSibling.nodeType==Node.TEXT_NODE ) {
+					focus = focus.previousSibling;
+					curPos += focus.textContent.length;
 				}
+				prevElment = focus.previousSibling;
 			}
 		}
 
@@ -659,31 +683,36 @@ export class textareaBase extends textareaContainer {
 	// Get Position (in this.div.textContent) and special classes set in focusnode
 	getTextPos (sel=null) {
 		if ( sel===null ) {
-			sel = window.getSelection();
+			sel = this.getSelection();
 		}
-		if ( sel && sel.focusNode ) {
-			let pos = sel.focusOffset;
-			let node = sel.focusNode;
-			// add lengths of textContents of all pevious Elements
-			while ( ( node = node.previousSibling || node.parentNode ) && node != this.div && node ) {
-				if ( node.textContent ) {
-					pos += node.textContent.length;
-				}
-			}
-			const data = { textPos: pos, };
-			// check for frac classes
-			node = sel.focusNode;
-			while ( node && node != this.div && !node.classList ) {
-				node = node.parentNode;
-			}
-			if ( node.classList && node.classList.contains('frac') ) {
-				if ( node.classList.contains('top') ) data.class="frac top";
-				if ( node.classList.contains('bottom') ) data.class="frac bottom";
-			};
-			return data;
+		if ( !sel || !sel.focusNode || !this.div.contains( sel.focusNode ) ) {
+			return {}
 		}
 
-		return {};
+		let [ node, pos ] = this.getNodePos( sel.focusNode, sel.focusOffset );
+		// add lengths of textContents of all pevious Elements
+		while ( node && node != this.div ) {
+			while ( node && node != this.div && !node.previousSibling ) {
+				node = node.parentNode;
+			}
+			if ( node && node != this.div ) {
+				node = node.previousSibling;
+				pos += node.textContent.length;
+			}
+		}
+		const data = { textPos: pos, };
+
+		// check for frac classes
+		node = sel.focusNode;
+		while ( node && node != this.div && !node.classList ) {
+			node = node.parentNode;
+		}
+		if ( node.classList && node.classList.contains('frac') ) {
+			if ( node.classList.contains('top') ) data.class="frac top";
+			if ( node.classList.contains('bottom') ) data.class="frac bottom";
+		}
+
+		return data;
 	}
 
 	extract () {
@@ -827,7 +856,7 @@ export class textareaInserts extends textareaBase {
 
 		if ( this.toolbar[nr].dontInsertRecursive ) {
 			// search parent ".inserted" (-> inside another inserted element)
-			const sel = window.getSelection();
+			const sel = this.getSelection();
 			if ( sel && sel.focusNode ) {
 				let pnode = sel.focusNode;
 				while ( pnode && ( !pnode.classList || !pnode.classList.contains('textareaInserts') && !pnode.classList.contains('inserted') ) ) {

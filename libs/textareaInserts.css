@@ -37,9 +37,18 @@ div.textareaInserts div.toolbar.tirow {
 
 /* toolbar cell */
 div.textareaInserts div.toolbar > div {
-    display: table-cell;    /* Mit flex werden die Rechenzeichen vertikal nicht zentriert dargestellt */
+    /* Mit flex werden die Rechenzeichen vertikal nicht zentriert dargestellt */
+    /* display: table-cell;
     vertical-align: middle;
-    text-align: center;
+    text-align: center; */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 0.13em;
+    /* padding-bottom: Zentrierung: Rechenzeichen werden zu tief dargestellt */
+
+    box-sizing: border-box;
     width: 35px;
     height: 35px;
     border: 1px solid black;
@@ -57,9 +66,15 @@ div.textareaInserts div.toolbar.disabled > div > span {
 
 /* fraction */
 div.textareaInserts div.toolbar .frac {
-    display: table-cell;
+    /* display: table-cell;
     vertical-align: middle;
-    text-align: center;
+    text-align: center; */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 0.13em;
+    /* padding-top: Zentrierung: padding von Rechenzeichen aufheben */
 }
 
 div.textareaInserts .frac {

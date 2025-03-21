@@ -37,8 +37,9 @@ div.textareaInserts div.toolbar.tirow {
 
 /* toolbar cell */
 div.textareaInserts div.toolbar > div {
-    display: table;
-    box-sizing: border-box;
+    display: table-cell;    /* Mit flex werden die Rechenzeichen vertikal nicht zentriert dargestellt */
+    vertical-align: middle;
+    text-align: center;
     width: 35px;
     height: 35px;
     border: 1px solid black;
@@ -50,27 +51,27 @@ div.textareaInserts div.toolbar.tirow > div:not(:first-child) {
     border-left: none;
 }
 
-div.textareaInserts div.toolbar > div > span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
 div.textareaInserts div.toolbar.disabled > div > span {
     opacity: 0.2;
 }
 
 /* fraction */
+div.textareaInserts div.toolbar .frac {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
 div.textareaInserts .frac {
     display: inline-block;
-    position: relative;
+    /* position: relative; */
     vertical-align: middle;
     letter-spacing: 0.001em;
     text-align: center;
     white-space: normal;
-    margin-bottom: 0.2em;   /* vetical centering */
     padding: 0px;
 }
+
 div.textareaInserts .frac > span {
     display: block;
 }

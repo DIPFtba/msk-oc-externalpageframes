@@ -27,6 +27,10 @@ import { freePaintFromSchema } from './class_extensions/freePaint';
 import freePaintJSONSchema from './schemes/freePaint.schema.json';
 import freePaintSVG from './svgs/freePaint.svg';
 
+import { freePaintMultFromSchema } from './class_extensions/freePaintMult';
+import freePaintMultJSONSchema from './schemes/freePaintMult.schema.json';
+import freePaintMultSVG from './svgs/freePaint.svg';
+
 import { inputGridFromSchema } from './class_extensions/inputGrid';
 import inputGridJSONSchema from './schemes/inputGrid.schema.json';
 import inputGridSVG from './svgs/inputGrid.svg';
@@ -195,6 +199,10 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new freePaintFromSchema( base, cfgData );
 						break;
+					case 'freePaintMult':
+						initContainer(true);
+						creator = (cfgData) => new freePaintMultFromSchema( base, cfgData );
+						break;
 					case 'inputGrid':
 						initContainer(true);
 						creator = (cfgData) => new inputGridFromSchema( base, cfgData );
@@ -261,13 +269,13 @@ function loadSchema( schema ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-// /// #if __DEVELOP
+/// #if __DEVELOP
 
-// // for Development: always load one JSON schema
-// loadSchema( connectedFramesJSONSchema );
-// window.updateEWK = updateEWK;
+// for Development: always load one JSON schema
+loadSchema( freePaintMultJSONSchema );
+window.updateEWK = updateEWK;
 
-// /// #else
+/// #else
 
 // load schema Links
 const templs = {
@@ -277,6 +285,7 @@ const templs = {
 	connectedFrames: [ connectedFramesJSONSchema, connectedFramesSVG ],
 	filledBar: [ filledBarJSONSchema, filledBarSVG ],
 	freePaint: [ freePaintJSONSchema, freePaintSVG ],
+	freePaintMult: [ freePaintMultJSONSchema, freePaintMultSVG ],
 	inputGrid: [ inputGridJSONSchema, inputGridSVG ],
 	numberLine: [ numberLineJSONSchema, numberLineSVG ],
 	numberLineWithAnnotations: [ numberLineWithAnnotationsJSONSchema, numberLineWithAnnotationsSVG ],
@@ -305,7 +314,7 @@ Object.entries(templs).forEach( ([templ,[schema,svg]]) => {
 	schSel.appendChild( a );
 })
 
-// /// #endif
+/// #endif
 
 //////////////////////////////////////////////////////////////////////////////
 

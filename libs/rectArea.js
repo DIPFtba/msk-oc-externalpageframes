@@ -44,6 +44,7 @@ export class rectArea {
 				stroke: this.frameColor,
 				strokeWidth: this.frameWidth,
 				fill: this.fill,
+				cornerRadius: this.radius,
 			}
 			this.kRect = new Konva.Rect( rectOpts );
 			this.layer.add( this.kRect );

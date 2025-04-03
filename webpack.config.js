@@ -111,6 +111,7 @@ const ExtResFromSchema = {
 	barSliderFull: { version: "0.1.0" },
 	connectedFrames: { version: "0.1.0" },
 	filledBar: { version: "0.1.0" },
+	filledBarMult: { version: "0.1.0" },
 	freePaint: { version: "0.1.0" },
 	inputGrid: { version: "0.1.0" },
 	numberLine: { version: "0.1.0" },

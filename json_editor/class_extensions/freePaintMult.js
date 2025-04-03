@@ -1,8 +1,19 @@
 import { mergeDeep, getPosOfEvent, setStatePostProc, ignoreEvent } from '../../libs/common'
 
+// testcalls:
+//			window.postMessage( JSON.stringify( { callId: 'getImage' } ), '*' );
+//			window.postMessage( JSON.stringify( ['undo'] ), '*' );
+//			window.postMessage( JSON.stringify( ['redo'] ), '*' );
+//			window.postMessage( JSON.stringify( ['clearAll'] ), '*' );
+//			window.postMessage( JSON.stringify( ['setBrush', 'ff0000', 5, 'add'] ), '*' );
+//			window.postMessage( JSON.stringify( ['setBrush', '000000', 20, 'sub'] ), '*' );
+
 import Konva from 'konva/lib/Core'
 import { Line } from 'konva/lib/shapes/Line'
 import { Rect } from 'konva/lib/shapes/Rect'
+
+import penicon from '../../libs/img/penicon.png'
+import erasericon from '../../libs/img/erasericon.png'
 
 export class freePaintMultFromSchema {
 
@@ -12,14 +23,24 @@ export class freePaintMultFromSchema {
 			base.fsm.incInitCnt();
 		}
 
+		if ( opts.width<= 0 ) {
+			opts.width += base.width - opts.x;
+		}
+		if ( opts.height<= 0 ) {
+			opts.height += base.height - opts.y;
+		}
+
 		const defaultOpts = {
 			paintLine: {
-				frameWidth: 1,
-				frameColor: 'black',
+				strokeWidth: 1,
+				stroke: 'black',
 				lineCap: 'round',
 				lineJoin: 'round',
 				globalCompositeOperation: 'source-over',
 			},
+
+			cursorPaint: 'url(' + penicon + '), auto',
+			cursorErase: 'url(' + erasericon + '), auto',
 		}
 		mergeDeep( Object.assign( this, defaultOpts ), opts );
 		this.base = base;
@@ -27,9 +48,11 @@ export class freePaintMultFromSchema {
 		this.stage = stage;
 
 		// define extra-Rects clip Functions (if selected)
+		let freePaintBrushClipFunc;
 		const clipBrush = opts.extraRects.filter( r => r.clipBrush );
+
 		if ( clipBrush.length>0 ) {
-			opts.freePaintBrushClipFunc = function ( ctx ) {
+			freePaintBrushClipFunc = function ( ctx ) {
 				clipBrush.forEach( r => {
 					const rw2 = r.w/2;
 					const x = r.x+rw2, y = r.y+rw2;
@@ -49,11 +72,11 @@ export class freePaintMultFromSchema {
 			const x = opts.x+w2, y = opts.y+w2;
 			const w = opts.width-opts.frameWidth, h = opts.height-opts.frameWidth;
 			if ( opts.frameRadius ) {
-				opts.freePaintBrushClipFunc = function ( ctx ) {
+				freePaintBrushClipFunc = function ( ctx ) {
 					ctx.roundRect( x, y, w, h, opts.frameRadius );
 				}
 			} else {
-				opts.freePaintBrushClipFunc = function ( ctx ) {
+				freePaintBrushClipFunc = function ( ctx ) {
 					ctx.rect( x, y, w, h );
 				}
 			}
@@ -70,7 +93,7 @@ export class freePaintMultFromSchema {
 		}
 
 		// Gruppe für die Linien
-		this.kGroupBrush = new Konva.Group( { clipFunc: opts.freePaintBrushClipFunc } );
+		this.kGroupBrush = new Konva.Group( { clipFunc: freePaintBrushClipFunc } );
 		this.layer.add( this.kGroupBrush );
 
 		// Gibt es Rahmen/fest defienierte Rechtecke oder Linien im Vordergund? Dann gibt es auch eine Vordergrund-Gruppe
@@ -78,6 +101,10 @@ export class freePaintMultFromSchema {
 			this.kGroupFg = new Konva.Group();
 			this.layer.add( this.kGroupFg );
 		}
+
+		this.paintObj = this.stage;
+
+		// Inits
 
 		this.initScene();
 
@@ -91,7 +118,7 @@ export class freePaintMultFromSchema {
 
 		this.initInteractivity();
 
-		this.startGetImageListener();
+		// this.startGetImageListener();
 /// #if __DEVELOP
 		window.getRectPngImage = this.getRectPngImage.bind(this);
 /// #endif
@@ -118,12 +145,16 @@ export class freePaintMultFromSchema {
 			}));
 		}
 		if ( this.frameWidth ) {
-			this.kGroupFg.add( new Konva.Rect({
+			 const kRect = new Konva.Rect({
 				...frOpts,
 				stroke: this.frameColor,
 				strokeWidth: this.frameWidth,
 				cornerRadius: this.frameRadius,
-			}));
+			});
+			this.kGroupFg.add( kRect );
+			if ( this.clipBrush ) {
+				this.paintObj = kRect;
+			}
 		}
 
 		// draw extra rects
@@ -170,7 +201,7 @@ export class freePaintMultFromSchema {
 		if ( !this.readonly ) {
 
 			// Start painting
-			stage.on('mousedown touchstart', ev => {
+			this.stage.on('mousedown touchstart', ev => {
 				const pos = getPosOfEvent( this.stage, ev );
 				this.paintPoints = [ pos.x, pos.y ];
 				this.kFreePaintLine = new Konva.Line({
@@ -183,7 +214,7 @@ export class freePaintMultFromSchema {
 			});
 
 			// End painting
-			stage.on('mouseup mouseleave touchend', (ev) => {
+			this.stage.on('mouseup mouseleave touchend', (ev) => {
 				if ( ignoreEvent( this.stage, ev ) ) {
 					return;
 				}
@@ -193,7 +224,8 @@ export class freePaintMultFromSchema {
 							...this.paintLine,
 							points: this.paintPoints,
 						});
-						this.linesCopy.push(o)
+						this.linesCopy.push(o);
+						this.linesRedo.length = 0;	// clear redo buffer
 						this.base.postLog( 'line', o );
 						this.base.sendChangeState( this );	// init & send changeState & score
 					}
@@ -203,7 +235,7 @@ export class freePaintMultFromSchema {
 			});
 
 			// and core function - drawing
-			stage.on('mousemove touchmove', ev => {
+			this.stage.on('mousemove touchmove', ev => {
 				if ( ignoreEvent( this.stage, ev ) ) {
 					return;
 				}
@@ -217,19 +249,18 @@ export class freePaintMultFromSchema {
 				}
 			});
 
-			stage.on( 'mouseleave', (ev) => {
+			this.paintObj.on( 'mouseleave', (ev) => {
 				if ( ignoreEvent( this.stage, ev ) ) {
 					return;
 				}
-				this.cursorSaved = document.body.style.cursor;
 				document.body.style.cursor = "default";
 			});
 
-			stage.on( 'mouseenter', () => {
-				if ( this.cursorSaved ) {
-					document.body.style.cursor = this.cursorSaved;
-					this.cursorSaved = null;
+			this.paintObj.on( 'mouseenter', (ev) => {
+				if ( ignoreEvent( this.stage, ev ) ) {
+					return;
 				}
+				document.body.style.cursor = this.paintLine.globalCompositeOperation==='source-over' ? this.cursorPaint : this.cursorErase;
 			})
 		}
 	}
@@ -277,7 +308,7 @@ export class freePaintMultFromSchema {
 		if ( this.linesCopy.length>0 ) {
 			const line = this.linesCopy.pop();
 			this.linesRedo.push( line );
-			this.kGroupBrush.remove( this.kGroupBrush.children[ this.kGroupBrush.children.length-1 ] );
+			this.kGroupBrush.children[ this.linesCopy.length ].destroy();
 
 			this.redraw( 'undo', line );
 		}
@@ -295,18 +326,18 @@ export class freePaintMultFromSchema {
 	}
 
 	clearAll () {
-		this.linesCopy = [];
-		this.linesRedo = [];
+		this.linesCopy.length = 0;
+		this.linesRedo.length = 0;
 		this.kGroupBrush.destroyChildren();
 
 		this.redraw( 'clearAll' );
 	}
 
-	redraw ( log1, log2 ) {
+	redraw ( log1, log2={} ) {
 		this.layer.draw();
 
 		this.sendButtonState();
-		if ( log1, log2={} ) {
+		if ( log1, log2 ) {
 			this.base.postLog( log1, log2 );
 		}
 		this.base.sendChangeState( this );
@@ -332,6 +363,7 @@ export class freePaintMultFromSchema {
 		window.addEventListener(
 			"message",
 			(event) => {
+// console.log('#################',event.data,event.origin)
 				try {
 					const [ cmd, p1, p2, p3 ] = JSON.parse(event.data);
 					switch ( cmd ) {
@@ -372,7 +404,7 @@ export class freePaintMultFromSchema {
 	packLOpts ( u ) {
 		const o = {
 			p: u.points,
-		};
+		}
 		if ( u.stroke!='black' && u.stroke!='#000000' ) {
 			o.c = u.stroke;
 		}

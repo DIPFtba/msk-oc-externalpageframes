@@ -105,6 +105,15 @@ function getEditorCfg ( env, argv ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
+function hasSchemaScoringVals( extres ) {
+	const schema = require( path.resolve( __dirname, 'json_editor/schemes', `${extres}.schema.json` ) );
+	const erg = !!schema.properties?.dataSettings?.properties?.scoringVals;
+//	console.log( '##########################################', extres, erg );
+	return erg;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 const ExtResFromSchema = {
 	barPlot: { version: "0.1.0" },
 	barSlider: { version: "0.1.0" },
@@ -167,6 +176,7 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 							__CLASS: extres,
 							__DEVELOP: argv.mode==='production' ? false : true,
 							__EDITOR: false,
+							__CANHAVESCORINGVALS: hasSchemaScoringVals( extres ),
 							__item: '',
 						}
 					},

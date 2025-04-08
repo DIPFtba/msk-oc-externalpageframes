@@ -127,6 +127,7 @@ function initJSON ( json ) {
 		base.dataSettings = cfg.dataSettings;
 	}
 
+/// #if __CANHAVESCORINGVALS
 	// load Parser lazy or not
 	(
 
@@ -135,6 +136,9 @@ function initJSON ( json ) {
 			Promise.resolve({})
 
 	).then( addMods => {
+/// #else
+		const addMods= {};
+/// #endif
 
 		// there will be subsequent inits
 		if ( base.fsm && base.fsm.incInitCnt ) {
@@ -189,7 +193,10 @@ function initJSON ( json ) {
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();
 		}
+
+/// #if __CANHAVESCORINGVALS
 	})
+/// #endif
 }
 
 document.addEventListener( "DOMContentLoaded", initExtRes );

@@ -11,7 +11,7 @@
 - [Freihand Malen/Markieren (freePaint)](#freihand-malenmarkieren-freepaint)
 - [Eingabefeld mit Buttons (inputInserts)](#eingabefeld-mit-buttons-inputinserts)
 - [Zahlenstrahl mit Bögen (numberLineWithArcs)](#zahlenstrahl-mit-bögen-numberlinewitharcs)
-
+- [freePaint mit externen Buttons (freePaintMult)](#freepaint-mit-externen-buttons-freepaintmult)
 
 
 # Scoring (alle EWK)
@@ -135,3 +135,26 @@ folgende Funktionen sind in allen EWK definiert:
 - Damit die Zuordnung der Variablen klarer ist, sollten also die Labels und Bögen bereits sortiert (Reihenfolge in der Tabelle) im JSON Configfile definiert werden
 
 - Die Option `Keine neuen Bögen zulassen` macht nur Sinn, wenn keine Bögen vordefiniert werden und im Reiter `Achsenlabels` die Option `Labels ohne Bögen nicht löschen` aktiviert wird. Dann können Labels bzw. Beschriftungen am Zahlenstrahl erzeugt, bewegt und beschriftet werden (ohne Bögen). Die Option `Maximalzahl` im Reiter `Achsenlabels` begrenzt dann die mögliche Anzahl
+
+
+
+
+# freePaint mit externen Buttons (freePaintMult)
+
+Die Erweiterung reagiert auf folgende Befehle:
+
+|Befehl IB|Effekt|
+|:--------|:-----|
+|`callExternalPageFrame( ID, 'undo' )`|Undo des letzten Zeichnens/Radierens/ClearAll|
+|`callExternalPageFrame( ID, 'redo' )`|Redo des letzten Undo (außer clearAll)|
+|`callExternalPageFrame( ID, 'clearAll' )`|Alles Löschen|
+|`callExternalPageFrame( ID, 'setBrush', 'HTMLColor', Breite, 'add\|sub' )`|Setzt Pinsel Farbe (HTMLColor z.B. 'blue', '#ff0080'), Dicke und Mode ('add'=zeichnen, 'sub'=radieren)|
+
+Die Erweiterung sendet folgende Events:
+
+|Event|Bedeutung|
+|:----|:--------|
+|`EV_CAN_UNDO`|'Undo' & 'ClearAll' stehen zur Verfügung|
+|`EV_CANNOT_UNDO`|'Undo' & 'ClearAll' stehen nicht zur Verfügung|
+|`EV_CAN_REDO`|'Redo' steht zur Verfügung|
+|`EV_CANNOT_REDO`|'Redo' steht nicht zur Verfügung|

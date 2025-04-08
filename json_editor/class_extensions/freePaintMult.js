@@ -305,12 +305,21 @@ export class freePaintMultFromSchema {
 	///////////////////////////////////
 
 	undo () {
-		if ( this.linesCopy.length>0 ) {
+		if ( Array.isArray(this.undoClearAll) && this.undoClearAll.length>0 ) {
+			this.undoClearAll.forEach( l => {
+				this.linesCopy.push( l );
+				const kLine = new Konva.Line( this.unpackLOpts( l ) );
+				this.kGroupBrush.add( kLine );
+			});
+
+			this.drawLog( 'undoClearAll', this.undoClearAll );
+			this.undoClearAll = null;
+		} else if ( this.linesCopy.length>0 ) {
 			const line = this.linesCopy.pop();
 			this.linesRedo.push( line );
 			this.kGroupBrush.children[ this.linesCopy.length ].destroy();
 
-			this.redraw( 'undo', line );
+			this.drawLog( 'undo', line );
 		}
 	}
 
@@ -321,21 +330,22 @@ export class freePaintMultFromSchema {
 			const kLine = new Konva.Line( this.unpackLOpts(line) );
 			this.kGroupBrush.add( kLine );
 
-			this.redraw( 'redo', line );
+			this.drawLog( 'redo', line );
 		}
 	}
 
 	clearAll () {
-		this.linesCopy.length = 0;
-		this.linesRedo.length = 0;
+		this.undoClearAll = this.linesCopy;
+		this.linesCopy = [];
+		this.linesRedo = [];
 		this.kGroupBrush.destroyChildren();
 
-		this.redraw( 'clearAll' );
+		this.drawLog( 'clearAll' );
 	}
 
-	redraw ( log1, log2={} ) {
+	drawLog ( log1, log2={} ) {
 		this.layer.draw();
-
+console.log(`======== CMD ${log1} received ========`);
 		this.sendButtonState();
 		if ( log1, log2 ) {
 			this.base.postLog( log1, log2 );
@@ -344,10 +354,11 @@ export class freePaintMultFromSchema {
 	}
 
 	setBrush ( color, width, mode ) {
+console.log(`======== CMD setBrush (${color}/${width}/$mode) received ========`);
 		if ( color ) {
-			if ( color.match( /^[0-9a-fA-F]{6}$/ ) ) {
-				color = '#' + color;
-			}
+			// if ( color.match( /^[0-9a-fA-F]{6}$/ ) ) {
+			// 	color = '#' + color;
+			// }
 			this.paintLine.stroke = color;
 		}
 		if ( width ) {
@@ -388,13 +399,17 @@ export class freePaintMultFromSchema {
 	sendButtonState () {
 		const canUndo = this.linesCopy.length>0;
 		if ( canUndo !== this.canUndoSent ) {
-			this.base.fsm.triggerEvent( ( canUndo ? 'can' : 'canNot' ) + 'Undo' );
+			const ev = `EV_${ canUndo ? 'CAN' : 'CANNOT' }_UNDO`;
+console.log(`-------- EVENT ${ev} sent --------`);
+			this.base.fsm.triggerEvent( ev );
 			this.canUndoSent = canUndo;
 		}
 
 		const canRedo = this.linesRedo.length>0;
 		if ( canRedo !== this.canRedoSent ) {
-			this.base.fsm.triggerEvent( ( canRedo ? 'can' : 'canNot' ) + 'Redo' );
+			const ev = `EV_${ canRedo ? 'CAN' : 'CANNOT' }_REDO`;
+console.log(`-------- EVENT ${ev} sent --------`);
+			this.base.fsm.triggerEvent( ev );
 			this.canRedoSent = canRedo;
 		}
 	}
@@ -427,10 +442,14 @@ export class freePaintMultFromSchema {
 	}
 
 	getState () {
-		return JSON.stringify({
+		const state = {
 			l:  this.linesCopy,
 			r:  this.linesRedo,
-		})
+		};
+		if ( this.undoClearAll ) {
+			state.c = this.undoClearAll;
+		}
+		return JSON.stringify(state)
 	}
 
 	setState ( state ) {
@@ -440,6 +459,9 @@ export class freePaintMultFromSchema {
 			this.kGroupBrush.destroyChildren();
 			this.linesRedo = saved.r;
 			this.linesCopy = saved.l;
+			if ( saved.c ) {
+				this.undoClearAll = saved.c;
+			}
 
 			this.linesCopy.forEach( l => {
 				const kLine = new Konva.Line( this.unpackLOpts( l ) );

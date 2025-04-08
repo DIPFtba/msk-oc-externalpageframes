@@ -11,6 +11,7 @@
 <li><a href="#freihand-malenmarkieren-freepaint">Freihand Malen/Markieren (freePaint)</a></li>
 <li><a href="#eingabefeld-mit-buttons-inputinserts">Eingabefeld mit Buttons (inputInserts)</a></li>
 <li><a href="#zahlenstrahl-mit-bögen-numberlinewitharcs">Zahlenstrahl mit Bögen (numberLineWithArcs)</a></li>
+<li><a href="#freepaint-mit-externen-buttons-freepaintmult">freePaint mit externen Buttons (freePaintMult)</a></li>
 </ul>
 <h1 id="scoring-alle-ewk">Scoring (alle EWK)</h1>
 <ul>
@@ -196,3 +197,58 @@
 <li><p>Damit die Zuordnung der Variablen klarer ist, sollten also die Labels und Bögen bereits sortiert (Reihenfolge in der Tabelle) im JSON Configfile definiert werden</p></li>
 <li><p>Die Option <code>Keine neuen Bögen zulassen</code> macht nur Sinn, wenn keine Bögen vordefiniert werden und im Reiter <code>Achsenlabels</code> die Option <code>Labels ohne Bögen nicht löschen</code> aktiviert wird. Dann können Labels bzw. Beschriftungen am Zahlenstrahl erzeugt, bewegt und beschriftet werden (ohne Bögen). Die Option <code>Maximalzahl</code> im Reiter <code>Achsenlabels</code> begrenzt dann die mögliche Anzahl</p></li>
 </ul>
+<h1 id="freepaint-mit-externen-buttons-freepaintmult">freePaint mit externen Buttons (freePaintMult)</h1>
+<p>Die Erweiterung reagiert auf folgende Befehle:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Befehl IB</th>
+<th style="text-align:left;">Effekt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>callExternalPageFrame( ID, 'undo' )</code></td>
+<td style="text-align:left;">Undo des letzten Zeichnens/Radierens/ClearAll</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>callExternalPageFrame( ID, 'redo' )</code></td>
+<td style="text-align:left;">Redo des letzten Undo (außer clearAll)</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>callExternalPageFrame( ID, 'clearAll' )</code></td>
+<td style="text-align:left;">Alles Löschen</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>callExternalPageFrame( ID, 'setBrush', 'HTMLColor', Breite, 'add|sub' )</code></td>
+<td style="text-align:left;">Setzt Pinsel Farbe (HTMLColor z.B. 'blue', '#ff0080'), Dicke und Mode ('add'=zeichnen, 'sub'=radieren)</td>
+</tr>
+</tbody>
+</table>
+<p>Die Erweiterung sendet folgende Events:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>EV_CAN_UNDO</code></td>
+<td style="text-align:left;">'Undo' &amp; 'ClearAll' stehen zur Verfügung</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_CANNOT_UNDO</code></td>
+<td style="text-align:left;">'Undo' &amp; 'ClearAll' stehen nicht zur Verfügung</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_CAN_REDO</code></td>
+<td style="text-align:left;">'Redo' steht zur Verfügung</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_CANNOT_REDO</code></td>
+<td style="text-align:left;">'Redo' steht nicht zur Verfügung</td>
+</tr>
+</tbody>
+</table>

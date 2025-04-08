@@ -5,8 +5,8 @@ import { mergeDeep, getPosOfEvent, setStatePostProc, ignoreEvent } from '../../l
 //			window.postMessage( JSON.stringify( ['undo'] ), '*' );
 //			window.postMessage( JSON.stringify( ['redo'] ), '*' );
 //			window.postMessage( JSON.stringify( ['clearAll'] ), '*' );
-//			window.postMessage( JSON.stringify( ['setBrush', 'ff0000', 5, 'add'] ), '*' );
-//			window.postMessage( JSON.stringify( ['setBrush', '000000', 20, 'sub'] ), '*' );
+//			window.postMessage( JSON.stringify( ['setBrush', '#ff0000', 5, 'add'] ), '*' );
+//			window.postMessage( JSON.stringify( ['setBrush', '#000000', 20, 'sub'] ), '*' );
 
 import Konva from 'konva/lib/Core'
 import { Line } from 'konva/lib/shapes/Line'
@@ -226,6 +226,7 @@ export class freePaintMultFromSchema {
 						});
 						this.linesCopy.push(o);
 						this.linesRedo.length = 0;	// clear redo buffer
+						this.undoClearAll = null;
 						this.base.postLog( 'line', o );
 						this.base.sendChangeState( this );	// init & send changeState & score
 					}
@@ -475,6 +476,7 @@ console.log(`-------- EVENT ${ev} sent --------`);
 			console.error(e);
 		}
 
+		this.sendButtonState();
 		setStatePostProc(this);
 	}
 

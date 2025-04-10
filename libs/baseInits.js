@@ -1,6 +1,8 @@
 import { object_equals } from './common'
 import { fsmSend } from './fsm'
 
+import Konva from 'konva/lib/Core'
+
 // Konva should bei imported, but doens't seem to support tree shaking, so leave it out
 // import Konva from 'konva/lib/Core'
 

@@ -119,6 +119,41 @@
 						}
 					}
 				},
+
+				"paintLine": {
+					"title": "Startfarbe",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"titleHidden": false,
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 8,
+						"grid_break": true
+					},
+					"properties": {
+						"strokeWidth": {
+							"title": "Dicke",
+							"type": "integer",
+							"minimum": 1,
+							"default": 1,
+							"options": {
+								"grid_columns": 6
+							}
+						},
+						"stroke": {
+							"title": "Farbe",
+							"type": "string",
+							"format": "color",
+							"default": "#000000",
+							"options": {
+								"grid_columns": 6
+							}
+						}
+					}
+				},
+
 				"readonly": {
 					"title": "Alles unveränderbar",
 					"type": "boolean",

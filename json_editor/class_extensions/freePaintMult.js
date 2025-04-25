@@ -20,6 +20,7 @@ export class freePaintMultFromSchema {
 	constructor ( base, opts = {} ) {
 
 		if ( base.fsm && base.fsm.incInitCnt ) {
+			base.fsm.regSendInitDone(opts);
 			base.fsm.incInitCnt();
 		}
 
@@ -346,7 +347,7 @@ export class freePaintMultFromSchema {
 
 	drawLog ( log1, log2={} ) {
 		this.layer.draw();
-console.log(`======== CMD ${log1} received ========`);
+// console.log(`======== CMD ${log1} received ========`);
 		this.sendButtonState();
 		if ( log1, log2 ) {
 			this.base.postLog( log1, log2 );
@@ -355,7 +356,7 @@ console.log(`======== CMD ${log1} received ========`);
 	}
 
 	setBrush ( color, width, mode ) {
-console.log(`======== CMD setBrush (${color}/${width}/$mode) received ========`);
+// console.log(`======== CMD setBrush (${color}/${width}/$mode) received ========`);
 		if ( color ) {
 			// if ( color.match( /^[0-9a-fA-F]{6}$/ ) ) {
 			// 	color = '#' + color;
@@ -401,7 +402,7 @@ console.log(`======== CMD setBrush (${color}/${width}/$mode) received ========`)
 		const canUndo = this.linesCopy.length>0;
 		if ( canUndo !== this.canUndoSent ) {
 			const ev = `EV_${ canUndo ? 'CAN' : 'CANNOT' }_UNDO`;
-console.log(`-------- EVENT ${ev} sent --------`);
+// console.log(`-------- EVENT ${ev} sent --------`);
 			this.base.fsm.triggerEvent( ev );
 			this.canUndoSent = canUndo;
 		}
@@ -409,7 +410,7 @@ console.log(`-------- EVENT ${ev} sent --------`);
 		const canRedo = this.linesRedo.length>0;
 		if ( canRedo !== this.canRedoSent ) {
 			const ev = `EV_${ canRedo ? 'CAN' : 'CANNOT' }_REDO`;
-console.log(`-------- EVENT ${ev} sent --------`);
+// console.log(`-------- EVENT ${ev} sent --------`);
 			this.base.fsm.triggerEvent( ev );
 			this.canRedoSent = canRedo;
 		}

@@ -192,4 +192,13 @@ export class fsmSend {
 		return this.initDoneCnt;
 	}
 
+	regSendInitDone (obj={}) {
+		this.getInitDonePromise().then( () => {
+			this.triggerEvent( "EV_EXTRES_INIT_DONE" );
+			if ( obj.dataSettings && obj.dataSettings.variablePrefix ) {
+				this.triggerEvent( `EV_EXTRES_${obj.dataSettings.variablePrefix}_INIT_DONE` );
+			}
+		});
+	}
+
 }

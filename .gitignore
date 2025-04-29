@@ -3,3 +3,4 @@ node_modules
 /dist/examples
 /dist/libs
 /dist/tools
+/json_editor/myScriptApiCfg.js

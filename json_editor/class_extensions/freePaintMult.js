@@ -193,6 +193,16 @@ export class freePaintMultFromSchema {
 		this.stage.draw();
 	}
 
+	paintLinesCopy () {
+		this.linesCopy.forEach( l => {
+			const opts = this.unpack2KonvaOpts( l );
+			const kLine = new Konva.Line( opts );
+			this.kGroupBrush.add( kLine );
+		})
+		this.layer.draw();
+		this.layer.updated();
+	}
+
 	///////////////////////////////////
 
 	initInteractivity () {
@@ -201,55 +211,9 @@ export class freePaintMultFromSchema {
 		// interactivity
 		if ( !this.readonly ) {
 
-			// Start painting
-			this.stage.on('mousedown touchstart', ev => {
-				const pos = getPosOfEvent( this.stage, ev );
-				this.paintPoints = [ pos.x, pos.y ];
-				this.kFreePaintLine = new Konva.Line({
-					...this.paintLine,
-					points: this.paintPoints,
-				});
-				this.kGroupBrush.add( this.kFreePaintLine );
-
-				ev.cancelBubble = true;
-			});
-
-			// End painting
-			this.stage.on('mouseup mouseleave touchend', (ev) => {
-				if ( ignoreEvent( this.stage, ev ) ) {
-					return;
-				}
-				if ( this.paintPoints!==null ) {
-					if ( this.paintPoints.length>2 ) {
-						const o = this.packLOpts({
-							...this.paintLine,
-							points: this.paintPoints,
-						});
-						this.linesCopy.push(o);
-						this.linesRedo.length = 0;	// clear redo buffer
-						this.undoClearAll = null;
-						this.base.postLog( 'line', o );
-						this.base.sendChangeState( this );	// init & send changeState & score
-					}
-					this.paintPoints = null;
-					this.sendButtonState();
-				}
-			});
-
-			// and core function - drawing
-			this.stage.on('mousemove touchmove', ev => {
-				if ( ignoreEvent( this.stage, ev ) ) {
-					return;
-				}
-				if ( this.paintPoints!==null ) {
-					const pos = getPosOfEvent( this.stage, ev );
-					this.paintPoints.push( pos.x, pos.y );
-					if ( this.kFreePaintLine ) {
-						this.kFreePaintLine.points( this.paintPoints );
-						this.layer.batchDraw();
-					}
-				}
-			});
+			this.stage.on('mousedown touchstart', this.iStartDraw.bind(this) );
+			this.stage.on('mousemove touchmove', this.iDraw.bind(this) );
+			this.stage.on('mouseup mouseleave touchend', this.iEndDraw.bind(this) );
 
 			this.paintObj.on( 'mouseleave', (ev) => {
 				if ( ignoreEvent( this.stage, ev ) ) {
@@ -264,6 +228,58 @@ export class freePaintMultFromSchema {
 				}
 				document.body.style.cursor = this.paintLine.globalCompositeOperation==='source-over' ? this.cursorPaint : this.cursorErase;
 			})
+		}
+	}
+
+	iStartDraw ( ev ) {
+		const pos = getPosOfEvent( this.stage, ev );
+		this.paintPoints = [ pos.x, pos.y ];
+		this.kFreePaintLine = new Konva.Line({
+			...this.paintLine,
+			points: this.paintPoints,
+		});
+		this.kGroupBrush.add( this.kFreePaintLine );
+
+		ev.cancelBubble = true;
+		return [ pos.x, pos.y ];
+	}
+
+	iDraw ( ev ) {
+		if ( ignoreEvent( this.stage, ev ) ) {
+			return;
+		}
+		if ( this.paintPoints!==null ) {
+			const pos = getPosOfEvent( this.stage, ev );
+			this.paintPoints.push( pos.x, pos.y );
+			if ( this.kFreePaintLine ) {
+				this.kFreePaintLine.points( this.paintPoints );
+				this.layer.batchDraw();
+			}
+			return [ pos.x, pos.y ];
+		}
+
+		ev.cancelBubble = true;
+	}
+
+	iEndDraw ( ev ) {
+		if ( ignoreEvent( this.stage, ev ) ) {
+			return;
+		}
+		if ( this.paintPoints!==null ) {
+			const o = this.packLOpts({
+				...this.paintLine,
+				points: this.paintPoints,
+			});
+			this.linesCopy.push(o);
+			this.linesRedo.length = 0;	// clear redo buffer
+			this.undoClearAll = null;
+			this.paintPoints = null;
+			this.updated();
+
+			this.base.postLog( 'line', this.corr4Log(o) );
+			this.base.sendChangeState( this );	// init & send changeState & score
+
+			this.sendButtonState();
 		}
 	}
 
@@ -308,18 +324,16 @@ export class freePaintMultFromSchema {
 
 	undo () {
 		if ( Array.isArray(this.undoClearAll) && this.undoClearAll.length>0 ) {
-			this.undoClearAll.forEach( l => {
-				this.linesCopy.push( l );
-				const kLine = new Konva.Line( this.unpackLOpts( l ) );
-				this.kGroupBrush.add( kLine );
-			});
+			this.linesCopy = this.undoClearAll;
+			this.undoClearAll = null;
+			this.paintLinesCopy();
 
 			this.drawLog( 'undoClearAll', this.undoClearAll );
-			this.undoClearAll = null;
 		} else if ( this.linesCopy.length>0 ) {
 			const line = this.linesCopy.pop();
 			this.linesRedo.push( line );
 			this.kGroupBrush.children[ this.linesCopy.length ].destroy();
+			this.updated();
 
 			this.drawLog( 'undo', line );
 		}
@@ -331,6 +345,7 @@ export class freePaintMultFromSchema {
 			this.linesCopy.push( line );
 			const kLine = new Konva.Line( this.unpackLOpts(line) );
 			this.kGroupBrush.add( kLine );
+			this.updated();
 
 			this.drawLog( 'redo', line );
 		}
@@ -341,6 +356,7 @@ export class freePaintMultFromSchema {
 		this.linesCopy = [];
 		this.linesRedo = [];
 		this.kGroupBrush.destroyChildren();
+		this.updated();
 
 		this.drawLog( 'clearAll' );
 	}
@@ -416,7 +432,23 @@ export class freePaintMultFromSchema {
 		}
 	}
 
+	updated () {
+		// wird in abgeleiteten Klassen überschrieben
+	}
+
 	///////////////////////////////////
+
+	unpack2KonvaOpts (o) {
+		// hier sind die Einträge nach unpackLOpts schon die Konva Options
+		// Ist in abgeleiteten Klassen nicht mehr so
+		return this.unpackLOpts( o );
+	}
+
+	corr4Log (p) {
+		// hier sind die Einträge (nach packLOpts) schon die zu loggenden Daten
+		// Ist in abgeleiteten Klassen nicht mehr so
+		return p;
+	}
 
 	packLOpts ( u ) {
 		const o = {
@@ -464,12 +496,7 @@ export class freePaintMultFromSchema {
 			if ( saved.c ) {
 				this.undoClearAll = saved.c;
 			}
-
-			this.linesCopy.forEach( l => {
-				const kLine = new Konva.Line( this.unpackLOpts( l ) );
-				this.kGroupBrush.add( kLine );
-			})
-			this.layer.draw();
+			this.paintLinesCopy();
 
 			this.sendButtonState();
 

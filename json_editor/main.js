@@ -29,7 +29,11 @@ import freePaintSVG from './svgs/freePaint.svg';
 
 import { freePaintMultFromSchema } from './class_extensions/freePaintMult';
 import freePaintMultJSONSchema from './schemes/freePaintMult.schema.json';
-import freePaintMultSVG from './svgs/freePaint.svg';
+import freePaintMultSVG from './svgs/freePaintMult.svg';
+
+import { freePaintRecogFromSchema } from './class_extensions/freePaintRecog';
+import freePaintRecogJSONSchema from './schemes/freePaintRecog.schema.json';
+import freePaintRecogSVG from './svgs/freePaintMult.svg';
 
 import { inputGridFromSchema } from './class_extensions/inputGrid';
 import inputGridJSONSchema from './schemes/inputGrid.schema.json';
@@ -203,6 +207,10 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new freePaintMultFromSchema( base, cfgData );
 						break;
+					case 'freePaintRecog':
+						initContainer(true);
+						creator = (cfgData) => new freePaintRecogFromSchema( base, cfgData );
+						break;
 					case 'inputGrid':
 						initContainer(true);
 						creator = (cfgData) => new inputGridFromSchema( base, cfgData );
@@ -286,6 +294,7 @@ const templs = {
 	filledBar: [ filledBarJSONSchema, filledBarSVG ],
 	freePaint: [ freePaintJSONSchema, freePaintSVG ],
 	freePaintMult: [ freePaintMultJSONSchema, freePaintMultSVG ],
+	freePaintRecog: [ freePaintRecogJSONSchema, freePaintRecogSVG ],
 	inputGrid: [ inputGridJSONSchema, inputGridSVG ],
 	numberLine: [ numberLineJSONSchema, numberLineSVG ],
 	numberLineWithAnnotations: [ numberLineWithAnnotationsJSONSchema, numberLineWithAnnotationsSVG ],

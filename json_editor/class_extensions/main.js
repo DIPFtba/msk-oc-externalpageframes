@@ -78,6 +78,8 @@ import { filledBarFromSchema } from './filledBar';
 import { freePaintFromSchema } from './freePaint';
 /// #elif __CLASS == 'freePaintMult'
 import { freePaintMultFromSchema } from './freePaintMult';
+/// #elif __CLASS == 'freePaintRecog'
+import { freePaintRecogFromSchema } from './freePaintRecog';
 /// #elif __CLASS == 'inputGrid'
 import { inputGridFromSchema } from './inputGrid';
 /// #elif __CLASS == 'numbersByPictures'
@@ -161,6 +163,8 @@ function initJSON ( json ) {
 		const io = new freePaintFromSchema( base, cfg );
 /// #elif __CLASS == 'freePaintMult'
 		const io = new freePaintMultFromSchema( base, cfg );
+/// #elif __CLASS == 'freePaintRecog'
+		const io = new freePaintRecogFromSchema( base, cfg );
 /// #elif __CLASS == 'inputGrid'
 		const io = new inputGridFromSchema( base, cfg );
 /// #elif __CLASS == 'numbersByPictures'

@@ -122,6 +122,7 @@ const ExtResFromSchema = {
 	filledBar: { version: "0.1.0" },
 	freePaint: { version: "0.1.0" },
 	freePaintMult: { version: "0.1.0" },
+	freePaintRecog: { version: "0.1.0" },
 	inputGrid: { version: "0.1.0" },
 	numberLine: { version: "0.1.0" },
 	numberLineWithAnnotations: { version: "0.1.0" },

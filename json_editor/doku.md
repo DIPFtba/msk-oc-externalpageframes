@@ -45,23 +45,61 @@
 
 #### Vergleichsoperatoren
 
-| Operator        | Beschreibung                               |
-|:---------------:|:-------------------------------------------|
-| == | Gleichheitsoperator |
-| != | Ungleichheitsoperator |
-| >  | Größer-als-Operator  |
-| <  | Kleiner-als-Operator |
-| >= | Größer-oder-gleich-Operator |
-| <= | Kleiner-oder-gleich-Operator |
-| in | IN-Operator, ergibt TRUE, wenn linker Operand in rechtem Array-Operand enthalten ist |
+<table border="1">
+  <tr>
+    <th>Operator</th>
+    <th>Beschreibung</th>
+  </tr>
+  <tr>
+    <td>==</td>
+    <td>Gleichheitsoperator</td>
+  </tr>
+  <tr>
+    <td>!=</td>
+    <td>Ungleichheitsoperator</td>
+  </tr>
+  <tr>
+    <td>&gt;</td>
+    <td>Größer-als-Operator</td>
+  </tr>
+  <tr>
+    <td>&lt;</td>
+    <td>Kleiner-als-Operator</td>
+  </tr>
+  <tr>
+    <td>&gt;=</td>
+    <td>Größer-oder-gleich-Operator</td>
+  </tr>
+  <tr>
+    <td>&lt;=</td>
+    <td>Kleiner-oder-gleich-Operator</td>
+  </tr>
+  <tr>
+    <td>in</td>
+    <td>IN-Operator, ergibt TRUE, wenn linker Operand in rechtem Array-Operand enthalten ist</td>
+  </tr>
+</table>
 
 #### Logische Operatoren
 
-| Operator        | Beschreibung                              |
-|:---------------:|:------------------------------------------|
-| and | Der logische UND-Operator gibt `true` zurück, wenn beide Operanden `true` sind. |
-| or  | Der logische ODER-Operator gibt `true` zurück, wenn mindestens einer der Operanden `true` ist. |
-| not | Der logische NICHT-Operator invertiert den Wert eines Operanden. |
+<table border="1">
+  <tr>
+    <th>Operator</th>
+    <th>Beschreibung</th>
+  </tr>
+  <tr>
+    <td>and</td>
+    <td>Der logische UND-Operator gibt `true` zurück, wenn beide Operanden `true` sind.</td>
+  </tr>
+  <tr>
+    <td>or</td>
+    <td>Der logische ODER-Operator gibt `true` zurück, wenn mindestens einer der Operanden `true` ist.</td>
+  </tr>
+  <tr>
+    <td>not</td>
+    <td>Der logische NICHT-Operator invertiert den Wert eines Operanden.</td>
+  </tr>
+</table>
 
 #### Math. Operatoren
 
@@ -119,13 +157,33 @@ Alle Events von `freePaintMulti`und **zusätzllich:**
 |`EV_NewRecog` und<br>`EV_NewRecog_<pref>`|Es wurde ein neuer Text erkannt und in die Variable `V_RecogTxt_<pref>` geschrieben|
 
 ### inputGrid
-|Event|Bedeutung|
-|:----|:--------|
-|`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen, z.B. im "Carry"-Mode (nur 2 Ziffern erlaubt) oder im normalen "Text"-Mode (falls dort Beschränkung konfiguriert ist, was derzeit über JSON-Editor nicht möglich ist)|
-|`EV_ClickWithoutIconBarMode_<userDefId>`|Ohne aktiverten Modus (Text, Paint) wurde ins grid geklickt|
-|`EV_IconBarSwitchText_<userDefId>`|Modus "Text" wurde gewählt|
-|`EV_IconBarSwitchPaint_<userDefId>`|Modus "Paint" wurde gewählt|
-|`EV_IconBarSwitchOff_<userDefId>`|Aktueller Modus wurde deaktiviert|
+
+<table border="1">
+  <tr>
+    <th>Event</th>
+    <th>Bedeutung</th>
+  </tr>
+  <tr>
+    <td>ev_InputValidation_ExtRes</td>
+    <td>Es wurde versucht, eine unerlaubte Eingabe zu machen, z.B. im "Carry"-Mode (nur 2 Ziffern erlaubt) oder im normalen "Text"-Mode (falls dort Beschränkung konfiguriert ist, was derzeit über JSON-Editor nicht möglich ist)</td>
+  </tr>
+  <tr>
+    <td>EV_ClickWithoutIconBarMode_<userDefId></td>
+    <td>Ohne aktiverten Modus (Text, Paint) wurde ins grid geklickt</td>
+  </tr>
+  <tr>
+    <td>EV_IconBarSwitchText_<userDefId></td>
+    <td>Modus "Text" wurde gewählt</td>
+  </tr>
+  <tr>
+    <td>EV_IconBarSwitchPaint_<userDefId></td>
+    <td>Modus "Paint" wurde gewählt</td>
+  </tr>
+  <tr>
+    <td>EV_IconBarSwitchOff_<userDefId></td>
+    <td>Aktueller Modus wurde deaktiviert</td>
+  </tr>
+</table>
 
 ### inputInserts
 |Event|Bedeutung|

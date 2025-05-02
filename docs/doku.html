@@ -38,66 +38,58 @@
 <li><p>Zur Evaluation der Bedingung wird die Bibliothek <code>expr-eval</code> verwendet, s. <a href="https://github.com/silentmatt/expr-eval?tab=readme-ov-file#expression-syntax">Doku</a></p></li>
 </ul>
 <h4 id="vergleichsoperatoren">Vergleichsoperatoren</h4>
-<table>
-<thead>
-<tr>
-<th style="text-align:center;">Operator</th>
-<th style="text-align:left;">Beschreibung</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center;">==</td>
-<td style="text-align:left;">Gleichheitsoperator</td>
-</tr>
-<tr>
-<td style="text-align:center;">!=</td>
-<td style="text-align:left;">Ungleichheitsoperator</td>
-</tr>
-<tr>
-<td style="text-align:center;">&gt;</td>
-<td style="text-align:left;">Größer-als-Operator</td>
-</tr>
-<tr>
-<td style="text-align:center;">&lt;</td>
-<td style="text-align:left;">Kleiner-als-Operator</td>
-</tr>
-<tr>
-<td style="text-align:center;">&gt;=</td>
-<td style="text-align:left;">Größer-oder-gleich-Operator</td>
-</tr>
-<tr>
-<td style="text-align:center;">&lt;=</td>
-<td style="text-align:left;">Kleiner-oder-gleich-Operator</td>
-</tr>
-<tr>
-<td style="text-align:center;">in</td>
-<td style="text-align:left;">IN-Operator, ergibt TRUE, wenn linker Operand in rechtem Array-Operand enthalten ist</td>
-</tr>
-</tbody>
+<table border="1">
+  <tr>
+    <th>Operator</th>
+    <th>Beschreibung</th>
+  </tr>
+  <tr>
+    <td>==</td>
+    <td>Gleichheitsoperator</td>
+  </tr>
+  <tr>
+    <td>!=</td>
+    <td>Ungleichheitsoperator</td>
+  </tr>
+  <tr>
+    <td>&gt;</td>
+    <td>Größer-als-Operator</td>
+  </tr>
+  <tr>
+    <td>&lt;</td>
+    <td>Kleiner-als-Operator</td>
+  </tr>
+  <tr>
+    <td>&gt;=</td>
+    <td>Größer-oder-gleich-Operator</td>
+  </tr>
+  <tr>
+    <td>&lt;=</td>
+    <td>Kleiner-oder-gleich-Operator</td>
+  </tr>
+  <tr>
+    <td>in</td>
+    <td>IN-Operator, ergibt TRUE, wenn linker Operand in rechtem Array-Operand enthalten ist</td>
+  </tr>
 </table>
 <h4 id="logische-operatoren">Logische Operatoren</h4>
-<table>
-<thead>
-<tr>
-<th style="text-align:center;">Operator</th>
-<th style="text-align:left;">Beschreibung</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center;">and</td>
-<td style="text-align:left;">Der logische UND-Operator gibt <code>true</code> zurück, wenn beide Operanden <code>true</code> sind.</td>
-</tr>
-<tr>
-<td style="text-align:center;">or</td>
-<td style="text-align:left;">Der logische ODER-Operator gibt <code>true</code> zurück, wenn mindestens einer der Operanden <code>true</code> ist.</td>
-</tr>
-<tr>
-<td style="text-align:center;">not</td>
-<td style="text-align:left;">Der logische NICHT-Operator invertiert den Wert eines Operanden.</td>
-</tr>
-</tbody>
+<table border="1">
+  <tr>
+    <th>Operator</th>
+    <th>Beschreibung</th>
+  </tr>
+  <tr>
+    <td>and</td>
+    <td>Der logische UND-Operator gibt `true` zurück, wenn beide Operanden `true` sind.</td>
+  </tr>
+  <tr>
+    <td>or</td>
+    <td>Der logische ODER-Operator gibt `true` zurück, wenn mindestens einer der Operanden `true` ist.</td>
+  </tr>
+  <tr>
+    <td>not</td>
+    <td>Der logische NICHT-Operator invertiert den Wert eines Operanden.</td>
+  </tr>
 </table>
 <h4 id="math-operatoren">Math. Operatoren</h4>
 <table>
@@ -253,35 +245,31 @@
 </tbody>
 </table>
 <h3 id="inputgrid">inputGrid</h3>
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">Event</th>
-<th style="text-align:left;">Bedeutung</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;"><code>ev_InputValidation_ExtRes</code> und<br><code>ev_InputValidation_&lt;pref&gt;</code></td>
-<td style="text-align:left;">Es wurde versucht, eine unerlaubte Eingabe zu machen, z.B. im "Carry"-Mode (nur 2 Ziffern erlaubt) oder im normalen "Text"-Mode (falls dort Beschränkung konfiguriert ist, was derzeit über JSON-Editor nicht möglich ist)</td>
-</tr>
-<tr>
-<td style="text-align:left;"><code>EV_ClickWithoutIconBarMode_&lt;userDefId&gt;</code></td>
-<td style="text-align:left;">Ohne aktiverten Modus (Text, Paint) wurde ins grid geklickt</td>
-</tr>
-<tr>
-<td style="text-align:left;"><code>EV_IconBarSwitchText_&lt;userDefId&gt;</code></td>
-<td style="text-align:left;">Modus "Text" wurde gewählt</td>
-</tr>
-<tr>
-<td style="text-align:left;"><code>EV_IconBarSwitchPaint_&lt;userDefId&gt;</code></td>
-<td style="text-align:left;">Modus "Paint" wurde gewählt</td>
-</tr>
-<tr>
-<td style="text-align:left;"><code>EV_IconBarSwitchOff_&lt;userDefId&gt;</code></td>
-<td style="text-align:left;">Aktueller Modus wurde deaktiviert</td>
-</tr>
-</tbody>
+<table border="1">
+  <tr>
+    <th>Event</th>
+    <th>Bedeutung</th>
+  </tr>
+  <tr>
+    <td>ev_InputValidation_ExtRes</td>
+    <td>Es wurde versucht, eine unerlaubte Eingabe zu machen, z.B. im "Carry"-Mode (nur 2 Ziffern erlaubt) oder im normalen "Text"-Mode (falls dort Beschränkung konfiguriert ist, was derzeit über JSON-Editor nicht möglich ist)</td>
+  </tr>
+  <tr>
+    <td>EV_ClickWithoutIconBarMode_<userDefId></td>
+    <td>Ohne aktiverten Modus (Text, Paint) wurde ins grid geklickt</td>
+  </tr>
+  <tr>
+    <td>EV_IconBarSwitchText_<userDefId></td>
+    <td>Modus "Text" wurde gewählt</td>
+  </tr>
+  <tr>
+    <td>EV_IconBarSwitchPaint_<userDefId></td>
+    <td>Modus "Paint" wurde gewählt</td>
+  </tr>
+  <tr>
+    <td>EV_IconBarSwitchOff_<userDefId></td>
+    <td>Aktueller Modus wurde deaktiviert</td>
+  </tr>
 </table>
 <h3 id="inputinserts">inputInserts</h3>
 <table>

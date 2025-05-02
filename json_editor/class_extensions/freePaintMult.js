@@ -19,10 +19,8 @@ export class freePaintMultFromSchema {
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.regSendInitDone(opts);
-			base.fsm.incInitCnt();
-		}
+		base.regSendInitDone();
+		base.incInitCnt();
 
 		if ( opts.width<= 0 ) {
 			opts.width += base.width - opts.x;
@@ -124,9 +122,7 @@ export class freePaintMultFromSchema {
 		window.getRectPngImage = this.getRectPngImage.bind(this);
 /// #endif
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.fsm.decInitCnt();
 	}
 
 	///////////////////////////////////
@@ -200,7 +196,7 @@ export class freePaintMultFromSchema {
 			this.kGroupBrush.add( kLine );
 		})
 		this.layer.draw();
-		this.layer.updated();
+		this.layer.linesUpdated();
 	}
 
 	///////////////////////////////////
@@ -274,7 +270,7 @@ export class freePaintMultFromSchema {
 			this.linesRedo.length = 0;	// clear redo buffer
 			this.undoClearAll = null;
 			this.paintPoints = null;
-			this.updated();
+			this.linesUpdated();
 
 			this.base.postLog( 'line', this.corr4Log(o) );
 			this.base.sendChangeState( this );	// init & send changeState & score
@@ -333,7 +329,7 @@ export class freePaintMultFromSchema {
 			const line = this.linesCopy.pop();
 			this.linesRedo.push( line );
 			this.kGroupBrush.children[ this.linesCopy.length ].destroy();
-			this.updated();
+			this.linesUpdated();
 
 			this.drawLog( 'undo', line );
 		}
@@ -345,7 +341,7 @@ export class freePaintMultFromSchema {
 			this.linesCopy.push( line );
 			const kLine = new Konva.Line( this.unpackLOpts(line) );
 			this.kGroupBrush.add( kLine );
-			this.updated();
+			this.linesUpdated();
 
 			this.drawLog( 'redo', line );
 		}
@@ -356,7 +352,7 @@ export class freePaintMultFromSchema {
 		this.linesCopy = [];
 		this.linesRedo = [];
 		this.kGroupBrush.destroyChildren();
-		this.updated();
+		this.linesUpdated();
 
 		this.drawLog( 'clearAll' );
 	}
@@ -432,7 +428,7 @@ export class freePaintMultFromSchema {
 		}
 	}
 
-	updated () {
+	linesUpdated () {
 		// wird in abgeleiteten Klassen überschrieben
 	}
 

@@ -13,10 +13,7 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 
 		}
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.regSendInitDone(opts);
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		super( base, opts );
 
@@ -25,9 +22,7 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 
 		this.myScriptApi = new myScriptApi( opts.myScript );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	scoreDef () {
@@ -63,7 +58,7 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 		}
 	}
 
-	updated () {
+	linesUpdated () {
 		this.startRecog();
 	}
 
@@ -124,8 +119,10 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 				this.recogText = text;
 				this.base.sendChangeState( this );	// init & send changeState & score
 
-				this.base.fsm.triggerEvent( 'EV_NEWRECOG' );
-				this.base.fsm.triggerEvent( 'EV_NEWRECOG_' + this.dataSettings.variablePrefix );
+				this.base.fsm.triggerEvent( 'EV_NewRecog' );
+				if ( this.dataSettings.variablePrefix ) {
+					this.base.fsm.triggerEvent( 'EV_NewRecog_' + this.dataSettings.variablePrefix );
+				}
 
 			})
 			.catch( err => {

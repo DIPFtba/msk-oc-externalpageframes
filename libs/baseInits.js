@@ -12,6 +12,7 @@ export class baseInits {
 		const defaults = {
 			container: null,
 			addSendChangeState: null,
+			//dataSettings: {}	// set by opts
 		}
 		Object.assign( this, defaults, opts );
 
@@ -192,4 +193,28 @@ export class baseInits {
 
 		return varDefs;
 	}
+
+	///////////////////////////////////
+
+	getInitDonePromise () {
+		return this.fsm.getInitDonePromise();
+	}
+
+	incInitCnt () {
+		return this.fsm.incInitCnt();
+	}
+
+	decInitCnt () {
+		return this.fsm.decInitCnt();
+	}
+
+	regSendInitDone () {
+		this.getInitDonePromise().then( () => {
+			this.fsm.triggerEvent( "EV_InitDone_ExtRes" );
+			if ( this.dataSettings && this.dataSettings.variablePrefix ) {
+				this.fsm.triggerEvent( `EV_InitDone_${this.dataSettings.variablePrefix}` );
+			}
+		});
+	}
+
 }

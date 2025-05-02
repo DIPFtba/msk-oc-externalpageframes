@@ -7,12 +7,21 @@
       - [Logische Operatoren](#logische-operatoren)
       - [Math. Operatoren](#math-operatoren)
       - [Funktionen](#funktionen)
+- [Liste der Events (alle EWK)](#liste-der-events-alle-ewk)
+    - [barPlot](#barplot)
+    - [barSliderFull](#barsliderfull)
+    - [freePaintMulti](#freepaintmulti)
+    - [freePaintRecog](#freepaintrecog)
+    - [inputGrid](#inputgrid)
+    - [inputInserts](#inputinserts)
+    - [numberLineWithAnnotations](#numberlinewithannotations)
+    - [numberLineWithArcs](#numberlinewitharcs)
+    - [textAreaInserts](#textareainserts)
 - [Markierbarer Balken (filledBar)](#markierbarer-balken-filledbar)
 - [Freihand Malen/Markieren (freePaint)](#freihand-malenmarkieren-freepaint)
 - [Eingabefeld mit Buttons (inputInserts)](#eingabefeld-mit-buttons-inputinserts)
 - [Zahlenstrahl mit Bögen (numberLineWithArcs)](#zahlenstrahl-mit-bögen-numberlinewitharcs)
 - [freePaint mit externen Buttons (freePaintMult)](#freepaint-mit-externen-buttons-freepaintmult)
-
 
 # Scoring (alle EWK)
 
@@ -80,6 +89,66 @@ folgende Funktionen sind in allen EWK definiert:
 
 
 
+# Liste der Events (alle EWK)
+
+Folgende EWK triggern Events
+
+### barPlot
+|Event|Bedeutung|
+|:----|:--------|
+|`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von `Vorkomma-Stellen` und/oder `Nachkomma-Stellen` bei editierbaren y-Achsen-Labels oder Bar-Labels)|
+
+### barSliderFull
+|Event|Bedeutung|
+|:----|:--------|
+|`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von `Vorkomma-Stellen` und/oder `Nachkomma-Stellen` bei editierbaren Labels)|
+
+### freePaintMulti
+|Event|Bedeutung|
+|:----|:--------|
+|`EV_InitDone_ExtRes` und<br>`EV_InitDone_<pref>`|Initialisierung der EWK ist abgeschlossen|
+|`EV_CAN_UNDO`|'Undo' & 'ClearAll' stehen zur Verfügung|
+|`EV_CANNOT_UNDO`|'Undo' & 'ClearAll' stehen nicht zur Verfügung|
+|`EV_CAN_REDO`|'Redo' steht zur Verfügung|
+|`EV_CANNOT_REDO`|'Redo' steht nicht zur Verfügung|
+
+### freePaintRecog
+Alle Events von `freePaintMulti`und **zusätzllich:**
+|Event|Bedeutung|
+|:----|:--------|
+|`EV_NewRecog` und<br>`EV_NewRecog_<pref>`|Es wurde ein neuer Text erkannt und in die Variable `V_RecogTxt_<pref>` geschrieben|
+
+### inputGrid
+|Event|Bedeutung|
+|:----|:--------|
+|`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen, z.B. im "Carry"-Mode (nur 2 Ziffern erlaubt) oder im normalen "Text"-Mode (falls dort Beschränkung konfiguriert ist, was derzeit über JSON-Editor nicht möglich ist)|
+|`EV_ClickWithoutIconBarMode_<userDefId>`|Ohne aktiverten Modus (Text, Paint) wurde ins grid geklickt|
+|`EV_IconBarSwitchText_<userDefId>`|Modus "Text" wurde gewählt|
+|`EV_IconBarSwitchPaint_<userDefId>`|Modus "Paint" wurde gewählt|
+|`EV_IconBarSwitchOff_<userDefId>`|Aktueller Modus wurde deaktiviert|
+
+### inputInserts
+|Event|Bedeutung|
+|:----|:--------|
+|`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen, es sind nur Dezimalzahlen und Rechenzeichen in beliebigen Reihenfolgen erlaubt|
+
+### numberLineWithAnnotations
+|Event|Bedeutung|
+|:----|:--------|
+|`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von `Vorkomma-Stellen` und/oder `Nachkomma-Stellen` bei editierbaren Eingabefeldern)|
+
+### numberLineWithArcs
+|Event|Bedeutung|
+|:----|:--------|
+|`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von `Vorkomma-Stellen` und/oder `Nachkomma-Stellen` bei editierbaren Achsenlabels)|
+
+### textAreaInserts
+|Event|Bedeutung|
+|:----|:--------|
+|`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen (falls dort Beschränkung der Zeichen oider der Länge konfiguriert ist, was derzeit über JSON-Editor nicht möglich ist)|
+
+
+
 
 # Markierbarer Balken (filledBar)
 
@@ -95,6 +164,7 @@ folgende Funktionen sind in allen EWK definiert:
 
 
 
+
 # Freihand Malen/Markieren (freePaint)
 
 - Im Reiter `PaintArea` wird der Bereich spezifiziert, in dem Pinsel/Marker verwendet werden können. Der sollte die Icons nicht beinhalten.
@@ -104,6 +174,7 @@ folgende Funktionen sind in allen EWK definiert:
 - Im Reiter `Rechteck / Linien` sind zusätzliche Rechtecke und/oder Linien definierbar. Die Rahmen der Rechtecke und die Linien sind **IMMER im Vordergund**, also nicht mit Pinsel/Marker übermalbar. `Füllg. Ebene` gibt bei Rechtecken an, ob diese keine Füllung haben (=0), oder Füllung im Hintergund (=1, mit Pinsel/Marker übermalbar) oder Füllung im Vordergrund (=2, nicht übermalbar) haben
 
 - Bei Rechtecken kann durch `begr. Pinsel` und/oder `begr. Marker` eingeschaltet werden, dass Pinsel/Marker nur in diesem (und allen anderen mit dieser aktivierten Option) Rechtecken malen und **NICHT** (wie Standard) innerhalb der PaintArea
+
 
 
 
@@ -154,6 +225,7 @@ Die Erweiterung sendet folgende Events:
 
 |Event|Bedeutung|
 |:----|:--------|
+|`EV_InitDone_ExtRes` und<br>`EV_InitDone_<pref>`|Initialisierung der EWK ist abgeschlossen|
 |`EV_CAN_UNDO`|'Undo' & 'ClearAll' stehen zur Verfügung|
 |`EV_CANNOT_UNDO`|'Undo' & 'ClearAll' stehen nicht zur Verfügung|
 |`EV_CAN_REDO`|'Redo' steht zur Verfügung|

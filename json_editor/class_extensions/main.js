@@ -121,15 +121,11 @@ function initJSON ( json ) {
 	const cfg = clearCfgJson( json );
 
 /// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts'
-	const base = new baseInits();
+	const base = new baseInits( { dataSettings: cfg.dataSettings } );
 /// #else
-	const base = new baseInits( { container: 'container' } );
+	const base = new baseInits( { container: 'container', dataSettings: cfg.dataSettings } );
 /// #endif
 	baseInitialized.resolvePromise( base );
-
-	if ( cfg.dataSettings ) {
-		base.dataSettings = cfg.dataSettings;
-	}
 
 /// #if __CANHAVESCORINGVALS
 	// load Parser lazy or not

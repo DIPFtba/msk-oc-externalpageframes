@@ -7,6 +7,16 @@
 <li><a href="#logische-operatoren">Logische Operatoren</a></li>
 <li><a href="#math-operatoren">Math. Operatoren</a></li>
 <li><a href="#funktionen">Funktionen</a></li></ul></li>
+<li><a href="#liste-der-events-alle-ewk">Liste der Events (alle EWK)</a><ul>
+<li><a href="#barplot">barPlot</a></li>
+<li><a href="#barsliderfull">barSliderFull</a></li>
+<li><a href="#freepaintmulti">freePaintMulti</a></li>
+<li><a href="#freepaintrecog">freePaintRecog</a></li>
+<li><a href="#inputgrid">inputGrid</a></li>
+<li><a href="#inputinserts">inputInserts</a></li>
+<li><a href="#numberlinewithannotations">numberLineWithAnnotations</a></li>
+<li><a href="#numberlinewitharcs">numberLineWithArcs</a></li>
+<li><a href="#textareainserts">textAreaInserts</a></li></ul></li>
 <li><a href="#markierbarer-balken-filledbar">Markierbarer Balken (filledBar)</a></li>
 <li><a href="#freihand-malenmarkieren-freepaint">Freihand Malen/Markieren (freePaint)</a></li>
 <li><a href="#eingabefeld-mit-buttons-inputinserts">Eingabefeld mit Buttons (inputInserts)</a></li>
@@ -163,6 +173,176 @@
 </tr>
 </tbody>
 </table>
+<h1 id="liste-der-events-alle-ewk">Liste der Events (alle EWK)</h1>
+<p>Folgende EWK triggern Events</p>
+<h3 id="barplot">barPlot</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>ev_InputValidation_ExtRes</code> und<br><code>ev_InputValidation_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von <code>Vorkomma-Stellen</code> und/oder <code>Nachkomma-Stellen</code> bei editierbaren y-Achsen-Labels oder Bar-Labels)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="barsliderfull">barSliderFull</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>ev_InputValidation_ExtRes</code> und<br><code>ev_InputValidation_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von <code>Vorkomma-Stellen</code> und/oder <code>Nachkomma-Stellen</code> bei editierbaren Labels)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="freepaintmulti">freePaintMulti</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>EV_InitDone_ExtRes</code> und<br><code>EV_InitDone_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Initialisierung der EWK ist abgeschlossen</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_CAN_UNDO</code></td>
+<td style="text-align:left;">'Undo' &amp; 'ClearAll' stehen zur Verfügung</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_CANNOT_UNDO</code></td>
+<td style="text-align:left;">'Undo' &amp; 'ClearAll' stehen nicht zur Verfügung</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_CAN_REDO</code></td>
+<td style="text-align:left;">'Redo' steht zur Verfügung</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_CANNOT_REDO</code></td>
+<td style="text-align:left;">'Redo' steht nicht zur Verfügung</td>
+</tr>
+</tbody>
+</table>
+<h3 id="freepaintrecog">freePaintRecog</h3>
+<p>Alle Events von <code>freePaintMulti</code>und <strong>zusätzllich:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>EV_NewRecog</code> und<br><code>EV_NewRecog_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Es wurde ein neuer Text erkannt und in die Variable <code>V_RecogTxt_&lt;pref&gt;</code> geschrieben</td>
+</tr>
+</tbody>
+</table>
+<h3 id="inputgrid">inputGrid</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>ev_InputValidation_ExtRes</code> und<br><code>ev_InputValidation_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Es wurde versucht, eine unerlaubte Eingabe zu machen, z.B. im "Carry"-Mode (nur 2 Ziffern erlaubt) oder im normalen "Text"-Mode (falls dort Beschränkung konfiguriert ist, was derzeit über JSON-Editor nicht möglich ist)</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_ClickWithoutIconBarMode_&lt;userDefId&gt;</code></td>
+<td style="text-align:left;">Ohne aktiverten Modus (Text, Paint) wurde ins grid geklickt</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_IconBarSwitchText_&lt;userDefId&gt;</code></td>
+<td style="text-align:left;">Modus "Text" wurde gewählt</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_IconBarSwitchPaint_&lt;userDefId&gt;</code></td>
+<td style="text-align:left;">Modus "Paint" wurde gewählt</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_IconBarSwitchOff_&lt;userDefId&gt;</code></td>
+<td style="text-align:left;">Aktueller Modus wurde deaktiviert</td>
+</tr>
+</tbody>
+</table>
+<h3 id="inputinserts">inputInserts</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>ev_InputValidation_ExtRes</code> und<br><code>ev_InputValidation_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Es wurde versucht, eine unerlaubte Eingabe zu machen, es sind nur Dezimalzahlen und Rechenzeichen in beliebigen Reihenfolgen erlaubt</td>
+</tr>
+</tbody>
+</table>
+<h3 id="numberlinewithannotations">numberLineWithAnnotations</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>ev_InputValidation_ExtRes</code> und<br><code>ev_InputValidation_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von <code>Vorkomma-Stellen</code> und/oder <code>Nachkomma-Stellen</code> bei editierbaren Eingabefeldern)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="numberlinewitharcs">numberLineWithArcs</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>ev_InputValidation_ExtRes</code> und<br><code>ev_InputValidation_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von <code>Vorkomma-Stellen</code> und/oder <code>Nachkomma-Stellen</code> bei editierbaren Achsenlabels)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="textareainserts">textAreaInserts</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>ev_InputValidation_ExtRes</code> und<br><code>ev_InputValidation_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Es wurde versucht, eine unerlaubte Eingabe zu machen (falls dort Beschränkung der Zeichen oider der Länge konfiguriert ist, was derzeit über JSON-Editor nicht möglich ist)</td>
+</tr>
+</tbody>
+</table>
 <h1 id="markierbarer-balken-filledbar">Markierbarer Balken (filledBar)</h1>
 <ul>
 <li><p>"<strong>Markierbar nur Vielfache von</strong>" spezifiziert, welche Werte markiert werden können. Zur Auswahl stehen "kleine Ticks" (dann können nur kleine Ticks markiert werden, je nachdem, wie diese definiert sind), "1er", "10er" oder "(frei)" (dann ist Markierung frei wählbar, auch alle Zwischenwerte)</p></li>
@@ -234,6 +414,10 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td style="text-align:left;"><code>EV_InitDone_ExtRes</code> und<br><code>EV_InitDone_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Initialisierung der EWK ist abgeschlossen</td>
+</tr>
 <tr>
 <td style="text-align:left;"><code>EV_CAN_UNDO</code></td>
 <td style="text-align:left;">'Undo' &amp; 'ClearAll' stehen zur Verfügung</td>

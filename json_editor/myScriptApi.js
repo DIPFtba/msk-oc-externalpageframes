@@ -16,7 +16,9 @@ export class myScriptApi {
 			url: "https://cloud.myscript.com/api/v4.0/iink/recognize",
 			acceptHeader: "application/x-latex, application/json",
 
-			custom_sk_enabled_subset: "0123456789+-*:=",
+			// https://developer.myscript.com/docs/files/math-sk-symbols.txt
+			// custom_sk_enabled_subset: "0123456789+-*:=",
+
 			reqOpts: {
 				contentType: "Math",
 				configuration: {
@@ -39,23 +41,23 @@ export class myScriptApi {
 
 		mergeDeep( Object.assign( this, defaultOpts, extCfg ), opts );
 
-		if ( this.custom_sk_enabled_subset ) {
-			mergeDeep( this.reqOpts.configuration.math, {
-				"custom-sk": {
-					type: "Math Enabled Subset",
-					content: this.custom_sk_enabled_subset,
-				}
-			});
-		}
+		this.reqController = [];
 	}
 
 	///////////////////////////////////
 
-	async startRecog ( strokes ) {
-
-		this.cancelRecog();
+	async startRecog ( strokes, custom_sk_enabled_subset = this.custom_sk_enabled_subset ) {
 
 		const reqOpts = this.reqOpts;
+		if ( custom_sk_enabled_subset ) {
+			mergeDeep( this.reqOpts.configuration.math, {
+				"custom-sk": {
+					type: "Math Enabled Subset",
+					content: custom_sk_enabled_subset,
+				}
+			});
+		}
+
 		reqOpts.strokes = strokes;
 		const body = JSON.stringify(reqOpts);
 
@@ -66,7 +68,8 @@ export class myScriptApi {
 			"hmac": await this.getHk( body ),
 		}
 
-		this.reqController = new AbortController();
+		const reqController = new AbortController();
+		this.reqController.push( reqController );
 
 		const pr = new Promise( ( res, rej ) => {
 
@@ -74,7 +77,7 @@ export class myScriptApi {
 				method: "POST",
 				headers,
 				body,
-				signal: this.reqController.signal,
+				signal: reqController.signal,
 			})
 				.then( response => {
 
@@ -102,7 +105,8 @@ export class myScriptApi {
 					}
 				})
 				.finally( () => {
-					this.reqController = null;
+					// Remove the controller from the array after the request is completed
+					this.reqController = this.reqController.filter( ( ctrl ) => ctrl !== reqController );
 				});
 		});
 
@@ -111,10 +115,12 @@ export class myScriptApi {
 
 	///////////////////////////////////
 
-	cancelRecog () {
-		if ( this.reqController ) {
+	cancelAllRecogs () {
+		if ( this.reqController.length > 0 ) {
 			this.aborted = true;
-			this.reqController.abort();
+			this.reqController.forEach( ( ctrl ) => {
+				ctrl.abort();
+			});
 			this.aborted = false;
 		}
 	}

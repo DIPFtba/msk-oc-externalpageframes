@@ -6,19 +6,14 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 
 	constructor ( base, opts = {} ) {
 
-		const defaultOpts = {
-
-			myScript: {
-			},
-
-		}
-
 		base.incInitCnt();
 
 		super( base, opts );
 
 		this.startTs = +Date.now();
-		this.recogText = "";
+		this.recogTxt = "";
+		this.recogTxtX = Array( opts.myScript.sk_enabled_subsets.length || 0 ).fill("");
+		this.base.sendChangeState(this);
 
 		this.myScriptApi = new myScriptApi( opts.myScript );
 
@@ -26,15 +21,28 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 	}
 
 	scoreDef () {
-		return {
-			[ `V_RecogTxt_${this.dataSettings.variablePrefix}` ]: this.recogText,
-		};
+		if ( !( "recogTxt" in this ) ) {
+			// only freePaintMultFromSchema is initialized, no recogTxt yet
+			return {};
+		}
+
+		const obj = {};
+
+		if ( this.myScript.withOut_sk ) {
+			obj[ `V_RecogTxt_${this.dataSettings.variablePrefix}` ] = this.recogTxt;
+		}
+
+		this.myScript.sk_enabled_subsets.forEach( (sk, i) => {
+			obj[ `V_RecogTxt${i+1}_${this.dataSettings.variablePrefix}` ] = this.recogTxtX[i];
+		});
+
+		return obj;
 	}
 
 	///////////////////////////////////
 
 	iStartDraw ( ev ) {
-		this.cancelRecog();
+		this.cancelAllRecogs();
 		const t = +Date.now() - this.startTs;
 		const [ x, y ] = super.iStartDraw( ev );
 		this.paintPointsWithTS = [{ x, y, t }];
@@ -113,25 +121,39 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 			t: l.p.map( d => d.t ),
 		}) );
 
-		this.myScriptApi.startRecog( strokes )
-			.then( text => {
+		const sendEvents = () => {
+			this.base.sendChangeState( this );	// init & send changeState & score
 
-				this.recogText = text;
-				this.base.sendChangeState( this );	// init & send changeState & score
+			this.base.fsm.triggerEvent( 'EV_NewRecog' );
+			if ( this.dataSettings.variablePrefix ) {
+				this.base.fsm.triggerEvent( 'EV_NewRecog_' + this.dataSettings.variablePrefix );
+			}
+		}
+		const catchError = ( err ) => {
+			console.error( "freePaintRecog error:", err );
+		}
 
-				this.base.fsm.triggerEvent( 'EV_NewRecog' );
-				if ( this.dataSettings.variablePrefix ) {
-					this.base.fsm.triggerEvent( 'EV_NewRecog_' + this.dataSettings.variablePrefix );
-				}
+		if ( this.myScript.withOut_sk ) {
+			this.myScriptApi.startRecog( strokes )
+				.then( text => {
+					this.recogTxt = text;
+					sendEvents();
+				})
+				.catch( catchError );
+		}
 
-			})
-			.catch( err => {
-				console.error( "freePaintRecog error:", err );
-			});
+		this.myScript.sk_enabled_subsets.forEach( (sk, i) => {
+			this.myScriptApi.startRecog( strokes, sk )
+				.then( text => {
+					this.recogTxtX[i] = text;
+					sendEvents();
+				})
+				.catch( catchError );
+		});
 	}
 
-	cancelRecog () {
-		this.myScriptApi.cancelRecog();
+	cancelAllRecogs () {
+		this.myScriptApi.cancelAllRecogs();
 	}
 
 }

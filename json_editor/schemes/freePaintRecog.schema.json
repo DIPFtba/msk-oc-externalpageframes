@@ -327,6 +327,51 @@
 			}
 		},
 
+		"myScript": {
+			"title": "Recognition",
+			"type": "object",
+			"format": "grid-strict",
+			"options": {
+				"titleHidden": true,
+				"disable_collapse": true,
+				"disable_edit_json": true,
+				"disable_properties": true
+			},
+			"properties": {
+
+				"withOut_sk": {
+					"title": "Text ohne Einschränkung erkennen, in Variablen 'V_RecogTxt_&lt;prefix&gt;' speichern",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true
+					}
+				},
+
+				"sk_enabled_subsets": {
+					"title": "Subsets",
+					"type": "array",
+					"format": "table",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 12,
+						"grid_break": true,
+						"uniqueItems": true,
+						"infoText": "Einschränkungen ('custom-sk Math Enabled Subsets') für die Erkennung, in Variablen 'V_RecogTxtX_<pref>', s. https://developer.myscript.com/docs/files/math-sk-symbols.txt"
+					},
+					"items": {
+						"title": "Subset",
+						"type": "string"
+					},
+					"default": ["0123456789+-*:="]
+				}
+			}
+		},
+
 		"dataSettings": {
 			"title": "Daten",
 			"type": "object",
@@ -357,7 +402,7 @@
 
 				"variablePrefix": {
 					"title": "Variablen-Prefix",
-					"description": "Erzeugt wird 'V_Status_&lt;pref&gt;' und 'V_RecogTxt_&lt;pref&gt;'",
+					"description": "Erzeugt wird 'V_Status_&lt;pref&gt;' und 'V_RecogTxt_&lt;pref&gt;' bzw. 'V_RecogTxtX_&lt;pref&gt;', s. Tab 'Recognition'",
 					"type": "string",
 					"default": "1a",
 					"options": {

@@ -859,6 +859,16 @@
 						"infoText": "Multiplikator für X-Werte (um gebrochene Zahlen als Integer zu speichern)"
 					}
 				},
+				"createConnXVars": {
+					"title": "Erzeuge V_Status_&lt;pref&gt;_Conn_X Status-Variablen",
+					"type": "boolean",
+					"format": "checkbox",
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Erzeuge Status-Variablen, die für jede Verbindung angeben, ob Verbindung von Labels zum Strahl erstellt wurde"
+					}
+				},
 				"createConnSomeVars": {
 					"title": "Erzeuge V_Status_&lt;pref&gt;_Conn_Any Status-Variable",
 					"type": "boolean",
@@ -877,6 +887,16 @@
 						"grid_columns": 12,
 						"grid_break": true,
 						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Verbindungen von Labels zum Strahl erstellt wurde"
+					}
+				},
+				"createInpXVars": {
+					"title": "Erzeuge V_Status_&lt;pref&gt;_Lab_X Status-Variablen",
+					"type": "boolean",
+					"format": "checkbox",
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Erzeuge Status-Variablen, die für jedes Label angeben, ob Label mit Text benannt wurde"
 					}
 				},
 				"createInpSomeVars": {

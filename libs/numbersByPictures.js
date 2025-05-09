@@ -20,8 +20,8 @@ export class numbersByPictures {
 
 		const defaults = {
 
-			// x, y
-			// width
+			// x, y	// position of the first element
+			// width 	// width of all elements
 
 			iconBar: {
 				//x, y,
@@ -75,7 +75,7 @@ export class numbersByPictures {
 		}
 		mergeDeep( Object.assign( this, defaults ), opts );
 		const sepExtraMult = 0.6;
-		if ( !this.pics.cuboid ) 		this.pics.cuboidDepth = this.pics.width*18/50;
+		if ( !this.pics.cuboidDepth ) 	this.pics.cuboidDepth = this.pics.width*18/50;
 		if ( !this.pics.barSpacing )	this.pics.barSpacing = this.pics.width/(9+sepExtraMult);
 		if ( !this.pics.barSeparator )	this.pics.barSeparator = this.pics.barSpacing*sepExtraMult;
 		if ( !this.pics.dotSpacing )	this.pics.dotSpacing = (this.pics.width-2*this.pics.radius)/(9+sepExtraMult);
@@ -90,7 +90,7 @@ export class numbersByPictures {
 		// stage.on( 'mouseleave', () => this.tooltip.hide() );
 
 		// Render iconBar
-		if ( this.iconBar.x && this.iconBar.y ) {
+		if ( ( 'x' in this.iconBar ) && ( 'y' in this.iconBar ) ) {
 			const iconDepth = this.iconBar.width*this.pics.cuboidDepth/(this.pics.width+this.pics.cuboidDepth);
 			const iconRadius = this.pics.radius*1.5;
 

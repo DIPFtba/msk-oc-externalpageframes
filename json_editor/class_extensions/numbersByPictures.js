@@ -9,12 +9,12 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 			base.fsm.incInitCnt();
 		}
 
-		const iconWidth = 22;
-		const depth = 18;
-
 		opts.pics = {
-			width: 60,
+			width: opts.picsWidth || 60,
 		}
+
+		const iconWidth = 22;
+		const depth = opts.pics.width*18/50; // bisher wurde fälschlicherweise 18 verwendet, wird ja aber nur zum zentireren hier verwendet
 
 		// iconbar default data
 		if ( !opts.readonly ) {
@@ -29,7 +29,7 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 
 		// x is start of pics
 		opts.x += iconWidth + 14;
-		opts.y += Math.max( 0, 4*22 + 3*2 - ( opts.pics.width + depth ) ) / 2 + depth;
+		opts.y += Math.max( 0, 4*iconWidth + 3*2 - ( opts.pics.width + depth ) ) / 2 + depth;
 		if ( opts.width<= 0 ) {
 			opts.width += base.width - opts.x;
 		}

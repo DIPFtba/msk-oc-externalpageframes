@@ -49,6 +49,14 @@
 					},
 					"default": -45
 				},
+				"picsWidth": {
+					"title": "Breite der Bilder",
+					"type": "integer",
+					"options": {
+						"hidden": true
+					},
+					"default": 60
+				},
 				"readonly": {
 					"title": "Daten unveränderbar (nicht interaktiv)",
 					"type": "boolean",

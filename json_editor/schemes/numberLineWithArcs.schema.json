@@ -1188,6 +1188,47 @@
 					}
 				},
 
+				"createInpArcLabAny": {
+					"title": "Erzeuge 'V_Status_&lt;pref&gt;_ArcLab_Any' Status-Variablen",
+					"type": "boolean",
+					"format": "checkbox",
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Erzeuge Status-Variable, die angibt, ob ein Bogenlabel mit Text benannt wurde"
+					}
+				},
+				"createInpArcLabAll": {
+					"title": "Erzeuge 'V_Status_&lt;pref&gt;_ArcLab_All' Status-Variablen",
+					"type": "boolean",
+					"format": "checkbox",
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Bogenlabels mit Text benannt wurden"
+					}
+				},
+
+				"createInpLabAny": {
+					"title": "Erzeuge 'V_Status_&lt;pref&gt;_Lab_Any' Status-Variablen",
+					"type": "boolean",
+					"format": "checkbox",
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Erzeuge Status-Variable, die angibt, ob ein Achsenlabel mit Text benannt wurde"
+					}
+				},
+				"createInpLabAll": {
+					"title": "Erzeuge 'V_Status_&lt;pref&gt;_Lab_All' Status-Variablen",
+					"type": "boolean",
+					"format": "checkbox",
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Achsenlabel mit Text benannt wurden"
+					}
+				},
 
 				"scoringVals": {
 					"title": "Scoring Werte",

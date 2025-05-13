@@ -274,7 +274,7 @@ export class numberLineWithArcs {
 				logObjectId: !( to.labelReadonly || this.readonly ) ? to.logObjectId : null,
 				logRef: () => ({ atValue: to.value }),
 				base: this.base,
-			})
+			});
 
 			if ( this.tickFrameWidth ) {
 				to.kLabelLine = new Konva.Line({
@@ -442,7 +442,7 @@ export class numberLineWithArcs {
 					ao.label = ao.labelObj.value;	// for get/set State()
 					this.sendChangeState();
 				},
-			}) )
+			}) );
 		}
 
 		// arc

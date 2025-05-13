@@ -18,7 +18,11 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 
 		super( base, opts );
 
-		addScoring( this, opts, addMods.Parser );
+		const me = this;
+		const addFnc = {
+			compArcs: (arcs,tol) => me.compArcs(arcs,tol),
+		}
+		addScoring( this, opts, addMods.Parser, addFnc );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();
@@ -36,6 +40,9 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 	}
 
 	scoreDef () {
+		if ( this.readonly ) {
+			return {};
+		}
 		const settings = this.dataSettings;
 		const pref = settings.variablePrefix;
 		const mult = settings.xMult;
@@ -58,6 +65,26 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 		for ( let i=0; i<settings.saveTicks; i++ ) {
 			scores[`V_Input_${pref}_LabVal_${i+1}`] = i<edTicks.length ? Math.round( edTicks[i].value*mult ) : null;
 			scores[`V_Input_${pref}_Lab_${i+1}`] = this.labTickValFnc( i<edTicks.length && edTicks[i].labelObj ? edTicks[i].labelObj.value : '' );
+		}
+
+		// Save V_Status_xy
+		if ( settings.createInpArcLabAny || settings.createInpArcLabAll ) {
+			const arcRwLabs = this.arcs.filter( a => !a.labelReadonly ).map( a => a.label!==null ? a.label : '' );
+			if ( settings.createInpArcLabAny ) {
+				scores[`V_Status_${pref}_ArcLab_Any`] = +arcRwLabs.some( a => a.length>0 );
+			}
+			if ( settings.createInpArcLabAll ) {
+				scores[`V_Status_${pref}_ArcLab_All`] = +( arcRwLabs.length>0 && arcRwLabs.every( a => a.length>0 ) );
+			}
+		}
+		if ( settings.createInpLabAny || settings.createInpLabAll ) {
+			const tickRwLabs = this.ticks.filter( t => !t.labelReadonly ).map( t => t.label!==null ? t.label : '' );
+			if ( settings.createInpLabAny ) {
+				scores[`V_Status_${pref}_Lab_Any`] = +tickRwLabs.some( l => l.length>0 );
+			}
+			if ( settings.createInpLabAll ) {
+				scores[`V_Status_${pref}_Lab_All`] = +( tickRwLabs.length>0 && tickRwLabs.every( l => l.length>0 ) );
+			}
 		}
 
 		if ( this.computeScoringVals ) {

@@ -202,7 +202,7 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 
 export function addStatusVarDef ( obj, json ) {
 
-	if ( !obj.statusVarDef && json.dataSettings && json.dataSettings.variablePrefix ) {
+	if ( !obj.readonly && !obj.statusVarDef && json.dataSettings && json.dataSettings.variablePrefix ) {
 		const statVarName = `V_Status_${json.dataSettings.variablePrefix}`;
 		obj.statusVarDef = function () {
 			return {

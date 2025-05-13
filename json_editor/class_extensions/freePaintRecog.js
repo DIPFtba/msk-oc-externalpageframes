@@ -2,6 +2,9 @@
 import { freePaintMultFromSchema } from "./freePaintMult";
 import { myScriptApi } from "../myScriptApi";
 
+//
+// Wie freePaintMultFromSchema, aber mit Erkennung des "gemalten" Mathe-Terms (myScript)
+//
 export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 
 	constructor ( base, opts = {} ) {

@@ -49,14 +49,47 @@ find . -type f -name "*.zip" | while read -r zipfile; do
             #     pack=1
             # fi
 
-            # textareaInserts
-            if [[ "$name" = "textareaInserts" ]]
+            # # textareaInserts
+            # if [[ "$name" = "textareaInserts" ]]
+            # then
+            #     echo
+            #     echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            #     # ___options.toolbar.euro=false hinzufügen
+            #     patch "$jsonfile" '.___options.toolbar.euro = false'
+            #     pack=1
+            # fi
+
+            # numbersByPictures
+            if [[ "$name" = "numbersByPictures" ]]
             then
                 echo
                 echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
                 # ___options.toolbar.euro=false hinzufügen
-                patch "$jsonfile" '.___options.toolbar.euro = false'
+                patch "$jsonfile" '.___defs.picsWidth = 60'
                 pack=1
+            fi
+
+            # numberLineWithAnnotations
+            if [[ "$name" = "numberLineWithAnnotations" ]]
+            then
+                echo
+                echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+                # ___options.toolbar.euro=false hinzufügen
+                patch "$jsonfile" '.dataSettings.createConnXVars = false'
+                patch "$jsonfile" '.dataSettings.createInpXVars = false'
+                pack=1
+            fi
+
+            # numberLineWithAnnotations
+            if [[ "$name" = "numberLineWithArcs" ]]
+            then
+                echo
+                echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+                # ___options.toolbar.euro=false hinzufügen
+                patch "$jsonfile" '.dataSettings.createInpArcLabAny = false'
+                patch "$jsonfile" '.dataSettings.createInpArcLabAll = false'
+                patch "$jsonfile" '.dataSettings.createInpLabAny = false'
+                patch "$jsonfile" '.dataSettings.createInpLabAll = false'
             fi
 
         fi

@@ -1,5 +1,10 @@
 import { mergeDeep, getPosOfEvent, setStatePostProc, ignoreEvent } from '../../libs/common'
 
+//
+// Ähnlich wie freePaintFromSchema, aber ohne Toolbar, die Farben werden von außen gesetzt
+// Unterstützt Undo/Redo und ClearAll
+//
+
 // testcalls:
 //			window.postMessage( JSON.stringify( { callId: 'getImage' } ), '*' );
 //			window.postMessage( JSON.stringify( ['undo'] ), '*' );
@@ -122,7 +127,7 @@ export class freePaintMultFromSchema {
 		window.getRectPngImage = this.getRectPngImage.bind(this);
 /// #endif
 
-		base.fsm.decInitCnt();
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////

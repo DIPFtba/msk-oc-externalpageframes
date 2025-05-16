@@ -1195,7 +1195,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variable, die angibt, ob ein Bogenlabel mit Text benannt wurde"
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob ein Bogenlabel mit Text benannt wurde"
 					}
 				},
 				"createInpArcLabAll": {
@@ -1205,7 +1205,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Bogenlabels mit Text benannt wurden"
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob alle Bogenlabels mit Text benannt wurden"
 					}
 				},
 
@@ -1216,7 +1216,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variable, die angibt, ob ein Achsenlabel mit Text benannt wurde"
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob ein Achsenlabel mit Text benannt wurde"
 					}
 				},
 				"createInpLabAll": {
@@ -1226,7 +1226,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Achsenlabel mit Text benannt wurden"
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob alle Achsenlabel mit Text benannt wurden"
 					}
 				},
 

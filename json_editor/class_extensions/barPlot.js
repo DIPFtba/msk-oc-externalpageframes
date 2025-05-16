@@ -68,6 +68,10 @@ export class barPlotFromSchema extends barPlot {
 
 		addScoring( this, opts, addMods.Parser );
 
+		this.rwBars = this.bars.filter( b => !b.readonly );
+		this.rwBarLabels = this.bars.map( b => b.labelObj ).filter( l => !l.readonly );
+		this.rwYLabels = this.yAxis?.labelObjs ? this.yAxis.labelObjs.filter( l => !l.readonly ) : [];
+
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();
 		}
@@ -88,52 +92,47 @@ export class barPlotFromSchema extends barPlot {
 
 	scoreDef () {
 		const res = {};
-		if ( this.readonly ) {
+		if ( this.readonly || !this.rwBars ) { // readonly or only super() initialized
 			return res;
 		}
 
-		if ( this.dataSettings  ) {
-			const pref = this.dataSettings.variablePrefix;
-			if ( pref ) {
-				const yMult = this.dataSettings.yMult;
+		const pref = this.dataSettings?.variablePrefix;
+		if ( pref ) {
+			const yMult = this.dataSettings.yMult;
 
-				if ( this.bars.length>0 ) {
-					let i=1;
-					this.bars.forEach( bar => {
-						if ( !bar.readonly ) {
-							res[`V_Input_${pref}_Val_${i++}`] = Math.round( bar.value * yMult );
-						}
-					});
-					i=1;
-					this.bars.forEach( bar => {
-						if ( bar.labelObj && !bar.labelObj.readonly ) {
-							res[`V_Input_${pref}_Lab_${i++}`] = this.labBValFnc( bar.labelObj.value || '' );
-						}
-					});
-				}
+			this.rwBars.forEach( (bar,i) => {
+				res[`V_Input_${pref}_Val_${i+1}`] = Math.round( bar.value * yMult );
+			});
+			this.rwBarLabels.forEach( (barLab,i) => {
+				res[`V_Input_${pref}_Lab_${i+1}`] = this.labBValFnc( barLab.value || '' );
+			});
 
-				if ( this.titleObj && !this.titleObj.readonly ) {
-					res[`V_Input_${pref}_Title`] = this.titleObj.value || '';
-				}
+			this.rwYLabels.forEach( (yLab,i) => {
+				res[`V_Input_${pref}_yLab_${i+1}`] = this.labYValFnc( yLab.value || '' );
+			});
 
-				if ( this.yAxis.axisLabelObj && !this.yAxis.axisLabelObj.readonly )	{
-					res[`V_Input_${pref}_yTitle`] = this.yAxis.axisLabelObj.value || '';
-				}
+			if ( this.titleObj && !this.titleObj.readonly ) {
+				res[`V_Input_${pref}_Title`] = this.titleObj.value || '';
+			}
 
-				if ( this.yAxis.labelObjs && this.yAxis.labelObjs.length > 0 ) {
-					let i=1;
-					this.yAxis.labelObjs.forEach( lab => {
-						if ( !lab.readonly ) {
-							res[`V_Input_${pref}_yLab_${i++}`] = this.labYValFnc( lab.value || '' );
-						}
-					});
-				}
+			if ( this.yAxis?.axisLabelObj && !this.yAxis.axisLabelObj.readonly )	{
+				res[`V_Input_${pref}_yTitle`] = this.yAxis.axisLabelObj.value || '';
+			}
+
+			if ( this.dataSettings.createStatusAllVars ) {
+				res[`V_Status_${pref}_All`] =
+					this.rwBars.every( (b,i) => b.value != this.initData.b[i].v ) &&
+					this.rwBarLabels.every( (bLab,i) => bLab.value != this.initData.b[i].l ) &&
+					this.rwYLabels.every( (yLab,i) => yLab.value != this.initData.l[i] &&
+					( !this.titleObj || this.titleObj.readonly || this.titleObj.value != this.initData.t ) &&
+					( !this.yAxis?.axisLabelObj || this.yAxis.axisLabelObj.readonly || this.yAxis.axisLabelObj.value != this.initData.a ) );
 			}
 		}
 
 		if ( this.computeScoringVals ) {
 			this.computeScoringVals( res );
 		}
+
 		return res;
 	}
 

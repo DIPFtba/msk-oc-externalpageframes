@@ -866,7 +866,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variablen, die für jede Verbindung angeben, ob Verbindung von Labels zum Strahl erstellt wurde"
+						"infoText": "Erzeuge zusätzliche Status-Variablen, die für jede Verbindung angeben, ob Verbindung von Labels zum Strahl erstellt wurde"
 					}
 				},
 				"createConnSomeVars": {
@@ -876,7 +876,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variable, die angibt, ob mind. eine Verbindung von Labels zum Strahl erstellt wurde"
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob mind. eine Verbindung von Labels zum Strahl erstellt wurde"
 					}
 				},
 				"createConnAllVars": {
@@ -886,7 +886,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Verbindungen von Labels zum Strahl erstellt wurde"
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob alle Verbindungen von Labels zum Strahl erstellt wurde"
 					}
 				},
 				"createInpXVars": {
@@ -896,7 +896,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variablen, die für jedes Label angeben, ob Label mit Text benannt wurde"
+						"infoText": "Erzeuge zusätzliche Status-Variablen, die für jedes Label angeben, ob Label mit Text benannt wurde"
 					}
 				},
 				"createInpSomeVars": {
@@ -906,7 +906,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variable, die angibt, ob mind. Label mit Text benannt wurde"
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob mind. Label mit Text benannt wurde"
 					}
 				},
 				"createInpAllVars": {
@@ -916,7 +916,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Labels mit Text benannt wurden"
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob alle Labels mit Text benannt wurden"
 					}
 				},
 				"createSomeVars": {
@@ -927,7 +927,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variable, die angibt, ob mind. eine Verbindung erstellt oder ein Label benannt wurde"
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob mind. eine Verbindung erstellt oder ein Label benannt wurde"
 					}
 				},
 				"createAllVars": {
@@ -938,7 +938,7 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Erzeuge Status-Variable, die angibt, ob alle Verbindungen erstellt und alle Labels benannt wurden"
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob alle Verbindungen erstellt und alle Labels benannt wurden"
 					}
 				},
 

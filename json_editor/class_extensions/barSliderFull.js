@@ -106,6 +106,7 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 
 		super( base, opts );
 
+		this.rwFreeLabels = this.freeLabels.filter( l => !l.readonly );
 		addScoring( this, opts, addMods.Parser );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
@@ -123,19 +124,23 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 			return res;
 		}
 
-		if ( this.dataSettings ) {
-			const pref = this.dataSettings.variablePrefix;
-			if ( pref ) {
-				res[`V_Input_${pref}_Val`] = Math.round( this.pos * this.dataSettings.xMult );
-			}
+		const pref = this.dataSettings?.variablePrefix;
+		if ( pref ) {
 
-			if ( this.freeLabels ) {
-				let i=1;
-				this.freeLabels.forEach( fl => {
-					if ( !fl.readonly ) {
-						res[`V_Input_${pref}_${i++}`] = this.labValFnc( fl.textObj ? fl.textObj.value : '' );
-					}
-				})
+			res[`V_Input_${pref}_Val`] = Math.round( this.pos * this.dataSettings.xMult );
+
+			if ( this.rwFreeLabels?.length>0 ) {
+				this.rwFreeLabels.forEach( (fl,i) => {
+					res[`V_Input_${pref}_${i+1}`] = this.labValFnc( fl.textObj ? fl.textObj.value : '' );
+				});
+
+				if ( this.dataSettings.createStatusAllVars && this.initData.l ) {
+					res[`V_Status_${pref}_All`] = +( this.pos != this.initData.pos &&
+							this.rwFreeLabels.every( (lab,i) => lab.textObj && lab.textObj.value != this.initData.l[i] ) );
+				}
+
+			} else if ( this.dataSettings.createStatusAllVars ) {
+				res[`V_Status_${pref}_All`] = ( this.pos != this.initData.pos );
 			}
 		}
 

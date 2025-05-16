@@ -1220,6 +1220,17 @@
 					}
 				},
 
+				"createStatusAllVars": {
+					"title": "Erzeuge V_Status_&lt;pref&gt;_All Status-Variable",
+					"type": "boolean",
+					"format": "checkbox",
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob alle beweglichen Bars bewegt und alle Labels benannt wurden"
+					}
+				},
+
 				"yMult": {
 					"title": "Y-Multiplikator",
 					"type": "integer",

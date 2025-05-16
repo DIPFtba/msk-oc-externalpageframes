@@ -66,11 +66,11 @@ export class barPlotFromSchema extends barPlot {
 
 		super( base, opts );
 
-		addScoring( this, opts, addMods.Parser );
-
 		this.rwBars = this.bars.filter( b => !b.readonly );
 		this.rwBarLabels = this.bars.map( b => b.labelObj ).filter( l => !l.readonly );
 		this.rwYLabels = this.yAxis?.labelObjs ? this.yAxis.labelObjs.filter( l => !l.readonly ) : [];
+
+		addScoring( this, opts, addMods.Parser );
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();
@@ -121,11 +121,12 @@ export class barPlotFromSchema extends barPlot {
 
 			if ( this.dataSettings.createStatusAllVars ) {
 				res[`V_Status_${pref}_All`] =
-					this.rwBars.every( (b,i) => b.value != this.initData.b[i].v ) &&
-					this.rwBarLabels.every( (bLab,i) => bLab.value != this.initData.b[i].l ) &&
-					this.rwYLabels.every( (yLab,i) => yLab.value != this.initData.l[i] &&
+					this.bars.every( (b,i) =>
+							( b.readonly || b.value != this.initData.b[i].v ) &&
+							( !b.labelObj || b.labelObj.readonly || b.labelObj.value != this.initData.b[i].l ) ) &&
 					( !this.titleObj || this.titleObj.readonly || this.titleObj.value != this.initData.t ) &&
-					( !this.yAxis?.axisLabelObj || this.yAxis.axisLabelObj.readonly || this.yAxis.axisLabelObj.value != this.initData.a ) );
+					( !this.yAxis?.labelObjs || this.yAxis.labelObjs.every( (yLab,i) => yLab.readonly || yLab.value != this.initData.l[i] ) ) &&
+					( !this.yAxis?.axisLabelObj || this.yAxis.axisLabelObj.readonly || this.yAxis.axisLabelObj.value != this.initData.a );
 			}
 		}
 

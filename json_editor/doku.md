@@ -27,12 +27,14 @@ table td, table th {
     - [inputInserts](#inputinserts)
     - [numberLineWithAnnotations](#numberlinewithannotations)
     - [numberLineWithArcs](#numberlinewitharcs)
+    - [pointAreaExt](#pointareaext)
     - [textAreaInserts](#textareainserts)
 - [Markierbarer Balken (filledBar)](#markierbarer-balken-filledbar)
 - [Freihand Malen/Markieren (freePaint)](#freihand-malenmarkieren-freepaint)
 - [Eingabefeld mit Buttons (inputInserts)](#eingabefeld-mit-buttons-inputinserts)
 - [Zahlenstrahl mit Bögen (numberLineWithArcs)](#zahlenstrahl-mit-bögen-numberlinewitharcs)
 - [freePaint mit externen Buttons (freePaintMult)](#freepaint-mit-externen-buttons-freepaintmult)
+- [pointAreaExt mit externen Buttons (freePaintMult)](#pointareaext-mit-externen-buttons-freepaintmult)
 
 # Scoring (alle EWK)
 
@@ -153,6 +155,11 @@ Alle Events von `freePaintMulti`und **zusätzllich:**
 |:----|:--------|
 |`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von `Vorkomma-Stellen` und/oder `Nachkomma-Stellen` bei editierbaren Achsenlabels)|
 
+### pointAreaExt
+|Event|Bedeutung|
+|:----|:--------|
+|`EV_InitDone_ExtRes` und<br>`EV_InitDone_<pref>`|Initialisierung der EWK ist abgeschlossen|
+
 ### textAreaInserts
 |Event|Bedeutung|
 |:----|:--------|
@@ -241,3 +248,17 @@ Die Erweiterung sendet folgende Events:
 |`EV_CANNOT_UNDO`|'Undo' & 'ClearAll' stehen nicht zur Verfügung|
 |`EV_CAN_REDO`|'Redo' steht zur Verfügung|
 |`EV_CANNOT_REDO`|'Redo' steht nicht zur Verfügung|
+
+# pointAreaExt mit externen Buttons (freePaintMult)
+
+Die Erweiterung reagiert auf folgende Befehle:
+
+|Befehl IB|Effekt|
+|:--------|:-----|
+|`callExternalPageFrame( ID, 'setColorIdx', Index )`|Setzt Farbe `Index` als aktuelle Malfarbe (Index=0 bedeutet leer/löschen)|
+
+Die Erweiterung sendet folgende Events:
+
+|Event|Bedeutung|
+|:----|:--------|
+|`EV_InitDone_ExtRes` und<br>`EV_InitDone_<pref>`|Initialisierung der EWK ist abgeschlossen|

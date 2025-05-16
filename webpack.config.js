@@ -129,6 +129,7 @@ const ExtResFromSchema = {
 	numberLineWithArcs: { version: "0.1.0" },
 	numbersByPictures: { version: "0.1.0" },
 	pointArea: { version: "0.1.0" },
+	pointAreaExt: { version: "0.1.0" },
 	rectArrayMarkable: { version: "0.1.0" },
 	stampImages: { version: "0.1.0" },
 	inputInserts: { version: "0.1.0" },

@@ -59,6 +59,10 @@ import { pointAreaFromSchema } from './class_extensions/pointArea';
 import pointAreaJSONSchema from './schemes/pointArea.schema.json';
 import pointAreaSVG from './svgs/pointArea.svg';
 
+import { pointAreaExtFromSchema } from './class_extensions/pointAreaExt';
+import pointAreaExtJSONSchema from './schemes/pointAreaExt.schema.json';
+import pointAreaExtSVG from './svgs/pointAreaExt.svg';
+
 import { rectArrayMarkableFromSchema } from './class_extensions/rectArrayMarkable';
 import rectArrayMarkableJSONSchema from './schemes/rectArrayMarkable.schema.json';
 import rectArrayMarkableSVG from './svgs/rectArrayMarkable.svg';
@@ -235,6 +239,10 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new pointAreaFromSchema( base, cfgData, addMods );
 						break;
+					case 'pointAreaExt':
+						initContainer(true);
+						creator = (cfgData) => new pointAreaExtFromSchema( base, cfgData, addMods );
+						break;
 					case 'rectArrayMarkable':
 						initContainer(true);
 						creator = (cfgData) => new rectArrayMarkableFromSchema( base, cfgData, addMods );
@@ -301,6 +309,7 @@ const templs = {
 	numberLineWithArcs: [ numberLineWithArcsJSONSchema, numberLineWithArcsSVG ],
 	numbersByPictures: [ numbersByPicturesJSONSchema, numbersByPicturesSVG ],
 	pointArea: [ pointAreaJSONSchema, pointAreaSVG ],
+	pointAreaExt: [ pointAreaExtJSONSchema, pointAreaExtSVG ],
 	rectArrayMarkable: [ rectArrayMarkableJSONSchema, rectArrayMarkableSVG ],
 	stampImages: [ stampImagesJSONSchema, stampImagesSVG ],
 	textareaInserts: [ textareaInsertsJSONSchema, textareaInsertsSVG ],

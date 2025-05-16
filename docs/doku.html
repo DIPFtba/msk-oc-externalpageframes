@@ -26,12 +26,14 @@ table td, table th {
 <li><a href="#inputinserts">inputInserts</a></li>
 <li><a href="#numberlinewithannotations">numberLineWithAnnotations</a></li>
 <li><a href="#numberlinewitharcs">numberLineWithArcs</a></li>
+<li><a href="#pointareaext">pointAreaExt</a></li>
 <li><a href="#textareainserts">textAreaInserts</a></li></ul></li>
 <li><a href="#markierbarer-balken-filledbar">Markierbarer Balken (filledBar)</a></li>
 <li><a href="#freihand-malenmarkieren-freepaint">Freihand Malen/Markieren (freePaint)</a></li>
 <li><a href="#eingabefeld-mit-buttons-inputinserts">Eingabefeld mit Buttons (inputInserts)</a></li>
 <li><a href="#zahlenstrahl-mit-bögen-numberlinewitharcs">Zahlenstrahl mit Bögen (numberLineWithArcs)</a></li>
 <li><a href="#freepaint-mit-externen-buttons-freepaintmult">freePaint mit externen Buttons (freePaintMult)</a></li>
+<li><a href="#pointareaext-mit-externen-buttons-freepaintmult">pointAreaExt mit externen Buttons (freePaintMult)</a></li>
 </ul>
 <h1 id="scoring-alle-ewk">Scoring (alle EWK)</h1>
 <ul>
@@ -338,6 +340,21 @@ table td, table th {
 </tr>
 </tbody>
 </table>
+<h3 id="pointareaext">pointAreaExt</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>EV_InitDone_ExtRes</code> und<br><code>EV_InitDone_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Initialisierung der EWK ist abgeschlossen</td>
+</tr>
+</tbody>
+</table>
 <h3 id="textareainserts">textAreaInserts</h3>
 <table>
 <thead>
@@ -443,6 +460,37 @@ table td, table th {
 <tr>
 <td style="text-align:left;"><code>EV_CANNOT_REDO</code></td>
 <td style="text-align:left;">'Redo' steht nicht zur Verfügung</td>
+</tr>
+</tbody>
+</table>
+<h1 id="pointareaext-mit-externen-buttons-freepaintmult">pointAreaExt mit externen Buttons (freePaintMult)</h1>
+<p>Die Erweiterung reagiert auf folgende Befehle:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Befehl IB</th>
+<th style="text-align:left;">Effekt</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>callExternalPageFrame( ID, 'setColorIdx', Index )</code></td>
+<td style="text-align:left;">Setzt Farbe <code>Index</code> als aktuelle Malfarbe (Index=0 bedeutet leer/löschen)</td>
+</tr>
+</tbody>
+</table>
+<p>Die Erweiterung sendet folgende Events:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>EV_InitDone_ExtRes</code> und<br><code>EV_InitDone_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Initialisierung der EWK ist abgeschlossen</td>
 </tr>
 </tbody>
 </table>

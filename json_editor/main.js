@@ -67,6 +67,10 @@ import { rectArrayMarkableFromSchema } from './class_extensions/rectArrayMarkabl
 import rectArrayMarkableJSONSchema from './schemes/rectArrayMarkable.schema.json';
 import rectArrayMarkableSVG from './svgs/rectArrayMarkable.svg';
 
+import { recordAudioFromSchema } from './class_extensions/recordAudio';
+import recordAudioJSONSchema from './schemes/recordAudio.schema.json';
+import recordAudioSVG from './svgs/recordAudio.svg';
+
 import { stampImagesFromSchema } from './class_extensions/stampImages';
 import stampImagesJSONSchema from './schemes/stampImages.schema.json';
 import stampImagesSVG from './svgs/stampImages.svg';
@@ -243,6 +247,12 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new pointAreaExtFromSchema( base, cfgData, addMods );
 						break;
+					case 'recordAudio':
+						creator = (cfgData) => {
+							initContainer(false);
+							return  new recordAudioFromSchema( textContainer.firstChild, cfgData, base );
+						}
+						break;
 					case 'rectArrayMarkable':
 						initContainer(true);
 						creator = (cfgData) => new rectArrayMarkableFromSchema( base, cfgData, addMods );
@@ -285,13 +295,13 @@ function loadSchema( schema ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-// /// #if __DEVELOP
+/// #if __DEVELOP
 
-// // for Development: always load one JSON schema
-// loadSchema( freePaintRecogJSONSchema );
-// window.updateEWK = updateEWK;
+// for Development: always load one JSON schema
+loadSchema( recordAudioJSONSchema );
+window.updateEWK = updateEWK;
 
-// /// #else
+/// #else
 
 // load schema Links
 const templs = {
@@ -310,6 +320,7 @@ const templs = {
 	numbersByPictures: [ numbersByPicturesJSONSchema, numbersByPicturesSVG ],
 	pointArea: [ pointAreaJSONSchema, pointAreaSVG ],
 	pointAreaExt: [ pointAreaExtJSONSchema, pointAreaExtSVG ],
+	recordAudio: [ recordAudioJSONSchema, recordAudioSVG ],
 	rectArrayMarkable: [ rectArrayMarkableJSONSchema, rectArrayMarkableSVG ],
 	stampImages: [ stampImagesJSONSchema, stampImagesSVG ],
 	textareaInserts: [ textareaInsertsJSONSchema, textareaInsertsSVG ],
@@ -332,7 +343,7 @@ Object.entries(templs).forEach( ([templ,[schema,svg]]) => {
 	schSel.appendChild( a );
 })
 
-// /// #endif
+/// #endif
 
 //////////////////////////////////////////////////////////////////////////////
 

@@ -130,6 +130,7 @@ const ExtResFromSchema = {
 	numbersByPictures: { version: "0.1.0" },
 	pointArea: { version: "0.1.0" },
 	pointAreaExt: { version: "0.1.0" },
+	recordAudio: { version: "0.1.0" },
 	rectArrayMarkable: { version: "0.1.0" },
 	stampImages: { version: "0.1.0" },
 	inputInserts: { version: "0.1.0" },

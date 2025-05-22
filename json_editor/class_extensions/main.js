@@ -94,6 +94,8 @@ import { numberLineWithArcsFromSchema } from './numberLineWithArcs';
 import { pointAreaFromSchema } from './pointArea';
 /// #elif __CLASS == 'pointAreaExt'
 import { pointAreaExtFromSchema } from './pointAreaExt';
+/// #elif __CLASS == 'recordAudio'
+import { recordAudioFromSchema } from './recordAudio';
 /// #elif __CLASS == 'rectArrayMarkable'
 import { rectArrayMarkableFromSchema } from './rectArrayMarkable';
 /// #elif __CLASS == 'stampImages'
@@ -122,7 +124,8 @@ function initJSON ( json ) {
 
 	const cfg = clearCfgJson( json );
 
-/// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts'
+/// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio'
+	// base ohne Konva stage
 	const base = new baseInits( { dataSettings: cfg.dataSettings } );
 /// #else
 	const base = new baseInits( { container: 'container', dataSettings: cfg.dataSettings } );
@@ -177,6 +180,8 @@ function initJSON ( json ) {
 		const io = new pointAreaFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'pointAreaExt'
 		const io = new pointAreaExtFromSchema( base, cfg, addMods );
+/// #elif __CLASS == 'recordAudio'
+		const io = new recordAudioFromSchema( '#container', cfg, base, addMods );
 /// #elif __CLASS == 'rectArrayMarkable'
 		const io = new rectArrayMarkableFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'stampImages'

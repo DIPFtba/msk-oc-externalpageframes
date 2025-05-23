@@ -138,6 +138,7 @@ export class recordAudioFromSchema extends textareaContainer {
 			}
 		}
 
+		this.prAllBlobsSaved = Promise.resolve();
 		this.audioId = 0;
 		this.audioList = [];
 		this.deleteAudios();
@@ -192,10 +193,16 @@ export class recordAudioFromSchema extends textareaContainer {
 
 		this.audioDisplay( audioUrl );
 
-		this.audioList[ this.audioId++ ] = {
+		// Speichern als base64 (asynchron!)
+		const currAudioId = this.audioId++;
+		this.audioList[ currAudioId ] = {
 			a: audioUrl,
 			v: 1,
 		};
+		this.convertToBase64( audioBlob ).then( base64 =>
+			this.audioList[ currAudioId ].b = base64
+		);
+
 		this.base.sendChangeState(this);
 	}
 
@@ -412,13 +419,13 @@ export class recordAudioFromSchema extends textareaContainer {
 	stopRecord () {
 
 		if ( this.recording ) {
+			this.statLog( 'RECORD_STOPPED', { audioId: this.audioId } );
 
 			this.recording = false;
 			this.audioRecStop();
 
 			this.showReady();
 			this.enableTrash( true );
-			this.statLog( 'RECORD_STOPPED', { audioId: this.audioId } );
 		}
 	}
 
@@ -482,17 +489,66 @@ export class recordAudioFromSchema extends textareaContainer {
 
 	///////////////////////////////////
 
+	convertToBase64 ( audioBlob ) {
+		const newProm =
+			this.blobToBase64( audioBlob )
+				.catch( e => console.error( "convertToBase64: ", e ) );	// ignore errors
+
+		const newPrAllBlobsSaved = Promise.all([ this.prAllBlobsSaved, newProm ]);
+		this.prAllBlobsSaved = newPrAllBlobsSaved;
+		newPrAllBlobsSaved.then( () => {
+			// wenn inzwischen kein anderes Save-Prom gesetzt: Event triggern
+			if ( this.prAllBlobsSaved === newPrAllBlobsSaved ) {
+				this.statLog( 'RECORD_AUDIOS_SAVED' );
+			}
+		});
+
+		return newProm;
+	}
+
+	blobToBase64 (blob) {
+		return new Promise( (resolve, reject) => {
+			const reader = new FileReader();
+			reader.onloadend = () => resolve(reader.result); // z. B. "data:audio/webm;base64,..."
+			reader.onerror = reject;
+			reader.readAsDataURL(blob);
+		});
+	}
+
+	base64ToBlob(base64String) {
+		const [header, base64Data] = base64String.split(',');
+		const mimeMatch = header.match(/:(.*?);/);
+		const mimeType = mimeMatch ? mimeMatch[1] : '';
+
+		const binary = atob(base64Data);
+		const bytes = new Uint8Array(binary.length);
+		for (let i = 0; i < binary.length; i++) {
+			bytes[i] = binary.charCodeAt(i);
+		}
+
+		return new Blob([bytes], { type: mimeType });
+	}
+
+	///////////////////////////////////
+
 	getState () {
-		return JSON.stringify( this.audioList);
+		return JSON.stringify( this.audioList.map( l => ({
+			b: l.b,
+			v: l.v,
+		})));
 	}
 
 	setState ( state ) {
 		try {
 			this.audioList = JSON.parse( state );
+			this.div.innerHTML = '';
 
 			this.audioList.forEach( (a, i) => {
 				if ( a.v ) {
-					this.audioDisplay( a.a, i, this.newDisplayDiv(i) );
+					const blob = this.base64ToBlob( a.b );
+					const audioUrl = URL.createObjectURL(blob);
+					this.audioList[ i ].a = audioUrl;
+					this.audioDisplay( audioUrl, i, this.newDisplayDiv(i) );
 				}
 			});
 			this.audioId = this.audioList.length;

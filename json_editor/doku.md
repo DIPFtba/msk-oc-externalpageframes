@@ -166,8 +166,9 @@ Alle Events von `freePaintMulti`und **zusätzllich:**
 |`EV_RECORD_MIC_NOT_ALLOWED`|Nutzung des Mikrofons wurde soeben vom Browser abgelehnt|
 |`EV_RECORD_DISABLED`|Es ist keine Aufnahme möglich|
 |`EV_RECORD_READY`|Eine Aufnahme ist jederzeit möglich|
-|`EV_RECORD_STARTED`|Eine Aufnahme wurde gestartet|
-|`EV_RECORD_STOPPED`|Die laufende Aufnahme wurde beendet|
+|`EV_RECORD_STARTED`|Eine Aufnahme wurde gestartet (`Weiter` Button muss deaktiviert werden!)|
+|`EV_RECORD_STOPPED`|Die laufende Aufnahme wurde beendet (da noch eine Konvertierung stattfindet, muss `Weiter` Button deaktiviert bleiben)|
+|`EV_RECORD_AUDIOS_SAVED`|Die Konverierung für Speicherung ist abgeschlossen, `Weiter` Button kann wieder aktiviert werden|
 
 ### pointAreaExt
 |Event|Bedeutung|

@@ -1,6 +1,20 @@
 
 import './textareaSpeechApi.css'
 
+//
+// Vor erneutem Einsatz sehr gut testen!
+//
+// Enthält z.B. den Bug, dass auf iPads weitere Aufnahmen nicht mehr möglich sind,
+// (wenn z.B. vorher eine Aufnahme komplett angehört wurde???), weil auf iOS der audioStream
+// nicht beliebig weiterverwendet werden kann.
+// (nach jeder Aufnahme eigentlich this.audioStream.getTracks().forEach( track => track.stop() )
+// nötig und erneutes Anfordern eines Streams für Folgeaufnahmen?)
+//
+// Außerdem wurde bei textareaSpeechApiRec in der Console eine Fehlermeldung beobachtet
+//
+// Wie können die hier gespeicherten audioChunks weiterverwendet werden?
+//
+
 import { textareaContainer, textareaBase } from './textareaInserts'
 import { mergeDeep } from './common';
 

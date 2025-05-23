@@ -61,7 +61,7 @@ export class recordAudioFromSchema extends textareaContainer {
 			statContainerTemplate:
 				'<div id=iconCont>'+
 						'<div id=microCont><div id=microBg><div></div><div></div></div><img id=microImg src="'+microSvg+'"></div>'+
-						'<div id=trashCont><img id=trashImg src="'+trashSvg+'"></div>'+
+						( opts.deleteAllButton===undefined || opts.deleteAllButton ? '<div id=trashCont><img id=trashImg src="'+trashSvg+'"></div>' : '' )+
 				'</div>',
 
 			recordText: "<span style=\"color: darkred; font-weight: bold;\">... Neue Aufnahme läuft ...</span>",
@@ -75,6 +75,7 @@ export class recordAudioFromSchema extends textareaContainer {
 			audioBitsPerSecond: 32000,
 
 			individualDelete: true,
+			deleteAllButton: true,
 		};
 		mergeDeep( defaults, opts );
 
@@ -90,11 +91,17 @@ export class recordAudioFromSchema extends textareaContainer {
 		const statContainer = tmp.firstChild;
 		this.outerDiv.appendChild( statContainer );
 
-		['microBg','microImg','trashImg'].forEach( id => {
+		const imgs = ['microBg','microImg'];
+		if ( this.deleteAllButton ) {
+			imgs.push('trashImg');
+		}
+		imgs.forEach( id => {
 			const el = document.getElementById( id );
 			this[id] = el ? el : document.createElement('DIV');
 		});
-		this.trashImg.addEventListener( 'click', this.deleteAll.bind(this) );
+		if ( this.deleteAllButton ) {
+			this.trashImg.addEventListener( 'click', this.deleteAll.bind(this) );
+		}
 
 		if ( !navigator.mediaDevices?.getUserMedia ) {
 			this.setMicroStat('notAvailable');
@@ -173,6 +180,11 @@ export class recordAudioFromSchema extends textareaContainer {
 	}
 
 	audioRecOnStop () {
+		// Muss alles geschlossen werden und neu initialisiert werden wg. iPads, die sonst
+		// nach komplettem Abspielen der Aufnahme nicht mehr aufnehmen können
+		this.audioStream.getTracks().forEach( track => track.stop() );
+		this.audioStream = null;
+
 		const audioBlob = new Blob(this.audioChunks, this.getMimeType('type') );
 		const audioUrl = URL.createObjectURL(audioBlob);
 
@@ -182,6 +194,7 @@ export class recordAudioFromSchema extends textareaContainer {
 			a: audioUrl,
 			v: 1,
 		};
+		this.base.sendChangeState(this);
 	}
 
 	audioDisplay (data, audioId=this.audioId, displayDiv=this.displayDiv) {
@@ -211,6 +224,7 @@ export class recordAudioFromSchema extends textareaContainer {
 			delBtn.addEventListener( 'click', () => this.delOneAudio(displayDiv, audioId) );
 			displayDiv.appendChild( delBtn );
 		}
+		displayDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
 		// add event listeners for all audio elements
 		const evs = {
@@ -287,6 +301,10 @@ export class recordAudioFromSchema extends textareaContainer {
 	}
 
 	enableTrash (stat) {
+		if ( !this.deleteAllButton ) {
+			return;
+		}
+
 		let opacity, cursor;
 		if ( stat ) {
 			opacity = 1;
@@ -331,7 +349,7 @@ export class recordAudioFromSchema extends textareaContainer {
 	async getUserMedia ( showReady=1 ) {
 
 		const me = this;
-		return new Promise( (res,rej) => {
+		return new Promise( (resolve,reject) => {
 
 			const onEnabled = (stream) => {
 				const s = 'enabled';
@@ -343,7 +361,7 @@ export class recordAudioFromSchema extends textareaContainer {
 					me.showReady();
 				}
 				me.audioStream = stream;
-				res(stream);
+				resolve(stream);
 			}
 
 			const onDisabled = () => {
@@ -353,7 +371,7 @@ export class recordAudioFromSchema extends textareaContainer {
 					this.statLog('SPEECHAPI_MIC_NOT_ALLOWED');
 				}
 				me.showDisabled();
-				rej();
+				reject();
 			}
 
 			const constraints = { audio: true };
@@ -367,7 +385,10 @@ export class recordAudioFromSchema extends textareaContainer {
 		const displayDiv = document.createElement('DIV');
 		displayDiv.dataset.audioId = audioId;
 		displayDiv.innerHTML = this.recordText;
+
 		this.div.appendChild( displayDiv );
+		displayDiv.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
 		return displayDiv;
 	}
 
@@ -405,11 +426,14 @@ export class recordAudioFromSchema extends textareaContainer {
 		this.audioList[ audioId ].v = 0;
 
 		if ( div ) {
-			const prevHeight = div.offsetHeight;
+			const prevHeight = div.offsetHeight + "px";
 			div.innerHTML = "<span>Aufnahme Gelöscht. <a href=\"#\">Rückgängig machen</a><span>";
-			div.style.minHeight = prevHeight + "px";
+			div.style.minHeight = prevHeight;
+			div.style.maxHeight = prevHeight;
+			div.style.height = prevHeight;
 			div.classList.add('deleted');
 			div.querySelector('a').addEventListener( 'click', this.undelOneAudio.bind( this, div, audioId ) );
+			div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 		}
 		this.base.sendChangeState( this );
 	}

@@ -47,6 +47,16 @@
 					"format": "checkbox",
 					"default": true,
 					"options": {
+						"grid_break": true,
+						"grid_columns": 4
+					}
+				},
+				"deleteAllButton": {
+					"title": "Es gibt einen Delete-All Trash",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": true,
+					"options": {
 						"grid_columns": 4
 					}
 				}

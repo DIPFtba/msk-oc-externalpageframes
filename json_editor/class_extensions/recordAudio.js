@@ -105,11 +105,13 @@ export class recordAudioFromSchema extends textareaContainer {
 
 		if ( !navigator.mediaDevices?.getUserMedia ) {
 			this.setMicroStat('notAvailable');
-			this.statLog('SPEECHAPI_NOT_AVAILABLE')
+			this.statLog('RECORD_NOT_AVAILABLE')
 			return;
 		}
 
 		// is micro access enabled?
+		// Es wid verucht, zu speichern, ob Mikro schon erlaubt wurde, damit dem IB mitgeteilt werden kann,
+		// ob wahrscheinlich gleich danach gefragt wird (damit der z.B. mit einer Meldung darauf reagieren kann)
 		this.getSavedStat().then( s0 => {
 			this.savedStat = s0;
 			if ( s0 === 'disabled' ) {
@@ -118,7 +120,7 @@ export class recordAudioFromSchema extends textareaContainer {
 				this.showReady();
 			} else {
 				this.setMicroStat('allow');
-				this.statLog('SPEECHAPI_MUST_ASK');
+				this.statLog('RECORD_MUST_ASK');
 			}
 		});
 
@@ -152,7 +154,7 @@ export class recordAudioFromSchema extends textareaContainer {
 		});
 		if ( !recorder ) {
 			this.setMicroStat('notAvailable');
-			this.statLog('SPEECHAPI_NOT_AVAILABLE')
+			this.statLog('RECORD_NOT_AVAILABLE')
 			return;
 		}
 
@@ -259,12 +261,12 @@ export class recordAudioFromSchema extends textareaContainer {
 
 	showDisabled () {
 		this.setMicroStat('notAvailable');
-		this.statLog('SPEECHAPI_DISABLED')
+		this.statLog('RECORD_DISABLED')
 	}
 
 	showReady () {
 		this.setMicroStat('ready');
-		this.statLog('SPEECHAPI_READY')
+		this.statLog('RECORD_READY')
 	}
 
 	setMicroStat (stat) {
@@ -355,7 +357,7 @@ export class recordAudioFromSchema extends textareaContainer {
 				const s = 'enabled';
 				if ( me.savedStat !== s ) {
 					me.setSavedStat( s, 0 );
-					this.statLog('SPEECHAPI_MIC_ALLOWED');
+					this.statLog('RECORD_MIC_ALLOWED');
 				}
 				if ( showReady ) {
 					me.showReady();
@@ -368,7 +370,7 @@ export class recordAudioFromSchema extends textareaContainer {
 				const s = 'disabled';
 				if ( me.savedStat !== s ) {
 					me.setSavedStat( s, 0 );
-					this.statLog('SPEECHAPI_MIC_NOT_ALLOWED');
+					this.statLog('RECORD_MIC_NOT_ALLOWED');
 				}
 				me.showDisabled();
 				reject();
@@ -402,7 +404,7 @@ export class recordAudioFromSchema extends textareaContainer {
 				this.audioRecStart();
 
 				this.setMicroStat('recording');
-				this.statLog( 'SPEECHAPI_STARTED', { audioId: this.audioId } );
+				this.statLog( 'RECORD_STARTED', { audioId: this.audioId } );
 			})
 			.catch();
 	}
@@ -416,6 +418,7 @@ export class recordAudioFromSchema extends textareaContainer {
 
 			this.showReady();
 			this.enableTrash( true );
+			this.statLog( 'RECORD_STOPPED', { audioId: this.audioId } );
 		}
 	}
 
@@ -473,7 +476,8 @@ export class recordAudioFromSchema extends textareaContainer {
 
 	statLog ( stat, obj={} ) {
 		this.base.postLog( stat, obj );
-		this.base.fsm.setFSMVariable( 'SpeechApiStat', stat );
+		this.base.fsm.triggerEvent( `EV_${stat}`, obj )
+		// this.base.fsm.setFSMVariable( 'SpeechApiStat', stat );
 	}
 
 	///////////////////////////////////

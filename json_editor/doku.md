@@ -27,6 +27,7 @@ table td, table th {
     - [inputInserts](#inputinserts)
     - [numberLineWithAnnotations](#numberlinewithannotations)
     - [numberLineWithArcs](#numberlinewitharcs)
+    - [recordAudio](#recordaudio)
     - [pointAreaExt](#pointareaext)
     - [textAreaInserts](#textareainserts)
 - [Markierbarer Balken (filledBar)](#markierbarer-balken-filledbar)
@@ -154,6 +155,19 @@ Alle Events von `freePaintMulti`und **zusätzllich:**
 |Event|Bedeutung|
 |:----|:--------|
 |`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von `Vorkomma-Stellen` und/oder `Nachkomma-Stellen` bei editierbaren Achsenlabels)|
+
+### recordAudio
+|Event|Bedeutung|
+|:----|:--------|
+|`EV_InitDone_ExtRes` und<br>`EV_InitDone_<pref>`|Initialisierung der EWK ist abgeschlossen|
+|`EV_RECORD_NOT_AVAILABLE`|Der Browser unterstützt/erlaubt keine Aufnahmen bzw. oder der Initialisierung ist ein Fehler aufgetreten|
+|`EV_RECORD_MUST_ASK`|Es ist unbekannt, ob Erlaubnis zur Mikrofonnutzung bereits vorliegt. Wahrscheinlich wird beim nächsten Klick auf das Mikro von Browser danach gefragt. (Wird aber auch bei jeder EWK getriggert, wenn der Zustand nicht im localStorage des Browsers gespeichert werden konnte)|
+|`EV_RECORD_MIC_ALLOWED`|Nutzung des Mikrofons wurde soeben vom Browser bestätigt|
+|`EV_RECORD_MIC_NOT_ALLOWED`|Nutzung des Mikrofons wurde soeben vom Browser abgelehnt|
+|`EV_RECORD_DISABLED`|Es ist keine Aufnahme möglich|
+|`EV_RECORD_READY`|Eine Aufnahme ist jederzeit möglich|
+|`EV_RECORD_STARTED`|Eine Aufnahme wurde gestartet|
+|`EV_RECORD_STOPPED`|Die laufende Aufnahme wurde beendet|
 
 ### pointAreaExt
 |Event|Bedeutung|

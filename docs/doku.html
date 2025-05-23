@@ -26,6 +26,7 @@ table td, table th {
 <li><a href="#inputinserts">inputInserts</a></li>
 <li><a href="#numberlinewithannotations">numberLineWithAnnotations</a></li>
 <li><a href="#numberlinewitharcs">numberLineWithArcs</a></li>
+<li><a href="#recordaudio">recordAudio</a></li>
 <li><a href="#pointareaext">pointAreaExt</a></li>
 <li><a href="#textareainserts">textAreaInserts</a></li></ul></li>
 <li><a href="#markierbarer-balken-filledbar">Markierbarer Balken (filledBar)</a></li>
@@ -337,6 +338,53 @@ table td, table th {
 <tr>
 <td style="text-align:left;"><code>ev_InputValidation_ExtRes</code> und<br><code>ev_InputValidation_&lt;pref&gt;</code></td>
 <td style="text-align:left;">Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von <code>Vorkomma-Stellen</code> und/oder <code>Nachkomma-Stellen</code> bei editierbaren Achsenlabels)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="recordaudio">recordAudio</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>EV_InitDone_ExtRes</code> und<br><code>EV_InitDone_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Initialisierung der EWK ist abgeschlossen</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_RECORD_NOT_AVAILABLE</code></td>
+<td style="text-align:left;">Der Browser unterstützt/erlaubt keine Aufnahmen bzw. oder der Initialisierung ist ein Fehler aufgetreten</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_RECORD_MUST_ASK</code></td>
+<td style="text-align:left;">Es ist unbekannt, ob Erlaubnis zur Mikrofonnutzung bereits vorliegt. Wahrscheinlich wird beim nächsten Klick auf das Mikro von Browser danach gefragt. (Wird aber auch bei jeder EWK getriggert, wenn der Zustand nicht im localStorage des Browsers gespeichert werden konnte)</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_RECORD_MIC_ALLOWED</code></td>
+<td style="text-align:left;">Nutzung des Mikrofons wurde soeben vom Browser bestätigt</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_RECORD_MIC_NOT_ALLOWED</code></td>
+<td style="text-align:left;">Nutzung des Mikrofons wurde soeben vom Browser abgelehnt</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_RECORD_DISABLED</code></td>
+<td style="text-align:left;">Es ist keine Aufnahme möglich</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_RECORD_READY</code></td>
+<td style="text-align:left;">Eine Aufnahme ist jederzeit möglich</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_RECORD_STARTED</code></td>
+<td style="text-align:left;">Eine Aufnahme wurde gestartet</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_RECORD_STOPPED</code></td>
+<td style="text-align:left;">Die laufende Aufnahme wurde beendet</td>
 </tr>
 </tbody>
 </table>

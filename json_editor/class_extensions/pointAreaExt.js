@@ -34,7 +34,7 @@ export class pointAreaExtFromSchema {
 
 		addScoring( this, opts, addMods.Parser );
 
-		this.initData = this.getChState();
+		this.initData = this.copyColors( this.getChState() );
 		this.base.sendChangeState( this );	// init & send changeState & score
 
 		base.decInitCnt();
@@ -198,7 +198,7 @@ export class pointAreaExtFromSchema {
 			e.cancelBubble = true;
 			this.drawStart = getPosOfEvent( this.stage, e );
 			// aktuelle dotColors kopieren
-			this.lastDotColors = this.dotColors.map( dotRow => [...dotRow] );
+			this.lastDotColors = this.copyColors( this.dotColors);
 		});
 		this.stage.on('mousemove touchmove', (e) => {
 			if ( ignoreEvent(e) || !this.drawStart ) {
@@ -241,7 +241,7 @@ export class pointAreaExtFromSchema {
 		this.dots[row][col].k.fill( this.colors[this.currColor] );
 
 		this.base.postLog( 'dotClicked', { y:row+1, x:col+1, color: this.currColor } );
-		this.base.logNewCnt();
+		this.logNewCnt();
 		this.base.sendChangeState( this );	// send changeState & score
 	}
 
@@ -326,6 +326,10 @@ export class pointAreaExtFromSchema {
 		}
 
 		this.lastIdx = idx;
+	}
+
+	copyColors (dotColors=this.dotColors) {
+		return dotColors.map( dotRow => [...dotRow] );
 	}
 
 	getColorCnt ( searchColor ) {

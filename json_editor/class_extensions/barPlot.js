@@ -120,13 +120,14 @@ export class barPlotFromSchema extends barPlot {
 			}
 
 			if ( this.dataSettings.createStatusAllVars ) {
-				res[`V_Status_${pref}_All`] =
+				res[`V_Status_${pref}_All`] = +(
 					this.bars.every( (b,i) =>
 							( b.readonly || b.value != this.initData.b[i].v ) &&
 							( !b.labelObj || b.labelObj.readonly || b.labelObj.value != this.initData.b[i].l ) ) &&
 					( !this.titleObj || this.titleObj.readonly || this.titleObj.value != this.initData.t ) &&
 					( !this.yAxis?.labelObjs || this.yAxis.labelObjs.every( (yLab,i) => yLab.readonly || yLab.value != this.initData.l[i] ) ) &&
-					( !this.yAxis?.axisLabelObj || this.yAxis.axisLabelObj.readonly || this.yAxis.axisLabelObj.value != this.initData.a );
+					( !this.yAxis?.axisLabelObj || this.yAxis.axisLabelObj.readonly || this.yAxis.axisLabelObj.value != this.initData.a )
+				);
 			}
 		}
 

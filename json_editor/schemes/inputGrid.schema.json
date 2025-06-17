@@ -350,6 +350,19 @@
 						}
 					}
 				},
+				"insertButtonsBeside": {
+					"title": "Einfüge-Buttons neben Text-Mode-Bar",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 6,
+						"grid_break": true,
+						"dependencies": {
+							"hasTextModeBar": true
+						}
+					}
+				},
 				"toolbarSpace":{
 					"title": "Abstand Grid <-> Icons",
 					"type": "integer",

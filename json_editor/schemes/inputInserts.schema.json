@@ -110,7 +110,8 @@
 						"disable_collapse": true,
 						"disable_edit_json": true,
 						"disable_properties": true,
-						"infoText": "Term: Kann optionales (=[]) Ergebnis enthalten | OP-Perm: Permutation der Operanden | Mehr erlaubt: Extra-Text vor/nach erlaubt wenn kein Ergebnis angegeben"
+						"grid_columns": 12,
+						"infoText": "Term: Kann optionales (=[]) Ergebnis enthalten | OP-Perm: Permutation der Operanden | Mehr erlaubt: Extra-Text vor/nach erlaubt wenn kein Ergebnis angegeben | IB Variable: Soll Muster als Variable im IB gespeichert werden?"
 					},
 					"items": {
 						"title": "Scoring Muster",
@@ -135,6 +136,12 @@
 								"title": "Mehr erlaubt",
 								"type": "boolean",
 								"format": "checkbox"
+							},
+							"exp": {
+								"title": "IB Variable",
+								"type": "boolean",
+								"format": "checkbox",
+								"default": true
 							}
 						}
 					}

@@ -51,6 +51,7 @@ export class inputInsertsFromSchema extends inputInserts {
 	parseScoringPattern ( pattern, pref ) {
 
 		this.scoringPattern = {};
+		this.dontExportVariables = [];
 
 		const numRe = regexCanLookBehind() ?
 			'(?:\\.|(?:(?<!!)!)?\\d+(?:\\.\\d+)?)' : // number, optionally prepended by one '!'
@@ -89,12 +90,17 @@ export class inputInsertsFromSchema extends inputInserts {
 
 				const re = this.getOpRE( ops, p.perm ? this.perm( mult ) : [mult], res, resOpt);
 // console.log( ops, mult, res, resOpt, re.toString() );
-				this.scoringPattern[ `V_Score_${pref}_${p.name}` ] = re;
+				const scoreName = `V_Score_${pref}_${p.name.trim()}`;
+				this.scoringPattern[ scoreName ] = re;
+
+				if ( !p.exp ) {
+					this.dontExportVariables.push( scoreName );
+				}
 			}
 		})
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 
 		const pref = this.dataSettings.variablePrefix;
 		const res ={
@@ -109,6 +115,12 @@ export class inputInsertsFromSchema extends inputInserts {
 		if ( this.computeScoringVals ) {
 			this.computeScoringVals( res );
 		}
+
+		// Delete not exported scoring variables
+		if ( this.dontExportVariables && !exportAll) {
+			this.dontExportVariables.forEach( k => delete res[k] );
+		}
+
 		return res;
 	}
 

@@ -26,7 +26,31 @@ export class pointAreaExtFromSchema {
 
 		this.colors = [ this.bgColor, ...this.colors ];
 		this.dotColors = Array.from({ length: this.rows }, () => Array(this.cols).fill(0));
+		this.dotReadonly = Array.from({ length: this.rows }, () => Array(this.cols).fill(false));
 		this.setColor(0);
+
+		// preSets eintragen
+		opts.preSets.forEach( (preSet) => {
+			const color = parseInt( preSet.color );
+			if ( color > 0 && color <= this.colors.length ) {
+
+				preSet.idxs.split(/[,;:]/).map( s => s.trim() ).forEach( (idx) => {
+					const vonBis = idx.split('-').map( s => parseInt( s.trim() ) );
+					const allIdxs = vonBis.length === 2 && vonBis[1]>vonBis[0] ?
+						Array.from({length: vonBis[1] - vonBis[0] + 1}, (_, i) => i + vonBis[0]) : [ vonBis[0] ];
+
+					allIdxs.forEach( (i) => {
+						const row = Math.floor( (i-1) / this.cols );
+						const col = (i-1) % this.cols;
+						if ( row < this.rows && col < this.cols ) {
+							this.dotColors[row][col] = color;
+							this.dotReadonly[row][col] = preSet.readonly;
+						}
+					});
+				});
+
+			}
+		});
 
 		this.initScene();
 		this.initInteractivity();
@@ -67,6 +91,8 @@ export class pointAreaExtFromSchema {
 	///////////////////////////////////
 
 	initScene () {
+
+		document.body.style.cursor = 'pointer';
 
 		if ( this.layer ) {
 			this.layer.destroyChildren();
@@ -318,7 +344,7 @@ export class pointAreaExtFromSchema {
 			for ( let col=colFrom; col<=colTo; col++ ) {
 				const color = ( idx && row>=idx.r0 && row<=idx.r1 && col>=idx.c0 && col<=idx.c1 ) ?
 								this.currColor : this.lastDotColors[row][col];
-				if ( color !== this.dotColors[row][col] ) {
+				if ( color !== this.dotColors[row][col] && !this.dotReadonly[row][col] ) {
 					this.dotColors[row][col] = color;
 					this.dots[row][col].k.fill( this.colors[color] );
 				}

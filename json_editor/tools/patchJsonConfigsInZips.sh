@@ -80,7 +80,7 @@ find . -type f -name "*.zip" | while read -r zipfile; do
                 pack=1
             fi
 
-            # numberLineWithAnnotations
+            # numberLineWithArcs
             if [[ "$name" = "numberLineWithArcs" ]]
             then
                 echo
@@ -90,6 +90,14 @@ find . -type f -name "*.zip" | while read -r zipfile; do
                 patch "$jsonfile" '.dataSettings.createInpArcLabAll = false'
                 patch "$jsonfile" '.dataSettings.createInpLabAny = false'
                 patch "$jsonfile" '.dataSettings.createInpLabAll = false'
+            fi
+
+            # pointAreaExt
+            if [[ "$name" = "pointAreaExt" ]]
+            then
+                echo
+                echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+                patch "$jsonfile" '.___preSets.preSets = []' '.___preSets.preSets'
             fi
 
         fi

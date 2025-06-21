@@ -1,0 +1,34 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="./../class_extensions/SimpleInput.css">
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+
+                import("./../class_extensions/SimpleInput.js")
+                    .then(module => {
+                        const inp = new module.SimpleInput({
+                            x: 100, y: 100,
+                            width: 140, height: 50,
+                            value: 'HgHg',
+                            fontSize: 33,
+                            minFontSize: 20,
+                            stylesNormal: {
+                                'border': '1px solid lightgray',
+                            },
+                            stylesHover: {
+                                'border': '1px solid blue',
+                            },
+                            stylesFocus: {
+                                'border': '1px solid red',
+                            },
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error loading module:", error);
+                    });
+            });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

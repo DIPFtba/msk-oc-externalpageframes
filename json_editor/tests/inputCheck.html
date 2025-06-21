@@ -1,0 +1,117 @@
+<html>
+    <head>
+        <style>
+            .tst {
+                width: 300px;
+                height: 100px;
+                border: 2px solid gray;
+                border-radius: 10px;
+                font-size: 40px;
+                text-align: center;
+                padding: 3px;
+            }
+            .tst:focus {
+                border: 2px solid red;
+                outline: none;
+            }
+        </style>
+        <script>
+            function getInputTextWidth(input) {
+                const span = document.createElement('span');
+                span.style.visibility = 'hidden';
+                span.style.position = 'absolute';
+                span.style.whiteSpace = 'pre';
+                // Übernehme die Schrift-Eigenschaften vom Input
+                const style = window.getComputedStyle(input);
+                [
+                    'font',
+                    'fontSize',
+                    'fontFamily',
+                    'fontWeight',
+                    'letterSpacing'
+                ].forEach(prop => {
+                    span.style[prop] = style[prop];
+                });
+                span.textContent = input.value || input.placeholder || '';
+                document.body.appendChild(span);
+                const width = span.offsetWidth;
+                document.body.removeChild(span);
+                return width;
+            }
+
+            function append(txt) {
+                const el = document.createElement('div');
+                el.innerHTML = txt;
+                document.body.appendChild(el);
+            }
+
+            let tid=0;
+
+            document.addEventListener('DOMContentLoaded', function() {
+
+                let lastEl, lastStart, lastEnd;
+
+                document.querySelectorAll('.tst').forEach(function(input) {
+                    input.addEventListener('focus', function() {
+                        console.log(input.selectionStart,input.selectionEnd);
+                        console.log(window.getSelection());
+                        console.log(document.activeElement);
+
+                        lastEl = input;
+                        lastStart = input.selectionStart;
+                        lastEnd = input.selectionEnd;
+                    });
+                    input.addEventListener('blur', function() {
+                        console.log(input.selectionStart,input.selectionEnd);
+                        console.log(window.getSelection());
+                        console.log(document.activeElement);
+
+                        const ss = input.selectionStart;
+                        const se = input.selectionEnd;
+
+                        // tid = setTimeout( () => append("000000"), 0 );
+
+                        setTimeout(function() {
+                            input.focus();
+                            input.selectionStart = ss;
+                            input.selectionEnd = se;
+                        }, 2000);
+
+                        lastEl = input;
+                        lastStart = input.selectionStart;
+                        lastEnd = input.selectionEnd;
+                    });
+                });
+
+                // window.addEventListenrer( "keydown" , function(event) {
+                //     console.log(event);
+                // });
+
+                window.addEventListener( 'message', ev=> {
+                    console.log('***** Message received:', ev.data,lastEl);
+                    // clearTimeout(tid);
+                    append('-->'+ev.data);
+
+                    lastEl.focus();
+                    lastEl.selectionStart = lastStart;
+                    lastEl.selectionEnd = lastEnd;
+                })
+
+            });
+
+        </script>
+    </head>
+    <body>
+        <br>
+        <br>
+        <br>
+        <br>
+        <input id=1 type="text" class="tst">
+        <br>
+        <br>
+        <br>
+        <input id=2 type="text" class="tst">
+        <br>
+        <br>
+    </body>
+</html>

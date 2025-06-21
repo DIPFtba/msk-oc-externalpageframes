@@ -32,6 +32,8 @@ export class SimpleInput {
 
             cursorHeight: null, // null = automatic, otherwise a number
             stylesCursor: {},
+
+            readonly: false,
         }
         mergeDeep( Object.assign( this, defaultOpts ), opts );
 
@@ -62,12 +64,14 @@ export class SimpleInput {
             this.maxFontSize = this.fontSize;
         }
 
-        [ 'click', 'mouseenter', 'mouseleave' ].forEach( ( ev ) =>
-            div.addEventListener( ev, this[`h_${ev}`].bind(this) )
-        );
-        [ 'keydown', 'click' ].forEach( ( ev ) =>
-            window.addEventListener( ev, this[`wh_${ev}`].bind(this), false )
-        );
+        if ( !this.readonly ) {
+            [ 'click', 'mouseenter', 'mouseleave' ].forEach( ( ev ) =>
+                div.addEventListener( ev, this[`h_${ev}`].bind(this) )
+            );
+            [ 'keydown', 'click' ].forEach( ( ev ) =>
+                window.addEventListener( ev, this[`wh_${ev}`].bind(this), false )
+            );
+        }
 
         container.appendChild( div );
         this.div = div;
@@ -400,10 +404,11 @@ window.simpleInput = this; // for debugging
             } else {
                 el.innerText = this.value[i];
             }
-            el.addEventListener( "click", ( ev ) => {
-                this.h_click_char( ev, i );
-                ev.stopPropagation();
-            });
+            if ( !this.readonly ) {
+                el.addEventListener( "click", ( ev ) => {
+                    this.h_click_char( ev, i );
+                });
+            }
             this.div.appendChild( el );
 
             chars.push({ el });

@@ -128,7 +128,7 @@ const ExtResFromSchema = {
 	numberLineWithAnnotations: { version: "0.1.0" },
 	numberLineWithArcs: { version: "0.1.0" },
 	numbersByPictures: { version: "0.1.0" },
-	piakstextEntry: { version: "0.1.0" },
+	pikasTextEntry: { version: "0.1.0" },
 	pointArea: { version: "0.1.0" },
 	pointAreaExt: { version: "0.1.0" },
 	recordAudio: { version: "0.1.0" },

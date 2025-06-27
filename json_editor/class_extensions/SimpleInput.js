@@ -1,10 +1,10 @@
-// import "./SimpleInput.css"
+import "./SimpleInput.css"
 
 import { mergeDeep } from "../../libs/common.js";
 
 export class SimpleInput {
 
-    constructor ( opts = {} ) {
+    constructor ( opts = {}, parentContainer=document.body ) {
 
         const defaultOpts = {
 
@@ -34,8 +34,19 @@ export class SimpleInput {
             stylesCursor: {},
 
             readonly: false,
-        }
+        };
+        // use 'value' in defaultOpts and opts, but store it as _value
+        [ defaultOpts, opts ].forEach( o => {
+            if ( 'value' in o ) {
+                o._value = o.value;
+                delete o.value;
+            }
+        });
         mergeDeep( Object.assign( this, defaultOpts ), opts );
+
+        if ( this.inputRegexp && typeof this.inputRegexp === 'string' ) {
+            this.inputRegexp = new RegExp( this.inputRegexp );
+        }
 
         // create container element
         const container = document.createElement( "div" );
@@ -43,7 +54,10 @@ export class SimpleInput {
         if ( this.id ) {
             container.id = `${this.id}-container`;
         }
-        document.body.appendChild( container );
+        const contBound = parentContainer.getBoundingClientRect();
+        this.offsX = contBound.left + window.scrollX;
+        this.offsY = contBound.top + window.scrollY;
+        parentContainer.appendChild( container );
         this.container = container;
 
         // create input element
@@ -69,7 +83,7 @@ export class SimpleInput {
                 div.addEventListener( ev, this[`h_${ev}`].bind(this) )
             );
             [ 'keydown', 'click' ].forEach( ( ev ) =>
-                window.addEventListener( ev, this[`wh_${ev}`].bind(this), false )
+                window.addEventListener( ev, this[`wh_${ev}`].bind(this), true )
             );
         }
 
@@ -78,7 +92,7 @@ export class SimpleInput {
 
         // create cursor element
         const cursorElement = document.createElement( "span" );
-        cursorElement.classList.add( "simple-input", "cursor" );
+        cursorElement.classList.add( "simple-input-cursor" );
 
         const span = document.createElement( "span" );
         span.innerText = "Hg";
@@ -86,7 +100,7 @@ export class SimpleInput {
         const bound = span.getBoundingClientRect();
         this.setStyles( cursorElement, {
             ...this.stylesCursor,
-            top: bound.top + "px",
+            top: (bound.top-this.offsY) + "px",
             height: this.cursorHeight!==null ? this.cursorHeight + "px" : bound.height + "px",
             visibility: "hidden",
         });
@@ -98,15 +112,14 @@ export class SimpleInput {
         // inits
         this.evHandler = {};
         this.hasFocus = false;
-        this.selectionStart = this.value.length; // cursor position in value
-        this.selectionEnd = this.value.length;
+        this._cursorPos = this._value.length; // cursor position in value
 
         // initial Render
         this.render();
 
-// if ( process.env.NODE_ENV !== 'production' ) {
-window.simpleInput = this; // for debugging
-// }
+        if ( process?.env?.NODE_ENV !== 'production' ) {
+            ( window.simpleInput = window.simpleInput || [] ).push( this ); // for debugging
+        }
     }
 
     ///////////////////////////////////
@@ -115,17 +128,17 @@ window.simpleInput = this; // for debugging
         if ( !this.hasFocus ) {
             this.hasFocus = true;
             this.setStyles( this.div, this.stylesFocus );
-            this.setCursorPos( Math.min( this.selectionStart, this.value.length ) );
+            this.setCursorPos( Math.min( this._cursorPos, this._value.length ) );
             this.renderCursor();
-            this.focusStartValue = this.value; // save current value for blur
+            this.focusStartValue = this._value; // save current value for blur
             this.emit( 'focus' );
         }
     }
 
     blur () {
         if ( this.hasFocus ) {
-            if ( this.value !== this.focusStartValue ) {
-                this.emit( 'change', this.value );
+            if ( this._value !== this.focusStartValue ) {
+                this.emit( 'change', this._value );
             }
             this.emit( 'blur' );
             this.hasFocus = false;
@@ -135,22 +148,23 @@ window.simpleInput = this; // for debugging
     }
 
     setValue ( newValue, newCursorPos=null ) {
-        if ( this.maxlength && newValue.length > this.maxlength ) {
-            this.emit( 'maxlength', newValue );
-            return; // do not set value if it exceeds maxlength
-        }
-        if ( this.inputRegexp && !this.inputRegexp.test( newValue ) ) {
-            this.emit( 'invalid', newValue );
-            return; // do not set value if it does not match the regexp
-        }
 
-        if ( this.value !== newValue ) {
-            const oldValue = this.value;
-            const oldCursorPos = this.selectionStart;
+        if ( this._value !== newValue ) {
+            if ( this.maxlength && newValue.length > this.maxlength ) {
+                this.emit( 'maxlength', newValue );
+                return; // do not set value if it exceeds maxlength
+            }
+            if ( this.inputRegexp && !this.inputRegexp.test( newValue ) ) {
+                this.emit( 'invalid', newValue );
+                return; // do not set value if it does not match the regexp
+            }
 
-            this.value = newValue;
-            const effCursorPos = Math.min( newCursorPos ?? this.selectionStart, this.value.length );
-            if ( this.selectionStart !== effCursorPos ) {
+            const oldValue = this._value;
+            const oldCursorPos = this._cursorPos;
+
+            this._value = newValue;
+            const effCursorPos = Math.min( newCursorPos ?? this._cursorPos, this._value.length );
+            if ( this._cursorPos !== effCursorPos ) {
                 this.setCursorPos( effCursorPos, false );
             }
             this.render();
@@ -162,7 +176,7 @@ window.simpleInput = this; // for debugging
                 if ( !this.minFontSize || !this.resizeFont() ) {
                     // no shrinking posible, revert to old value
                     this.emit( 'oversize', newValue );
-                    this.value = oldValue; // revert to old value
+                    this._value = oldValue; // revert to old value
                     if ( effCursorPos !== oldCursorPos ) {
                         this.setCursorPos( oldCursorPos, false );
                     }
@@ -183,7 +197,7 @@ window.simpleInput = this; // for debugging
 
     resizeFont () {
         if ( this.minFontSize ) {
-            const fontSize = this.value.length == 0 ?
+            const fontSize = this._value.length == 0 ?
                 this.maxFontSize :
                 Math.min(
                     this.maxFontSize,
@@ -205,30 +219,29 @@ window.simpleInput = this; // for debugging
     }
 
     insertAtCursor (text) {
-        const newValue = this.value.slice( 0, this.selectionStart ) + text + this.value.slice( this.selectionStart );
-// console.log('### insertAtCursor', text, this.selectionStart, this.value, newValue );
-        this.setValue( newValue, this.selectionStart + text.length );
+        const newValue = this._value.slice( 0, this._cursorPos ) + text + this._value.slice( this._cursorPos );
+// console.log('### insertAtCursor', text, this._cursorPos, this._value, newValue );
+        this.setValue( newValue, this._cursorPos + text.length );
     }
 
     delBakSpace () {
-        if ( this.selectionStart > 0 ) {
-            const newValue = this.value.slice( 0, this.selectionStart - 1 ) + this.value.slice( this.selectionStart );
-            this.setValue( newValue, this.selectionStart - 1 );
+        if ( this._cursorPos > 0 ) {
+            const newValue = this._value.slice( 0, this._cursorPos - 1 ) + this._value.slice( this._cursorPos );
+            this.setValue( newValue, this._cursorPos - 1 );
         }
     }
 
     delForward () {
-        if ( this.selectionStart < this.value.length ) {
-            const newValue = this.value.slice( 0, this.selectionStart ) + this.value.slice( this.selectionStart + 1 );
+        if ( this._cursorPos < this._value.length ) {
+            const newValue = this._value.slice( 0, this._cursorPos ) + this._value.slice( this._cursorPos + 1 );
             this.setValue( newValue );
         }
     }
 
     setCursorPos ( cursorX, renderCursor=true ) {
-// console.log('*** setCursorPos', this.selectionStart, cursorX );
-        if ( this.selectionStart != cursorX ) {
-            this.selectionStart = Math.max( 0, Math.min( cursorX, this.value.length ) );
-            this.selectionEnd = this.selectionStart;
+// console.log('*** setCursorPos', this._cursorPos, cursorX );
+        if ( this._cursorPos != cursorX ) {
+            this._cursorPos = Math.max( 0, Math.min( cursorX, this._value.length ) );
             if ( renderCursor ) {
                 this.renderCursor();
             }
@@ -237,15 +250,41 @@ window.simpleInput = this; // for debugging
     }
 
     curLeft () {
-        if ( this.selectionStart > 0 ) {
-            this.setCursorPos( this.selectionStart - 1 );
+        if ( this._cursorPos > 0 ) {
+            this.setCursorPos( this._cursorPos - 1 );
         }
     }
 
     curRight () {
-        if ( this.selectionStart < this.value.length ) {
-            this.setCursorPos( this.selectionStart + 1 );
+        if ( this._cursorPos < this._value.length ) {
+            this.setCursorPos( this._cursorPos + 1 );
         }
+    }
+
+    ///////////////////////////////////
+
+    get value () {
+        return this._value;
+    }
+
+    set value ( newValue ) {
+        this.setValue( newValue );
+    }
+
+    get selectionStart () {
+        return this._cursorPos;
+    }
+
+    set selectionStart ( newPos ) {
+        this.setCursorPos( newPos );
+    }
+
+    get selectionEnd () {
+        return this._cursorPos;
+    }
+
+    set selectionEnd ( newPos ) {
+        this.setCursorPos( newPos );
     }
 
     ///////////////////////////////////
@@ -260,12 +299,12 @@ window.simpleInput = this; // for debugging
         if ( !this.hasFocus ) {
             this.focus();
         }
-        const pageX = ev.pageX;
+        const pageX = ev.pageX-this.offsX;
         if ( this.chars.length == 0 || pageX < this.chars[0].x1 ) {
             this.setCursorPos( 0 );
             ev.stopPropagation();
         } else if ( pageX > this.chars[ this.chars.length - 1 ].x2 ) {
-            this.setCursorPos( this.value.length );
+            this.setCursorPos( this._value.length );
             ev.stopPropagation();
         } else {
             this.h_click_char( ev, this.chars.findIndex( ( char ) => pageX >= char.x1 && pageX <= char.x2 ) );
@@ -291,7 +330,7 @@ window.simpleInput = this; // for debugging
         }
         const char = ( idx !== null ? this.chars[idx] : ev.target );
 // console.log('*** hClickChar char', char );
-        this.setCursorPos( ev.pageX < ( char.x1 + char.x2 ) / 2 ? idx : idx + 1 );
+        this.setCursorPos( ev.pageX-this.offsX < ( char.x1 + char.x2 ) / 2 ? idx : idx + 1 );
         ev.stopPropagation();
     }
 
@@ -316,7 +355,7 @@ window.simpleInput = this; // for debugging
                 handled = 1;
                 break;
             case "End":
-                this.setCursorPos( this.value.length );
+                this.setCursorPos( this._value.length );
                 handled = 1;
                 break;
             case "Backspace":
@@ -329,15 +368,15 @@ window.simpleInput = this; // for debugging
                 break;
             case "Enter":
                 if ( this.blurOnEnter ) {
-                    this.emit( 'enterPressed', this.value );
+                    this.emit( 'enterPressed', this._value );
                     this.blur();
                     handled = 1;
                 }
                 break;
             case "Escape":
                 if ( this.revertOnEsc ) {
-                    this.emit( 'escPressed', this.value );
-                    this.setValue( this.focusStartValue, this.selectionStart );
+                    this.emit( 'escPressed', this._value );
+                    this.setValue( this.focusStartValue, this._cursorPos );
                     this.blur();
                     handled = 1;
                 }
@@ -350,6 +389,7 @@ window.simpleInput = this; // for debugging
         }
 
         if ( handled ) {
+            this.emit(ev);
             ev.preventDefault(); // prevent default browser actions
             ev.stopPropagation();
         }
@@ -380,9 +420,14 @@ window.simpleInput = this; // for debugging
         this.off( event, handler );
     }
 
-    emit ( event, ...args ) {
-// console.log('### emit', event, ...args );
-        ( this.evHandler[event] || [] ).forEach( h => h(...args) );
+    emit ( event, arg=null ) {
+// console.log('### emit', event, ...args, this );
+        const n = typeof event === 'object' ? {...event} : { type: event };
+        n.target = this;
+        if ( arg !== null ) {
+            n.data = arg;
+        }
+        ( this.evHandler[event] || [] ).forEach( h => h(n) );
     }
 
     ///////////////////////////////////
@@ -397,12 +442,12 @@ window.simpleInput = this; // for debugging
         const chars = [];
 
         this.div.innerHTML = "";
-        for ( let i = 0; i < this.value.length; i++ ) {
+        for ( let i = 0; i < this._value.length; i++ ) {
             const el = document.createElement( "span" );
-            if ( this.value[i] == ' ' ) {
+            if ( this._value[i] == ' ' ) {
                 el.innerHTML = "&nbsp;"; // escape single space
             } else {
-                el.innerText = this.value[i];
+                el.innerText = this._value[i];
             }
             if ( !this.readonly ) {
                 el.addEventListener( "click", ( ev ) => {
@@ -420,10 +465,11 @@ window.simpleInput = this; // for debugging
     }
 
     getCharPositions () {
+        const offsX = this.offsX;
         this.chars.forEach( ( char ) => {
             const bound = char.el.getBoundingClientRect();
-            char.x1 = bound.left;
-            char.x2 = bound.right;
+            char.x1 = bound.left-offsX;
+            char.x2 = bound.right-offsX;
         });
     }
 
@@ -432,7 +478,7 @@ window.simpleInput = this; // for debugging
         if ( this.hasFocus ) {
             const lastCharIdx = this.chars.length-1;
             const cx = lastCharIdx<0 ? this.x+this.width/2 :
-                    this.selectionStart>lastCharIdx ? this.chars[ lastCharIdx ].x2 : this.chars[ this.selectionStart ].x1;
+                    this._cursorPos>lastCharIdx ? this.chars[ lastCharIdx ].x2 : this.chars[ this._cursorPos ].x1;
             cursorStyle.left = (cx-0.5) + "px";
             cursorStyle.visibility  = "visible";
         } else {

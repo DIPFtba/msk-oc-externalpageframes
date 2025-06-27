@@ -1,4 +1,9 @@
 
+div.simple-input-container {
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
 div.simple-input {
     position: absolute;
     display: flex;
@@ -6,12 +11,15 @@ div.simple-input {
     justify-content: center;
     align-items: center;
 
+    padding: 0;
+    margin: 0;
+
     border: 1px solid #ccc;
     user-select: none;
     cursor: text;
 }
 
-span.simple-input.cursor {
+span.simple-input-cursor {
   position: absolute;
   width: 1px;
   background: black;

@@ -43,6 +43,10 @@ import { numbersByPicturesFromSchema } from './class_extensions/numbersByPicture
 import numbersByPicturesJSONSchema from './schemes/numbersByPictures.schema.json';
 import numbersByPicturesSVG from './svgs/numbersByPictures.svg';
 
+import { pikasTextEntryFromSchema } from './class_extensions/pikasTextEntry';
+import pikasTextEntryJSONSchema from './schemes/pikasTextEntry.schema.json';
+import pikasTextEntrySVG from './svgs/pikasTextEntry.svg';
+
 import { numberLineFromSchema } from './class_extensions/numberLine';
 import numberLineJSONSchema from './schemes/numberLine.schema.json';
 import numberLineSVG from './svgs/numberLine.svg';
@@ -239,6 +243,12 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new numbersByPicturesFromSchema( base, cfgData, addMods );
 						break;
+					case 'pikasTextEntry':
+						creator = (cfgData) => {
+							initContainer(false);
+							return new pikasTextEntryFromSchema( textContainer.firstChild, cfgData, base );
+						}
+						break;
 					case 'pointArea':
 						initContainer(true);
 						creator = (cfgData) => new pointAreaFromSchema( base, cfgData, addMods );
@@ -298,7 +308,7 @@ function loadSchema( schema ) {
 // /// #if __DEVELOP
 
 // // for Development: always load one JSON schema
-// loadSchema( recordAudioJSONSchema );
+// loadSchema( pikasTextEntryJSONSchema );
 // window.updateEWK = updateEWK;
 
 // /// #else
@@ -318,6 +328,7 @@ const templs = {
 	numberLineWithAnnotations: [ numberLineWithAnnotationsJSONSchema, numberLineWithAnnotationsSVG ],
 	numberLineWithArcs: [ numberLineWithArcsJSONSchema, numberLineWithArcsSVG ],
 	numbersByPictures: [ numbersByPicturesJSONSchema, numbersByPicturesSVG ],
+	pikasTextEntry: [ pikasTextEntryJSONSchema, pikasTextEntrySVG ],
 	pointArea: [ pointAreaJSONSchema, pointAreaSVG ],
 	pointAreaExt: [ pointAreaExtJSONSchema, pointAreaExtSVG ],
 	recordAudio: [ recordAudioJSONSchema, recordAudioSVG ],

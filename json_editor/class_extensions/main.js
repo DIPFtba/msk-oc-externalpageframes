@@ -84,6 +84,8 @@ import { freePaintRecogFromSchema } from './freePaintRecog';
 import { inputGridFromSchema } from './inputGrid';
 /// #elif __CLASS == 'numbersByPictures'
 import { numbersByPicturesFromSchema } from './numbersByPictures';
+/// #elif __CLASS == 'pikasTextEntry'
+import { pikasTextEntryFromSchema } from './pikasTextEntry';
 /// #elif __CLASS == 'numberLine'
 import { numberLineFromSchema } from './numberLine';
 /// #elif __CLASS == 'numberLineWithAnnotations'
@@ -124,7 +126,7 @@ function initJSON ( json ) {
 
 	const cfg = clearCfgJson( json );
 
-/// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio'
+/// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio' || __CLASS == 'pikasTextEntry'
 	// base ohne Konva stage
 	const base = new baseInits( { dataSettings: cfg.dataSettings } );
 /// #else
@@ -170,6 +172,8 @@ function initJSON ( json ) {
 		const io = new inputGridFromSchema( base, cfg );
 /// #elif __CLASS == 'numbersByPictures'
 		const io = new numbersByPicturesFromSchema( base, cfg, addMods );
+/// #elif __CLASS == 'pikasTextEntry'
+		const io = new pikasTextEntryFromSchema( '#container', cfg, base, addMods );
 /// #elif __CLASS == 'numberLine'
 		const io = new numberLineFromSchema( base, cfg );
 /// #elif __CLASS == 'numberLineWithAnnotations'

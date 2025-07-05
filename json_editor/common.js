@@ -101,13 +101,13 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 
 		const scoringVals = opts.dataSettings.scoringVals;
 
-		const scores = obj.scoreDef();
+		const scores = obj.scoreDef(true);
 		if ( typeof scores === 'object' ) {
-			const varNames = Object.keys( scores );
+			const varNames = Object.keys( scores ).map( s => s.trim() );
 			if ( varNames.length>0 ) {
 
 				scoringVals.forEach( sv => {
-					let cond = sv.condition;
+					let cond = sv.condition.trim();
 					if ( cond ) {
 						let saveCond = cond;
 						const allVarsInCond = cond.matchAll( /\$\{([^}]*)}/g );
@@ -115,7 +115,7 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 							if ( vn[1].length == 0 ) {
 								debugAndConsoleOut( `Variablen-Name '\${}' in Scoring nicht zulässig` );
 							} else {
-								const varsearch = opts.dataSettings.variablePrefix ? vn[1].replace( /<pref>/i, opts.dataSettings.variablePrefix ) : vn[1];
+								const varsearch = ( opts.dataSettings.variablePrefix ? vn[1].replace( /<pref>/i, opts.dataSettings.variablePrefix ) : vn[1] ).trim();
 								const re = new RegExp( `${varsearch}$`, 'i' );
 								const selVarNames = varNames.filter( v => v.match(re) );
 								if ( selVarNames.length>1 ) {

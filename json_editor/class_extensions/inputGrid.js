@@ -28,7 +28,9 @@ export class inputGridFromSchema extends inputGrid_freePaint_InsertButtons_switc
 		}
 		delete opts.insertButtons;
 		opts.mode ='text';
+
 		let iconWidth = 1;
+		let insertButtonsWidth, textModeBarWidth;
 
 		if ( texts[0].length > 0) {
 			opts.insertIconDefs = texts.map( (text,i) => ({
@@ -38,7 +40,8 @@ export class inputGridFromSchema extends inputGrid_freePaint_InsertButtons_switc
 				height: 1.5*opts.cell.height-2,
 				texts: text
 			}) );
-			iconWidth = texts.length * ( opts.insertIconDefs[0].width + 2 );
+			insertButtonsWidth = texts.length * ( opts.insertIconDefs[0].width + 2 );
+			iconWidth = insertButtonsWidth;
 		} else {
 			opts.insertIconDefs = [];
 		}
@@ -57,12 +60,25 @@ export class inputGridFromSchema extends inputGrid_freePaint_InsertButtons_switc
 				y: opts.y,
 				width: 1.5*opts.cell.width-2,
 				height: 1.5*opts.cell.height-2,
-				iconDefs
+				iconDefs,
 			}
 			opts.insertIconDefs.forEach( bar => bar.y += opts.textModeBarDefs.iconDefs.length * ( opts.textModeBarDefs.height + 2 ) + opts.toolbarSpace );
-			iconWidth = Math.max( iconWidth, opts.textModeBarDefs.width + 2 );
+			textModeBarWidth = opts.textModeBarDefs.width + 2;
+			iconWidth = Math.max( iconWidth, textModeBarWidth );
 		} else {
 			opts.textModeBarDefs = null;
+		}
+
+		// insertButtonsBeside?
+		// dann Koordinaten von InsertButtons relativ anpassen
+		if ( opts.hasTextModeBar && opts.insertButtonsBeside && opts.insertIconDefs.length > 0 ) {
+			const rx = opts.textModeBarDefs.width+2 + opts.toolbarSpace;
+			const ry = opts.textModeBarDefs.iconDefs.length * ( opts.textModeBarDefs.height + 2 ) + opts.toolbarSpace;
+			opts.insertIconDefs.forEach( bar => {
+				bar.x += rx;
+				bar.y -= ry;
+			});
+			iconWidth = Math.max( iconWidth, insertButtonsWidth + textModeBarWidth + opts.toolbarSpace );
 		}
 
 		// init FreePaint bar

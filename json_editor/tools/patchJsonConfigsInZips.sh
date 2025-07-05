@@ -10,16 +10,30 @@
 #
 # Patcht und ZIP ggf.
 #
+# Dieses SKript gibt es mit/ohne ZIP unpack/pack in
+# msk-oc-externalpageframes/tools und Maco_Json/json_editor/tools
+# !!! Änderungen immer in beiden machen !!!
+#
 
 patch() {
     JSONFILE="$1"
     PATCH="$2"
+    IFNULL="$3"
+
+    if [[ -n "$IFNULL" ]]; then
+        if [[ $(jq -r "$IFNULL" "$JSONFILE") != "null" ]]; then
+            # echo "!!!!! $IFNULL ist null, ABBRUCH !!!!!" >&2
+            return 1
+        fi
+    fi
 
     jq "$PATCH" "$JSONFILE" -c > "$JSONFILE.tmp" || { echo "!!!!! jq Fehler, ABBRUCH !!!!!" >&2; exit 1; }
     echo
-    diff -u <(jq '.' "$JSONFILE") <(jq '.' "$JSONFILE.tmp") && { echo "!!!!! Nichts gepatcht ($PATCH)! ABBRUCH !!!!!" >&2; exit 1; }
+    diff -u <(jq '.' "$JSONFILE") <(jq '.' "$JSONFILE.tmp") && echo "Nichts gepatcht ($PATCH)!" >&2 && rm "$JSONFILE.tmp" && return 1
     echo
     mv -vf "$JSONFILE.tmp" "$JSONFILE" || { echo "ABBRUCH!" >&2; exit 1; }
+
+    return 0
 }
 
 find . -type f -name "*.zip" | while read -r zipfile; do
@@ -65,8 +79,7 @@ find . -type f -name "*.zip" | while read -r zipfile; do
                 echo
                 echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
                 # ___options.toolbar.euro=false hinzufügen
-                patch "$jsonfile" '.___defs.picsWidth = 60'
-                pack=1
+                patch "$jsonfile" '.___defs.picsWidth = 60' '.___defs.picsWidth' && pack=1
             fi
 
             # numberLineWithAnnotations
@@ -75,8 +88,8 @@ find . -type f -name "*.zip" | while read -r zipfile; do
                 echo
                 echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
                 # ___options.toolbar.euro=false hinzufügen
-                patch "$jsonfile" '.dataSettings.createConnXVars = false'
-                patch "$jsonfile" '.dataSettings.createInpXVars = false'
+                patch "$jsonfile" '.dataSettings.createConnXVars = false' '.dataSettings.createConnXVars' && \
+                patch "$jsonfile" '.dataSettings.createInpXVars = false' '.dataSettings.createInpXVars' && \
                 pack=1
             fi
 
@@ -86,10 +99,11 @@ find . -type f -name "*.zip" | while read -r zipfile; do
                 echo
                 echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
                 # ___options.toolbar.euro=false hinzufügen
-                patch "$jsonfile" '.dataSettings.createInpArcLabAny = false'
-                patch "$jsonfile" '.dataSettings.createInpArcLabAll = false'
-                patch "$jsonfile" '.dataSettings.createInpLabAny = false'
-                patch "$jsonfile" '.dataSettings.createInpLabAll = false'
+                patch "$jsonfile" '.dataSettings.createInpArcLabAny = false' '.dataSettings.createInpArcLabAny' && \
+                patch "$jsonfile" '.dataSettings.createInpArcLabAll = false' '.dataSettings.createInpArcLabAll' && \
+                patch "$jsonfile" '.dataSettings.createInpLabAny = false' '.dataSettings.createInpLabAny' && \
+                patch "$jsonfile" '.dataSettings.createInpLabAll = false' '.dataSettings.createInpLabAll' && \
+                pack=1
             fi
 
             # pointAreaExt
@@ -100,6 +114,17 @@ find . -type f -name "*.zip" | while read -r zipfile; do
                 patch "$jsonfile" '.___preSets.preSets = []' '.___preSets.preSets'
             fi
 
+            # inputInserts
+            if [[ "$name" = "inputInserts" ]]
+            then
+                patch "$jsonfile" '.dataSettings.scoringPattern |= map(if has("exp") then . else . + {"exp": true} end)' && pack=1
+            fi
+
+            # inputGrid
+            if [[ "$name" = "inputGrid" ]]
+            then
+                patch "$jsonfile" '.___basic.insertButtonsBeside = false' '.___basic.insertButtonsBeside' && pack=1
+            fi
         fi
     done < <(find "$tempdir" -type f -name "*config*.json")
 

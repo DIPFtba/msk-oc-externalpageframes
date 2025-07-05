@@ -125,6 +125,9 @@ function initJSON ( json ) {
 	// jsonLoaded.resolvePromise( json );	// for I18N
 
 	const cfg = clearCfgJson( json );
+	if ( cfg.dataSettings?.variablePrefix ) {
+		cfg.dataSettings.variablePrefix = cfg.dataSettings.variablePrefix.trim();
+	}
 
 /// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio' || __CLASS == 'pikasTextEntry'
 	// base ohne Konva stage

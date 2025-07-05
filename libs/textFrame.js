@@ -65,10 +65,10 @@ export class textFrame {
 		this.kGroup.add( kFrame );
 
 		// Text
-		const wRed = this.frameWidth ? this.frameWidth+1 : 0;
+		const wRed = this.frameWidth ? parseInt(this.frameWidth) + 1 : 0;
 		const kText = new Konva.Text({
 			text: this.insertThousandsSep( this.value ),
-			x: this.x + wRed,
+			x: parseInt(this.x) + wRed,
 			y: this.y,
 			width: this.width - wRed*2,
 			height: this.height,
@@ -111,10 +111,10 @@ export class textFrame {
 				inputElement.style.position = 'absolute';
 												// !!!!! Hier muss noch scrollPos verrechnet werden
 				const inpAddOff = this.getAddOff();
-				inputElement.style.left = (0+ stageBox.left + kFrame.x() + kGroup.x() + inpAddOff.x ) +'px';
-				inputElement.style.top = (0+ stageBox.top + kFrame.y() + kGroup.y() + inpAddOff.y )+'px';
-				inputElement.style.width = (1+this.width)+'px';
-				inputElement.style.height = (1+this.height)+'px';
+				inputElement.style.left = ( parseInt(stageBox.left) + kFrame.x() + kGroup.x() + parseInt(inpAddOff.x) ) +'px';
+				inputElement.style.top = ( parseInt(stageBox.top) + kFrame.y() + kGroup.y() + parseInt(inpAddOff.y) )+'px';
+				inputElement.style.width = (1+parseInt(this.width))+'px';
+				inputElement.style.height = (1+parseInt(this.height))+'px';
 				inputElement.style.background = this.backgroundEdit;
 				inputElement.style.border = '1px solid black';
 				inputElement.style['box-sizing'] = 'border-box';
@@ -263,7 +263,7 @@ export class textFrame {
 			case 270:
 				return {
 					x: 0,
-					y: -( this.width + this.height )/2,
+					y: -( parseInt(this.width) + parseInt(this.height) )/2,
 				}
 			default:
 				return {

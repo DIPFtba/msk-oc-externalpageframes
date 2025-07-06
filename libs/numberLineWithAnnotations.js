@@ -215,7 +215,10 @@ export class numberLineWithAnnotations {
 			}
 			const hitWidth = this.numberLine.tickHitLineWidth();
 			const hitAddTop = ao.annotationTickHeightTop*0.5;
-			const hitHeight = ao.annotationTickHeightTop*1.5+ao.annotationTickHeightBottom*2;
+			const hitHeight = Math.min(
+				ao.annotationTickHeightTop*1.5+ao.annotationTickHeightBottom*2,
+				ao.y - Math.min( apoints[1], apoints[3] ) // Höhe des Hit-Rectangles auf über TextFrame begrenzen
+			);
 			ao.kAnnotationTick = new Konva.Line({
 				points: apoints,
 				stroke: ao.conLineColor,

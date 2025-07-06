@@ -36,6 +36,99 @@ patch() {
     return 0
 }
 
+proc_config() {
+    local jsonfile="$1"
+
+    pack=0
+    name=$(jq -r '.dataSettings.___jsonSchemaData.___name' "$jsonfile")
+    if [ "$name" != "null" ]; then
+        # echo "File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+
+        # # freePaint:
+        # if [[ "$name" = "freePaint" ]]
+        # then
+        #     echo
+        #     echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+        #     # ___freePaint.doFill=true hinzufügen
+        #     patch "$jsonfile" '.___freePaint.doFill = true'
+        #     #{ .fl=0 } in .___extraLines.extraRects[] hinzufügen
+        #     if [[ $( jq -r '.___extraLines.extraRects | length' "$jsonfile" ) -gt 0 ]]
+        #     then
+        #         patch "$jsonfile" '.___extraLines.extraRects |= map(. + {"fl": 0})'
+        #     fi
+
+        #     pack=1
+        # fi
+
+        # # textareaInserts
+        # if [[ "$name" = "textareaInserts" ]]
+        # then
+        #     echo
+        #     echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+        #     # ___options.toolbar.euro=false hinzufügen
+        #     patch "$jsonfile" '.___options.toolbar.euro = false'
+        #     pack=1
+        # fi
+
+        # numbersByPictures
+        if [[ "$name" = "numbersByPictures" ]]
+        then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            # ___options.toolbar.euro=false hinzufügen
+            patch "$jsonfile" '.___defs.picsWidth = 60' '.___defs.picsWidth' && pack=1
+        fi
+
+        # numberLineWithAnnotations
+        if [[ "$name" = "numberLineWithAnnotations" ]]
+        then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            # ___options.toolbar.euro=false hinzufügen
+            patch "$jsonfile" '.dataSettings.createConnXVars = false' '.dataSettings.createConnXVars' && \
+            patch "$jsonfile" '.dataSettings.createInpXVars = false' '.dataSettings.createInpXVars' && \
+            pack=1
+        fi
+
+        # numberLineWithArcs
+        if [[ "$name" = "numberLineWithArcs" ]]
+        then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            # ___options.toolbar.euro=false hinzufügen
+            patch "$jsonfile" '.dataSettings.createInpArcLabAny = false' '.dataSettings.createInpArcLabAny' && \
+            patch "$jsonfile" '.dataSettings.createInpArcLabAll = false' '.dataSettings.createInpArcLabAll' && \
+            patch "$jsonfile" '.dataSettings.createInpLabAny = false' '.dataSettings.createInpLabAny' && \
+            patch "$jsonfile" '.dataSettings.createInpLabAll = false' '.dataSettings.createInpLabAll' && \
+            pack=1
+        fi
+
+        # pointAreaExt
+        if [[ "$name" = "pointAreaExt" ]]
+        then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            patch "$jsonfile" '.___preSets.preSets = []' '.___preSets.preSets' && pack=1
+        fi
+
+        # inputInserts
+        if [[ "$name" = "inputInserts" ]]
+        then
+            patch "$jsonfile" '.dataSettings.scoringPattern |= map(if has("exp") then . else . + {"exp": true} end)' && pack=1
+        fi
+
+        # inputGrid
+        if [[ "$name" = "inputGrid" ]]
+        then
+            patch "$jsonfile" '.___basic.insertButtonsBeside = false' '.___basic.insertButtonsBeside' && pack=1
+        fi
+    fi
+
+    return $pack
+}
+
+
+# ZIPs in den Unterverzeichnissen
 find . -type f -name "*.zip" | while read -r zipfile; do
 
     tempdir=$(mktemp -d)
@@ -43,89 +136,7 @@ find . -type f -name "*.zip" | while read -r zipfile; do
     pack=0
 
     while read -r jsonfile; do
-        name=$(jq -r '.dataSettings.___jsonSchemaData.___name' "$jsonfile")
-        if [ "$name" != "null" ]; then
-            # echo "File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
-
-            # # freePaint:
-            # if [[ "$name" = "freePaint" ]]
-            # then
-            #     echo
-            #     echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
-            #     # ___freePaint.doFill=true hinzufügen
-            #     patch "$jsonfile" '.___freePaint.doFill = true'
-            #     #{ .fl=0 } in .___extraLines.extraRects[] hinzufügen
-            #     if [[ $( jq -r '.___extraLines.extraRects | length' "$jsonfile" ) -gt 0 ]]
-            #     then
-            #         patch "$jsonfile" '.___extraLines.extraRects |= map(. + {"fl": 0})'
-            #     fi
-
-            #     pack=1
-            # fi
-
-            # # textareaInserts
-            # if [[ "$name" = "textareaInserts" ]]
-            # then
-            #     echo
-            #     echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
-            #     # ___options.toolbar.euro=false hinzufügen
-            #     patch "$jsonfile" '.___options.toolbar.euro = false'
-            #     pack=1
-            # fi
-
-            # numbersByPictures
-            if [[ "$name" = "numbersByPictures" ]]
-            then
-                echo
-                echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
-                # ___options.toolbar.euro=false hinzufügen
-                patch "$jsonfile" '.___defs.picsWidth = 60' '.___defs.picsWidth' && pack=1
-            fi
-
-            # numberLineWithAnnotations
-            if [[ "$name" = "numberLineWithAnnotations" ]]
-            then
-                echo
-                echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
-                # ___options.toolbar.euro=false hinzufügen
-                patch "$jsonfile" '.dataSettings.createConnXVars = false' '.dataSettings.createConnXVars' && \
-                patch "$jsonfile" '.dataSettings.createInpXVars = false' '.dataSettings.createInpXVars' && \
-                pack=1
-            fi
-
-            # numberLineWithArcs
-            if [[ "$name" = "numberLineWithArcs" ]]
-            then
-                echo
-                echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
-                # ___options.toolbar.euro=false hinzufügen
-                patch "$jsonfile" '.dataSettings.createInpArcLabAny = false' '.dataSettings.createInpArcLabAny' && \
-                patch "$jsonfile" '.dataSettings.createInpArcLabAll = false' '.dataSettings.createInpArcLabAll' && \
-                patch "$jsonfile" '.dataSettings.createInpLabAny = false' '.dataSettings.createInpLabAny' && \
-                patch "$jsonfile" '.dataSettings.createInpLabAll = false' '.dataSettings.createInpLabAll' && \
-                pack=1
-            fi
-
-            # pointAreaExt
-            if [[ "$name" = "pointAreaExt" ]]
-            then
-                echo
-                echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
-                patch "$jsonfile" '.___preSets.preSets = []' '.___preSets.preSets'
-            fi
-
-            # inputInserts
-            if [[ "$name" = "inputInserts" ]]
-            then
-                patch "$jsonfile" '.dataSettings.scoringPattern |= map(if has("exp") then . else . + {"exp": true} end)' && pack=1
-            fi
-
-            # inputGrid
-            if [[ "$name" = "inputGrid" ]]
-            then
-                patch "$jsonfile" '.___basic.insertButtonsBeside = false' '.___basic.insertButtonsBeside' && pack=1
-            fi
-        fi
+        proc_config "$jsonfile" || pack=1
     done < <(find "$tempdir" -type f -name "*config*.json")
 
     # neu packen?
@@ -141,3 +152,9 @@ find . -type f -name "*.zip" | while read -r zipfile; do
 
     rm -rf "$tempdir"
 done
+
+
+# ungezippte JSONs in den Unterverzeichnissen
+while read -r jsonfile; do
+    proc_config "$jsonfile"
+done < <(find . -type f -name "*config*.json")

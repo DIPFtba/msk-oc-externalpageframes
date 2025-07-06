@@ -54,6 +54,12 @@ export class SimpleInput {
         if ( this.id ) {
             container.id = `${this.id}-container`;
         }
+        if ( typeof parentContainer === 'string' ) {
+            parentContainer = document.querySelector( parentContainer );
+            if ( !parentContainer ) {
+                throw new Error( `Parent container "${parentContainer}" not found` );
+            }
+        }
         const contBound = parentContainer.getBoundingClientRect();
         this.offsX = contBound.left + window.scrollX;
         this.offsY = contBound.top + window.scrollY;

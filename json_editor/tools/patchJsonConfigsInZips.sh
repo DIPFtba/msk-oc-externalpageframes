@@ -15,6 +15,8 @@
 # !!! Änderungen immer in beiden machen !!!
 #
 
+preserveLongJsons=0
+
 patch() {
     JSONFILE="$1"
     PATCH="$2"
@@ -27,7 +29,9 @@ patch() {
         fi
     fi
 
-    jq "$PATCH" "$JSONFILE" -c > "$JSONFILE.tmp" || { echo "!!!!! jq Fehler, ABBRUCH !!!!!" >&2; exit 1; }
+    [[ $preserveLongJsons -gt 0 && $(cat "$JSONFILE" | wc -l) -gt 2 ]] && compressArg="" || compressArg="-c"
+
+    jq "$PATCH" "$JSONFILE" $compressArg > "$JSONFILE.tmp" || { echo "!!!!! jq Fehler, ABBRUCH !!!!!" >&2; exit 1; }
     echo
     diff -u <(jq '.' "$JSONFILE") <(jq '.' "$JSONFILE.tmp") && echo "Nichts gepatcht ($PATCH)!" >&2 && rm "$JSONFILE.tmp" && return 1
     echo
@@ -155,6 +159,8 @@ done
 
 
 # ungezippte JSONs in den Unterverzeichnissen
+preserveLongJsons=1
+
 while read -r jsonfile; do
     proc_config "$jsonfile"
 done < <(find . -type f -name "*config*.json")

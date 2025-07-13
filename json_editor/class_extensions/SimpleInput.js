@@ -123,9 +123,9 @@ export class SimpleInput {
         // initial Render
         this.render();
 
-        if ( process?.env?.NODE_ENV !== 'production' ) {
-            ( window.simpleInput = window.simpleInput || [] ).push( this ); // for debugging
-        }
+        // if ( process.env.NODE_ENV !== 'production' ) {
+        //     ( window.simpleInputFields = window.simpleInputFields || [] ).push( this ); // for debugging
+        // }
     }
 
     ///////////////////////////////////

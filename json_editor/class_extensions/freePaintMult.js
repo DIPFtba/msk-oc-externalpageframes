@@ -344,7 +344,7 @@ export class freePaintMultFromSchema {
 		if ( this.linesRedo.length>0 ) {
 			const line = this.linesRedo.pop();
 			this.linesCopy.push( line );
-			const kLine = new Konva.Line( this.unpackLOpts(line) );
+			const kLine = new Konva.Line( this.unpack2KonvaOpts(line) );
 			this.kGroupBrush.add( kLine );
 			this.linesUpdated();
 

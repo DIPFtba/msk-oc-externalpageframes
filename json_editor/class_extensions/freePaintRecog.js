@@ -35,9 +35,9 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 			obj[ `V_RecogTxt_${this.dataSettings.variablePrefix}` ] = this.recogTxt;
 		}
 
-		this.myScript.sk_enabled_subsets.forEach( (sk, i) => {
+		for (let i = 0; i < this.myScript.sk_enabled_subsets.length; i++) {
 			obj[ `V_RecogTxt${i+1}_${this.dataSettings.variablePrefix}` ] = this.recogTxtX[i];
-		});
+		}
 
 		return obj;
 	}
@@ -118,12 +118,6 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 
 	startRecog () {
 
-		const strokes = this.linesCopy.map( l => ({
-			x: l.p.map( d => d.x ),
-			y: l.p.map( d => d.y ),
-			t: l.p.map( d => d.t ),
-		}) );
-
 		const sendEvents = () => {
 			this.base.sendChangeState( this );	// init & send changeState & score
 
@@ -132,6 +126,24 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 				this.base.fsm.triggerEvent( 'EV_NewRecog_' + this.dataSettings.variablePrefix );
 			}
 		}
+
+		if ( this.linesCopy.length === 0 ) {
+			if ( this.myScript.withOut_sk ) {
+				this.recogTxt = "";
+			}
+			for (let i = 0; i < this.myScript.sk_enabled_subsets.length; i++) {
+				this.recogTxtX[i] = "";
+			}
+			sendEvents();
+			return;
+		}
+
+		const strokes = this.linesCopy.map( l => ({
+			x: l.p.map( d => d.x ),
+			y: l.p.map( d => d.y ),
+			t: l.p.map( d => d.t ),
+		}) );
+
 		const catchError = ( err ) => {
 			console.error( "freePaintRecog error:", err );
 		}

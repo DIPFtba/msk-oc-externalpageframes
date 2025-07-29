@@ -416,7 +416,7 @@ export class freePaintMultFromSchema {
 	}
 
 	sendButtonState () {
-		const canUndo = this.linesCopy.length>0;
+		const canUndo = this.linesCopy.length>0 || ( Array.isArray(this.undoClearAll) && this.undoClearAll.length>0 );
 		if ( canUndo !== this.canUndoSent ) {
 			const ev = `EV_${ canUndo ? 'CAN' : 'CANNOT' }_UNDO`;
 // console.log(`-------- EVENT ${ev} sent --------`);

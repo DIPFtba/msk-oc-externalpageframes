@@ -160,10 +160,11 @@ export class numberLineWithAnnotations {
 		annotations.forEach( a => {
 
 			let ao = Object.assign( {}, this.defaultAnnotation, a );
+			const pReadonly = ao.readonly || this.readonly;
 			if ( !( 'y' in ao ) ) ao.y = this.numberLine.y + 50;
 			if ( ao.xval ) ao.x = this.numberLine.val2x( ao.xval )-ao.width/2;
 			if ( !( 'x' in ao ) && 'toValue' in ao ) ao.x = this.numberLine.val2x( ao.toValue )-ao.width/2;
-			ao.conLineColor = ( ao.toValueReadonly || ao.readonly || this.readonly ) ? ao.conLineColorReadonly : ao.conLineColorEditable;
+			ao.conLineColor = ( ao.toValueReadonly || pReadonly ) ? ao.conLineColorReadonly : ao.conLineColorEditable;
 			if ( !( 'logObjectId' in ao ) ) {
 				ao.logObjectId = this.logObjectId++;
 			}
@@ -175,7 +176,7 @@ export class numberLineWithAnnotations {
 					value: ao.text,
 					cornerRadius: 4,
 					inputRegexp: ao.inputRegexp,
-					readonly: ao.textReadonly || ao.readonly || this.readonly,
+					readonly: ao.textReadonly || pReadonly,
 
 					onChange: () => {
 						ao.text = ao.frame.value;	// for get/set State()
@@ -186,38 +187,44 @@ export class numberLineWithAnnotations {
 						});
 						this.base.sendChangeState( this );
 					},
-					logObjectId: !( ao.textReadonly || ao.readonly || this.readonly ) ? ao.logObjectId : null,
+					logObjectId: !( ao.textReadonly || pReadonly ) ? ao.logObjectId : null,
 					logRef: () => ({ toValue: ao.toValue }),
 					base: this.base,
 			});
 
-			// line
-			let apoints = [ ao.frame.x+ao.frame.width/2, ao.frame.y ];
-			if ( ao.toValue!==null ) {
-				apoints.push( ao.frame.x+ao.frame.width/2 );		apoints.push( ao.frame.y-ao.conLineVertPiece );
-				apoints.push( this.numberLine.val2x(ao.toValue) );	apoints.push( this.numberLine.y + ao.annotationTickHeightBottom + ao.conLineVertPiece );
-				apoints.push( this.numberLine.val2x(ao.toValue) );	apoints.push( this.numberLine.y + ao.annotationTickHeightBottom );
+			const tickY1 = this.numberLine.y - ao.annotationTickHeightTop;
+			const tickY2 = this.numberLine.y + ao.annotationTickHeightBottom;
+			const tickX = ao.toValue!==null ? this.numberLine.val2x(ao.toValue) : null;
+			const hFrameX = ao.frame.x + ao.frame.width/2;
+
+			// line (under tick, only bezier part, if tickX is set)
+			let apoints = [ hFrameX, ao.frame.y ];
+			if ( tickX!==null ) {
+				apoints.push(
+					hFrameX, ao.frame.y - ao.conLineVertPiece,
+					tickX, tickY2 + ao.conLineVertPiece,
+					tickX, tickY2
+				);
 			}
 			ao.kLine = new Konva.Line({
 				points: apoints,
 				stroke: ao.conLineColor,
 				strokeWidth: ao.strokeWidth,
 				lineCap: 'round',
-				bezier: ao.toValue!==null,
+				bezier: tickX!==null,
 			})
 			this.line_layer.add( ao.kLine );
 
 			// AnnotationTick
 			apoints = [];
-			if ( ao.toValue!==null ) {
-				apoints.push( this.numberLine.val2x(ao.toValue) );	apoints.push( this.numberLine.y + ao.annotationTickHeightBottom );
-				apoints.push( this.numberLine.val2x(ao.toValue) );	apoints.push( this.numberLine.y - ao.annotationTickHeightTop );
+			if ( tickX!==null ) {
+				apoints.push( tickX, tickY1, tickX, tickY2 );
 			}
 			const hitWidth = this.numberLine.tickHitLineWidth();
 			const hitAddTop = ao.annotationTickHeightTop*0.5;
 			const hitHeight = Math.min(
 				ao.annotationTickHeightTop*1.5+ao.annotationTickHeightBottom*2,
-				ao.y - Math.min( apoints[1], apoints[3] ) // Höhe des Hit-Rectangles auf über TextFrame begrenzen
+				ao.y - Math.min( tickY1, tickY2 ) // Höhe des Hit-Rectangles auf über TextFrame begrenzen
 			);
 			ao.kAnnotationTick = new Konva.Line({
 				points: apoints,
@@ -238,12 +245,14 @@ export class numberLineWithAnnotations {
 			this.line_layer.add( ao.kAnnotationTick );
 
 			// highlight & line interactivity
-			if ( !( ao.toValueReadonly || ao.readonly || this.readonly ) ) {
+			if ( !( ao.toValueReadonly || pReadonly ) ) {
+
+				const highlightColor = this.highlightColor;
 
 				// mouse cursor highlighting
 				ao.frame.kText.on( 'mouseenter', function () {
 					if ( !this.sticky_ao && ao.toValue===null ) {
-						this.set_ao_line( ao, this.highlightColor );
+						this.set_ao_line( ao, highlightColor );
 					}
 				}.bind(this))
 				ao.frame.kText.on( 'mouseleave', function (ev) {
@@ -256,8 +265,8 @@ export class numberLineWithAnnotations {
 				}.bind(this))
 				ao.kAnnotationTick.on( 'mouseenter mousemove', function () {
 					if ( !this.repos_ao ) {
-						ao.kAnnotationTick.stroke( this.highlightColor );
-						ao.kLine.stroke( this.highlightColor );
+						ao.kAnnotationTick.stroke( highlightColor );
+						ao.kLine.stroke( highlightColor );
 						this.line_layer.batchDraw();
 						document.body.style.cursor = "ew-resize";
 					}
@@ -277,7 +286,7 @@ export class numberLineWithAnnotations {
 				// activate stickiness
 				ao.frame.kText.on( 'mousedown touchstart', function (ev) {
 					if ( !this.sticky_ao && ao.toValue===null ) {
-						this.set_ao_line( ao, this.highlightColor );
+						this.set_ao_line( ao, highlightColor );
 						this.sticky_ao=ao;
 						ev.cancelBubble = true;
 					}
@@ -285,8 +294,8 @@ export class numberLineWithAnnotations {
 				ao.kAnnotationTick.on( 'mousedown touchstart', function (ev) {
 					if ( !this.repos_ao ) {
 						this.repos_ao = ao;
-						this.set_ao_line( ao, this.highlightColor );
-						this.set_ao_annoline( this.repos_ao, this.highlightColor, ev );
+						this.set_ao_line( ao, highlightColor );
+						this.set_ao_annoline( this.repos_ao, highlightColor, ev );
 						ev.cancelBubble = true;
 					}
 				}.bind(this))
@@ -374,17 +383,19 @@ export class numberLineWithAnnotations {
 		// ao.kAnnotationTick.stroke( color );
 
 		// draw line
+		const tickX = this.numberLine.val2x( val );
+		const tickY = this.numberLine.y + ao.annotationTickHeightBottom;
 		let points = ao.kLine.points();
-		points[4] = this.numberLine.val2x( val );
-		points[5] = this.numberLine.y + ao.annotationTickHeightBottom + ao.conLineVertPiece;
-		points[6] = this.numberLine.val2x( val );
-		points[7] = this.numberLine.y + ao.annotationTickHeightBottom;
+		points[4] = tickX;
+		points[5] = tickY + ao.conLineVertPiece;
+		points[6] = tickX;
+		points[7] = tickY;
 		ao.kLine.points( points );
 		ao.kLine.stroke( color );
 
 		// draw annotationTick
 		points = points.slice( 6, 8 );
-		points[2] = this.numberLine.val2x( val );
+		points[2] = tickX;
 		points[3] = this.numberLine.y - ao.annotationTickHeightTop;
 		ao.kAnnotationTick.points( points );
 		ao.kAnnotationTick.stroke( color );

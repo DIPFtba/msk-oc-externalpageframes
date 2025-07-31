@@ -467,3 +467,31 @@ export function patchCfgI18n ( json, i18n, nameFnc=getEPFFolderName ) {
 		}
 	})
 }
+
+///////////////////////////////////////
+
+export function setBodyFont ( fontPath ) {
+	if ( !fontPath || typeof fontPath !== 'string' || fontPath.length === 0 ) {
+		return;
+	}
+
+	// Erstelle ein neues <style> Element
+	const styleElement = document.createElement('style');
+
+	// Extrahiere den Font-Namen aus dem Dateinamen (ohne Pfad und Erweiterung)
+	const fontName = fontPath.split('/').pop().split('.')[0];
+
+	// Definiere die @font-face Regel und wende sie auf den body an
+	styleElement.textContent = `
+		@font-face {
+			font-family: '${fontName}';
+			src: url('${fontPath}');
+		}
+		body {
+			font-family: '${fontName}', Arial, sans-serif;
+		}
+	`;
+
+	// Füge das Style-Element zum <head> hinzu
+	document.head.appendChild(styleElement);
+}

@@ -81,8 +81,18 @@
 					"default": 0,
 					"options": {
 						"grid_columns": 4,
-						"grid_break": true,
 						"infoText": "Wenn > 0: Schriftgröße wird bis zu diesem Wert verringert, wenn der Text zu breit für Feld ist"
+					}
+				},
+				"fontFile": {
+					"title": "Schriftart",
+					"type": "string",
+					"default": "",
+					"format": "font",
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true,
+						"infoText": "relativer Pfad (zur Laufzeit!) zur Schriftart-Datei, die für die Eingabefelder verwendet werden soll. Wenn leer, dann wird die Standard-Schriftart verwendet"
 					}
 				},
 

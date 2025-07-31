@@ -1,6 +1,6 @@
 
 import { setStatePostProc } from '../../libs/common';
-import { addScoring, dp2labFncInputRegExp } from '../common';
+import { addScoring, dp2labFncInputRegExp, setBodyFont } from '../common';
 import { SimpleInput } from './SimpleInput';
 
 export class pikasTextEntryFromSchema {
@@ -9,6 +9,8 @@ export class pikasTextEntryFromSchema {
 		base.regSendInitDone();
 		base.incInitCnt();
 		this.base = base;
+
+		setBodyFont( opts.options.fontFile );
 
 		// !!!!!
 		// !!!!! ToDo: get/setState() testen

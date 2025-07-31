@@ -126,6 +126,12 @@ proc_config() {
         then
             patch "$jsonfile" '.___basic.insertButtonsBeside = false' '.___basic.insertButtonsBeside' && pack=1
         fi
+
+        # pikasTextEntry
+        if [[ "$name" = "pikasTextEntry" ]]
+        then
+            patch "$jsonfile" '.options.fontFile = ""' '.options.fontFile' && pack=1
+        fi
     fi
 
     return $pack

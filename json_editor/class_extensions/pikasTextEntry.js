@@ -27,6 +27,8 @@ export class pikasTextEntryFromSchema {
 		dp2labFncInputRegExp( opts.options, this );
 		this.dataSettings = opts.dataSettings || {};
 
+		this.focusField = null;
+
 		this.fields = opts.fields.map( (f,idx) => {
 
 			const SimpleInputOpts = {
@@ -39,10 +41,26 @@ export class pikasTextEntryFromSchema {
 
 			evs.forEach( event => inp.on( event, (ev) => this.evh( event, idx+1, ev ) ) );
 
+			// track current focus field
+			const me = this;
+			const oldFocus = inp.focus;
+			inp.focus = function () {
+				oldFocus.apply( this, arguments );
+				me.focusField = idx;
+			}
+			const oldBlur = inp.blur;
+			inp.blur = function () {
+				oldBlur.apply( this, arguments );
+				if ( me.focusField === idx ) {
+					me.focusField = null;
+				}
+			}
+
 			return inp;
 		});
 
 		addScoring( this, opts, addMods.Parser );
+		this.startButtonListener();
 
 		this.initData = this.getChState();
 
@@ -93,6 +111,43 @@ export class pikasTextEntryFromSchema {
 				this.base.sendChangeState( this );	// init & send changeState & score
 			}
 		}
+	}
+
+	startButtonListener () {
+		window.addEventListener(
+			"message",
+			(event) => {
+
+				try {
+					if ( this.focusField!==null ) {
+
+						const [ btn ] = JSON.parse(event.data);
+						if ( btn.startsWith('btn_' ) ) {
+							const key = btn.substring(4);
+
+							const simpleKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+							if ( simpleKeys.includes( key ) ) {
+								this.fields[ this.focusField ].simulateKeyPress( key );
+							}
+
+							const keyTrans = {
+								'backspace': "Backspace",
+								'plus': "+",
+								'minus': "-",
+								'result': "=",
+								'left': "ArrowLeft",
+								'right': "ArrowRight",
+							};
+							if ( key in keyTrans ) {
+								this.fields[ this.focusField ].simulateKeyPress( keyTrans[key] );
+							}
+						}
+
+					}
+				} catch (e) {}
+
+			},
+			false );
 	}
 
 	///////////////////////////////////

@@ -267,6 +267,11 @@ export class SimpleInput {
         }
     }
 
+    simulateKeyPress ( key ) {
+        const event = new KeyboardEvent( 'keydown', { key } );
+        this.wh_keydown( event );
+    }
+
     ///////////////////////////////////
 
     get value () {
@@ -390,7 +395,7 @@ export class SimpleInput {
             default:
                 if ( ev.key.length === 1 && !ev.ctrlKey && !ev.metaKey && !ev.altKey ) { // only single character keys
                     this.insertAtCursor( ev.key );
-                handled = 1;
+                    handled = 1;
                 }
         }
 

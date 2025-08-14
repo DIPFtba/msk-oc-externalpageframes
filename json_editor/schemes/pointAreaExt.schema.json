@@ -315,6 +315,16 @@
 				"disable_properties": true
 			},
 			"properties": {
+				"readonly": {
+					"title": "Alles Unveränderbar",
+					"format": "checkbox",
+					"type": "boolean",
+					"default": false,
+					"options": {
+						"grid_columns": 6,
+						"grid_break": true
+					}
+				},
 				"preSets": {
 					"title": "Vorbelegte Plättchen",
 					"type": "array",

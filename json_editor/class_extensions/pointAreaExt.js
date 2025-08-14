@@ -92,7 +92,7 @@ export class pointAreaExtFromSchema {
 
 	initScene () {
 
-		document.body.style.cursor = 'pointer';
+		document.body.style.cursor = this.readonly ? 'auto' : 'pointer';
 
 		if ( this.layer ) {
 			this.layer.destroyChildren();
@@ -196,13 +196,15 @@ export class pointAreaExtFromSchema {
 		// click point
 		this.dots.forEach( (dotRow, row) => {
 			dotRow.forEach( (dot, col) => {
-				dot.k.on('click tap', (e) => {
-					if ( ignoreEvent(e) ) {
-						return
-					}
-					e.cancelBubble = true;
-					this.clickDot( row, col );
-				});
+				if ( !this.dotReadonly[row][col] ) {
+					dot.k.on('click tap', (e) => {
+						if ( ignoreEvent(e) ) {
+							return
+						}
+						e.cancelBubble = true;
+						this.clickDot( row, col );
+					});
+				}
 			});
 		});
 

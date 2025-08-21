@@ -113,23 +113,30 @@ proc_config() {
             echo
             echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
             patch "$jsonfile" '.___preSets.preSets = []' '.___preSets.preSets' && pack=1
+            patch "$jsonfile" '.___preSets.readonly = false' '.___preSets.readonly' && pack=1
         fi
 
         # inputInserts
         if [[ "$name" = "inputInserts" ]]
         then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
             patch "$jsonfile" '.dataSettings.scoringPattern |= map(if has("exp") then . else . + {"exp": true} end)' && pack=1
         fi
 
         # inputGrid
         if [[ "$name" = "inputGrid" ]]
         then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
             patch "$jsonfile" '.___basic.insertButtonsBeside = false' '.___basic.insertButtonsBeside' && pack=1
         fi
 
         # pikasTextEntry
         if [[ "$name" = "pikasTextEntry" ]]
         then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
             patch "$jsonfile" '.options.fontFile = ""' '.options.fontFile' && pack=1
         fi
     fi

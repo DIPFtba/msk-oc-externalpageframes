@@ -67,13 +67,13 @@ export class pikasTextEntryFromSchema {
 		base.decInitCnt();
 	}
 
-	scoreDefType () {
-		return this.labType;
+	scoreDefType (varName) {
+		return varName.match( /^V_Input_\w+_\d+$/ ) ? this.labType : 'Integer';
 	}
 
 	scoreDef () {
 		const res = {};
-		if ( this.readonly ) {
+		if ( this.readonly || !this.initData ) {
 			return res;
 		}
 
@@ -84,6 +84,10 @@ export class pikasTextEntryFromSchema {
 					res[`V_Input_${pref}_${i+1}`] = this.labValFnc( f.value );
 				}
 			});
+
+			if ( this.dataSettings?.createInpAllVars ) {
+				res[`V_Status_${pref}_All`] = +this.getChState().every( ( val, i ) => val != this.initData[i] );
+			}
 		}
 
 		if ( this.computeScoringVals ) {
@@ -158,7 +162,7 @@ export class pikasTextEntryFromSchema {
 
 	// Check if User made changes
 	getDefaultChangeState () {
-		return this.getChState() !== this.initData;
+		return this.getChState().some( (val, i) => val != this.initData[i] );
 	}
 
 	getState () {

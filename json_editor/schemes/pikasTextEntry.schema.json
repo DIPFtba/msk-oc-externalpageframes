@@ -527,6 +527,17 @@
 					}
 				},
 
+				"createInpAllVars": {
+					"title": "Erzeuge V_Status_&lt;pref&gt;_All Status-Variable",
+					"type": "boolean",
+					"format": "checkbox",
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Erzeuge zusätzliche Status-Variable, die angibt, ob in alle Felder Text eingegeben wurde"
+					}
+				},
+
 				"scoringVals": {
 					"title": "Scoring Werte",
 					"type": "array",

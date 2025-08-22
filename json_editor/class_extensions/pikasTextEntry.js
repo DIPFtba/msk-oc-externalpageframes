@@ -10,7 +10,10 @@ export class pikasTextEntryFromSchema {
 		base.incInitCnt();
 		this.base = base;
 
-		setBodyFont( opts.options.fontFile );
+		setBodyFont(
+			opts.options.fontFile,
+			opts.options.fontBold ? { 'font-weight': 'bold' } : {}
+		);
 
 		// !!!!!
 		// !!!!! ToDo: get/setState() testen

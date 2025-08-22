@@ -80,6 +80,7 @@
 					"minimum": 0,
 					"default": 0,
 					"options": {
+						"grid_break": true,
 						"grid_columns": 4,
 						"infoText": "Wenn > 0: Schriftgröße wird bis zu diesem Wert verringert, wenn der Text zu breit für Feld ist"
 					}
@@ -90,9 +91,22 @@
 					"default": "",
 					"format": "font",
 					"options": {
-						"grid_columns": 4,
 						"grid_break": true,
+						"grid_columns": 4,
 						"infoText": "relativer Pfad (zur Laufzeit!) zur Schriftart-Datei, die für die Eingabefelder verwendet werden soll. Wenn leer, dann wird die Standard-Schriftart verwendet"
+					}
+				},
+				"fontBold": {
+					"title": "Schriftart Fett darstellen",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_break": true,
+						"grid_columns": 4,
+						"dependencies": {
+							"fontFile": true
+						}
 					}
 				},
 

@@ -470,7 +470,7 @@ export function patchCfgI18n ( json, i18n, nameFnc=getEPFFolderName ) {
 
 ///////////////////////////////////////
 
-export function setBodyFont ( fontPath ) {
+export function setBodyFont ( fontPath, extraCss={} ) {
 	if ( !fontPath || typeof fontPath !== 'string' || fontPath.length === 0 ) {
 		return;
 	}
@@ -489,6 +489,7 @@ export function setBodyFont ( fontPath ) {
 		}
 		body {
 			font-family: '${fontName}', Arial, sans-serif;
+			${Object.entries(extraCss).map(([key, value]) => `${key}: ${value};`).join('\n')}
 		}
 	`;
 

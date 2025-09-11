@@ -168,14 +168,18 @@ export class numberLine {
 				strokeWidth: this.labelTickWidth || 1,
 			}))
 		}
-		const kText = new Konva.Text({
-			text: Array.isArray(v) ? v[1] : v,
-			x: x,
-			y: y,
-			fontSize: this.labelSize,
-		});
-		kText.offsetX( kText.width() / 2 );
-		this.layer.add(kText);
+
+		const text = ( Array.isArray(v) ? v[1] : v ).toString();
+		if ( text.length>0 && this.labelSize>0 ) {
+			const kText = new Konva.Text({
+				text,
+				x: x,
+				y: y,
+				fontSize: this.labelSize,
+			});
+			kText.offsetX( kText.width() / 2 );
+			this.layer.add(kText);
+		}
 
 		return this;
 	}

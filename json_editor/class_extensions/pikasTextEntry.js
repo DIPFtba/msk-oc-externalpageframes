@@ -32,32 +32,106 @@ export class pikasTextEntryFromSchema {
 
 		this.focusField = null;
 
+		const hasNavPrevNext = opts.fields.some( f => f.navPrev || f.navNext );
+		opts.options.navNextOnEnter &&= opts.options.blurOnEnter;
+
 		this.fields = opts.fields.map( (f,idx) => {
 
+			const readonly = opts.readonly || f.readonly;
 			const SimpleInputOpts = {
 				...opts.options,
 				...f,
-				readonly: f.readonly || opts.readonly,
+				readonly,
 			};
 
 			const inp = new SimpleInput( SimpleInputOpts, divSelector );
 
 			evs.forEach( event => inp.on( event, (ev) => this.evh( event, idx+1, ev ) ) );
 
-			// track current focus field
-			const me = this;
-			const oldFocus = inp.focus;
-			inp.focus = function () {
-				oldFocus.apply( this, arguments );
-				me.focusField = idx;
-			}
-			const oldBlur = inp.blur;
-			inp.blur = function () {
-				oldBlur.apply( this, arguments );
-				if ( me.focusField === idx ) {
-					me.focusField = null;
+			if ( !readonly ) {
+
+				// track current focus field
+				const me = this;
+				const oldFocus = inp.focus;
+				inp.focus = function () {
+					const oldFocusField = me.focusField;
+					if ( oldFocusField !== idx ) {
+						if ( oldFocusField !== null ) {
+							me.dontDisableKeyboard = true;
+							me.fields[ oldFocusField ].blur();
+						}
+						oldFocus.apply( this, arguments );
+						me.focusField = idx;
+						me.dontDisableKeyboard = false;
+						// me.checkPossibleInput();
+						me.enableKeyboard();
+					}
 				}
-			}
+				const oldBlur = inp.blur;
+				inp.blur = function () {
+					oldBlur.apply( this, arguments );
+					if ( me.focusField === idx ) {
+						me.focusField = null;
+						if ( !me.dontDisableKeyboard ) {
+							me.disableKeyboard();
+						}
+					}
+				}
+
+				// // Kann an der aktuellen Cursorposition laut MaxLength/RegExp noch etwas
+				// // über externe Tastatur eingegeben werden?
+				// // Entsprechenden Status der Tastatur setzen
+				// // Kann aber nicht voraussagen, ob Zeichen (mit Schriftverkleinerung?) noch passen würde
+				// inp.checkPossibleInput = function () {
+				// 	if ( this.maxlength && this.value.length >= this.maxlength ) {
+				// 		inputPossible = false;
+				// 	} else
+				// 	if ( inputPossible ) {
+				// 		me.enableKeyboard();
+				// 	} else {
+				// 		me.disableKeyboard();
+				// 	}
+				// }
+				// ['input','cursorPosChanged'].forEach( ev => {
+				// 	inp.on( ev, inp.checkPossibleInput.bind(inp) );
+				// });
+
+				// navPrev umsetzen?
+				if ( f.navPrev ) {
+					const prevIdx = parseInt( f.navPrev, 10 ) - 1;
+					if ( prevIdx <= opts.fields.length && prevIdx >= 0 ) {
+						const navToPrev = () => {
+							const field = me.fields[ prevIdx ];
+							field.focus();
+							field.setCursorPos( field.value.length );
+						};
+						inp.on( 'navPrev', navToPrev );
+					}
+				}
+
+				// navNext umsetzen?
+				const navToNext = (newIdx) => {
+					const field = me.fields[ newIdx ];
+					field.focus();
+					field.setCursorPos( 0 );
+				};
+				if ( f.navNext ) {
+					const nextIdx = parseInt( f.navNext, 10 ) - 1;
+					const navNext2 = () => navToNext( nextIdx );
+					if ( nextIdx <= opts.fields.length && nextIdx >= 0 ) {
+						inp.on( 'navNext', navNext2 );
+						if ( opts.options.navNextOnEnter ) {
+							inp.on( 'enterPressed', navNext2 );
+						}
+					}
+				}
+
+				if ( opts.options.navNextOnEnter && !hasNavPrevNext ) {
+					const nextIdx = (idx+1) % opts.fields.length;
+					inp.on( 'enterPressed', () => navToNext( nextIdx ) );
+				}
+
+			} // if !readonly
 
 			return inp;
 		});
@@ -102,6 +176,22 @@ export class pikasTextEntryFromSchema {
 
 	///////////////////////////////////
 
+	enableKeyboard () {
+		if ( this.keyboard !== true ) {
+			this.base.fsm.triggerEvent('EV_UNFROZEN');
+			this.keyboard = true;
+		}
+	}
+
+	disableKeyboard () {
+		if ( this.keyboard !== false ) {
+			this.base.fsm.triggerEvent('EV_FROZEN');
+			this.keyboard = false;
+		}
+	}
+
+	///////////////////////////////////
+
 	evh ( event, idx, ev ) {
 		if ( this.base ) {
 			const logDat = {
@@ -134,19 +224,25 @@ export class pikasTextEntryFromSchema {
 
 							const simpleKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
 							if ( simpleKeys.includes( key ) ) {
+								// Wenn die durch die externe Tastatur eingebbaren Zeichen geändert
+								// werden, dann unbdeingt auch in checkPossibleInput() ändern!
 								this.fields[ this.focusField ].simulateKeyPress( key );
-							}
 
-							const keyTrans = {
-								'backspace': "Backspace",
-								'plus': "+",
-								'minus': "-",
-								'result': "=",
-								'left': "ArrowLeft",
-								'right': "ArrowRight",
-							};
-							if ( key in keyTrans ) {
-								this.fields[ this.focusField ].simulateKeyPress( keyTrans[key] );
+							} else {
+
+								const keyTrans = {
+									'backspace': "Backspace",
+									'plus': "+",
+									'minus': "-",
+									'result': "=",
+									'left': "ArrowLeft",
+									'right': "ArrowRight",
+								};
+								if ( key in keyTrans ) {
+									// Wenn die durch die externe Tastatur eingebbaren Zeichen geändert
+									// werden, dann unbdeingt auch in checkPossibleInput() ändern!
+									this.fields[ this.focusField ].simulateKeyPress( keyTrans[key] );
+								}
 							}
 						}
 

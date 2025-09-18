@@ -139,7 +139,9 @@ proc_config() {
             echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
             patch "$jsonfile" '.options.fontFile = ""' '.options.fontFile' && pack=1
             patch "$jsonfile" '.options.fontBold = false' '.options.fontBold' && pack=1
+            patch "$jsonfile" '.options.navNextOnEnter = true' '.options.navNextOnEnter' && pack=1
             patch "$jsonfile" '.dataSettings.createInpAllVars = false' '.dataSettings.createInpAllVars' && pack=1
+            # patch "$jsonfile" '.dataSettings.___fields.fields |= map(if has("navPrev") then . else . + {"navPrev": "",navNext: ""} end)' && pack=1
         fi
     fi
 

@@ -131,7 +131,7 @@ export class SimpleInput {
     ///////////////////////////////////
 
     focus () {
-        if ( !this.hasFocus ) {
+        if ( !this.hasFocus && !this.readonly ) {
             this.hasFocus = true;
             this.setStyles( this.div, this.stylesFocus );
             this.setCursorPos( Math.min( this._cursorPos, this._value.length ) );
@@ -251,19 +251,23 @@ export class SimpleInput {
             if ( renderCursor ) {
                 this.renderCursor();
             }
-            this.emit( 'cursorPosChange', cursorX );
+            this.emit( 'cursorPosChanged', cursorX );
         }
     }
 
     curLeft () {
         if ( this._cursorPos > 0 ) {
             this.setCursorPos( this._cursorPos - 1 );
+        } else {
+            this.emit('navPrev' );
         }
     }
 
     curRight () {
         if ( this._cursorPos < this._value.length ) {
             this.setCursorPos( this._cursorPos + 1 );
+        } else {
+            this.emit('navNext' );
         }
     }
 
@@ -313,10 +317,10 @@ export class SimpleInput {
         const pageX = ev.pageX-this.offsX;
         if ( this.chars.length == 0 || pageX < this.chars[0].x1 ) {
             this.setCursorPos( 0 );
-            ev.stopPropagation();
+            ev.stopImmediatePropagation();
         } else if ( pageX > this.chars[ this.chars.length - 1 ].x2 ) {
             this.setCursorPos( this._value.length );
-            ev.stopPropagation();
+            ev.stopImmediatePropagation();
         } else {
             this.h_click_char( ev, this.chars.findIndex( ( char ) => pageX >= char.x1 && pageX <= char.x2 ) );
         }
@@ -342,7 +346,7 @@ export class SimpleInput {
         const char = ( idx !== null ? this.chars[idx] : ev.target );
 // console.log('*** hClickChar char', char );
         this.setCursorPos( ev.pageX-this.offsX < ( char.x1 + char.x2 ) / 2 ? idx : idx + 1 );
-        ev.stopPropagation();
+        ev.stopImmediatePropagation();
     }
 
     wh_keydown ( ev ) {
@@ -402,7 +406,7 @@ export class SimpleInput {
         if ( handled ) {
             this.emit(ev);
             ev.preventDefault(); // prevent default browser actions
-            ev.stopPropagation();
+            ev.stopImmediatePropagation();
         }
     }
 

@@ -119,6 +119,19 @@
 						"grid_columns": 4
 					}
 				},
+				"navNextOnEnter": {
+					"title": "Enter navigiert zu nächstem Feld",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": true,
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true,
+						"dependencies": {
+							"blurOnEnter": true
+						}
+					}
+				},
 				"revertOnEsc": {
 					"title": "Eingabe bei Esc verwerfen",
 					"type": "boolean",
@@ -425,6 +438,7 @@
 			"format": "grid-strict",
 			"options": {
 				"titleHidden": true,
+				"remove_empty_properties": true,
 				"disable_collapse": true,
 				"disable_edit_json": true,
 				"disable_properties": true
@@ -440,7 +454,7 @@
 						"disable_edit_json": true,
 						"disable_properties": true,
 						"grid_columns": 12,
-						"infoText": "Definitionen der Eingabefelder. Wenn Breite/Höhe leer, dann wird die Default-Breite/Höhe verwendet. 'VarName' wird Teil des IB-Variablen-Namens"
+						"infoText": "Definitionen der Eingabefelder. Wenn Breite/Höhe leer, dann wird die Default-Breite/Höhe verwendet. 'Prev-/NextIdx' gibt Index 1-n des vorherigen/nächsten Feldes an. 'Fest' bedeutet 'Unveränderbar'. 'VarName' wird Teil des IB-Variablen-Namens"
 					},
 					"items": {
 						"title": "Eingabefeld",
@@ -484,8 +498,18 @@
 								"type": "string",
 								"default": ""
 							},
+							"navPrev": {
+								"title": "PrevIdx",
+								"type": "string",
+								"default": ""
+							},
+							"navNext": {
+								"title": "NextIdx",
+								"type": "string",
+								"default": ""
+							},
 							"readonly": {
-								"title": "Unveränderbar",
+								"title": "Fest",
 								"type": "boolean",
 								"format": "checkbox",
 								"default": false

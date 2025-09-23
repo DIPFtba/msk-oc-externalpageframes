@@ -35,6 +35,8 @@ export class pikasTextEntryFromSchema {
 		const hasNavPrevNext = opts.fields.some( f => f.navPrev || f.navNext );
 		opts.options.navNextOnEnter &&= opts.options.blurOnEnter;
 
+		const hasVarNames = opts.fields.some( f => f.varName );
+
 		this.fields = opts.fields.map( (f,idx) => {
 
 			const readonly = opts.readonly || f.readonly;
@@ -131,6 +133,10 @@ export class pikasTextEntryFromSchema {
 					inp.on( 'enterPressed', () => navToNext( nextIdx ) );
 				}
 
+				if ( !hasVarNames && this.dataSettings?.variablePrefix ) {
+					inp.varName = (idx+1).toString();
+				}
+
 			} // if !readonly
 
 			return inp;
@@ -157,8 +163,8 @@ export class pikasTextEntryFromSchema {
 		const pref = this.dataSettings?.variablePrefix;
 		if ( pref ) {
 			this.fields.forEach( (f, i) => {
-				if ( !f.readonly ) {
-					res[`V_Input_${pref}_${i+1}`] = this.labValFnc( f.value );
+				if ( !f.readonly && f.varName ) {
+					res[`V_Input_${pref}_${f.varName}`] = this.labValFnc( f.value );
 				}
 			});
 
@@ -204,7 +210,7 @@ export class pikasTextEntryFromSchema {
 
 			if ( event=='invalid' ) {
 				this.base.triggerInputValidationEvent();
-			} else if ( event=='change' ) {
+			} else if ( ['input','change'].includes(event) ) {
 				this.base.sendChangeState( this );	// init & send changeState & score
 			}
 		}

@@ -454,7 +454,7 @@
 						"disable_edit_json": true,
 						"disable_properties": true,
 						"grid_columns": 12,
-						"infoText": "Definitionen der Eingabefelder. Wenn Breite/Höhe leer, dann wird die Default-Breite/Höhe verwendet. 'Prev-/NextIdx' gibt Index 1-n des vorherigen/nächsten Feldes an. 'Fest' bedeutet 'Unveränderbar'. 'VarName' wird Teil des IB-Variablen-Namens"
+						"infoText": "Definitionen der Eingabefelder. Wenn Breite/Höhe leer, dann wird die Default-Breite/Höhe verwendet. 'Prev-/NextIdx' gibt Index 1-n des vorherigen/nächsten Feldes an. 'Fest' bedeutet 'Unveränderbar'. 'VarName' wird Teil des IB-Variablen-Namens (wenn alle leer = Index wird verwendet)"
 					},
 					"items": {
 						"title": "Eingabefeld",

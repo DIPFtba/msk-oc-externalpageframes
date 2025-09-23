@@ -22,7 +22,7 @@
 			"properties": {
 
 				"readonly": {
-					"title": "Komplett unveränderbar",
+					"title": "Balken unveränderbar",
 					"type": "boolean",
 					"format": "checkbox",
 					"default": false,
@@ -147,7 +147,7 @@
 						"sliderWidth": {
 							"title": "Dicke Slider",
 							"type": "integer",
-							"minimum": 1,
+							"minimum": 0,
 							"options": {
 								"grid_columns": 4
 							},

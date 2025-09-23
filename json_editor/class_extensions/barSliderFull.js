@@ -127,7 +127,9 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 		const pref = this.dataSettings?.variablePrefix;
 		if ( pref ) {
 
-			res[`V_Input_${pref}_Val`] = Math.round( this.pos * this.dataSettings.xMult );
+			if ( !this.readonly_bar ) {
+				res[`V_Input_${pref}_Val`] = Math.round( this.pos * this.dataSettings.xMult );
+			}
 
 			if ( this.rwFreeLabels?.length>0 ) {
 				this.rwFreeLabels.forEach( (fl,i) => {

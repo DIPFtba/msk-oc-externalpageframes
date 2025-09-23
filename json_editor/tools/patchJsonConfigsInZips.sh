@@ -143,6 +143,15 @@ proc_config() {
             patch "$jsonfile" '.dataSettings.createInpAllVars = false' '.dataSettings.createInpAllVars' && pack=1
             # patch "$jsonfile" '.dataSettings.___fields.fields |= map(if has("navPrev") then . else . + {"navPrev": "",navNext: ""} end)' && pack=1
         fi
+
+        # BalkenSliderFull
+        if [[ "$name" = "BalkenSliderFull" ]]
+        then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            patch "$jsonfile" '.___bar.readonly_bar = false' '.___bar.readonly_bar' && pack=1
+            patch "$jsonfile" '.___freePaint.linesChangeState = false' '.___freePaint.linesChangeState' && pack=1
+        fi
     fi
 
     return $pack

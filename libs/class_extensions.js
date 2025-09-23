@@ -184,6 +184,8 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 						on: () => this.freePaintClearAll(),
 					}],
 			},
+
+			linesChangeState: null,	// Overwrites linesChangeState arg, if set
 		};
 		if ( hasMarker && ( opts.hasMarker===undefined || opts.hasMarker ) ) {
 			additionalDefaultOpts.modeIconBarDef.icons.splice( 1, 0, {
@@ -201,7 +203,9 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 			}
 		}
 		mergeAdditionalDefaultsToThis.call( this, additionalDefaultOpts, opts );
-
+		if ( this.linesChangeState===null ) {
+			this.linesChangeState = linesChangeState;
+		}
 		this.freePaintInit();
 
 		this.initData = this.getChState();
@@ -431,17 +435,15 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 
 	getChState () {
 		const s = super.getChState();
-		if ( linesChangeState && this.linesCopy && this.linesCopy.length ) {
+		if ( this.linesChangeState && this.linesCopy && this.linesCopy.length ) {
 			s.lines = this.linesCopy;
 		}
-		return  s;
+		return s;
 	}
 
-	getDefaultChangeState () {
-
-		return super.getDefaultChangeState() || !!( linesChangeState && this.linesCopy && this.linesCopy.length );
-
-	}
+	// getDefaultChangeState () {
+	// 	return super.getDefaultChangeState() || !!( this.linesChangeState && this.linesCopy && this.linesCopy.length );
+	// }
 }
 
 //////////////////////////////////////////////////////////////////////////////

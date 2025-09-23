@@ -41,6 +41,7 @@ export class barSlider {
 				// { val: 0-1, text:}
 			],
 			readonly: 0,
+			readonly_bar: 0,	// es kann auch nur der bar readonly gesetzt werden, ohne global readonly zu setzen (wichtig für abgeleitete Klassen, z.B. durch addFreePaintTo() )
 			logObjectId: 1,
 		}
 		Object.assign( this, defaultOpts, opts );
@@ -132,7 +133,7 @@ export class barSlider {
 		this.layer.add( this.kSlider );
 
 		// interactivity
-		if ( !this.readonly ) {
+		if ( !this.readonly && !this.readonly_bar ) {
 
 			this.kSlider.on( 'mouseenter', () => {
 				this.redraw( this.sliderHighlightColor );

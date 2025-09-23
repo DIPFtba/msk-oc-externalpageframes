@@ -31,16 +31,26 @@
 						"grid_break": true
 					}
 				},
+				"readonly_bar": {
+					"title": "Balken unveränderbar",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"dependencies": {
+							"readonly": false
+						}
+					}
+				},
 				"pos": {
-					"title": "Eingestellter Wert (0 - 1.0)",
+					"title": "Voreingestellter Wert (0 - 1.0)",
 					"type": "number",
 					"minimum": 0,
 					"options": {
 						"grid_columns": 4,
-						"grid_break": true,
-						"dependencies": {
-							"readonly": true
-						}
+						"grid_break": true
 					},
 					"default": 0
 				},
@@ -147,7 +157,7 @@
 						"sliderWidth": {
 							"title": "Dicke Slider",
 							"type": "integer",
-							"minimum": 1,
+							"minimum": 0,
 							"options": {
 								"grid_columns": 4
 							},
@@ -780,6 +790,19 @@
 				},
 				"hasMarker": {
 					"title": "Marker",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"dependencies": {
+							"___hasFreePaint": true
+						}
+					}
+				},
+				"linesChangeState": {
+					"title": "Linienänderung setzt Status-Variable",
 					"type": "boolean",
 					"format": "checkbox",
 					"default": false,

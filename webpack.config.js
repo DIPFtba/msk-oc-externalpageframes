@@ -61,6 +61,7 @@ function getEditorCfg ( env, argv ) {
 							__DEVELOP: argv.mode==='production' ? false : true,
 							__EDITOR: true,
 							__item: '',
+							__VueExamples: true, // to enable Vue examples in editor
 						}
 					}],
 					exclude: /node_modules/,
@@ -118,6 +119,8 @@ const ExtResFromSchema = {
 	barPlot: { version: "0.1.0" },
 	barSlider: { version: "0.1.0" },
 	barSliderFull: { version: "0.1.0" },
+	// vueExamplePropsEmit: { version: "0.1.0" },
+	// vueExamplePinia: { version: "0.1.0" },
 	connectedFrames: { version: "0.1.0" },
 	filledBar: { version: "0.1.0" },
 	freePaint: { version: "0.1.0" },

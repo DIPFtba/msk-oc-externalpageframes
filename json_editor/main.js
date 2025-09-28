@@ -15,13 +15,23 @@ import { barSliderFullFromSchema } from './class_extensions/barSliderFull';
 import barSliderFullJSONSchema from './schemes/barSliderFull.schema.json';
 import barSliderFullSVG from './svgs/barSliderFull.svg';
 
-import { connectedFramesFromSchema } from './class_extensions/connectedFrames';
-import connectedFramesJSONSchema from './schemes/connectedFrames.schema.json';
-import connectedFramesSVG from './svgs/connectedFrames.svg';
-
 import { filledBarFromSchema } from './class_extensions/filledBar';
 import filledBarJSONSchema from './schemes/filledBar.schema.json';
 import filledBarSVG from './svgs/filledBar.svg';
+
+/// #if __VueExamples
+import { vueExamplePropsEmitFromSchema } from './class_extensions/vueExamplePropsEmit';
+import vueExamplePropsEmitJSONSchema from './schemes/vueExamplePropsEmit.schema.json';
+import vueExamplePropsEmitSVG from './svgs/vue.svg';
+
+import { vueExamplePiniaFromSchema } from './class_extensions/vueExamplePinia';
+import vueExamplePiniaJSONSchema from './schemes/vueExamplePinia.schema.json';
+import vueExamplePiniaSVG from './svgs/vue.svg';
+/// #endif
+
+import { connectedFramesFromSchema } from './class_extensions/connectedFrames';
+import connectedFramesJSONSchema from './schemes/connectedFrames.schema.json';
+import connectedFramesSVG from './svgs/connectedFrames.svg';
 
 import { freePaintFromSchema } from './class_extensions/freePaint';
 import freePaintJSONSchema from './schemes/freePaint.schema.json';
@@ -203,6 +213,16 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new barSliderFullFromSchema( base, cfgData, addMods );
 						break;
+/// #if __VueExamples
+					case 'vueExamplePropsEmit':
+						initContainer(true);
+						creator = (cfgData) => new vueExamplePropsEmitFromSchema( base, cfgData, addMods );
+						break;
+					case 'vueExamplePinia':
+						initContainer(true);
+						creator = (cfgData) => new vueExamplePiniaFromSchema( base, cfgData, addMods );
+						break;
+/// #endif
 					case 'connectedFrames':
 						initContainer(true);
 						creator = (cfgData) => new connectedFramesFromSchema( base, cfgData, addMods );
@@ -318,6 +338,10 @@ const templs = {
 	barPlot: [ barPlotJSONSchema, barPlotSVG ],
 	barSlider: [ barSliderJSONSchema, barSliderSVG ],
 	barSliderFull: [ barSliderFullJSONSchema, barSliderFullSVG ],
+/// #if __VueExamples
+	vueExamplePropsEmit: [ vueExamplePropsEmitJSONSchema, vueExamplePropsEmitSVG ],
+	vueExamplePinia: [ vueExamplePiniaJSONSchema, vueExamplePiniaSVG ],
+/// #endif
 	connectedFrames: [ connectedFramesJSONSchema, connectedFramesSVG ],
 	filledBar: [ filledBarJSONSchema, filledBarSVG ],
 	freePaint: [ freePaintJSONSchema, freePaintSVG ],

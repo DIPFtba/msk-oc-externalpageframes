@@ -144,8 +144,8 @@ proc_config() {
             # patch "$jsonfile" '.dataSettings.___fields.fields |= map(if has("navPrev") then . else . + {"navPrev": "",navNext: ""} end)' && pack=1
         fi
 
-        # BalkenSliderFull
-        if [[ "$name" = "BalkenSliderFull" ]]
+        # barSliderFull
+        if [[ "$name" = "barSliderFull" ]]
         then
             echo
             echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"

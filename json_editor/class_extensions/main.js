@@ -70,6 +70,10 @@ import { barPlotFromSchema } from './barPlot';
 import { barSliderFromSchema } from './barSlider';
 /// #elif __CLASS == 'barSliderFull'
 import { barSliderFullFromSchema } from './barSliderFull';
+/// #elif __CLASS == 'vueExamplePropsEmit'
+import { vueExamplePropsEmitFromSchema } from './vueExamplePropsEmit';
+/// #elif __CLASS == 'vueExamplePinia'
+import { vueExamplePiniaFromSchema } from './vueExamplePinia';
 /// #elif __CLASS == 'connectedFrames'
 import { connectedFramesFromSchema } from './connectedFrames';
 /// #elif __CLASS == 'filledBar'
@@ -161,6 +165,10 @@ function initJSON ( json ) {
 		const io = new barSliderFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'barSliderFull'
 		const io = new barSliderFullFromSchema( base, cfg, addMods );
+/// #elif __CLASS == 'vueExamplePropsEmit'
+		const io = new vueExamplePropsEmitFromSchema( base, cfg, addMods );
+/// #elif __CLASS == 'vueExamplePinia'
+		const io = new vueExamplePiniaFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'connectedFrames'
 		const io = new connectedFramesFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'filledBar'

@@ -412,18 +412,6 @@ function updateEWK () {
 				window.extres = extres;
 			}
 
-			// Patch scoreDef for output
-			if ( extres.scoreDef ) {
-				const oldScoreDef = extres.scoreDef.bind( extres );
-				let oldScoreVals = {};
-				extres.scoreDef = function () {
-					const res = oldScoreDef();
-					oldScoreVals = debugOutObj( 'Variables', res, oldScoreVals );
-					return res;
-				}
-				extres.scoreDef();
-			}
-
 			// Patch statusVarDef
 			addStatusVarDef( extres, cfgData );
 			if ( extres.statusVarDef ) {
@@ -435,6 +423,18 @@ function updateEWK () {
 					return res;
 				}
 				extres.statusVarDef();
+			}
+
+			// Patch scoreDef for output
+			if ( extres.scoreDef ) {
+				const oldScoreDef = extres.scoreDef.bind( extres );
+				let oldScoreVals = {};
+				extres.scoreDef = function () {
+					const res = oldScoreDef();
+					oldScoreVals = debugOutObj( 'Variables', res, oldScoreVals );
+					return res;
+				}
+				extres.scoreDef();
 			}
 
 			if ( extres.getState ) {

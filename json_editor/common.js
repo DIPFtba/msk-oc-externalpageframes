@@ -103,6 +103,11 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 
 		const scores = obj.scoreDef(true);
 		if ( typeof scores === 'object' ) {
+			// FIX: (sehr wahrscheinlich vorhandene) StatusVariable in res verfügbar machen
+			if ( obj.dataSettings.variablePrefix && !obj.readonly ) {
+				scores[ `V_Status_${obj.dataSettings.variablePrefix}` ] = 1;
+			}
+			// Ende FIX
 			const varNames = Object.keys( scores ).map( s => s.trim() );
 			if ( varNames.length>0 ) {
 
@@ -175,16 +180,27 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 
 	if ( obj.scoringVals ) {
 		obj.computeScoringVals = function (res) {
+			// FIX: StatusVariable in res verfügbar machen
+			let res_in = res;
+			if ( this.statusVarDef ) {
+				res_in = Object.assign( {}, res, this.statusVarDef() );
+			} else if ( this.dataSettings.variablePrefix && !this.readonly ) {
+				// Ist noch nicht verfügbar, wird es aber (sehr wahrscheinlich) später sein
+				res_in = Object.assign( {}, res, {
+					[ `V_Status_${this.dataSettings.variablePrefix}` ]: 1
+				});
+			}
+			// Ende FIX
 			let score = null;
 			const scoreDat = this.scoringVals;
 			for ( let h=0; score===null && h<scoreDat.length; h++ ) {
 				const [v,c] = scoreDat[h];
 				try {
-					if ( c.evaluate( res ) ) {
+					if ( c.evaluate( res_in ) ) {
 						score = v;
 					}
 				} catch (e) {
-					debugAndConsoleOut( `Error in scoring-condition: ${e}, ${res}` );
+					debugAndConsoleOut( `Error in scoring-condition: ${e}` );
 				}
 			}
 			const n = Number(score)

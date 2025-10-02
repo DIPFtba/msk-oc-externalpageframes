@@ -61,7 +61,7 @@ function getEditorCfg ( env, argv ) {
 							__DEVELOP: argv.mode==='production' ? false : true,
 							__EDITOR: true,
 							__item: '',
-							__VueExamples: true, // to enable Vue examples in editor
+							__VueExamples: false, // to enable Vue examples in editor
 						}
 					}],
 					exclude: /node_modules/,

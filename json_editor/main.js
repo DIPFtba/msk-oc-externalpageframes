@@ -15,9 +15,9 @@ import { barSliderFullFromSchema } from './class_extensions/barSliderFull';
 import barSliderFullJSONSchema from './schemes/barSliderFull.schema.json';
 import barSliderFullSVG from './svgs/barSliderFull.svg';
 
-import { filledBarFromSchema } from './class_extensions/filledBar';
-import filledBarJSONSchema from './schemes/filledBar.schema.json';
-import filledBarSVG from './svgs/filledBar.svg';
+import { chatTextAudioFromSchema } from './class_extensions/chatTextAudio';
+import chatTextAudioJSONSchema from './schemes/chatTextAudio.schema.json';
+import chatTextAudioSVG from './svgs/vue.svg';
 
 /// #if __VueExamples
 import { vueExamplePropsEmitFromSchema } from './class_extensions/vueExamplePropsEmit';
@@ -32,6 +32,10 @@ import vueExamplePiniaSVG from './svgs/vue.svg';
 import { connectedFramesFromSchema } from './class_extensions/connectedFrames';
 import connectedFramesJSONSchema from './schemes/connectedFrames.schema.json';
 import connectedFramesSVG from './svgs/connectedFrames.svg';
+
+import { filledBarFromSchema } from './class_extensions/filledBar';
+import filledBarJSONSchema from './schemes/filledBar.schema.json';
+import filledBarSVG from './svgs/filledBar.svg';
 
 import { freePaintFromSchema } from './class_extensions/freePaint';
 import freePaintJSONSchema from './schemes/freePaint.schema.json';
@@ -213,6 +217,10 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new barSliderFullFromSchema( base, cfgData, addMods );
 						break;
+					case 'chatTextAudio':
+						initContainer(true);
+						creator = (cfgData) => new chatTextAudioFromSchema( base, cfgData, addMods );
+						break;
 /// #if __VueExamples
 					case 'vueExamplePropsEmit':
 						initContainer(true);
@@ -338,6 +346,7 @@ const templs = {
 	barPlot: [ barPlotJSONSchema, barPlotSVG ],
 	barSlider: [ barSliderJSONSchema, barSliderSVG ],
 	barSliderFull: [ barSliderFullJSONSchema, barSliderFullSVG ],
+	chatTextAudio: [ chatTextAudioJSONSchema, chatTextAudioSVG ],
 /// #if __VueExamples
 	vueExamplePropsEmit: [ vueExamplePropsEmitJSONSchema, vueExamplePropsEmitSVG ],
 	vueExamplePinia: [ vueExamplePiniaJSONSchema, vueExamplePiniaSVG ],

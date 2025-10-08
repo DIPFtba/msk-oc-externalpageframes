@@ -13,8 +13,10 @@
 		"___list": {
 			"title": "Chat-Liste",
 			"type": "object",
+			"format": "grid-strict",
 			"options": {
 				"titleHidden": true,
+				"remove_empty_properties": true,
 				"disable_collapse": true,
 				"disable_edit_json": true,
 				"disable_properties": true
@@ -26,7 +28,7 @@
 					"type": "string",
 					"default": "",
 					"options": {
-						"grid_columns": 6
+						"grid_columns": 4
 					}
 				},
 				"listGap": {
@@ -34,8 +36,8 @@
 					"type": "string",
 					"default": "12",
 					"options": {
-						"grid_columns": 6,
-						"grid-break": true
+						"grid_columns": 4,
+						"grid_break": true
 					}
 				},
 
@@ -44,6 +46,7 @@
 					"type": "object",
 					"format": "grid-strict",
 					"options": {
+						"collapsed": true,
 						"grid_columns": 12,
 						"remove_empty_properties": true,
 						"disable_edit_json": true,
@@ -65,8 +68,7 @@
 							"format": "color",
 							"default": "#000000",
 							"options": {
-								"grid_columns": 4,
-								"grid-break": true
+								"grid_columns": 4
 							}
 						},
 						"borderRadius": {
@@ -74,27 +76,54 @@
 							"type": "string",
 							"default": "5",
 							"options": {
+								"grid_break": true,
 								"grid_columns": 4
 							}
 						},
 
+						"_set_BackgroundColor": {
+							"title": "Hintergrundfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": false,
+							"options": {
+								"grid_columns": 4
+							}
+						},
 						"backgroundColor": {
 							"title": "Hintergrundfarbe",
 							"type": "string",
 							"format": "color",
-							"default": "",
+							"default": "#FFFFFF",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_BackgroundColor": true
+								}
+							}
+						},
+
+						"_set_color": {
+							"title": "Textfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": false,
+							"options": {
+								"grid_columns": 4
 							}
 						},
 						"color": {
 							"title": "Textfarbe",
 							"type": "string",
 							"format": "color",
-							"default": "",
+							"default": "#000000",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_color": true
+								}
 							}
 						},
 
@@ -103,7 +132,7 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4
 							}
 						},
 						"marginHorz": {
@@ -111,8 +140,8 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						}
 
@@ -124,6 +153,7 @@
 					"type": "object",
 					"format": "grid-strict",
 					"options": {
+						"collapsed": true,
 						"grid_columns": 12,
 						"remove_empty_properties": true,
 						"disable_edit_json": true,
@@ -145,8 +175,7 @@
 							"format": "color",
 							"default": "#008000",
 							"options": {
-								"grid_columns": 4,
-								"grid-break": true
+								"grid_columns": 4
 							}
 						},
 						"borderRadius": {
@@ -154,27 +183,55 @@
 							"type": "string",
 							"default": "3",
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						},
 
+						"_set_BackgroundColor": {
+							"title": "Hintergrundfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": true,
+							"options": {
+								"grid_columns": 4
+							}
+						},
 						"backgroundColor": {
 							"title": "Hintergrundfarbe",
 							"type": "string",
 							"format": "color",
 							"default": "#CCF0CC",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_BackgroundColor": true
+								}
+							}
+						},
+
+						"_set_color": {
+							"title": "Textfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": false,
+							"options": {
+								"grid_columns": 4
 							}
 						},
 						"color": {
 							"title": "Textfarbe",
 							"type": "string",
 							"format": "color",
-							"default": "",
+							"default": "#000000",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_color": true
+								}
+
 							}
 						},
 
@@ -183,7 +240,7 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4
 							}
 						},
 						"marginHorz": {
@@ -191,8 +248,8 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						},
 
@@ -201,7 +258,7 @@
 							"type": "string",
 							"default": "3",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4
 							}
 						},
 						"paddingHorz": {
@@ -209,8 +266,8 @@
 							"type": "string",
 							"default": "10",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						}
 					}
@@ -221,6 +278,7 @@
 					"type": "object",
 					"format": "grid-strict",
 					"options": {
+						"collapsed": true,
 						"grid_columns": 12,
 						"remove_empty_properties": true,
 						"disable_edit_json": true,
@@ -242,8 +300,7 @@
 							"format": "color",
 							"default": "#FF0000",
 							"options": {
-								"grid_columns": 4,
-								"grid-break": true
+								"grid_columns": 4
 							}
 						},
 						"borderRadius": {
@@ -251,27 +308,55 @@
 							"type": "string",
 							"default": "3",
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						},
 
+						"_set_BackgroundColor": {
+							"title": "Hintergrundfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": true,
+							"options": {
+								"grid_columns": 4
+							}
+						},
 						"backgroundColor": {
 							"title": "Hintergrundfarbe",
 							"type": "string",
 							"format": "color",
 							"default": "#FFE6E6",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_BackgroundColor": true
+								}
+							}
+						},
+
+						"_set_color": {
+							"title": "Textfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": false,
+							"options": {
+								"grid_columns": 4
 							}
 						},
 						"color": {
 							"title": "Textfarbe",
 							"type": "string",
 							"format": "color",
-							"default": "",
+							"default": "#000000",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_color": true
+								}
+
 							}
 						},
 
@@ -280,7 +365,7 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4
 							}
 						},
 						"marginHorz": {
@@ -288,8 +373,8 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						},
 
@@ -298,16 +383,16 @@
 							"type": "string",
 							"default": "3",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4
 							}
 						},
 						"paddingHorz": {
 							"title": "Innen-Abstand horizontal",
 							"type": "string",
-							"default": "5",
+							"default": "10",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						}
 					}
@@ -331,7 +416,7 @@
 					"type": "string",
 					"default": "2",
 					"options": {
-						"grid_columns": 6
+						"grid_columns": 4
 					}
 				},
 				"inputPlaceholder": {
@@ -339,8 +424,8 @@
 					"type": "string",
 					"default": "Nachricht hier eingeben",
 					"options": {
-						"grid_columns": 6,
-						"grid-break": true
+						"grid_columns": 4,
+						"grid_break": true
 					}
 				},
 
@@ -349,6 +434,7 @@
 					"type": "object",
 					"format": "grid-strict",
 					"options": {
+						"collapsed": true,
 						"grid_columns": 12,
 						"remove_empty_properties": true,
 						"disable_edit_json": true,
@@ -370,8 +456,7 @@
 							"format": "color",
 							"default": "#D3D3D3",
 							"options": {
-								"grid_columns": 4,
-								"grid-break": true
+								"grid_columns": 4
 							}
 						},
 						"borderRadius": {
@@ -379,27 +464,55 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						},
 
+						"_set_BackgroundColor": {
+							"title": "Hintergrundfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": false,
+							"options": {
+								"grid_columns": 4
+							}
+						},
 						"backgroundColor": {
 							"title": "Hintergrundfarbe",
 							"type": "string",
 							"format": "color",
-							"default": "",
+							"default": "#FFFFFF",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_BackgroundColor": true
+								}
+							}
+						},
+
+						"_set_color": {
+							"title": "Textfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": false,
+							"options": {
+								"grid_columns": 4
 							}
 						},
 						"color": {
 							"title": "Textfarbe",
 							"type": "string",
 							"format": "color",
-							"default": "",
+							"default": "#000000",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_color": true
+								}
+
 							}
 						},
 
@@ -408,7 +521,7 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4
 							}
 						},
 						"marginHorz": {
@@ -416,8 +529,8 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						},
 
@@ -426,7 +539,7 @@
 							"type": "string",
 							"default": "1",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4
 							}
 						},
 						"paddingHorz": {
@@ -434,8 +547,8 @@
 							"type": "string",
 							"default": "1",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						}
 					}
@@ -446,6 +559,7 @@
 					"type": "object",
 					"format": "grid-strict",
 					"options": {
+						"collapsed": true,
 						"grid_columns": 12,
 						"remove_empty_properties": true,
 						"disable_edit_json": true,
@@ -467,8 +581,7 @@
 							"format": "color",
 							"default": "#008000",
 							"options": {
-								"grid_columns": 4,
-								"grid-break": true
+								"grid_columns": 4
 							}
 						},
 						"borderRadius": {
@@ -476,17 +589,41 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						},
 
+						"_set_BackgroundColor": {
+							"title": "Hintergrundfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": true,
+							"options": {
+								"grid_columns": 4
+							}
+						},
 						"backgroundColor": {
 							"title": "Hintergrundfarbe",
 							"type": "string",
 							"format": "color",
 							"default": "#EDFAED",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_BackgroundColor": true
+								}
+							}
+						},
+
+						"_set_color": {
+							"title": "Textfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": false,
+							"options": {
+								"grid_columns": 4
 							}
 						},
 						"color": {
@@ -495,8 +632,12 @@
 							"format": "color",
 							"default": "",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_color": true
+								}
+
 							}
 						},
 
@@ -505,7 +646,7 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4
 							}
 						},
 						"marginHorz": {
@@ -513,8 +654,8 @@
 							"type": "string",
 							"default": "",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						},
 
@@ -523,7 +664,7 @@
 							"type": "string",
 							"default": "0",
 							"options": {
-								"grid_columns": 6
+								"grid_columns": 4
 							}
 						},
 						"paddingHorz": {
@@ -531,8 +672,8 @@
 							"type": "string",
 							"default": "0",
 							"options": {
-								"grid_columns": 6,
-								"grid-break": true
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						}
 					}
@@ -576,6 +717,17 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true
+					}
+				},
+
+				"createInpCnt": {
+					"title": "Erzeuge 'V_Input_Cnt_XYZ Variablen",
+					"type": "boolean",
+					"format": "checkbox",
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Erzeuge zusätzliche Variable, die angeben, wieviel Text-/Audio-/gelöschte Einträge im Chat sind (Zähler)."
 					}
 				}
 			}

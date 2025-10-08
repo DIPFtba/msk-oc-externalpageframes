@@ -208,6 +208,7 @@ export class recordAudioFromSchema extends textareaContainer {
 
 	audioDisplay (data, audioId=this.audioId, displayDiv=this.displayDiv) {
 		const audio = document.createElement('AUDIO');
+		audio.classList.add('w100');
 
 		const attr = {
 			controls: "controls",

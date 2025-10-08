@@ -2,6 +2,7 @@ import { object_equals, mergeDeep } from '../../libs/common.js'
 import { addScoring } from "../common.js";
 import { initializeAndMount } from '../external_bundled/chat-text-audio.js';
 
+import '../external_bundled/chat-text-audio.css';
 export class chatTextAudioFromSchema {
 
 	constructor(base, cfgData, addMods ) {
@@ -15,6 +16,15 @@ export class chatTextAudioFromSchema {
 			dataSettings: {},
 		}
 
+		// !!!!!
+		// !!!!!
+		// !!!!!
+		// !!!!! get/setState fehlen noch
+		// !!!!! EventDoku fehlt noch
+		// !!!!!
+		// !!!!!
+		// !!!!!
+
 		mergeDeep( Object.assign( this, defaultOpts ), cfgData );
 		this.base = base;
 
@@ -22,6 +32,7 @@ export class chatTextAudioFromSchema {
 			// Das hier passiert, wenn state in Vue App geändert wird
 			base.sendChangeState( this );
 		});
+		console.log(this.vueApp,this.vueApp.state);
 
 		// // Für debug Zwecke, um von außen den Text setzen zu können
 		// window.setText = (t) => this.vueApp.state.textValue = t;
@@ -46,27 +57,26 @@ export class chatTextAudioFromSchema {
 	}
 
 	scoreDefType () {
-		return 'String';
+		return 'number';
 	}
 
 	scoreDef() {
-		return {};
-	// 	const res = {};
-	// 	if ( this.readonly || !this.vueApp?.state) {
-	// 		return res;
-	// 	}
+		const res = {};
+		if ( !this.vueApp || !this.vueApp.state ) {
+			return res;
+		}
 
-	// 	if ( this.dataSettings ) {
-	// 		const pref = this.dataSettings.variablePrefix;
-	// 		if ( pref ) {
-	// 			res[`V_Input_${pref}_Val`] = this.vueApp.state.textValue;
-	// 		}
-	// 	}
+		const pref = this.dataSettings?.variablePrefix;
+		if ( pref && this.dataSettings?.createInpCnt ) {
+			res[`V_Input_Cnt_Text`] = this.vueApp.state.chatList.reduce( (acc, cur) => acc + (cur.status==='active' && cur.type === 'text' ? 1 : 0), 0 );
+			res[`V_Input_Cnt_Audio`] = this.vueApp.state.chatList.reduce( (acc, cur) => acc + (cur.status==='active' && cur.type === 'audio' ? 1 : 0), 0 );
+			res[`V_Input_Cnt_Deleted`] = this.vueApp.state.chatList.reduce( (acc, cur) => acc + (cur.status==='deleted' ? 1 : 0), 0 );
+		}
 
 	// 	if ( this.computeScoringVals ) {
 	// 		this.computeScoringVals( res );
 	// 	}
-	// 	return res;
+		return res;
 	}
 
 }

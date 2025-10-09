@@ -218,17 +218,23 @@ function loadSchema( schema ) {
 						creator = (cfgData) => new barSliderFullFromSchema( base, cfgData, addMods );
 						break;
 					case 'chatTextAudio':
-						initContainer(true);
-						creator = (cfgData) => new chatTextAudioFromSchema( base, cfgData, addMods );
+						creator = (cfgData) => {
+							initContainer(false);
+							return new chatTextAudioFromSchema( base, cfgData, addMods );
+						}
 						break;
 /// #if __VueExamples
 					case 'vueExamplePropsEmit':
-						initContainer(true);
-						creator = (cfgData) => new vueExamplePropsEmitFromSchema( base, cfgData, addMods );
+						creator = (cfgData) => {
+							initContainer(false);
+							return new new vueExamplePropsEmitFromSchema( base, cfgData, addMods );
+						}
 						break;
 					case 'vueExamplePinia':
-						initContainer(true);
-						creator = (cfgData) => new vueExamplePiniaFromSchema( base, cfgData, addMods );
+						creator = (cfgData) => {
+							initContainer(false);
+							return new vueExamplePiniaFromSchema( base, cfgData, addMods );
+						}
 						break;
 /// #endif
 					case 'connectedFrames':

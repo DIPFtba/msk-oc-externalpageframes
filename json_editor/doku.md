@@ -21,6 +21,7 @@ table td, table th {
 - [Liste der Events (alle EWK)](#liste-der-events-alle-ewk)
     - [barPlot](#barplot)
     - [barSliderFull](#barsliderfull)
+    - [chatTextAudio](#chattextaudio)
     - [freePaintMulti](#freepaintmulti)
     - [freePaintRecog](#freepaintrecog)
     - [inputGrid](#inputgrid)
@@ -116,6 +117,17 @@ Folgende EWK triggern Events
 |Event|Bedeutung|
 |:----|:--------|
 |`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von `Vorkomma-Stellen` und/oder `Nachkomma-Stellen` bei editierbaren Labels)|
+
+### chatTextAudio
+|Event|Bedeutung|
+|:----|:--------|
+|`EV_InitDone_ExtRes` und<br>`EV_InitDone_<pref>`|Initialisierung der EWK ist abgeschlossen|
+|`EV_RECORD_NOT_SUPPORTED`|Der Browser unterstützt/erlaubt keine Aufnahmen bzw. oder der Initialisierung ist ein Fehler aufgetreten|
+|`EV_RECORD_DENIED`|Nutzung des Mikrofons wurde vom Browser abgelehnt|
+|`EV_RECORD_ALLOWED`|Nutzung des Mikrofons wurde soeben vom Browser bestätigt|
+|`EV_RECORD_PROMPT`|Es ist unbekannt, ob Erlaubnis zur Mikrofonnutzung bereits vorliegt. Wahrscheinlich wird beim nächsten Klick auf das Mikro von Browser danach gefragt. (Wird aber auch bei jeder EWK getriggert, wenn der Zustand nicht im localStorage des Browsers gespeichert werden konnte)|
+|`EV_NEXT_ENABLED`|Alle Nachrichten wurden versandt, keine neue Nachricht eingegeben|
+|`EV_NEXT_DISABLED`|Es gibt noch nicht versandte Nachricht im Inputfenster|
 
 ### freePaintMulti
 |Event|Bedeutung|

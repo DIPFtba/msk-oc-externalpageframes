@@ -70,6 +70,8 @@ import { barPlotFromSchema } from './barPlot';
 import { barSliderFromSchema } from './barSlider';
 /// #elif __CLASS == 'barSliderFull'
 import { barSliderFullFromSchema } from './barSliderFull';
+/// #elif __CLASS == 'chatTextAudio'
+import { chatTextAudioFromSchema } from './chatTextAudio';
 /// #elif __CLASS == 'vueExamplePropsEmit'
 import { vueExamplePropsEmitFromSchema } from './vueExamplePropsEmit';
 /// #elif __CLASS == 'vueExamplePinia'
@@ -133,7 +135,7 @@ function initJSON ( json ) {
 		cfg.dataSettings.variablePrefix = cfg.dataSettings.variablePrefix.trim();
 	}
 
-/// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio' || __CLASS == 'pikasTextEntry'
+/// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio' || __CLASS == 'pikasTextEntry' || __CLASS == 'chatTextAudio' || __CLASS == 'vueExamplePropsEmit' || __CLASS == 'vueExamplePinia'
 	// base ohne Konva stage
 	const base = new baseInits( { dataSettings: cfg.dataSettings } );
 /// #else
@@ -165,6 +167,8 @@ function initJSON ( json ) {
 		const io = new barSliderFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'barSliderFull'
 		const io = new barSliderFullFromSchema( base, cfg, addMods );
+/// #elif __CLASS == 'chatTextAudio'
+		const io = new chatTextAudioFromSchema( '#container', cfg, base, addMods );
 /// #elif __CLASS == 'vueExamplePropsEmit'
 		const io = new vueExamplePropsEmitFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'vueExamplePinia'

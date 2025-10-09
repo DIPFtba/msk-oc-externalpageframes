@@ -5,11 +5,10 @@ import { initializeAndMount } from '../external_bundled/chat-text-audio.js';
 import '../external_bundled/chat-text-audio.css';
 export class chatTextAudioFromSchema {
 
-	constructor(base, cfgData, addMods ) {
+	constructor(divSelector, cfgData = {}, base = null ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.regSendInitDone();
+		base.incInitCnt();
 
 		const defaultOpts = {
 			readonly: false,
@@ -20,7 +19,6 @@ export class chatTextAudioFromSchema {
 		// !!!!!
 		// !!!!!
 		// !!!!! get/setState fehlen noch
-		// !!!!! EventDoku fehlt noch
 		// !!!!!
 		// !!!!!
 		// !!!!!
@@ -28,11 +26,11 @@ export class chatTextAudioFromSchema {
 		mergeDeep( Object.assign( this, defaultOpts ), cfgData );
 		this.base = base;
 
-		this.vueApp = initializeAndMount( this.base.container, cfgData, (a) => {
+		this.vueApp = initializeAndMount( divSelector, cfgData, (a) => {
 			// Das hier passiert, wenn state in Vue App geändert wird
 			base.sendChangeState( this );
 		});
-		console.log(this.vueApp,this.vueApp.state);
+		// console.log(this.vueApp,this.vueApp.state);
 
 		// // Für debug Zwecke, um von außen den Text setzen zu können
 		// window.setText = (t) => this.vueApp.state.textValue = t;
@@ -40,11 +38,9 @@ export class chatTextAudioFromSchema {
 		this.initData = this.getChState();
 		this.base.sendChangeState( this );	// init & send changeState & score
 
-		addScoring( this, cfgData, addMods.Parser );
+		// addScoring( this, cfgData, addMods.Parser );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	getChState() {

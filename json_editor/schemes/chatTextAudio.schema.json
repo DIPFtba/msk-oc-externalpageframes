@@ -26,7 +26,7 @@
 				"listHeight": {
 					"title": "Höhe Chat-Liste",
 					"type": "number",
-					"default": 200,
+					"default": 125,
 					"minimum": 50,
 					"options": {
 						"grid_columns": 4

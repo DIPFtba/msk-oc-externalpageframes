@@ -168,7 +168,7 @@ function initJSON ( json ) {
 /// #elif __CLASS == 'barSliderFull'
 		const io = new barSliderFullFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'chatTextAudio'
-		const io = new chatTextAudioFromSchema( '#container', cfg, base, addMods );
+		const io = new chatTextAudioFromSchema( '#container', cfg, base );
 /// #elif __CLASS == 'vueExamplePropsEmit'
 		const io = new vueExamplePropsEmitFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'vueExamplePinia'

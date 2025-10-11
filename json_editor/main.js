@@ -220,20 +220,20 @@ function loadSchema( schema ) {
 					case 'chatTextAudio':
 						creator = (cfgData) => {
 							initContainer(false);
-							return new chatTextAudioFromSchema( base, cfgData, addMods );
+							return new chatTextAudioFromSchema( textContainer.firstChild, cfgData, base );
 						}
 						break;
 /// #if __VueExamples
 					case 'vueExamplePropsEmit':
 						creator = (cfgData) => {
 							initContainer(false);
-							return new new vueExamplePropsEmitFromSchema( base, cfgData, addMods );
+							return new new vueExamplePropsEmitFromSchema( textContainer.firstChild, cfgData, base );
 						}
 						break;
 					case 'vueExamplePinia':
 						creator = (cfgData) => {
 							initContainer(false);
-							return new vueExamplePiniaFromSchema( base, cfgData, addMods );
+							return new vueExamplePiniaFromSchema( textContainer.firstChild, cfgData, base );
 						}
 						break;
 /// #endif

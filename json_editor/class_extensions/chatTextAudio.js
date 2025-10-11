@@ -1,11 +1,11 @@
-import { object_equals, mergeDeep } from '../../libs/common.js'
-import { addScoring } from "../common.js";
+import { object_equals, mergeDeep, setStatePostProc } from '../../libs/common.js'
+// import { addScoring } from "../common.js";
 import { initializeAndMount } from '../external_bundled/chat-text-audio.js';
 
 import '../external_bundled/chat-text-audio.css';
 export class chatTextAudioFromSchema {
 
-	constructor(divSelector, cfgData = {}, base = null ) {
+	constructor(divSelector, cfgData, base ) {
 
 		base.regSendInitDone();
 		base.incInitCnt();
@@ -15,21 +15,19 @@ export class chatTextAudioFromSchema {
 			dataSettings: {},
 		}
 
-		// !!!!!
-		// !!!!!
-		// !!!!!
-		// !!!!! get/setState fehlen noch
-		// !!!!!
-		// !!!!!
-		// !!!!!
-
 		mergeDeep( Object.assign( this, defaultOpts ), cfgData );
 		this.base = base;
 
-		this.vueApp = initializeAndMount( divSelector, cfgData, (a) => {
-			// Das hier passiert, wenn state in Vue App geändert wird
-			base.sendChangeState( this );
-		});
+		this.vueApp = initializeAndMount(
+			divSelector,
+			cfgData,
+			() => {
+				// Das hier passiert, wenn state in Vue App geändert wird
+				base.sendChangeState( this );
+			},
+			// postMessage-Function
+			base.fsm.postMessageWithPathsAndTraceCount.bind( base.fsm ) );
+
 		// console.log(this.vueApp,this.vueApp.state);
 
 		// // Für debug Zwecke, um von außen den Text setzen zu können
@@ -43,7 +41,10 @@ export class chatTextAudioFromSchema {
 		base.decInitCnt();
 	}
 
+	///////////////////////////////////
+
 	getChState() {
+		// Einträge können nicht geändert werden, also nur Länge ansehen
 		return this.vueApp?.state?.chatList?.length;
 	}
 
@@ -73,6 +74,22 @@ export class chatTextAudioFromSchema {
 	// 		this.computeScoringVals( res );
 	// 	}
 		return res;
+	}
+
+	///////////////////////////////////
+
+	getState () {
+		return JSON.stringify( this.vueApp?.state.chatList );
+	}
+
+	setState ( state ) {
+		try {
+			this.vueApp.state.chatList = JSON.parse( state );
+		} catch (e) {
+			console.error(e);
+		}
+
+		setStatePostProc(this);
 	}
 
 }

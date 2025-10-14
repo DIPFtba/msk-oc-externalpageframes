@@ -171,24 +171,48 @@ export class baseInits {
 			'boolean': 'Boolean',
 		}
 
-		for ( const vname in this.FSMVarsSent ) {
+		try {
+			for ( const vname in this.FSMVarsSent ) {
 
-			const val = this.FSMVarsSent[vname];
-			let type = '';
-			if ( this.scoreObj && this.scoreObj.scoreDefType ) {
-				type = this.scoreObj.scoreDefType.call(this.scoreObj, vname);
-			}
-			if ( !type ) {
-				type = val===null ? 'Integer' : typetrans[ typeof val ];
-			}
+				const val = this.FSMVarsSent[vname];
+				let type = '';
+				let defaultValue = val;
 
-			const vdef = {
-				name: vname,
-				type,
-				defaultValue: Number.isNaN(val) || val===null ? 0 : ( val === '' ? 'EMPTY' : val ),
-				namedValues: [],
+				if ( this.scoreObj && this.scoreObj.scoreDefType ) {
+					type = this.scoreObj.scoreDefType.call(this.scoreObj, vname);
+				}
+
+				if ( !type ) {
+					if(val===null){
+						type = 'Integer';
+						defaultValue = 0;
+					}
+					else if(typetrans[ typeof val ]){
+						type = typetrans[ typeof val ];
+						defaultValue = Number.isNaN(val) || val===null ? 0 : ( val === '' ? 'EMPTY' : val );
+					}
+					else {
+						type = 'String';
+						defaultValue = !val ? 'EMPTY' : JSON.stringify(val);
+					}
+				}
+
+				const vdef = {
+					name: vname,
+					type,
+					defaultValue,
+					namedValues: [],
+				}
+				varDefs.push( vdef );
 			}
-			varDefs.push( vdef );
+			
+		} catch (e) {
+			varDefs.push({
+				name: 'EPF_VariableDeclarationError',
+				type: 'String',
+				defaultValue: e,
+				namedValues: []
+			});			
 		}
 
 		return varDefs;

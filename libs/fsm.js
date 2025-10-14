@@ -111,7 +111,11 @@ export class fsmSend {
 
 		this.answerVarDeclReq = function (callId) {
 			prInitDone.then( () => {
-				const variables = declareVariableCallback();
+				let variables = []
+				if(typeof declareVariableCallback == 'function') {
+					variables = declareVariableCallback();
+				}
+
 				const pass_data = {
 					initialVariables: variables,
 					callId

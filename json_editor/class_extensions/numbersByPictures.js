@@ -13,7 +13,7 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 			width: opts.picsWidth || 60,
 		}
 
-		const iconWidth = 22;
+		const iconWidth = 28;
 		const depth = opts.pics.width*18/50; // bisher wurde fälschlicherweise 18 verwendet, wird ja aber nur zum zentireren hier verwendet
 
 		// iconbar default data

@@ -64,6 +64,7 @@ export class iconBar {
 			cursor: null,		// cursor, when activated
 			cursorOver: null,	// cursor, when "mouseover", e.g. "url(icon.png) 16 16, auto"
 			tooltipImage: null,
+			modifier: null,		// 'plus' or 'minus' - adds green plus or red minus overlay
 			on: () => 1,
 			off: () => 1,
 		}
@@ -224,6 +225,50 @@ export class iconBar {
 					}
 				}
 
+				// Function to create modifier overlay (plus/minus)
+				const createModifierOverlay = (modifier, iconX, iconY) => {
+					if (!modifier || (modifier !== 'plus' && modifier !== 'minus')) return null;
+					
+					const modifierSize = Math.min(this.width, this.height) * 0.4;
+					const modifierX = iconX + this.width - modifierSize + wp - 1;
+					const modifierY = iconY + this.height - modifierSize + wp - 1; // Lower right corner
+
+					// White background square
+					const bgSquare = new Konva.Rect({
+						x: modifierX,
+						y: modifierY,
+						width: modifierSize,
+						height: modifierSize,
+						fill: 'white',
+						stroke: '#ccc',
+						strokeWidth: 1,
+						// cornerRadius: 2,
+						dontGrayOut: true,
+						opacity: 0.8,
+					});
+					
+					// Plus or minus symbol
+					const symbolColor = modifier === 'plus' ? '#28a745' : '#dc3545'; // Green for plus, red for minus
+					const symbol = modifier === 'plus' ? '+' : '−'; // Using proper minus character
+					
+					const symbolText = new Konva.Text({
+						x: modifierX,
+						y: modifierY,
+						width: modifierSize,
+						height: modifierSize,
+						text: symbol,
+						fontSize: modifierSize * 0.9,
+						fontFamily: 'Arial, sans-serif',
+						fontStyle: 'bold',
+						fill: symbolColor,
+						align: 'center',
+						verticalAlign: 'middle',
+						dontGrayOut: true,
+					});
+					
+					return [bgSquare, symbolText];
+				}
+
 				if ( i.src ) {
 					// create image
 					const me = this;
@@ -260,7 +305,24 @@ export class iconBar {
 
 					setInteract( i.kIcon );
 					this.kGroup.add( i.kIcon );
+					
 				}
+
+				// Add modifier overlay if specified
+				if ( i.modifier ) {
+					
+					const modifierElements = createModifierOverlay( i.modifier, rectAttr.x, rectAttr.y );
+					loadPrs.push(
+						Promise.all( Array.isArray(modifierElements) ? modifierElements : [modifierElements] )
+						.then( kObjs => kObjs.forEach( kObj => {
+							if ( kObj ) {
+								this.kGroup.add( kObj );
+								kObj.moveToTop(); // Ensure modifier is on top
+							}
+						}))
+					);
+					i.kModifierElements = modifierElements;
+				}				
 
 				// get position for next icon
 				// const offs = nr*( this.spacing + this.height+2*wp );

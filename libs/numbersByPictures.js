@@ -26,11 +26,11 @@ export class numbersByPictures {
 			iconBar: {
 				//x, y,
 				// width, height
-				spacing: 2,
-				framePadding: 0,
-				frameWidth: 0,
-				frameFill: 'lightgray',
-				cursorOver: `url(${cursor_add}) 2 2, auto`,
+				// width: 40,
+				spacing: 4,
+				framePadding: 6,
+				frameWidth: 1,
+				frameFill: 'lightgray',				
 			},
 			// iconBarTooltip: {
 			// 	src: `${base.scriptDir}/add_icon.png`,
@@ -43,7 +43,7 @@ export class numbersByPictures {
 				width: 50, // width of bars, rectangles, cuboids
 				//cuboidDepth: 18, // '3d' cube: movement to right and to top
 
-				spacing: 12,
+				spacing: 20,
 
 				//barSpacing:	5,	// vertical spacing between bars
 				//barSeparator: 5,	// extra vertical space below 5 bars
@@ -57,7 +57,7 @@ export class numbersByPictures {
 				strokeWidth: 2,
 				lineCap: 'square',
 
-				cursorOver: `url(${cursor_del}) 2 2, auto`,
+				// cursorOver: `url(${cursor_del}) 2 2, auto`,
 			},
 			// picsTooltip: {		// Cursor mouseover
 			// 	src: `${base.scriptDir}/delete_icon.png`,
@@ -94,9 +94,8 @@ export class numbersByPictures {
 			const iconDepth = this.iconBar.width*this.pics.cuboidDepth/(this.pics.width+this.pics.cuboidDepth);
 			const iconRadius = this.pics.radius*1.5;
 
-			const iconBarOpts = mergeDeep( this.iconBar, {
+			const iconBarOptsAdd = { ...this.iconBar, ...{
 				sticky: false,
-
 				icons: [
 					{ kCreateFunc: function (x,y) {
 						return this.cuboid({
@@ -106,8 +105,9 @@ export class numbersByPictures {
 							strokeWidth: 1,
 						})}.bind(this),
 						// tooltipImage: this.iconBarTooltip,
-						cursorOver: this.iconBar.cursorOver,
+						cursorOver: `url(${cursor_add}) 2 2, auto`,
 						on: () => this.addShape('c'),
+						modifier: 'plus',
 					},
 					{ kCreateFunc: function (x,y) {
 						return this.rectangle({
@@ -116,8 +116,9 @@ export class numbersByPictures {
 							strokeWidth: 1,
 						})}.bind(this),
 						// tooltipImage: this.iconBarTooltip,
-						cursorOver: this.iconBar.cursorOver,
+						cursorOver: `url(${cursor_add}) 2 2, auto`,
 						on: () => this.addShape('r'),
+						modifier: 'plus',
 					},
 					{ kCreateFunc: function (x,y) {
 						return this.bar({
@@ -126,8 +127,9 @@ export class numbersByPictures {
 							strokeWidth: 2,
 						})}.bind(this),
 						// tooltipImage: this.iconBarTooltip,
-						cursorOver: this.iconBar.cursorOver,
+						cursorOver: `url(${cursor_add}) 2 2, auto`,
 						on: () => this.addShape('b'),
+						modifier: 'plus',
 					},
 					{ kCreateFunc: function (x,y) {
 						return this.dot({
@@ -136,13 +138,67 @@ export class numbersByPictures {
 							radius: iconRadius,
 						})}.bind(this),
 						// tooltipImage: this.iconBarTooltip,
-						cursorOver: this.iconBar.cursorOver,
+						cursorOver: `url(${cursor_add}) 2 2, auto`,
 						on: () => this.addShape('d'),
+						modifier: 'plus',
 					},
 				],
-			})
+			}}
 
-			new iconBar( stage, iconBarOpts );
+			const iconBarOptsRemove = { ...this.iconBar, ...{
+				sticky: false,
+				icons: [
+					{ kCreateFunc: function (x,y) {
+						return this.cuboid({
+							x: x, y: y+iconDepth,
+							cuboidDepth: iconDepth,
+							width: this.iconBar.width - iconDepth,
+							strokeWidth: 1,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_del}) 2 2, auto`,
+						on: (ev) => this.delShapeByType('c'),
+						modifier: 'minus',
+					},
+					{ kCreateFunc: function (x,y) {
+						return this.rectangle({
+							x: x+iconDepth/2, y: y+iconDepth/2,
+							width: this.iconBar.width - iconDepth,
+							strokeWidth: 1,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_del}) 2 2, auto`,
+						on: () => this.delShapeByType('r'),
+						modifier: 'minus',
+					},
+					{ kCreateFunc: function (x,y) {
+						return this.bar({
+							x: x+iconDepth/2, y: y+this.iconBar.width/2,
+							width: this.iconBar.width - iconDepth,
+							strokeWidth: 2,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_del}) 2 2, auto`,
+						on: () => this.delShapeByType('b'),
+						modifier: 'minus',
+					},
+					{ kCreateFunc: function (x,y) {
+						return this.dot({
+							x: x+this.iconBar.width/2-iconRadius, y: y+this.iconBar.width/2-iconRadius,
+							width: this.iconBar.width - iconDepth,
+							radius: iconRadius,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_del}) 2 2, auto`,
+						on: () => this.delShapeByType('d'),
+						modifier: 'minus',
+					},
+				],
+			}}
+
+			new iconBar( stage, iconBarOptsRemove );
+
+			new iconBar( stage, {...iconBarOptsAdd, ...{x: this.iconBar.x + this.iconBar.width + 20}} ); // twice to avoid first time click problems
 		}
 
 		if ( this.data.length ) {
@@ -237,6 +293,16 @@ export class numbersByPictures {
 		}
 	}
 
+	delShapeByType (shape){
+		let found = false;
+		this.data.forEach((e,i) => {
+			if( !found && ((shape=='c' && e.c>0 ) || ( shape=='r' && e.r>0 ) || ( shape=='b' && e.b>0 ) || ( shape=='d' && e.d>0 ) )){
+				this.delShape(i, shape);
+				found = true;
+			}
+		});		
+	}
+
 	delShape ( nr, shape = null ) {
 
 		if ( !this.readonly ) {
@@ -270,7 +336,7 @@ export class numbersByPictures {
 	drawShapes () {
 
 		const new_layer = new Konva.Layer();
-		let x = this.x;
+		let x = this.x + 2*this.iconBar.width + 16;
 		let y = this.y;
 
 		this.data.forEach( ( dat, nr ) => {

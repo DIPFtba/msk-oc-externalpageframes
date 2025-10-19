@@ -1,5 +1,5 @@
 {
-	"title": "ChatTextAudio",
+	"title": "ChatBotJson",
 	"type": "object",
 	"format": "categories",
 	"options": {
@@ -36,6 +36,15 @@
 					"title": "Abstand Chat-Elemente",
 					"type": "string",
 					"default": "12",
+					"options": {
+						"grid_columns": 4
+					}
+				},
+				"botDelay": {
+					"title": "Bot-Antwort-Verzögerung (ms)",
+					"type": "number",
+					"default": 750,
+					"minimum": 0,
 					"options": {
 						"grid_columns": 4,
 						"grid_break": true
@@ -149,8 +158,8 @@
 					}
 				},
 
-				"entryStyle": {
-					"title": "Stil Einträge",
+				"userEntryStyle": {
+					"title": "Stil User-Einträge",
 					"type": "object",
 					"format": "grid-strict",
 					"options": {
@@ -274,8 +283,8 @@
 					}
 				},
 
-				"deletingStyle": {
-					"title": "Stil Löschende Einträge",
+				"botEntryStyle": {
+					"title": "Stil Bot-Einträge",
 					"type": "object",
 					"format": "grid-strict",
 					"options": {
@@ -299,7 +308,7 @@
 							"title": "Rahmenfarbe",
 							"type": "string",
 							"format": "color",
-							"default": "#FF0000",
+							"default": "#000080",
 							"options": {
 								"grid_columns": 4
 							}
@@ -327,7 +336,7 @@
 							"title": "Hintergrundfarbe",
 							"type": "string",
 							"format": "color",
-							"default": "#FFE6E6",
+							"default": "#E0E0F0",
 							"options": {
 								"grid_columns": 4,
 								"grid_break": true,
@@ -398,6 +407,7 @@
 						}
 					}
 				}
+
 			}
 		},
 
@@ -415,18 +425,9 @@
 				"inputRows": {
 					"title": "Zeilen Chat-Eingabefeld",
 					"type": "string",
-					"default": "2",
+					"default": "2.5",
 					"options": {
 						"grid_columns": 4
-					}
-				},
-				"inputPlaceholder": {
-					"title": "Text Chat-Eingabefeld",
-					"type": "string",
-					"default": "Nachricht hier eingeben",
-					"options": {
-						"grid_columns": 4,
-						"grid_break": true
 					}
 				},
 
@@ -555,8 +556,8 @@
 					}
 				},
 
-				"inputStyleTextinput": {
-					"title": "Stil Eingabefeld Texteingabe",
+				"inputStyleUser": {
+					"title": "Stil Eingabefeld Userantworten",
 					"type": "object",
 					"format": "grid-strict",
 					"options": {
@@ -588,7 +589,7 @@
 						"borderRadius": {
 							"title": "Rahmenradius",
 							"type": "string",
-							"default": "",
+							"default": "5",
 							"options": {
 								"grid_columns": 4,
 								"grid_break": true
@@ -608,7 +609,7 @@
 							"title": "Hintergrundfarbe",
 							"type": "string",
 							"format": "color",
-							"default": "#EDFAED",
+							"default": "#CCF0CC",
 							"options": {
 								"grid_columns": 4,
 								"grid_break": true,
@@ -645,7 +646,7 @@
 						"marginVert": {
 							"title": "Außen-Abstand vertikal",
 							"type": "string",
-							"default": "",
+							"default": "3",
 							"options": {
 								"grid_columns": 4
 							}
@@ -653,7 +654,7 @@
 						"marginHorz": {
 							"title": "Außen-Abstand horizontal",
 							"type": "string",
-							"default": "",
+							"default": "5",
 							"options": {
 								"grid_columns": 4,
 								"grid_break": true
@@ -663,7 +664,7 @@
 						"paddingVert": {
 							"title": "Innen-Abstand vertikal",
 							"type": "string",
-							"default": "0",
+							"default": "3",
 							"options": {
 								"grid_columns": 4
 							}
@@ -671,7 +672,7 @@
 						"paddingHorz": {
 							"title": "Innen-Abstand horizontal",
 							"type": "string",
-							"default": "0",
+							"default": "5",
 							"options": {
 								"grid_columns": 4,
 								"grid_break": true
@@ -679,6 +680,90 @@
 						}
 					}
 				}
+			}
+		},
+
+		"chat": {
+			"title": "Bot- & UserTexte",
+			"type": "object",
+			"options": {
+				"titleHidden": true,
+				"disable_collapse": true,
+				"disable_edit_json": true,
+				"disable_properties": true
+			},
+			"properties": {
+
+				"bot": {
+					"title": "Bot-Texte",
+					"type": "array",
+					"format": "table",
+					"items": {
+						"title": "BotText",
+						"type": "object",
+						"properties": {
+							"label": {
+								"title": "Label",
+								"type": "string"
+							},
+							"text": {
+								"title": "Text",
+								"type": "string"
+							}
+						}
+					},
+					"default": [{
+						"label": "START",
+						"text": "Willkommen!"
+					}],
+					"options": {
+						"titleHidden": true,
+						"disable_collapse": true,
+						"grid_columns": 12,
+						"grid_break": true
+					}
+				},
+
+				"user": {
+					"title": "User-Texte",
+					"type": "array",
+					"format": "table",
+					"items": {
+						"title": "UserText",
+						"type": "object",
+						"properties": {
+							"label": {
+								"title": "Label",
+								"type": "string"
+							},
+							"text": {
+								"title": "Text",
+								"type": "string"
+							},
+							"next": {
+								"title": "zu Bot-Text (Label)",
+								"type": "string"
+							}
+						}
+					},
+					"default": [{
+						"label": "START",
+						"text": "Text 1"
+					},{
+						"label": "START",
+						"text": "Text 2"
+					},{
+						"label": "START",
+						"text": "Text 3"
+					}],
+					"options": {
+						"titleHidden": true,
+						"disable_collapse": true,
+						"grid_columns": 12,
+						"grid_break": true
+					}
+				}
+
 			}
 		},
 
@@ -698,7 +783,7 @@
 					"properties": {
 						"___name": {
 							"type":"string",
-							"default":"chatTextAudio"
+							"default":"chatBotJson"
 						},
 						"___version": {
 							"type":"number",
@@ -719,18 +804,8 @@
 						"grid_columns": 12,
 						"grid_break": true
 					}
-				},
-
-				"createInpCnt": {
-					"title": "Erzeuge 'V_Input_Cnt_XYZ Variablen",
-					"type": "boolean",
-					"format": "checkbox",
-					"options": {
-						"grid_columns": 12,
-						"grid_break": true,
-						"infoText": "Erzeuge zusätzliche Variable, die angeben, wieviel Text-/Audio-/gelöschte Einträge im Chat sind (Zähler)."
-					}
 				}
+
 			}
 		}
 	}

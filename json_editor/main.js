@@ -15,6 +15,10 @@ import { barSliderFullFromSchema } from './class_extensions/barSliderFull';
 import barSliderFullJSONSchema from './schemes/barSliderFull.schema.json';
 import barSliderFullSVG from './svgs/barSliderFull.svg';
 
+import { chatBotJsonFromSchema } from './class_extensions/chatBotJson';
+import chatBotJsonJSONSchema from './schemes/chatBotJson.schema.json';
+import chatBotJsonSVG from './svgs/vue.svg';
+
 import { chatTextAudioFromSchema } from './class_extensions/chatTextAudio';
 import chatTextAudioJSONSchema from './schemes/chatTextAudio.schema.json';
 import chatTextAudioSVG from './svgs/vue.svg';
@@ -217,6 +221,12 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new barSliderFullFromSchema( base, cfgData, addMods );
 						break;
+					case 'chatBotJson':
+						creator = (cfgData) => {
+							initContainer(false);
+							return new chatBotJsonFromSchema( textContainer.firstChild, cfgData, base );
+						}
+						break;
 					case 'chatTextAudio':
 						creator = (cfgData) => {
 							initContainer(false);
@@ -352,6 +362,7 @@ const templs = {
 	barPlot: [ barPlotJSONSchema, barPlotSVG ],
 	barSlider: [ barSliderJSONSchema, barSliderSVG ],
 	barSliderFull: [ barSliderFullJSONSchema, barSliderFullSVG ],
+	chatBotJson: [ chatBotJsonJSONSchema, chatBotJsonSVG ],
 	chatTextAudio: [ chatTextAudioJSONSchema, chatTextAudioSVG ],
 /// #if __VueExamples
 	vueExamplePropsEmit: [ vueExamplePropsEmitJSONSchema, vueExamplePropsEmitSVG ],

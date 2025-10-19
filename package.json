@@ -15,7 +15,7 @@
     "libsdev": "webpack --config webpack.libs.config.js --mode=development",
     "examples": "webpack --config webpack.examples.config.js --mode=development"
   },
-  "author": "Marc A. Müller",
+  "author": "blauwaldt.it UG (haftungsbeschränkt)",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.20.2",

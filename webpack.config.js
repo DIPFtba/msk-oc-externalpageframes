@@ -116,31 +116,30 @@ function hasSchemaScoringVals( extres ) {
 //////////////////////////////////////////////////////////////////////////////
 
 const ExtResFromSchema = {
-	barPlot: { version: "0.1.0" },
-	barSlider: { version: "0.1.0" },
-	barSliderFull: { version: "0.1.0" },
-	chatBotJson: { version: "0.1.0" },
-	chatTextAudio: { version: "0.1.0" },
-	// vueExamplePropsEmit: { version: "0.1.0" },
-	// vueExamplePinia: { version: "0.1.0" },
-	connectedFrames: { version: "0.1.0" },
-	filledBar: { version: "0.1.0" },
-	freePaint: { version: "0.1.0" },
-	freePaintMult: { version: "0.1.0" },
-	freePaintRecog: { version: "0.1.0" },
-	inputGrid: { version: "0.1.0" },
-	numberLine: { version: "0.1.0" },
-	numberLineWithAnnotations: { version: "0.1.0" },
-	numberLineWithArcs: { version: "0.1.0" },
+	// barPlot: { version: "0.1.0" },
+	// barSlider: { version: "0.1.0" },
+	// barSliderFull: { version: "0.1.0" },
+	// chatTextAudio: { version: "0.1.0" },
+	// // vueExamplePropsEmit: { version: "0.1.0" },
+	// // vueExamplePinia: { version: "0.1.0" },
+	// connectedFrames: { version: "0.1.0" },
+	// filledBar: { version: "0.1.0" },
+	// freePaint: { version: "0.1.0" },
+	// freePaintMult: { version: "0.1.0" },
+	// freePaintRecog: { version: "0.1.0" },
+	// inputGrid: { version: "0.1.0" },
+	// numberLine: { version: "0.1.0" },
+	// numberLineWithAnnotations: { version: "0.1.0" },
+	// numberLineWithArcs: { version: "0.1.0" },
 	numbersByPictures: { version: "0.1.0" },
-	pikasTextEntry: { version: "0.1.0" },
-	pointArea: { version: "0.1.0" },
-	pointAreaExt: { version: "0.1.0" },
-	recordAudio: { version: "0.1.0" },
-	rectArrayMarkable: { version: "0.1.0" },
-	stampImages: { version: "0.1.0" },
-	inputInserts: { version: "0.1.0" },
-	textareaInserts: { version: "0.1.0" },
+	// pikasTextEntry: { version: "0.1.0" },
+	// pointArea: { version: "0.1.0" },
+	// pointAreaExt: { version: "0.1.0" },
+	// recordAudio: { version: "0.1.0" },
+	// rectArrayMarkable: { version: "0.1.0" },
+	// stampImages: { version: "0.1.0" },
+	// inputInserts: { version: "0.1.0" },
+	// textareaInserts: { version: "0.1.0" },
 };
 
 const extres_subdir = 'dist/ext_res';
@@ -279,6 +278,8 @@ function getToolsCfg () {
 
 module.exports = ( env, argv ) => {
 
+	
+
 	let cfg = getEditorCfg( env, argv );
 
 	if ( env.WEBPACK_SERVE ) {
@@ -311,6 +312,21 @@ module.exports = ( env, argv ) => {
 		cfg.push( getToolsCfg() );
 
 	}
+	
+
+	// let cfg = [];
+	// Object.keys( ExtResFromSchema ).forEach( er =>{
+	// 	cfg.push( getExtResFromSchemaWebPackConfig( argv, er ) );
+	// 	createManifestFile( er, ExtResFromSchema[er] );
+	// })
+
+	// cfg.push( getToolsCfg() );	
+
+
+	// fs.writeFileSync(
+	// 	path.resolve(__dirname, 'webpack.conf.json'),
+	// 	JSON.stringify(cfg, null, 2)
+	// );
 
 	return cfg;
 }

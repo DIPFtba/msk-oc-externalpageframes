@@ -207,10 +207,10 @@ export class numbersByPictures {
 				],
 			}}
 
-			this.iconBarAdd = new iconBar( stage, {...iconBarOptsAdd, ...{highlightColor: '#ccffcc', frameColor: '#66ff66'}} ); 
+			this.iconBarAdd = new iconBar( stage, {...iconBarOptsAdd, ...{highlightColor: '#ccffcc', frameColor: '#11de11', frameFill: '#eaf5ea'}} ); 
 			this.iconBarRemove = new iconBar( stage, {...iconBarOptsRemove, ...{x: this.iconBar.x + this.iconbarWidth + this.iconBar.spacing, highlightColor: '#ffcccc',  frameColor: '#ff6666'}} );
 
-			this.stage.height(this.iconBar.y+this.iconBarAdd.getOverallHeight());
+			this.stage.height(this.iconBar.y+this.iconBarAdd.getOverallHeight()+4);
 		}
 
 		if ( this.data.length ) {

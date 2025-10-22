@@ -86,10 +86,10 @@ export class numbersByPictures {
 		this.base = base;
 		const stage = base.stage;
 		this.stage = stage;
-		this.stage.width(opts.width || this.stage.width() );		
+		this.stage.width(opts.width || this.stage.width() );
+		this.stage.height(opts.height || this.stage.height() );
 		this.usedWidth = 0;
-		this.iconbarWidth = this.iconBar.width + this.iconBar.framePadding*2 + this.iconBar.frameWidth*2;
-		this.x = this.iconBar.x + 2*this.iconbarWidth + 20;
+		this.iconbarWidth = 0;
 
 		// this.tooltip = new tooltip( stage );
 		// stage.on( 'mouseleave', () => this.tooltip.hide() );
@@ -98,114 +98,120 @@ export class numbersByPictures {
 		const iconDepth = this.iconBar.width*this.pics.cuboidDepth/(this.pics.width+this.pics.cuboidDepth);
 		const iconRadius = this.pics.radius*1.5;
 
-		const iconBarOptsAdd = { ...this.iconBar, ...{
-			sticky: false,
-			icons: [
-				{ kCreateFunc: function (x,y) {
-					return this.cuboid({
-						x: x, y: y+iconDepth,
-						cuboidDepth: iconDepth,
-						width: this.iconBar.width - iconDepth,
-						strokeWidth: 1,
-					})}.bind(this),
-					// tooltipImage: this.iconBarTooltip,
-					cursorOver: `url(${cursor_add}) 2 2, auto`,
-					on: () => this.addShape('c'),
-					// modifier: 'plus',
-				},
-				{ kCreateFunc: function (x,y) {
-					return this.rectangle({
-						x: x+iconDepth/2, y: y+iconDepth/2,
-						width: this.iconBar.width - iconDepth,
-						strokeWidth: 1,
-					})}.bind(this),
-					// tooltipImage: this.iconBarTooltip,
-					cursorOver: `url(${cursor_add}) 2 2, auto`,
-					on: () => this.addShape('r'),
-					// modifier: 'plus',
-				},
-				{ kCreateFunc: function (x,y) {
-					return this.bar({
-						x: x+iconDepth/2, y: y+this.iconBar.width/2,
-						width: this.iconBar.width - iconDepth,
-						strokeWidth: 2,
-					})}.bind(this),
-					// tooltipImage: this.iconBarTooltip,
-					cursorOver: `url(${cursor_add}) 2 2, auto`,
-					on: () => this.addShape('b'),
-					// modifier: 'plus',
-				},
-				{ kCreateFunc: function (x,y) {
-					return this.dot({
-						// x: x+this.iconBar.width/2-iconRadius, y: y+this.iconBar.width/2-iconRadius,
-						x: x+this.iconBar.width/2, y: y+this.iconBar.width/2,
-						width: this.iconBar.width - iconDepth,
-						radius: iconRadius,
-					})}.bind(this),
-					// tooltipImage: this.iconBarTooltip,
-					cursorOver: `url(${cursor_add}) 2 2, auto`,
-					on: () => this.addShape('d'),
-					// modifier: 'plus',
-				},
-			],
-		}}
+		if(this.iconBar && this.iconBar.x !== undefined && this.iconBar.y !== undefined) {
 
-		const iconBarOptsRemove = { ...this.iconBar, ...{
-			sticky: false,
-			icons: [
-				{ kCreateFunc: function (x,y) {
-					return this.cuboid({
-						x: x, y: y+iconDepth,
-						cuboidDepth: iconDepth,
-						width: this.iconBar.width - iconDepth,
-						strokeWidth: 1,
-					})}.bind(this),
-					// tooltipImage: this.iconBarTooltip,
-					cursorOver: `url(${cursor_del}) 2 2, auto`,
-					on: (ev) => this.delShapeByType('c'),
-					modifier: 'minus',
-				},
-				{ kCreateFunc: function (x,y) {
-					return this.rectangle({
-						x: x+iconDepth/2, y: y+iconDepth/2,
-						width: this.iconBar.width - iconDepth,
-						strokeWidth: 1,
-					})}.bind(this),
-					// tooltipImage: this.iconBarTooltip,
-					cursorOver: `url(${cursor_del}) 2 2, auto`,
-					on: () => this.delShapeByType('r'),
-					modifier: 'minus',
-				},
-				{ kCreateFunc: function (x,y) {
-					return this.bar({
-						x: x+iconDepth/2, y: y+this.iconBar.width/2,
-						width: this.iconBar.width - iconDepth,
-						strokeWidth: 2,
-					})}.bind(this),
-					// tooltipImage: this.iconBarTooltip,
-					cursorOver: `url(${cursor_del}) 2 2, auto`,
-					on: () => this.delShapeByType('b'),
-					modifier: 'minus',						
-				},
-				{ kCreateFunc: function (x,y) {
-					return this.dot({
-						// x: x+this.iconBar.width/2-iconRadius, y: y+this.iconBar.width/2-iconRadius,
-						x: x+this.iconBar.width/2, y: y+this.iconBar.width/2,
-						width: this.iconBar.width - iconDepth,
-						radius: iconRadius,
-					})}.bind(this),
-					// tooltipImage: this.iconBarTooltip,
-					cursorOver: `url(${cursor_del}) 2 2, auto`,
-					on: () => this.delShapeByType('d'),
-					modifier: 'minus',
-				},
-			],
-		}}
+			this.iconbarWidth = this.iconBar.width + this.iconBar.framePadding*2 + this.iconBar.frameWidth*2;
+			this.x = this.iconBar.x + 2*this.iconbarWidth + 20;
 
-		this.iconBarAdd = new iconBar( stage, {...iconBarOptsAdd, ...{highlightColor: '#ccffcc', frameColor: '#66ff66'}} ); 
-		this.iconBarRemove = new iconBar( stage, {...iconBarOptsRemove, ...{x: this.iconBar.x + this.iconbarWidth + this.iconBar.spacing, highlightColor: '#ffcccc',  frameColor: '#ff6666'}} );
+			const iconBarOptsAdd = { ...this.iconBar, ...{
+				sticky: false,
+				icons: [
+					{ kCreateFunc: function (x,y) {
+						return this.cuboid({
+							x: x, y: y+iconDepth,
+							cuboidDepth: iconDepth,
+							width: this.iconBar.width - iconDepth,
+							strokeWidth: 1,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_add}) 2 2, auto`,
+						on: () => this.addShape('c'),
+						// modifier: 'plus',
+					},
+					{ kCreateFunc: function (x,y) {
+						return this.rectangle({
+							x: x+iconDepth/2, y: y+iconDepth/2,
+							width: this.iconBar.width - iconDepth,
+							strokeWidth: 1,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_add}) 2 2, auto`,
+						on: () => this.addShape('r'),
+						// modifier: 'plus',
+					},
+					{ kCreateFunc: function (x,y) {
+						return this.bar({
+							x: x+iconDepth/2, y: y+this.iconBar.width/2,
+							width: this.iconBar.width - iconDepth,
+							strokeWidth: 2,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_add}) 2 2, auto`,
+						on: () => this.addShape('b'),
+						// modifier: 'plus',
+					},
+					{ kCreateFunc: function (x,y) {
+						return this.dot({
+							// x: x+this.iconBar.width/2-iconRadius, y: y+this.iconBar.width/2-iconRadius,
+							x: x+this.iconBar.width/2, y: y+this.iconBar.width/2,
+							width: this.iconBar.width - iconDepth,
+							radius: iconRadius,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_add}) 2 2, auto`,
+						on: () => this.addShape('d'),
+						// modifier: 'plus',
+					},
+				],
+			}}
 
-		this.stage.height(this.iconBar.y+this.iconBarAdd.getOverallHeight());
+			const iconBarOptsRemove = { ...this.iconBar, ...{
+				sticky: false,
+				icons: [
+					{ kCreateFunc: function (x,y) {
+						return this.cuboid({
+							x: x, y: y+iconDepth,
+							cuboidDepth: iconDepth,
+							width: this.iconBar.width - iconDepth,
+							strokeWidth: 1,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_del}) 2 2, auto`,
+						on: (ev) => this.delShapeByType('c'),
+						modifier: 'minus',
+					},
+					{ kCreateFunc: function (x,y) {
+						return this.rectangle({
+							x: x+iconDepth/2, y: y+iconDepth/2,
+							width: this.iconBar.width - iconDepth,
+							strokeWidth: 1,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_del}) 2 2, auto`,
+						on: () => this.delShapeByType('r'),
+						modifier: 'minus',
+					},
+					{ kCreateFunc: function (x,y) {
+						return this.bar({
+							x: x+iconDepth/2, y: y+this.iconBar.width/2,
+							width: this.iconBar.width - iconDepth,
+							strokeWidth: 2,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_del}) 2 2, auto`,
+						on: () => this.delShapeByType('b'),
+						modifier: 'minus',						
+					},
+					{ kCreateFunc: function (x,y) {
+						return this.dot({
+							// x: x+this.iconBar.width/2-iconRadius, y: y+this.iconBar.width/2-iconRadius,
+							x: x+this.iconBar.width/2, y: y+this.iconBar.width/2,
+							width: this.iconBar.width - iconDepth,
+							radius: iconRadius,
+						})}.bind(this),
+						// tooltipImage: this.iconBarTooltip,
+						cursorOver: `url(${cursor_del}) 2 2, auto`,
+						on: () => this.delShapeByType('d'),
+						modifier: 'minus',
+					},
+				],
+			}}
+
+			this.iconBarAdd = new iconBar( stage, {...iconBarOptsAdd, ...{highlightColor: '#ccffcc', frameColor: '#66ff66'}} ); 
+			this.iconBarRemove = new iconBar( stage, {...iconBarOptsRemove, ...{x: this.iconBar.x + this.iconbarWidth + this.iconBar.spacing, highlightColor: '#ffcccc',  frameColor: '#ff6666'}} );
+
+			this.stage.height(this.iconBar.y+this.iconBarAdd.getOverallHeight());
+		}
 
 		if ( this.data.length ) {
 			this.drawShapes();

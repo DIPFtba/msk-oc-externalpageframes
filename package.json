@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "clean": "rimraf dist/ext_res",
-    "buildDist": "webpack --mode=production",
+    "buildDist": "npm run clean && webpack --mode=production",
     "doku": "node.exe node_modules/showdown/bin/showdown.js makehtml  -c tables -c ghCompatibleHeaderId -i json_editor/doku.md -o docs/doku.html",
     "build": "npm run buildDist && npm run doku",
     "dev": "webpack --mode=development",
@@ -32,7 +32,7 @@
     "rimraf": "^5.0.10",
     "showdown": "^2.1.0",
     "webpack": "^5.65.0",
-    "webpack-cli": "^4.10.0",
+    "webpack-cli": "^4.9.1",
     "webpack-dev-server": "^4.7.3"
   },
   "dependencies": {

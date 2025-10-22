@@ -5,6 +5,7 @@ import { tooltip } from './tooltip'
 import Konva from 'konva/lib/Core'
 import { Rect } from 'konva/lib/shapes/Rect'
 import { Text } from 'konva/lib/shapes/Text'
+import { Line } from 'konva/lib/shapes/Line'
 import { Image as kImage } from 'konva/lib/shapes/Image'
 
 export class iconBar {
@@ -30,6 +31,7 @@ export class iconBar {
 			framePadding: 2,
 			frameWidth: 1,
 			frameFill: null,
+			backgroundFill: 'white',
 
 			highlightColor: '#FFA99A',
 			highlightFrame: '#8c3627',
@@ -73,6 +75,7 @@ export class iconBar {
 			verticalAlign: 'middle',
 			fontSize: 20,
 		}
+
 		Object.assign( this, defaults, opts );
 		this.stage = stage;
 		// search iconBar Layer ore create new
@@ -94,6 +97,21 @@ export class iconBar {
 		}
 		this.kGroup = new Konva.Group();
 		this.layer.add( this.kGroup );
+
+		//Draw icon bar background first if needed
+		if ( this.frameWidth || this.backgroundFill || this.highlightColor ) {
+			this.kBackground = new Konva.Rect({
+				x: this.x - this.spacing || 0,
+				y: this.y - this.spacing || 0,
+				width: this.width + 3*this.framePadding,
+				height: this.getOverallHeight() + 4*this.framePadding,
+				// stroke: this.frameColor,
+				// strokeWidth: this.frameWidth,
+				fill: this.backgroundFill,
+				dontGrayOut: true,
+			});
+			this.kGroup.add( this.kBackground );
+		}		
 
 		// Icons
 		const wp = this.frameWidth + this.framePadding;
@@ -229,9 +247,16 @@ export class iconBar {
 				const createModifierOverlay = (modifier, iconX, iconY) => {
 					if (!modifier || (modifier !== 'plus' && modifier !== 'minus')) return null;
 					
+					/*
 					const modifierSize = Math.min(this.width, this.height) * 0.4;
 					const modifierX = iconX + this.width - modifierSize + wp - 1;
 					const modifierY = iconY + this.height - modifierSize + wp - 1; // Lower right corner
+					*/
+
+					const modifierSize = Math.min(this.width + 2*wp, this.height + 2*wp);
+					const modifierX = iconX;
+					const modifierY = iconY;
+
 
 					// White background square
 					const bgSquare = new Konva.Rect({
@@ -240,33 +265,68 @@ export class iconBar {
 						width: modifierSize,
 						height: modifierSize,
 						fill: 'white',
-						stroke: '#ccc',
-						strokeWidth: 1,
+						// stroke: '#ccc',
+						// strokeWidth: 1,
 						// cornerRadius: 2,
 						dontGrayOut: true,
 						opacity: 0.8,
 					});
 					
 					// Plus or minus symbol
-					const symbolColor = modifier === 'plus' ? '#28a745' : '#dc3545'; // Green for plus, red for minus
-					const symbol = modifier === 'plus' ? '+' : '−'; // Using proper minus character
+					const symbolColor = modifier === 'plus' ? '#28a745' : '#dc3545'; // Green for plus, red for cross
+					const symbol = modifier === 'plus' ? '+' : 'X'; 
 					
-					const symbolText = new Konva.Text({
+					const symbolSize = modifierSize;
+					const strokeWidth = Math.max(2, Math.round(symbolSize * 0.06));
+					// Group to hold the cross so it can be added as a single element
+					const symbolGroup = new Konva.Group({
 						x: modifierX,
 						y: modifierY,
-						width: modifierSize,
-						height: modifierSize,
-						text: symbol,
-						fontSize: modifierSize * 0.9,
-						fontFamily: 'Arial, sans-serif',
-						fontStyle: 'bold',
-						fill: symbolColor,
-						align: 'center',
-						verticalAlign: 'middle',
+						width: symbolSize,
+						height: symbolSize,
+						listening: false,
 						dontGrayOut: true,
 					});
+					// Diagonal from top-left to bottom-right
+					const line1 = new Konva.Line({
+						points: [2, 2, symbolSize - 2, symbolSize - 2],
+						stroke: symbolColor,
+						strokeWidth,
+						lineCap: 'round',
+						lineJoin: 'round',
+						dontGrayOut: true,
+						opacity: 0.6
+					});
+					// Diagonal from top-right to bottom-left
+					const line2 = new Konva.Line({
+						points: [symbolSize - 2, 2, 2, symbolSize - 2],
+						stroke: symbolColor,
+						strokeWidth,
+						lineCap: 'round',
+						lineJoin: 'round',
+						dontGrayOut: true,
+						opacity: 0.6
+					});
+					// symbolGroup.add(bgSquare);
+					symbolGroup.add(line1);
+					symbolGroup.add(line2);
+
+					// const symbolText = new Konva.Text({
+					// 	x: modifierX,
+					// 	y: modifierY,
+					// 	width: modifierSize,
+					// 	height: modifierSize,
+					// 	text: symbol,
+					// 	fontSize: modifierSize,
+					// 	fontFamily: 'Arial, sans-serif',
+					// 	fontStyle: 'bold',
+					// 	fill: symbolColor,
+					// 	align: 'center',
+					// 	verticalAlign: 'middle',
+					// 	dontGrayOut: true,
+					// });
 					
-					return [bgSquare, symbolText];
+					return symbolGroup;
 				}
 
 				if ( i.src ) {
@@ -311,7 +371,7 @@ export class iconBar {
 				// Add modifier overlay if specified
 				if ( i.modifier ) {
 					
-					const modifierElements = createModifierOverlay( i.modifier, rectAttr.x, rectAttr.y );
+					const modifierElements = createModifierOverlay( i.modifier, x, y );
 					loadPrs.push(
 						Promise.all( Array.isArray(modifierElements) ? modifierElements : [modifierElements] )
 						.then( kObjs => kObjs.forEach( kObj => {

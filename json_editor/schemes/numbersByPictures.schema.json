@@ -57,6 +57,14 @@
 					},
 					"default": 60
 				},
+				"iconWidth": {
+					"title": "Breite der Icons",
+					"type": "integer",
+					"options": {
+						"grid_columns": 4
+					},
+					"default": 28
+				},
 				"readonly": {
 					"title": "Daten unveränderbar (nicht interaktiv)",
 					"type": "boolean",

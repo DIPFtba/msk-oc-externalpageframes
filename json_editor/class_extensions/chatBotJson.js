@@ -3,12 +3,16 @@ import { object_equals, mergeDeep, setStatePostProc } from '../../libs/common.js
 import { initializeAndMount } from '../external_bundled/chat-bot-json.js';
 
 import '../external_bundled/chat-bot-json.css';
+import { setBodyFont } from '../common.js';
+
 export class chatBotJsonFromSchema {
 
 	constructor(divSelector, cfgData, base ) {
 
 		base.regSendInitDone();
 		base.incInitCnt();
+
+		setBodyFont( cfgData.fontFile );
 
 		const defaultOpts = {
 			readonly: false,

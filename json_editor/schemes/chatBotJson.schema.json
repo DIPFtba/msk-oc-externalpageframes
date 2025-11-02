@@ -43,12 +43,35 @@
 				"botDelay": {
 					"title": "Bot-Antwort-Verzögerung (ms)",
 					"type": "number",
-					"default": 750,
+					"default": 1500,
 					"minimum": 0,
 					"options": {
 						"grid_columns": 4,
 						"grid_break": true
 					}
+				},
+
+				"fontFile": {
+					"title": "Schriftart",
+					"type": "string",
+					"default": "",
+					"format": "font",
+					"options": {
+						"grid_break": true,
+						"grid_columns": 4,
+						"infoText": "relativer Pfad (zur Laufzeit!) zur Schriftart-Datei, die für die Eingabefelder verwendet werden soll. Wenn leer, dann wird die Standard-Schriftart verwendet"
+					}
+				},
+				"chatBotTypingText":{
+					"title": "Bot-Tippt-Text",
+					"type": "string",
+					"default": "Chatbot schreibt",
+					"options": {
+						"grid_columns": 8,
+						"grid_break": true,
+						"infoText": "Text, der angezeigt wird, wenn der Bot gerade 'tippt'. Dahinter werden 0-1 '.' animiert"
+					}
+
 				},
 
 				"listStyle": {
@@ -245,6 +268,26 @@
 							}
 						},
 
+						"fontSize": {
+							"title": "Schriftgröße",
+							"type": "string",
+							"default": "",
+							"options": {
+								"grid_columns": 4,
+								"infoText": "Wenn leer, dann wird die Standard-Schriftgröße verwendet"
+							}
+						},
+						"fontWeight": {
+							"title": "Schriftstärke",
+							"type": "string",
+							"default": "",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true,
+								"infoText": "z.B. 'normal', 'bold', '100', '200', ..., '900'. Wenn leer, dann wird die Standard-Schriftstärke verwendet"
+							}
+						},
+
 						"marginVert": {
 							"title": "Außen-Abstand vertikal",
 							"type": "string",
@@ -367,6 +410,26 @@
 									"_set_color": true
 								}
 
+							}
+						},
+
+						"fontSize": {
+							"title": "Schriftgröße",
+							"type": "string",
+							"default": "",
+							"options": {
+								"grid_columns": 4,
+								"infoText": "Wenn leer, dann wird die Standard-Schriftgröße verwendet"
+							}
+						},
+						"fontWeight": {
+							"title": "Schriftstärke",
+							"type": "string",
+							"default": "",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true,
+								"infoText": "z.B. 'normal', 'bold', '100', '200', ..., '900'. Wenn leer, dann wird die Standard-Schriftstärke verwendet"
 							}
 						},
 
@@ -640,6 +703,42 @@
 									"_set_color": true
 								}
 
+							}
+						},
+
+						"fontSize": {
+							"title": "Schriftgröße",
+							"type": "string",
+							"default": "",
+							"options": {
+								"grid_columns": 4,
+								"infoText": "Wenn leer, dann wird die Standard-Schriftgröße verwendet"
+							}
+						},
+						"fontWeight": {
+							"title": "Schriftstärke",
+							"type": "string",
+							"default": "",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true,
+								"infoText": "z.B. 'normal', 'bold', '100', '200', ..., '900'. Wenn leer, dann wird die Standard-Schriftstärke verwendet"
+							}
+						},
+
+						"textAlign": {
+							"title": "Textausrichtung",
+							"type": "string",
+							"enum": [
+								"center",
+								"left",
+								"right",
+								"justify"
+							],
+							"default": "center",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
 							}
 						},
 

@@ -74,6 +74,86 @@
 
 				},
 
+				"outerStyle": {
+					"title": "Stil App-Bereich",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"collapsed": true,
+						"grid_columns": 12,
+						"remove_empty_properties": true,
+						"disable_edit_json": true,
+						"disable_properties": true
+					},
+					"properties": {
+
+						"_set_backgroundColor": {
+							"title": "Hintergrundfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": false,
+							"options": {
+								"grid_columns": 4
+							}
+						},
+						"backgroundColor": {
+							"title": "Hintergrundfarbe",
+							"type": "string",
+							"format": "color",
+							"default": "#FFFFFF",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_backgroundColor": true
+								}
+							}
+						},
+
+						"_set_color": {
+							"title": "Textfarbe setzen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": false,
+							"options": {
+								"grid_columns": 4
+							}
+						},
+						"color": {
+							"title": "Textfarbe",
+							"type": "string",
+							"format": "color",
+							"default": "#000000",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"_set_color": true
+								}
+							}
+						},
+
+						"paddingVert": {
+							"title": "Innen-Abstand vertikal",
+							"type": "string",
+							"default": "3",
+							"options": {
+								"grid_columns": 4
+							}
+						},
+						"paddingHorz": {
+							"title": "Innen-Abstand horizontal",
+							"type": "string",
+							"default": "3",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						}
+
+					}
+				},
+
 				"listStyle": {
 					"title": "Stil Chat-Liste",
 					"type": "object",
@@ -158,26 +238,7 @@
 									"_set_color": true
 								}
 							}
-						},
-
-						"marginVert": {
-							"title": "Außen-Abstand vertikal",
-							"type": "string",
-							"default": "",
-							"options": {
-								"grid_columns": 4
-							}
-						},
-						"marginHorz": {
-							"title": "Außen-Abstand horizontal",
-							"type": "string",
-							"default": "",
-							"options": {
-								"grid_columns": 4,
-								"grid_break": true
-							}
 						}
-
 					}
 				},
 
@@ -285,24 +346,6 @@
 								"grid_columns": 4,
 								"grid_break": true,
 								"infoText": "z.B. 'normal', 'bold', '100', '200', ..., '900'. Wenn leer, dann wird die Standard-Schriftstärke verwendet"
-							}
-						},
-
-						"marginVert": {
-							"title": "Außen-Abstand vertikal",
-							"type": "string",
-							"default": "",
-							"options": {
-								"grid_columns": 4
-							}
-						},
-						"marginHorz": {
-							"title": "Außen-Abstand horizontal",
-							"type": "string",
-							"default": "",
-							"options": {
-								"grid_columns": 4,
-								"grid_break": true
 							}
 						},
 
@@ -433,24 +476,6 @@
 							}
 						},
 
-						"marginVert": {
-							"title": "Außen-Abstand vertikal",
-							"type": "string",
-							"default": "",
-							"options": {
-								"grid_columns": 4
-							}
-						},
-						"marginHorz": {
-							"title": "Außen-Abstand horizontal",
-							"type": "string",
-							"default": "",
-							"options": {
-								"grid_columns": 4,
-								"grid_break": true
-							}
-						},
-
 						"paddingVert": {
 							"title": "Innen-Abstand vertikal",
 							"type": "string",
@@ -463,6 +488,50 @@
 							"title": "Innen-Abstand horizontal",
 							"type": "string",
 							"default": "10",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						}
+					}
+				},
+
+				"timeStyle": {
+					"title": "Stil Uhrzeitangaben",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"collapsed": true,
+						"grid_columns": 12,
+						"remove_empty_properties": true,
+						"disable_edit_json": true,
+						"disable_properties": true
+					},
+					"properties": {
+
+						"fontSize": {
+							"title": "Schriftgröße",
+							"type": "string",
+							"default": "8",
+							"options": {
+								"grid_columns": 4
+							}
+						},
+						"opacity100": {
+							"title": "Deckkraft",
+							"type": "number",
+							"format": "range",
+							"default": 50,
+							"minimum": 0,
+							"maximum": 100,
+							"options": {
+								"grid_columns": 4
+							}
+						},
+						"paddingTop": {
+							"title": "Abstand zwischen Text und Uhrzeit",
+							"type": "string",
+							"default": "",
 							"options": {
 								"grid_columns": 4,
 								"grid_break": true

@@ -170,6 +170,7 @@ export class baseInits {
 			'number': 'Integer',
 			'boolean': 'Boolean',
 		}
+		const emptyString = 'EMPTY';
 
 		try {
 			for ( const vname in this.FSMVarsSent ) {
@@ -179,21 +180,43 @@ export class baseInits {
 				let defaultValue = val;
 
 				if ( this.scoreObj && this.scoreObj.scoreDefType ) {
+					// Typdefinition aus JSON Config
 					type = this.scoreObj.scoreDefType.call(this.scoreObj, vname);
 				}
 
-				if ( !type ) {
+				if ( type ) {
+					// Typdef vorhanden
+					switch ( type ) {
+						case 'Boolean':
+							if ( val===null || val===undefined ) {
+								defaultValue = false;
+							}
+							break;
+						case 'String':
+							if ( val===null || val===undefined || val === '' ) {
+								defaultValue = emptyString;
+							}
+							break;
+						case 'Integer':
+							if ( val===null || val===undefined || Number.isNaN(val) ) {
+								defaultValue = 0;
+							}
+							break;
+					}
+
+				} else {
+					// keine Typdef, automatische Typdefinition
 					if(val===null){
 						type = 'Integer';
 						defaultValue = 0;
 					}
 					else if(typetrans[ typeof val ]){
 						type = typetrans[ typeof val ];
-						defaultValue = Number.isNaN(val) || val===null ? 0 : ( val === '' ? 'EMPTY' : val );
+						defaultValue = Number.isNaN(val) || val===null ? 0 : ( val === '' ? emptyString : val );
 					}
 					else {
 						type = 'String';
-						defaultValue = !val ? 'EMPTY' : JSON.stringify(val);
+						defaultValue = !val ? emptyString : JSON.stringify(val);
 					}
 				}
 
@@ -205,16 +228,17 @@ export class baseInits {
 				}
 				varDefs.push( vdef );
 			}
-			
+
 		} catch (e) {
 			varDefs.push({
 				name: 'EPF_VariableDeclarationError',
 				type: 'String',
 				defaultValue: e,
 				namedValues: []
-			});			
+			});
 		}
 
+console.log("====== declareVariables:", varDefs);
 		return varDefs;
 	}
 

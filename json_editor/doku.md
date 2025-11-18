@@ -29,6 +29,7 @@ table td, table th {
     - [numberLineWithAnnotations](#numberlinewithannotations)
     - [numberLineWithArcs](#numberlinewitharcs)
     - [recordAudio](#recordaudio)
+    - [pikasTextEntry](#pikastextentry)
     - [pointAreaExt](#pointareaext)
     - [textAreaInserts](#textareainserts)
 - [Markierbarer Balken (filledBar)](#markierbarer-balken-filledbar)
@@ -181,6 +182,13 @@ Alle Events von `freePaintMulti`und **zusätzllich:**
 |`EV_RECORD_STARTED`|Eine Aufnahme wurde gestartet (`Weiter` Button muss deaktiviert werden!)|
 |`EV_RECORD_STOPPED`|Die laufende Aufnahme wurde beendet (da noch eine Konvertierung stattfindet, muss `Weiter` Button deaktiviert bleiben)|
 |`EV_RECORD_AUDIOS_SAVED`|Die Konverierung für Speicherung ist abgeschlossen, `Weiter` Button kann wieder aktiviert werden|
+
+### pikasTextEntry
+|Event|Bedeutung|
+|:----|:--------|
+|`EV_InitDone_ExtRes` und<br>`EV_InitDone_<pref>`|Initialisierung der EWK ist abgeschlossen|
+|`EV_FROZEN_XYZ`|Ein Tastaturbereich soll ausgeblendet werden (XYZ=`NUM` für Zahlen, `DELBAK` für Delbak, `LEFT` bzw. `RIGHT` für Pfeile)
+|`EV_UNFROZEN_XYZ`|Ein Tastaturbereich soll Eingeblendet werden (XYZ=`NUM` für Zahlen, `DELBAK` für Delbak, `LEFT` bzw. `RIGHT` für Pfeile)
 
 ### pointAreaExt
 |Event|Bedeutung|

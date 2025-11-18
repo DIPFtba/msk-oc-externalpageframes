@@ -134,7 +134,7 @@ export class SimpleInput {
         if ( !this.hasFocus && !this.readonly ) {
             this.hasFocus = true;
             this.setStyles( this.div, this.stylesFocus );
-            this.setCursorPos( Math.min( this._cursorPos, this._value.length ) );
+            this.setCursorPos( this._cursorPos );
             this.renderCursor();
             this.focusStartValue = this._value; // save current value for blur
             this.emit( 'focus' );
@@ -169,10 +169,7 @@ export class SimpleInput {
             const oldCursorPos = this._cursorPos;
 
             this._value = newValue;
-            const effCursorPos = Math.min( newCursorPos ?? this._cursorPos, this._value.length );
-            if ( this._cursorPos !== effCursorPos ) {
-                this.setCursorPos( effCursorPos, false );
-            }
+            this.setCursorPos( newCursorPos ?? this._cursorPos, false );
             this.render();
 
             // check if text fits in div
@@ -183,9 +180,7 @@ export class SimpleInput {
                     // no shrinking posible, revert to old value
                     this.emit( 'oversize', newValue );
                     this._value = oldValue; // revert to old value
-                    if ( effCursorPos !== oldCursorPos ) {
-                        this.setCursorPos( oldCursorPos, false );
-                    }
+                    this.setCursorPos( oldCursorPos, false );
                     this.render(); // re-render with old value
                 }
 
@@ -245,9 +240,9 @@ export class SimpleInput {
     }
 
     setCursorPos ( cursorX, renderCursor=true ) {
-// console.log('*** setCursorPos', this._cursorPos, cursorX );
+        cursorX = Math.max( 0, Math.min( cursorX, this._value.length ) );
         if ( this._cursorPos != cursorX ) {
-            this._cursorPos = Math.max( 0, Math.min( cursorX, this._value.length ) );
+            this._cursorPos = cursorX;
             if ( renderCursor ) {
                 this.renderCursor();
             }

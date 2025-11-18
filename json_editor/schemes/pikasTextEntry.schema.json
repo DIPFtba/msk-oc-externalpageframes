@@ -110,6 +110,51 @@
 					}
 				},
 
+				"cursorAlwaysRight": {
+					"title": "Cursor immer rechts",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Cursor wird immer am rechten Ende des Textes positioniert (sonst an der Stelle des Klicks)"
+					}
+				},
+				"deleteAll":{
+					"title": "DELETE/DELBAK löscht gesamten Inhalt",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Bei Aktivierung wird beim Drücken der Löschen/Delbak-Taste immer der gesamte Inhalt des Feldes gelöscht (sonst nur ein Zeichen)"
+					}
+				},
+				"navPrevDelbak": {
+					"title": "Bei leerem Feld mit Delbak zu vorherigem Feld",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Wenn das Feld leer ist oder Cursor links steht und die Rücktaste (Delbak) gedrückt wird, wird zum vorherigen Feld gewechselt"
+					}
+				},
+				"navNextFull": {
+					"title": "Bei voller Eingabe zu nächstem Feld",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Wenn die maximale Eingabelänge eines Feldes erreicht ist, wird automatisch zum nächsten Feld gewechselt"
+					}
+				},
+
 				"blurOnEnter": {
 					"title": "Eingabe bei Enter bestätigen",
 					"type": "boolean",

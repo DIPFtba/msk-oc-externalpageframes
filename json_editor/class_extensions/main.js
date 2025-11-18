@@ -88,6 +88,8 @@ import { freePaintFromSchema } from './freePaint';
 import { freePaintMultFromSchema } from './freePaintMult';
 /// #elif __CLASS == 'freePaintRecog'
 import { freePaintRecogFromSchema } from './freePaintRecog';
+/// #elif __CLASS == 'inputfield'
+import { inputfieldFromSchema } from './inputfield';
 /// #elif __CLASS == 'inputGrid'
 import { inputGridFromSchema } from './inputGrid';
 /// #elif __CLASS == 'numbersByPictures'
@@ -137,7 +139,7 @@ function initJSON ( json ) {
 		cfg.dataSettings.variablePrefix = cfg.dataSettings.variablePrefix.trim();
 	}
 
-/// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio' || __CLASS == 'pikasTextEntry' || __CLASS == 'chatBotJson' || __CLASS == 'chatTextAudio' || __CLASS == 'vueExamplePropsEmit' || __CLASS == 'vueExamplePinia'
+/// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio' || __CLASS == 'pikasTextEntry' || __CLASS == 'chatBotJson' || __CLASS == 'chatTextAudio' || __CLASS == 'vueExamplePropsEmit' || __CLASS == 'vueExamplePinia' || __CLASS == 'inputfield'
 	// base ohne Konva stage
 	const base = new baseInits( { dataSettings: cfg.dataSettings } );
 /// #else
@@ -187,6 +189,8 @@ function initJSON ( json ) {
 		const io = new freePaintMultFromSchema( base, cfg );
 /// #elif __CLASS == 'freePaintRecog'
 		const io = new freePaintRecogFromSchema( base, cfg );
+/// #elif __CLASS == 'inputfield'
+		const io = new inputfieldFromSchema( '#container', cfg, base, addMods );
 /// #elif __CLASS == 'inputGrid'
 		const io = new inputGridFromSchema( base, cfg );
 /// #elif __CLASS == 'numbersByPictures'

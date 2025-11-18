@@ -53,6 +53,10 @@ import { freePaintRecogFromSchema } from './class_extensions/freePaintRecog';
 import freePaintRecogJSONSchema from './schemes/freePaintRecog.schema.json';
 import freePaintRecogSVG from './svgs/freePaintMult.svg';
 
+import { inputfieldFromSchema } from './class_extensions/inputfield';
+import inputfieldJSONSchema from './schemes/inputfield.schema.json';
+import inputfieldSVG from './svgs/inputGrid.svg';
+
 import { inputGridFromSchema } from './class_extensions/inputGrid';
 import inputGridJSONSchema from './schemes/inputGrid.schema.json';
 import inputGridSVG from './svgs/inputGrid.svg';
@@ -267,6 +271,14 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new freePaintRecogFromSchema( base, cfgData );
 						break;
+					case 'inputfield':
+						creator = (cfgData) => {
+							initContainer(false);
+							// wenn hier textContainer.firstChild asl Selektor übergeben wird, werden alle
+							// input felder des editors mit gestylt - daher der Umweg über die ID
+							return new inputfieldFromSchema( `#ewk_textcontainer > :first-child`, cfgData, base );
+						}
+						break;
 					case 'inputGrid':
 						initContainer(true);
 						creator = (cfgData) => new inputGridFromSchema( base, cfgData );
@@ -373,6 +385,7 @@ const templs = {
 	freePaint: [ freePaintJSONSchema, freePaintSVG ],
 	freePaintMult: [ freePaintMultJSONSchema, freePaintMultSVG ],
 	freePaintRecog: [ freePaintRecogJSONSchema, freePaintRecogSVG ],
+	inputfield: [ inputfieldJSONSchema, inputfieldSVG ],
 	inputGrid: [ inputGridJSONSchema, inputGridSVG ],
 	numberLine: [ numberLineJSONSchema, numberLineSVG ],
 	numberLineWithAnnotations: [ numberLineWithAnnotationsJSONSchema, numberLineWithAnnotationsSVG ],

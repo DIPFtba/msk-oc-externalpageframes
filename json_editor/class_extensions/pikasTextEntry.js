@@ -337,6 +337,7 @@ export class pikasTextEntryFromSchema {
 		this.startButtonListener();
 
 		this.initData = this.getChState();
+		this.base.sendChangeState( this );	// init & send changeState & score
 
 		base.decInitCnt();
 	}

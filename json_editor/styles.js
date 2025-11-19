@@ -48,6 +48,10 @@ export function expStyle(s) {
                 res['borderWidth'] = setPx(v);
                 res['borderStyle'] = 'solid';
                 break;
+            case 'fontWeight':
+                // Ohne "px"!
+                res[key] = v;
+                break;
             default:
                 res[key] = setPx(v);
                 break;

@@ -55,7 +55,7 @@ import freePaintRecogSVG from './svgs/freePaintMult.svg';
 
 import { inputfieldFromSchema } from './class_extensions/inputfield';
 import inputfieldJSONSchema from './schemes/inputfield.schema.json';
-import inputfieldSVG from './svgs/inputGrid.svg';
+import inputfieldSVG from './svgs/inputfield.svg';
 
 import { inputGridFromSchema } from './class_extensions/inputGrid';
 import inputGridJSONSchema from './schemes/inputGrid.schema.json';

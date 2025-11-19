@@ -21,7 +21,7 @@ export class inputfieldFromSchema {
 			input.setAttribute( 'readonly', 'readonly' );
 			this.readonly = true;
 		}
-		['placeholder','width','height'].forEach( attr => {
+		['placeholder'].forEach( attr => {
 			if ( opts.options?.[ attr ] ) {
 				input.setAttribute( attr, opts.options[ attr ] );
 			}
@@ -43,17 +43,16 @@ export class inputfieldFromSchema {
 		let styleDefs = "";
 		[ ['stylesNormal', ''] , ['stylesHover', ':hover'] , ['stylesFocus', ':focus'] ].forEach( ([styleType, pseudo]) => {
 			const stylesObj = {
-				...defaultStyles,
-				...opts.options[ styleType ]
+				...expStyle(defaultStyles),
+				...expStyle(opts.options[ styleType ])
 			};
-			const styles = expStyle( stylesObj );
-			if ( Object.keys( styles ).length === 0 ) {
+			if ( Object.keys( stylesObj ).length === 0 ) {
 				return;
 			}
 
 			styleDefs += `${styleSelector}${pseudo} { `;
-			for ( const st in styles ) {
-				styleDefs += `${camelToKebab( st )}: ${styles[ st ]}; `;
+			for ( const st in stylesObj ) {
+				styleDefs += `${camelToKebab( st )}: ${stylesObj[ st ]}; `;
 			}
 			styleDefs += `}\n`;
 		} );
@@ -74,7 +73,7 @@ export class inputfieldFromSchema {
 		///////////////////////////////////////
 
 		// Validation & Event Logging
-		const maxlength = opts.options?.maxLength;
+		const maxlength = opts.options?.maxlength;
 		const re = opts.options?.inputRegexp ? new RegExp( opts.options.inputRegexp ) : null;
 		input.addEventListener( 'input', () => {
 
@@ -91,6 +90,7 @@ export class inputfieldFromSchema {
 				this.lastOkValue = value;
 				base.postLog( 'input', logData );
 			}
+			base.sendChangeState( this );
 		});
 
 		[ 'focus', 'blur' ].forEach( ev => {
@@ -115,7 +115,7 @@ export class inputfieldFromSchema {
 
 	scoreDef () {
 		const res = {};
-		if ( this.readonly || !this.initData ) {
+		if ( this.readonly || !( "initData" in this ) ) {
 			return res;
 		}
 

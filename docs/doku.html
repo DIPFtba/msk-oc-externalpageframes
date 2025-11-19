@@ -28,6 +28,7 @@ table td, table th {
 <li><a href="#numberlinewithannotations">numberLineWithAnnotations</a></li>
 <li><a href="#numberlinewitharcs">numberLineWithArcs</a></li>
 <li><a href="#recordaudio">recordAudio</a></li>
+<li><a href="#pikastextentry">pikasTextEntry</a></li>
 <li><a href="#pointareaext">pointAreaExt</a></li>
 <li><a href="#textareainserts">textAreaInserts</a></li></ul></li>
 <li><a href="#markierbarer-balken-filledbar">Markierbarer Balken (filledBar)</a></li>
@@ -429,6 +430,29 @@ table td, table th {
 <tr>
 <td style="text-align:left;"><code>EV_RECORD_AUDIOS_SAVED</code></td>
 <td style="text-align:left;">Die Konverierung für Speicherung ist abgeschlossen, <code>Weiter</code> Button kann wieder aktiviert werden</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pikastextentry">pikasTextEntry</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>EV_InitDone_ExtRes</code> und<br><code>EV_InitDone_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Initialisierung der EWK ist abgeschlossen</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_FROZEN_XYZ</code></td>
+<td style="text-align:left;">Ein Tastaturbereich soll ausgeblendet werden (XYZ=<code>NUM</code> für Zahlen, <code>DELBAK</code> für Delbak, <code>LEFT</code> bzw. <code>RIGHT</code> für Pfeile)</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>EV_UNFROZEN_XYZ</code></td>
+<td style="text-align:left;">Ein Tastaturbereich soll Eingeblendet werden (XYZ=<code>NUM</code> für Zahlen, <code>DELBAK</code> für Delbak, <code>LEFT</code> bzw. <code>RIGHT</code> für Pfeile)</td>
 </tr>
 </tbody>
 </table>

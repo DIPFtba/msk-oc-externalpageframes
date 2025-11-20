@@ -218,17 +218,100 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 
 export function addStatusVarDef ( obj, json ) {
 
-		if ( !obj.readonly && !obj.statusVarDef && json.dataSettings && json.dataSettings.variablePrefix ) {
-		const statVarName = `V_Status_${json.dataSettings.variablePrefix}`;
-				obj.statusVarDef = function () {
-						return {
-				[statVarName]: +this.getDefaultChangeState(),
+	const pref = json.dataSettings?.variablePrefix;
+	if ( !obj.readonly && !obj.statusVarDef && pref ) {
+
+		const statVarName = `V_Status_${pref}`;
+		const statHistVarName = `V_StatHist_${pref}`;
+		let statusHistory = 0;
+
+		obj.statusVarDef = function () {
+			const currStatus = +this.getDefaultChangeState();
+			if ( currStatus ) {
+				statusHistory = 1;
+			}
+			return {
+				[statVarName]: currStatus,
+				[statHistVarName]: statusHistory,
 			}
 		}
+
+		// get/setState patchen, damit V_StatHist_... mit gespeichert wird
+		const statusHistKey = "_statusHist";
+		const valueWrapperKey = "_state";
+
+		const oldGetStateFnc = obj.getState;
+		if ( oldGetStateFnc ) {
+
+			obj.getState = function () {
+				// "alte" getState aufrufen
+				let state = oldGetStateFnc.call( this );
+				let jsonFormat = 0;
+
+				if ( typeof state === 'string' && state.length > 0 ) {
+					try {
+						const data = JSON.parse( state );
+						state = data;
+						jsonFormat = 1;
+					} catch (e) {
+						// Ignore JSON parse errors
+					}
+				}
+
+				if ( typeof state === 'object' && !Array.isArray(state) && state !== null && !( statusHistKey in state ) ) {
+					// Einfaches Objekt, in dem statusHistKey gesetzt wird
+					state[ statusHistKey ] = statusHistory;
+				} else {
+					// Status wrappen
+					state = {
+						[ valueWrapperKey ]: state,
+						[ statusHistKey ]: statusHistory,
+					}
+				}
+
+				return jsonFormat ? JSON.stringify(state) : state;
+			}
+		}
+
+		const oldSetStateFnc = obj.setState;
+		if ( oldSetStateFnc ) {
+
+			obj.setState = function ( state ) {
+				let jsonFormat = 0;
+
+				if ( typeof state === 'string' && state.length > 0 ) {
+					try {
+						const data = JSON.parse( state );
+						state = data;
+						jsonFormat = 1;
+					} catch (e) {
+						// Ignore JSON parse errors
+					}
+				}
+
+				if ( typeof state === 'object' && !Array.isArray(state) && state !== null ) {
+					const stateKeys = Object.keys( state );
+					// Status gewrappt?
+					if ( stateKeys.length === 2 && valueWrapperKey in state && statusHistKey in state ) {
+						statusHistory = +state[ statusHistKey ];
+						state = state[ valueWrapperKey ];
+					} else {
+						// Nur Object mit Key?
+						if ( statusHistKey in state ) {
+							statusHistory = +state[ statusHistKey ];
+							delete state[ statusHistKey ];
+						}
+					}
+				}
+
+				// "alte" setState aufrufen
+				oldSetStateFnc.call( obj, jsonFormat ? JSON.stringify(state) : state );
+			}
+		}
+
 	}
 
 }
-
 
 //////////////////////////////////////
 

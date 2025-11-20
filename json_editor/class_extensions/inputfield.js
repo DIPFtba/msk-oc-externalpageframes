@@ -146,9 +146,10 @@ export class inputfieldFromSchema {
 	}
 
 	getState () {
-		return {
+		const state = {
 			v: this.input.value
 		};
+		return JSON.stringify( state );
 	}
 
 	setState (state) {

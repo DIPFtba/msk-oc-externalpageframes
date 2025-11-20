@@ -448,7 +448,8 @@ export class pikasTextEntryFromSchema {
 	}
 
 	getState () {
-		return this.fields.map( f => f.value );
+		const state = this.fields.map( f => f.value );
+		return JSON.stringify( state );
 	}
 
 	setState (state) {

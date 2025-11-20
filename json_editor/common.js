@@ -218,10 +218,10 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 
 export function addStatusVarDef ( obj, json ) {
 
-	if ( !obj.readonly && !obj.statusVarDef && json.dataSettings && json.dataSettings.variablePrefix ) {
+		if ( !obj.readonly && !obj.statusVarDef && json.dataSettings && json.dataSettings.variablePrefix ) {
 		const statVarName = `V_Status_${json.dataSettings.variablePrefix}`;
-		obj.statusVarDef = function () {
-			return {
+				obj.statusVarDef = function () {
+						return {
 				[statVarName]: +this.getDefaultChangeState(),
 			}
 		}
@@ -279,7 +279,7 @@ export const dp2inputRegExp = (obj) => {
 	};
 
 	if ( obj.pdp || obj.dp ) {
-		let re = `^[0-9]${ obj.pdp ? `{0,${obj.pdp}}` : '*' }`;
+		let re = `^$|^[0-9]${ obj.pdp ? `{1,${obj.pdp}}` : '+' }`;
 		if ( obj.dp ) {
 			re += `([,.][0-9]{0,${obj.dp}})?`;
 		}
@@ -302,7 +302,7 @@ export const dp2labFncInputRegExp = ( obj, opts, nam='' ) => {
 	if ( obj.dp && !obj.units ) {
 		lVF = strToNum;
 		lT = 'Number';
-	} else if ( obj.pdp && !obj.units ) {
+	} else if ( obj.pdp && !obj.dp && !obj.units ) {
 		lVF = strToInt;
 		lT = 'Integer';
 	} else {

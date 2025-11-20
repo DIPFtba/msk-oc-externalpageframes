@@ -198,6 +198,7 @@ export class baseInits {
 							}
 							break;
 						case 'Integer':
+						case 'Number':
 							if ( val===null || val===undefined || Number.isNaN(val) ) {
 								defaultValue = 0;
 							}
@@ -238,7 +239,7 @@ export class baseInits {
 			});
 		}
 
-console.log("====== declareVariables:", varDefs);
+// console.log("====== declareVariables:", varDefs);
 		return varDefs;
 	}
 

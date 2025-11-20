@@ -23,6 +23,7 @@ table td, table th {
 <li><a href="#chattextaudio">chatTextAudio</a></li>
 <li><a href="#freepaintmulti">freePaintMulti</a></li>
 <li><a href="#freepaintrecog">freePaintRecog</a></li>
+<li><a href="#inputfield">inputField</a></li>
 <li><a href="#inputgrid">inputGrid</a></li>
 <li><a href="#inputinserts">inputInserts</a></li>
 <li><a href="#numberlinewithannotations">numberLineWithAnnotations</a></li>
@@ -303,6 +304,29 @@ table td, table th {
 <tr>
 <td style="text-align:left;"><code>EV_NewRecog</code> und<br><code>EV_NewRecog_&lt;pref&gt;</code></td>
 <td style="text-align:left;">Es wurde ein neuer Text erkannt und in die Variable <code>V_RecogTxt_&lt;pref&gt;</code> geschrieben</td>
+</tr>
+</tbody>
+</table>
+<h3 id="inputfield">inputField</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">Event</th>
+<th style="text-align:left;">Bedeutung</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;"><code>EV_InitDone_ExtRes</code> und<br><code>EV_InitDone_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Initialisierung der EWK ist abgeschlossen</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>ev_InputValidation_ExtRes</code> und<br><code>ev_InputValidation_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von <code>Vorkomma-Stellen</code> und/oder <code>Nachkomma-Stellen</code> oder Regexp)</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>ev_Blur_ExtRes</code> und<br><code>ev_Blur_&lt;pref&gt;</code></td>
+<td style="text-align:left;">Das Eingabefeld wurde verlassen</td>
 </tr>
 </tbody>
 </table>

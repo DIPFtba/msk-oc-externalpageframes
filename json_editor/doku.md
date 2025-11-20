@@ -24,6 +24,7 @@ table td, table th {
     - [chatTextAudio](#chattextaudio)
     - [freePaintMulti](#freepaintmulti)
     - [freePaintRecog](#freepaintrecog)
+    - [inputField](#inputfield)
     - [inputGrid](#inputgrid)
     - [inputInserts](#inputinserts)
     - [numberLineWithAnnotations](#numberlinewithannotations)
@@ -144,6 +145,14 @@ Alle Events von `freePaintMulti`und **zusätzllich:**
 |Event|Bedeutung|
 |:----|:--------|
 |`EV_NewRecog` und<br>`EV_NewRecog_<pref>`|Es wurde ein neuer Text erkannt und in die Variable `V_RecogTxt_<pref>` geschrieben|
+
+### inputField
+|Event|Bedeutung|
+|:----|:--------|
+|`EV_InitDone_ExtRes` und<br>`EV_InitDone_<pref>`|Initialisierung der EWK ist abgeschlossen|
+|`ev_InputValidation_ExtRes` und<br>`ev_InputValidation_<pref>`|Es wurde versucht, eine unerlaubte Eingabe zu machen (definiert durch Angabe von `Vorkomma-Stellen` und/oder `Nachkomma-Stellen` oder Regexp)|
+|`ev_Blur_ExtRes` und<br>`ev_Blur_<pref>`|Das Eingabefeld wurde verlassen|
+
 
 ### inputGrid
 |Event|Bedeutung|

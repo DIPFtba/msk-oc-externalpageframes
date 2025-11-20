@@ -93,10 +93,17 @@ export class inputfieldFromSchema {
 			base.sendChangeState( this );
 		});
 
-		[ 'focus', 'blur' ].forEach( ev => {
-			input.addEventListener( ev, () => {
-				base.postLog( ev, { val: this.input.value } );
-			});
+		input.addEventListener( "focus", () => {
+			base.postLog( "focus", { val: this.input.value } );
+		});
+
+		const blurEvent = this.dataSettings?.variablePrefix ? 'ev_Blur_' + this.dataSettings.variablePrefix : null;
+		input.addEventListener( "blur", () => {
+			base.fsm?.triggerEvent( 'ev_Blur_ExtRes' );
+			if ( blurEvent ) {
+				base.fsm?.triggerEvent( blurEvent );
+			}
+			base.postLog( "blur", { val: this.input.value } );
 		});
 
 		// !!!!!

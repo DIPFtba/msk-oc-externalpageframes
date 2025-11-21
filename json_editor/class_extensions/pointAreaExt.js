@@ -7,6 +7,7 @@ import { addScoring } from "../common";
 // Die Farben werden von außen gesetzt
 //
 
+//		window.postMessage( JSON.stringify( [ 'setColorIdx', -1 ] ), '*' );
 //		window.postMessage( JSON.stringify( [ 'setColorIdx', 0 ] ), '*' );
 //		window.postMessage( JSON.stringify( [ 'setColorIdx', 1 ] ), '*' );
 //		window.postMessage( JSON.stringify( [ 'setColorIdx', 2 ] ), '*' );
@@ -27,6 +28,8 @@ export class pointAreaExtFromSchema {
 		this.colors = [ this.bgColor, ...this.colors ];
 		this.dotColors = Array.from({ length: this.rows }, () => Array(this.cols).fill(0));
 		this.dotReadonly = Array.from({ length: this.rows }, () => Array(this.cols).fill(false));
+		this.dotStriked = Array.from({ length: this.rows }, () => Array(this.cols).fill(false));
+		this.hasStriked = false;
 		this.setColor(0);
 
 		// preSets eintragen
@@ -45,6 +48,8 @@ export class pointAreaExtFromSchema {
 						if ( row < this.rows && col < this.cols ) {
 							this.dotColors[row][col] = color;
 							this.dotReadonly[row][col] = preSet.readonly;
+							this.dotStriked[row][col] = preSet.striked;
+							this.hasStriked ||= preSet.striked;
 						}
 					});
 				});
@@ -182,6 +187,18 @@ export class pointAreaExtFromSchema {
 			this.dots.push( dotRow );
 		}
 
+		// Striked anlegen
+		this.kStrikedGroups = Array.from(
+			{ length: this.rows },
+			() => {
+				const kG = new Konva.Group();
+				this.layer.add( kG );
+				return kG;
+			});
+		for ( let row = 0; row < this.rows; row++ ) {
+			this.renderStrikedRow(row);
+		}
+
 		this.layer.draw();
 	}
 
@@ -226,7 +243,10 @@ export class pointAreaExtFromSchema {
 			e.cancelBubble = true;
 			this.drawStart = getPosOfEvent( this.stage, e );
 			// aktuelle dotColors kopieren
-			this.lastDotColors = this.copyColors( this.dotColors);
+			this.lastDotStriked = this.copyColors( this.dotStriked );
+			if ( this.currColor>=0 ) {
+				this.lastDotColors = this.copyColors( this.dotColors);
+			}
 		});
 		this.stage.on('mousemove touchmove', (e) => {
 			if ( ignoreEvent(e) || !this.drawStart ) {
@@ -265,8 +285,21 @@ export class pointAreaExtFromSchema {
 	}
 
 	clickDot ( row, col ) {
-		this.dotColors[row][col] = this.currColor;
-		this.dots[row][col].k.fill( this.colors[this.currColor] );
+		if ( this.currColor<0 ) {
+			if ( !this.dotStriked[row][col] && this.dotColors[row][col]>0 ) {
+				this.dotStriked[row][col] = true;
+				this.hasStriked = true;
+				this.renderStrikedRow(row);
+			}
+		} else {
+			this.dotColors[row][col] = this.currColor;
+			this.dots[row][col].k.fill( this.colors[this.currColor] );
+			if ( this.dotStriked[row][col] ) {
+				this.dotStriked[row][col] = false;
+				this.hasStriked = this.getHasStriked();
+				this.renderStrikedRow(row);
+			}
+		}
 
 		this.base.postLog( 'dotClicked', { y:row+1, x:col+1, color: this.currColor } );
 		this.logNewCnt();
@@ -323,7 +356,7 @@ export class pointAreaExtFromSchema {
 			this.kMarkRect.height( rect.y1-rect.y0 );
 		}
 
-		// Noch keine Puntke gefärbt jetzt nichts zu färben?
+		// Noch keine Punkte gefärbt & jetzt nichts zu färben?
 		if ( !idx && !this.lastIdx ) {
 			return
 		}
@@ -342,18 +375,102 @@ export class pointAreaExtFromSchema {
 		const rowFrom = Math.min( cmpLast.r0, cmpCurr.r0 );
 		const rowTo = Math.max( cmpLast.r1, cmpCurr.r1 );
 
+		let strikeChanged = false;
 		for ( let row=rowFrom; row<=rowTo; row++ ) {
+			let renderStrikeRow = false;
 			for ( let col=colFrom; col<=colTo; col++ ) {
-				const color = ( idx && row>=idx.r0 && row<=idx.r1 && col>=idx.c0 && col<=idx.c1 ) ?
-								this.currColor : this.lastDotColors[row][col];
-				if ( color !== this.dotColors[row][col] && !this.dotReadonly[row][col] ) {
-					this.dotColors[row][col] = color;
-					this.dots[row][col].k.fill( this.colors[color] );
+				const setNew = ( idx && row>=idx.r0 && row<=idx.r1 && col>=idx.c0 && col<=idx.c1 );
+
+				let strike;
+				if ( this.currColor<0 ) {
+					// striken
+					strike = setNew && this.dotColors[row][col]>0 ? true : this.lastDotStriked[row][col];
+				} else {
+					// normale Farbe setzen
+					const color = setNew ? this.currColor : this.lastDotColors[row][col];
+					if ( color !== this.dotColors[row][col] && !this.dotReadonly[row][col] ) {
+						this.dotColors[row][col] = color;
+						this.dots[row][col].k.fill( this.colors[color] );
+					}
+					strike = setNew ? false : this.lastDotStriked[row][col];
+				}
+				if ( strike !== this.dotStriked[row][col] ) {
+					this.dotStriked[row][col] = strike;
+					renderStrikeRow = true;
 				}
 			}
+			if ( renderStrikeRow ) {
+				this.renderStrikedRow(row);
+				strikeChanged = true;
+			}
+		}
+		if ( strikeChanged ) {
+			this.hasStriked = this.getHasStriked();
 		}
 
 		this.lastIdx = idx;
+	}
+
+	renderStrikedRow ( row ) {
+		const kGroupRow = this.kStrikedGroups[row];
+		const dotStrikedRow = this.dotStriked[row];
+
+		const drawStrikedLine = ( colStart, colEnd ) => {
+			const dotStart = this.dots[row][colStart];
+			const dotEnd = this.dots[row][colEnd];
+
+			let padBefore = this.dotMarginX;
+			if ( colStart===0 ) {
+				padBefore = Math.min( padBefore, this.framePaddingX );
+			} else if ( this.sepEveryX && colStart%this.sepEveryX===0 ) {
+				padBefore = Math.min( padBefore, this.framePaddingX+this.sepSpaceX );
+			}
+			let padAfter = this.dotMarginX;
+			if ( colEnd===this.cols-1 ) {
+				padAfter = Math.min( padAfter, this.framePaddingX );
+			} else if ( this.sepEveryX && (colEnd+1)%this.sepEveryX===0 ) {
+				padAfter = Math.min( padAfter, this.framePaddingX+this.sepSpaceX );
+			}
+
+			kGroupRow.add( new Konva.Line({
+				points: [
+					dotStart.x - this.dotRadius - ( this.dotWidth + padBefore )/2, dotStart.y,
+					dotEnd.x + this.dotRadius + ( this.dotWidth + padAfter )/2, dotEnd.y,
+				],
+				stroke: this.strikedColor,
+				strokeWidth: this.strikedWidth,
+				listening: false,
+			}) );
+		};
+
+		// Alte Striked-Linien entfernen
+		kGroupRow.destroyChildren();
+
+		// Neue Striked-Linien zeichnen
+		let begin = null;
+		for ( let col = 0; col < this.cols; col++ ) {
+			if ( dotStrikedRow[col] ) {
+				if ( begin === null ) {
+					begin = col;
+				}
+			} else {
+				if ( begin !== null ) {
+					// Linie von begin bis col-1 zeichnen
+					drawStrikedLine( begin, col-1 );
+					begin = null;
+				}
+			}
+		}
+		if ( begin !== null ) {
+			// Linie von begin bis Ende zeichnen
+			drawStrikedLine( begin, this.cols-1 );
+		}
+
+		this.layer.batchDraw();
+	}
+
+	getHasStriked () {
+		return this.dotStriked.some( dotRow => dotRow.some( v => v ) );
 	}
 
 	copyColors (dotColors=this.dotColors) {
@@ -361,9 +478,11 @@ export class pointAreaExtFromSchema {
 	}
 
 	getColorCnt ( searchColor ) {
-		const r = this.dotColors.reduce( (acc, dotRow) => {
+		const cntArray = searchColor<0 ? this.dotStriked : this.dotColors;
+		const colVal = searchColor<0 ? ( col => +col ) : ( col => col === searchColor ? 1 : 0 );
+		const r = cntArray.reduce( (acc, dotRow) => {
 			return acc + dotRow.reduce( (acc, color) => {
-				return acc + (color === searchColor ? 1 : 0);
+				return acc + colVal(color);
 			}, 0 )
 		}, 0 );
 		return r;
@@ -397,7 +516,8 @@ export class pointAreaExtFromSchema {
 	}
 
 	setColor ( idx ) {
-		if ( idx < 0 || idx >= this.colors.length ) {
+		idx = parseInt( idx );
+		if (  Number.isNaN(idx) || idx < -1 || idx >= this.colors.length ) {
 			return
 		}
 		this.currColor = idx;
@@ -408,14 +528,25 @@ export class pointAreaExtFromSchema {
 	///////////////////////////////////
 
 	getState () {
-		const state = this.dotColors;
+		const state = {
+			c: this.dotColors,
+		};
+		if ( this.hasStriked ) {
+			state.s = this.dotStriked.map( row => row.map( v => +v ) );
+		}
 		return JSON.stringify(state)
 	}
 
 	setState ( state ) {
 		try {
 			const saved = JSON.parse( state );
-			this.dotColors = saved;
+			this.dotColors = saved.c;
+			if ( saved.s ) {
+				this.dotStriked = saved.s.map( row => row.map( v => !!v ) );
+				this.hasStriked = true;
+			} else {
+				this.hasStriked = false;
+			}
 			this.initScene();
 		} catch (e) {
 			console.error(e);
@@ -425,7 +556,7 @@ export class pointAreaExtFromSchema {
 	}
 
 	getChState () {
-		return this.dotColors;
+		return this.hasStriked ? [ this.dotColors, this.dotStriked ] : this.dotColors;
 	}
 
 	// Check if User made changes

@@ -102,20 +102,22 @@
 							}
 						},
 						"framePaddingX": {
-							"title": "Extra Innen-Abstand X",
+							"title": "Innen-Abstand X",
 							"type": "integer",
 							"default": 2,
+							"minimum": 0,
 							"options": {
-								"infoText": "Extra Abstand der Punkte zum Rahmen (kann auch negativ sein)",
+								"infoText": "Abstand der Punkte zum Rahmen",
 								"grid_columns": 4
 							}
 						},
 						"framePaddingY": {
-							"title": "Extra Innen-Abstand Y",
+							"title": "Innen-Abstand Y",
 							"type": "integer",
 							"default": 2,
+							"minimum": 0,
 							"options": {
-								"infoText": "Extra Abstand der Punkte zum Rahmen (kann auch negativ sein)",
+								"infoText": "Abstand der Punkte zum Rahmen",
 								"grid_columns": 4,
 								"grid_break": true
 							}
@@ -300,6 +302,42 @@
 							"default": [ "#c05050", "#5050c0" ]
 						}
 					}
+				},
+
+				"___striked": {
+					"title": "Durchstreichen",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 12,
+						"grid_break": true
+					},
+					"properties": {
+
+						"strikedColor": {
+							"title": "Farbe (Index -1)",
+							"type": "string",
+							"format": "color",
+							"default": "#000000",
+							"options": {
+								"grid_columns": 4
+							}
+						},
+
+						"strikedWidth": {
+							"title": "Dicke",
+							"type": "integer",
+							"minimum": 1,
+							"default": 3,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						}
+					}
 				}
 			}
 		},
@@ -348,6 +386,12 @@
 								"title": "Index Füllfarbe (1-n)",
 								"type": "integer",
 								"minimum": 1
+							},
+							"striked": {
+								"title": "Durchgestrichen",
+								"format": "checkbox",
+								"type": "boolean",
+								"default": false
 							},
 							"readonly": {
 								"title": "Unveränderbar",

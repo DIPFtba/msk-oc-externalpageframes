@@ -299,7 +299,7 @@ Die Erweiterung reagiert auf folgende Befehle:
 
 |Befehl IB|Effekt|
 |:--------|:-----|
-|`callExternalPageFrame( ID, 'setColorIdx', Index )`|Setzt Farbe `Index` als aktuelle Malfarbe (Index=0 bedeutet leer/löschen)|
+|`callExternalPageFrame( ID, 'setColorIdx', Index )`|Setzt Farbe `Index` als aktuelle Malfarbe (Index=-1 bedeutet durchstreichen, Index=0 bedeutet leer/löschen, Index=1-n wählt Farben)|
 
 Die Erweiterung sendet folgende Events:
 

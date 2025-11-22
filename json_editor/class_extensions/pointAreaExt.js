@@ -345,7 +345,7 @@ export class pointAreaExtFromSchema {
 				height: rect.y1-rect.y0,
 				stroke: this.currColor ? null : 'black',
 				strokeWidth: this.currColor ? 0 : 1,
-				fill: this.colors[ this.currColor ],
+				fill: this.currColor<0 ? 'grey' : this.colors[ this.currColor ],
 				opacity: this.currColor ? 0.15 : 0.3,
 			});
 			this.layer.add( this.kMarkRect );

@@ -265,6 +265,9 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 						this.base.postLog( logNames[ this.mode ], { points: this.paintPoints } );
 						this.base.sendChangeState( this );	// init & send changeState & score
 					}
+					if ( this.mode == 'erase' ) {
+						this.detectCleared();
+					}
 				}
 			});
 
@@ -300,6 +303,14 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 				}
 			})
 		}
+
+		// Wenn alles initialisiert (auch das, was erst später gemalt wird, wie z.B. extraRects/Lines)
+		// dann alle Punkte in allen Layers zählen (außer modeIconbar)
+		base.getInitDonePromise().then( () => {
+			// const clearedDetectLayers = stage.getLayers().filter( l => l !== this.modeIconBar.layer );
+			// this.clearedDetectLayers = clearedDetectLayers;
+			// this.coloredPointsAtStart = clearedDetectLayers.reduce( (sum, l) => sum + this.pointsInLayer(l), 0 );
+		});
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();
@@ -342,6 +353,66 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 
 		// iconBar
 		this.modeIconBar = new iconBar( this.stage, this.modeIconBarDef );
+	}
+
+	///////////////////////////////////
+
+	pointsInLayer ( layer, threshold=0 ) {
+		let coloredPoints = 0;
+
+		// Zugriff auf den 2D-Kontext des Layers
+		const canvas = layer.getCanvas()._canvas;
+		const ctx = canvas.getContext('2d');
+
+		// Abrufen der Bounding Box (falls Sie nicht den gesamten Layer wollen)
+		const layerBreite = layer.width(); // oder canvas.width
+		const layerHoehe = layer.height(); // oder canvas.height
+
+		// Pixeldaten abrufen
+		const imageData = ctx.getImageData(0, 0, layerBreite, layerHoehe);
+		const pixelDaten = imageData.data; // Das Array mit [R, G, B, A, R, G, B, A, ...]
+
+		// Durchiterieren und Prüfen
+
+		// Das Array wird in Schritten von 4 durchlaufen (R, G, B, A)
+		for (let i = 0; i < pixelDaten.length; i += 4) {
+			// Wir prüfen hier, ob er nicht weiß ist UND sichtbar (Alpha > 0)
+			if (pixelDaten[i+3]/*A*/ > 0.4 && (pixelDaten[i]/*R*/ < 128 || pixelDaten[i+1]/*G*/ < 128 || pixelDaten[i+2]/*B*/ < 128)) {
+				coloredPoints++;
+				if ( threshold && coloredPoints > threshold ) {
+					return coloredPoints;
+				}
+			}
+		}
+
+		return coloredPoints;
+	}
+
+	detectCleared () {
+		if ( this.linesCopy.length === 0 ) {
+			return;
+		}
+
+		// Feststellen, ob nach Eraser noch gefärbte Punkte vorhanden sind
+
+		let coloredPoints = 0;
+		const threshold = this.coloredPointsAtStart + 50; // Anzahl der gefärbten Punkte, ab der wir sagen, dass es nicht leer ist
+
+		this.clearedDetectLayers.forEach( layer => {
+			if ( coloredPoints >= threshold ) {
+				return;
+			}
+
+			coloredPoints += this.pointsInLayer( layer, threshold - coloredPoints );
+		});
+
+		console.log("=============", coloredPoints, coloredPoints < threshold);
+		if ( coloredPoints < threshold ) {
+			this.base.postLog( 'paintClearedByEraser', {} );
+			this.freePaintClearAll( false );
+			this.base.sendChangeState( this );
+		}
+
 	}
 
 	///////////////////////////////////

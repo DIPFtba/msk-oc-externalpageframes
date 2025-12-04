@@ -128,6 +128,7 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 		}
 
 		if ( this.linesCopy.length === 0 ) {
+			this.cancelAllRecogs();
 			if ( this.myScript.withOut_sk ) {
 				this.recogTxt = "";
 			}

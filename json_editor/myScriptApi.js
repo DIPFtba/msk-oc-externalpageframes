@@ -61,6 +61,14 @@ export class myScriptApi {
 		reqOpts.strokes = strokes;
 		const body = JSON.stringify(reqOpts);
 
+		const reqController = new AbortController();
+		this.reqController.push( reqController );
+
+		const delreqController = () => {
+			// Remove the controller from the array after the request is completed
+			this.reqController = this.reqController.filter( ( ctrl ) => ctrl !== reqController );
+		}
+
 		const headers = {
 			"Accept": this.acceptHeader,
 			"Content-Type": "application/json",
@@ -68,8 +76,11 @@ export class myScriptApi {
 			"hmac": await this.getHk( body ),
 		}
 
-		const reqController = new AbortController();
-		this.reqController.push( reqController );
+		// Schon währen getHk() abgebrochen?
+		if ( reqController.signal.aborted ) {
+			delreqController();
+			return Promise.resolve("");
+		}
 
 		const pr = new Promise( ( res, rej ) => {
 
@@ -104,10 +115,7 @@ export class myScriptApi {
 						rej( `myScript Error: ${err.message}` );
 					}
 				})
-				.finally( () => {
-					// Remove the controller from the array after the request is completed
-					this.reqController = this.reqController.filter( ( ctrl ) => ctrl !== reqController );
-				});
+				.finally( delreqController);
 		});
 
 		return pr;

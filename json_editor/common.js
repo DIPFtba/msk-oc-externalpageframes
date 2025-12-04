@@ -245,7 +245,7 @@ export function addStatusVarDef ( obj, json ) {
 
 			obj.getState = function () {
 				// "alte" getState aufrufen
-				let state = oldGetStateFnc.call( this );
+				let state = oldGetStateFnc.call( obj );
 				let jsonFormat = 0;
 
 				if ( typeof state === 'string' && state.length > 0 ) {

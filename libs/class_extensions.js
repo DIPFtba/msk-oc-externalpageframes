@@ -307,9 +307,9 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 		// Wenn alles initialisiert (auch das, was erst später gemalt wird, wie z.B. extraRects/Lines)
 		// dann alle Punkte in allen Layers zählen (außer modeIconbar)
 		base.getInitDonePromise().then( () => {
-			// const clearedDetectLayers = stage.getLayers().filter( l => l !== this.modeIconBar.layer );
-			// this.clearedDetectLayers = clearedDetectLayers;
-			// this.coloredPointsAtStart = clearedDetectLayers.reduce( (sum, l) => sum + this.pointsInLayer(l), 0 );
+			const detectLayers = stage.getLayers().filter( l => l !== this.modeIconBar.layer );
+			this.detectLayers = detectLayers;
+			this.coloredPointsAtStart = this.pointsInDetectLayers();
 		});
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
@@ -357,22 +357,27 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 
 	///////////////////////////////////
 
-	pointsInLayer ( layer, threshold=0 ) {
-		let coloredPoints = 0;
+	pointsInDetectLayers ( threshold=0 ) {
 
-		// Zugriff auf den 2D-Kontext des Layers
-		const canvas = layer.getCanvas()._canvas;
-		const ctx = canvas.getContext('2d');
+		const tempCanvas = document.createElement('canvas');
+		const stageBreite = this.stage.width();
+		tempCanvas.width = stageBreite;
+		const stageHoehe = this.stage.height();
+		tempCanvas.height = stageHoehe;
+		const tempCtx = tempCanvas.getContext('2d');
 
-		// Abrufen der Bounding Box (falls Sie nicht den gesamten Layer wollen)
-		const layerBreite = layer.width(); // oder canvas.width
-		const layerHoehe = layer.height(); // oder canvas.height
+		// Alle this.detectLayers auf das tempCanvas malen
+		for ( const layer of this.detectLayers ) {
+			const layerCanvas = layer.getCanvas()._canvas
+			tempCtx.drawImage(layerCanvas, 0, 0, stageBreite, stageHoehe);
+		}
 
-		// Pixeldaten abrufen
-		const imageData = ctx.getImageData(0, 0, layerBreite, layerHoehe);
+		// Ergebnis Image holen
+		const imageData = tempCtx.getImageData(0, 0, stageBreite, stageHoehe);
 		const pixelDaten = imageData.data; // Das Array mit [R, G, B, A, R, G, B, A, ...]
 
 		// Durchiterieren und Prüfen
+		let coloredPoints = 0;
 
 		// Das Array wird in Schritten von 4 durchlaufen (R, G, B, A)
 		for (let i = 0; i < pixelDaten.length; i += 4) {
@@ -394,21 +399,11 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 		}
 
 		// Feststellen, ob nach Eraser noch gefärbte Punkte vorhanden sind
-
-		let coloredPoints = 0;
 		const threshold = this.coloredPointsAtStart + 50; // Anzahl der gefärbten Punkte, ab der wir sagen, dass es nicht leer ist
+		const coloredPoints = this.pointsInDetectLayers( threshold );
 
-		this.clearedDetectLayers.forEach( layer => {
-			if ( coloredPoints >= threshold ) {
-				return;
-			}
-
-			coloredPoints += this.pointsInLayer( layer, threshold - coloredPoints );
-		});
-
-		console.log("=============", coloredPoints, coloredPoints < threshold);
 		if ( coloredPoints < threshold ) {
-			this.base.postLog( 'paintClearedByEraser', {} );
+			this.base.postLog( 'clearedByEraser', {} );
 			this.freePaintClearAll( false );
 			this.base.sendChangeState( this );
 		}

@@ -127,6 +127,11 @@ export class freePaintMultFromSchema {
 		window.getRectPngImage = this.getRectPngImage.bind(this);
 /// #endif
 
+		// Wenn alles initialisiert (auch das, was erst später gemalt wird)
+		base.getInitDonePromise().then( () => {
+			this.coloredPointsAtStart = this.getPointsColored();
+		});
+
 		base.decInitCnt();
 	}
 
@@ -200,8 +205,8 @@ export class freePaintMultFromSchema {
 			const kLine = new Konva.Line( opts );
 			this.kGroupBrush.add( kLine );
 		})
-		this.layer.draw();
-		this.layer.linesUpdated();
+		this.layer.batchDraw();
+		this.linesUpdated();
 	}
 
 	///////////////////////////////////
@@ -278,8 +283,10 @@ export class freePaintMultFromSchema {
 			this.linesUpdated();
 
 			this.base.postLog( 'line', this.corr4Log(o) );
-			this.base.sendChangeState( this );	// init & send changeState & score
 
+			this.detectCleared();
+
+			this.base.sendChangeState( this );
 			this.sendButtonState();
 		}
 	}
@@ -323,13 +330,63 @@ export class freePaintMultFromSchema {
 
 	///////////////////////////////////
 
+	getPointsColored (threshold=0) {
+		// Image holen
+		const layer = this.layer;
+		const layerBreite = layer.width();
+		const layerHoehe = layer.height();
+		const canvas = layer.getCanvas()._canvas;
+		const context = canvas.getContext('2d');
+		const imageData = context.getImageData(0, 0, layerBreite, layerHoehe);
+		const pixelDaten = imageData.data; // Das Array mit [R, G, B, A, R, G, B, A, ...]
+
+		// Durchiterieren und Prüfen
+		let coloredPoints = 0;
+
+		// Das Array wird in Schritten von 4 durchlaufen (R, G, B, A)
+		for (let i = 0; i < pixelDaten.length; i += 4) {
+			// Wir prüfen hier, ob er nicht weiß ist UND sichtbar (Alpha > 0)
+			if (pixelDaten[i+3]/*A*/ > 0.4 && (pixelDaten[i]/*R*/ < 128 || pixelDaten[i+1]/*G*/ < 128 || pixelDaten[i+2]/*B*/ < 128)) {
+				coloredPoints++;
+				if ( threshold && coloredPoints > threshold ) {
+					return coloredPoints;
+				}
+			}
+		}
+
+		return coloredPoints;
+	}
+
+	detectCleared () {
+		if ( this.linesCopy.length === 0 ) {
+			return;
+		}
+		// Feststellen, ob nach Eraser noch gefärbte Punkte vorhanden sind
+		const threshold = this.coloredPointsAtStart + 25; // Anzahl der gefärbten Punkte, ab der wir sagen, dass es nicht leer ist
+
+		const coloredPoints = this.getPointsColored( threshold );
+
+		if ( coloredPoints < threshold ) {
+			this.base.postLog( 'clearedByEraser', {} );
+			this.clearAll();
+			this.undoTwice = true;
+			this.base.sendChangeState( this );
+		}
+	}
+
+	///////////////////////////////////
+
 	undo () {
 		if ( Array.isArray(this.undoClearAll) && this.undoClearAll.length>0 ) {
 			this.linesCopy = this.undoClearAll;
+			this.drawLog( 'undoClearAll', this.undoClearAll );
 			this.undoClearAll = null;
 			this.paintLinesCopy();
 
-			this.drawLog( 'undoClearAll', this.undoClearAll );
+			// Auch das zum Löschen geführte Radieren rückgängig machen?
+			if ( this.undoTwice ) {
+				this.undo();
+			}
 		} else if ( this.linesCopy.length>0 ) {
 			const line = this.linesCopy.pop();
 			this.linesRedo.push( line );
@@ -349,11 +406,13 @@ export class freePaintMultFromSchema {
 			this.linesUpdated();
 
 			this.drawLog( 'redo', line );
+			this.detectCleared();
 		}
 	}
 
 	clearAll () {
 		this.undoClearAll = this.linesCopy;
+		this.undoTwice = false;
 		this.linesCopy = [];
 		this.linesRedo = [];
 		this.kGroupBrush.destroyChildren();
@@ -410,7 +469,9 @@ export class freePaintMultFromSchema {
 							this.setBrush( p1, p2, p3 );
 							break;
 					}
-				} catch (e) {}
+				} catch (e) {
+					console.error(e);
+				}
 			},
 			false );
 	}
@@ -483,6 +544,7 @@ export class freePaintMultFromSchema {
 		};
 		if ( this.undoClearAll ) {
 			state.c = this.undoClearAll;
+			state.u = +this.undoTwice;
 		}
 		return JSON.stringify(state)
 	}
@@ -495,7 +557,8 @@ export class freePaintMultFromSchema {
 			this.linesRedo = saved.r;
 			this.linesCopy = saved.l;
 			if ( saved.c ) {
-				this.undoClearAll = saved.c;
+				this.undoClearAll = 1;
+				this.undoTwice = saved.u;
 			}
 			this.paintLinesCopy();
 

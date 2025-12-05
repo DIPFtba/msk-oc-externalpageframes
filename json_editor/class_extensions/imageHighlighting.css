@@ -1,0 +1,25 @@
+div.ihOuterContainer {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    user-select: none;
+}
+
+div.ihImgContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    position: relative;
+}
+
+div.ihBaseDiv {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+    mix-blend-mode: multiply;
+}

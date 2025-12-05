@@ -470,7 +470,7 @@ export class freePaintMultFromSchema {
 							break;
 					}
 				} catch (e) {
-					console.error(e);
+					// console.error(e);
 				}
 			},
 			false );

@@ -53,6 +53,10 @@ import { freePaintRecogFromSchema } from './class_extensions/freePaintRecog';
 import freePaintRecogJSONSchema from './schemes/freePaintRecog.schema.json';
 import freePaintRecogSVG from './svgs/freePaintMult.svg';
 
+import { imageHighlightingFromSchema } from './class_extensions/imageHighlighting';
+import imageHighlightingJSONSchema from './schemes/imageHighlighting.schema.json';
+import imageHighlightingSVG from './svgs/freePaintMult.svg';
+
 import { inputfieldFromSchema } from './class_extensions/inputfield';
 import inputfieldJSONSchema from './schemes/inputfield.schema.json';
 import inputfieldSVG from './svgs/inputfield.svg';
@@ -271,6 +275,15 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new freePaintRecogFromSchema( base, cfgData );
 						break;
+					case 'imageHighlighting':
+						creator = (cfgData) => {
+							initContainer(false);
+							// erzeugt base selbst!
+							const io = new imageHighlightingFromSchema( textContainer.firstChild, cfgData );
+							base = io.base;
+							return io;
+						}
+						break;
 					case 'inputfield':
 						creator = (cfgData) => {
 							initContainer(false);
@@ -361,13 +374,13 @@ function loadSchema( schema ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-// /// #if __DEVELOP
+/// #if __DEVELOP
 
-// // for Development: always load one JSON schema
-// loadSchema( pikasTextEntryJSONSchema );
-// window.updateEWK = updateEWK;
+// for Development: always load one JSON schema
+loadSchema( imageHighlightingJSONSchema );
+window.updateEWK = updateEWK;
 
-// /// #else
+/// #else
 
 // load schema Links
 const templs = {
@@ -385,6 +398,7 @@ const templs = {
 	freePaint: [ freePaintJSONSchema, freePaintSVG ],
 	freePaintMult: [ freePaintMultJSONSchema, freePaintMultSVG ],
 	freePaintRecog: [ freePaintRecogJSONSchema, freePaintRecogSVG ],
+	imageHighlighting: [ imageHighlightingJSONSchema, imageHighlightingSVG ],
 	inputfield: [ inputfieldJSONSchema, inputfieldSVG ],
 	inputGrid: [ inputGridJSONSchema, inputGridSVG ],
 	numberLine: [ numberLineJSONSchema, numberLineSVG ],
@@ -417,7 +431,7 @@ Object.entries(templs).forEach( ([templ,[schema,svg]]) => {
 	schSel.appendChild( a );
 })
 
-// /// #endif
+/// #endif
 
 //////////////////////////////////////////////////////////////////////////////
 

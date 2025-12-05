@@ -88,6 +88,8 @@ import { freePaintFromSchema } from './freePaint';
 import { freePaintMultFromSchema } from './freePaintMult';
 /// #elif __CLASS == 'freePaintRecog'
 import { freePaintRecogFromSchema } from './freePaintRecog';
+/// #elif __CLASS == 'imageHighlighting'
+import { imageHighlightingFromSchema } from './imageHighlighting';
 /// #elif __CLASS == 'inputfield'
 import { inputfieldFromSchema } from './inputfield';
 /// #elif __CLASS == 'inputGrid'
@@ -142,10 +144,14 @@ function initJSON ( json ) {
 /// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio' || __CLASS == 'pikasTextEntry' || __CLASS == 'chatBotJson' || __CLASS == 'chatTextAudio' || __CLASS == 'vueExamplePropsEmit' || __CLASS == 'vueExamplePinia' || __CLASS == 'inputfield'
 	// base ohne Konva stage
 	const base = new baseInits( { dataSettings: cfg.dataSettings } );
+/// #elseif __CLASS == 'imageHighlighting'
+	let base = null;	// wird in class selbst erzeugt
 /// #else
 	const base = new baseInits( { container: 'container', dataSettings: cfg.dataSettings } );
 /// #endif
-	baseInitialized.resolvePromise( base );
+	if ( base ) {
+		baseInitialized.resolvePromise( base );
+	}
 
 /// #if __CANHAVESCORINGVALS
 	// load Parser lazy or not
@@ -161,7 +167,7 @@ function initJSON ( json ) {
 /// #endif
 
 		// there will be subsequent inits
-		if ( base.fsm && base.fsm.incInitCnt ) {
+		if ( base && base.fsm && base.fsm.incInitCnt ) {
 			base.fsm.incInitCnt();
 		}
 
@@ -189,6 +195,14 @@ function initJSON ( json ) {
 		const io = new freePaintMultFromSchema( base, cfg );
 /// #elif __CLASS == 'freePaintRecog'
 		const io = new freePaintRecogFromSchema( base, cfg );
+/// #elif __CLASS == 'imageHighlighting'
+		const io = new imageHighlightingFromSchema( '#container', cfg ); // Das muss base selbst erzeugen!
+		base = io.base;
+		if ( base && base.fsm && base.fsm.incInitCnt ) {
+			// base Inits von oben nachholen
+			baseInitialized.resolvePromise( base );
+			base.fsm.incInitCnt();
+		}
 /// #elif __CLASS == 'inputfield'
 		const io = new inputfieldFromSchema( '#container', cfg, base, addMods );
 /// #elif __CLASS == 'inputGrid'

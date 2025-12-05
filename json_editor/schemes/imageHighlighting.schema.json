@@ -1,0 +1,219 @@
+{
+	"title": "ImageHighlighting",
+	"type": "object",
+	"format": "categories",
+	"options": {
+		"disable_collapse": true,
+		"disable_edit_json": true,
+		"disable_properties": true
+	},
+	"properties": {
+
+		"___global": {
+			"title": "Darstellung",
+			"type": "object",
+			"format": "grid-strict",
+			"options": {
+				"titleHidden": true,
+				"disable_collapse": true,
+				"disable_edit_json": true,
+				"disable_properties": true
+			},
+			"properties": {
+
+				"readonly": {
+					"title": "Kein Markieren erlauben (Read-Only)",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 8,
+						"grid_break": true
+					}
+				},
+
+				"areaWidth": {
+					"title": "Breite Image-Bereich",
+					"type": "string",
+					"default": "98%",
+					"options": {
+						"grid_columns": 4,
+						"infoText": "Breite des Bildanzeigebereichs, z.B. '500px', '90vw', '95%'."
+					}
+				},
+				"areaColor": {
+					"title": "Farbe Image-Bereich",
+					"type": "string",
+					"format": "color",
+					"default": "#e0e0e0",
+					"options": {
+						"grid_columns": 4,
+						"infoText": "Farbe Hintergrund Bildanzeigebereich"
+					}
+				},
+				"marginColor": {
+					"title": "Farbe Rand-Bereich",
+					"type": "string",
+					"format": "color",
+					"default": "#a0a0a0",
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true,
+						"infoText": "Farbe Hintergrund Randbereich rechts"
+					}
+				},
+
+				"___imgs": {
+					"title": "Hintergrundbilder",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"titleHidden": false,
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 12,
+						"grid_break": true
+					},
+
+					"properties": {
+
+						"gap": {
+							"title": "Abstand Vertikal",
+							"type": "number",
+							"minimum": 0,
+							"default": 10,
+							"options": {
+								"grid_columns": 4,
+								"infoText": "Vertikaler Abstand oben/unten/zwischen mehreren Bildern in Pixeln"
+							}
+						},
+
+						"imgs": {
+							"title": "Bilder",
+							"type": "array",
+							"format": "table",
+							"default": [{"url":"/Rechnung.svg","width":"80%"},{"url":"/Rechnung.svg","width":"98%"}],
+							"options": {
+								"disable_collapse": true,
+								"disable_edit_json": true,
+								"disable_properties": true,
+								"grid_columns": 12
+							},
+							"items": {
+								"title": "Bild",
+								"type": "object",
+								"format": "grid-strict",
+								"options": {
+									"disable_collapse": true,
+									"disable_edit_json": true,
+									"disable_properties": true
+								},
+								"properties": {
+									"url": {
+										"title": "Bild-URL",
+										"type": "string"
+									},
+									"width": {
+										"title": "Breite",
+										"type": "string"
+									}
+								}
+							}
+						}
+					}
+				},
+
+				"highlight": {
+					"title": "Highlighting",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"titleHidden": false,
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 12,
+						"grid_break": true
+					},
+					"properties": {
+
+						"stroke": {
+							"title": "Farbe",
+							"type": "string",
+							"format": "color",
+							"default": "#ffff00",
+							"options": {
+								"grid_columns": 4
+							}
+						},
+
+						"strokeWidth": {
+							"title": "Dicke",
+							"type": "integer",
+							"minimum": 1,
+							"default": 15,
+							"options": {
+								"grid_columns": 4
+							}
+						},
+
+						"opacity100": {
+							"title": "Deckkraft",
+							"type": "number",
+							"format": "range",
+							"default": 50,
+							"minimum": 0,
+							"maximum": 100,
+							"options": {
+								"grid_columns": 4
+							}
+						}
+					}
+				}
+			}
+		},
+
+		"dataSettings": {
+			"title": "Daten",
+			"type": "object",
+			"format": "grid-strict",
+			"options": {
+				"disable_collapse": true,
+				"disable_edit_json": true,
+				"disable_properties": true
+			},
+			"properties": {
+
+				"___jsonSchemaData": {
+					"type": "object",
+					"properties": {
+						"___name": {
+							"type":"string",
+							"default":"imageHighlighting"
+						},
+						"___version": {
+							"type":"number",
+							"default":0.1
+						}
+					},
+					"options": {
+						"hidden": true
+					}
+				},
+
+				"variablePrefix": {
+					"title": "Variablen-Prefix",
+					"description": "Erzeugt wird 'V_Status_&lt;pref&gt;'",
+					"type": "string",
+					"default": "1a",
+					"options": {
+						"grid_columns": 12,
+						"grid_break": true
+					}
+				}
+
+			}
+		}
+	}
+}

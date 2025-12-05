@@ -100,12 +100,14 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 	if ( opts.dataSettings && opts.dataSettings.scoringVals && obj.scoreDef ) {
 
 		const scoringVals = opts.dataSettings.scoringVals;
+		const pref = opts.dataSettings.variablePrefix || '';
 
 		const scores = obj.scoreDef(true);
 		if ( typeof scores === 'object' ) {
 			// FIX: (sehr wahrscheinlich vorhandene) StatusVariable in res verfügbar machen
-			if ( obj.dataSettings.variablePrefix && !obj.readonly ) {
-				scores[ `V_Status_${obj.dataSettings.variablePrefix}` ] = 1;
+			if ( pref && !obj.readonly ) {
+				scores[ `V_Status_${pref}` ] = 1;
+				scores[ `V_StatHist_${pref}` ] = 1;
 			}
 			// Ende FIX
 			const varNames = Object.keys( scores ).map( s => s.trim() );
@@ -120,7 +122,7 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 							if ( vn[1].length == 0 ) {
 								debugAndConsoleOut( `Variablen-Name '\${}' in Scoring nicht zulässig` );
 							} else {
-								const varsearch = ( opts.dataSettings.variablePrefix ? vn[1].replace( /<pref>/i, opts.dataSettings.variablePrefix ) : vn[1] ).trim();
+								const varsearch = ( pref ? vn[1].replace( /<pref>/i, pref ) : vn[1] ).trim();
 								const re = new RegExp( `${varsearch}$`, 'i' );
 								const selVarNames = varNames.filter( v => v.match(re) );
 								if ( selVarNames.length>1 ) {
@@ -167,7 +169,8 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 								obj.scoringVals = [];
 							}
 							try {
-								obj.scoringVals.push( [ sv.val, parser.parse( saveCond ) ] );
+								const num = Number(sv.val);
+								obj.scoringVals.push( [ !Number.isNaN(num) ? num : sv.val, parser.parse( saveCond ) ] );
 							} catch (e) {
 								debugAndConsoleOut( `Fehler (${e}) in Scoring-Condition: ${cond}` );
 							}
@@ -178,33 +181,51 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 		}
 	}
 
-	if ( obj.scoringVals ) {
+	if ( obj.scoringVals && obj.scoringVals.length>0 ) {
 		obj.computeScoringVals = function (res) {
 			// FIX: StatusVariable in res verfügbar machen
 			let res_in = res;
+			const pref = this.dataSettings?.variablePrefix || '';
 			if ( this.statusVarDef ) {
 				res_in = Object.assign( {}, res, this.statusVarDef() );
-			} else if ( this.dataSettings.variablePrefix && !this.readonly ) {
+			} else if ( pref && !this.readonly ) {
 				// Ist noch nicht verfügbar, wird es aber (sehr wahrscheinlich) später sein
-				res_in = Object.assign( {}, res, {
-					[ `V_Status_${this.dataSettings.variablePrefix}` ]: 1
-				});
+				res_in[ `V_Status_${pref}` ] = 1;
+				res_in[ `V_StatHist_${pref}` ] = 1;
 			}
 			// Ende FIX
-			let score = null;
 			const scoreDat = this.scoringVals;
-			for ( let h=0; score===null && h<scoreDat.length; h++ ) {
+			// Wenn die Werte von scoringVals Numbers sind, wird der erste, bei dem die Condition true ist,
+			// in `V_Score_${pref}` geschrieben.
+			// Gibt es auch String-Werte, werden die Vaiablen `V_<xyz>_${pref}` je nach Condition mit 0|1 gesetzt
+			let score = null; // Hier wird der `V_Score_${pref}` "gesammelt"
+			const evalVarNames = scoreDat.filter( sd => typeof sd[0]==='string' && sd[0] ).map( sd => sd[0] );
+			evalVarNames.forEach( vn => {
+				// Erstmal alle auf 0 setzen
+				res[ `V_${vn}_${pref}` ] = 0;
+			});
+			const hasEvalVars = evalVarNames.length>0;
+
+			for ( let h=0; ( score===null || hasEvalVars ) && h<scoreDat.length; h++ ) {
 				const [v,c] = scoreDat[h];
 				try {
 					if ( c.evaluate( res_in ) ) {
-						score = v;
+						if ( typeof v === 'string' && v ) {
+							// String-Wert: Setze die Variable auf 1
+							res[ `V_${v}_${pref}` ] = 1;
+						} else if ( score === null ) {
+							// Number-Wert: Setze score, aber nur, wenn noch nicht gesetzt
+							score = v;
+						}
 					}
 				} catch (e) {
 					debugAndConsoleOut( `Error in scoring-condition: ${e}` );
 				}
 			}
-			const n = Number(score)
-			res[ `V_Score_${this.dataSettings.variablePrefix}` ] = score!== null && n!==NaN ? n : score;
+			if ( !hasEvalVars || evalVarNames.length<scoreDat.length ) {
+				const n = Number(score)
+				res[ `V_Score_${pref}` ] = score!== null && !Number.isNaN(n) ? n : score;
+			}
 		}
 
 		if ( obj.scoreDef && obj.base ) {

@@ -12,6 +12,8 @@ div.ihImgContainer {
     margin: 0;
     padding: 0;
     position: relative;
+    box-sizing: border-box;
+    user-select: none;
 }
 
 div.ihBaseDiv {
@@ -22,4 +24,6 @@ div.ihBaseDiv {
     height: 100%;
     z-index: 10;
     mix-blend-mode: multiply;
+    box-sizing: border-box;
+    user-select: none;
 }

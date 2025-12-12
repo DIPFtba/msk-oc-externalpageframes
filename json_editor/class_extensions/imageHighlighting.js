@@ -2,10 +2,25 @@ import { freePaintMultFromSchema } from './freePaintMult.js';
 import { baseInits } from '../../libs/baseInits.js';
 import { ResolvablePromise } from '../common.js';
 import './imageHighlighting.css';
+import { getPosOfEvent } from '../../libs/common'
 
 function addPx ( val ) {
 	return val.match( /^[0-9]+$/ ) ? val+'px' : val;
 }
+
+function cancelEvent ( ev ) {
+	if ( ev.preventDefault ) {
+		ev.preventDefault();
+		if ( ev.stopPropagation ) {
+			ev.stopPropagation();
+		}
+	} else {
+		ev.cancelBubble = true;
+	}
+}
+
+const startPaintDistance = 7;
+const startTimeoutMs = 200;
 
 export class imageHighlightingFromSchema extends freePaintMultFromSchema {
 
@@ -14,7 +29,7 @@ export class imageHighlightingFromSchema extends freePaintMultFromSchema {
 		const imgPoss = [];
 
 		// Struktur der IMGs aufbauen
-		const outerContainer = typeof container==='string' ? document.getElementById( container ) : container;
+		const outerContainer = typeof container==='string' ? document.querySelector( container ) : container;
 		outerContainer.classList.add( 'ihOuterContainer' );
 		if ( opts.marginColor ) {
 			outerContainer.style.backgroundColor = opts.marginColor;
@@ -136,6 +151,13 @@ export class imageHighlightingFromSchema extends freePaintMultFromSchema {
 		this.base = base;
 		this.imgPoss = imgPoss;
 
+		this.firstTouch = null;
+		baseDiv.addEventListener( 'touchstart', this.iTouchStart.bind(this), { capture: true, passive: false } );
+		// baseDiv.addEventListener( 'touchstart', this.iStartDraw.bind(this), { capture: true, passive: false } );
+		baseDiv.addEventListener( 'touchmove', this.iDraw.bind(this), { capture: true, passive: false } );
+
+		outerContainer.addEventListener( 'scroll', () => this.iScroll( outerContainer ) );
+
 		this.initData = this.getChState();
 		this.base.sendChangeState( this );	// init & send changeState & score
 
@@ -144,16 +166,81 @@ export class imageHighlightingFromSchema extends freePaintMultFromSchema {
 
 	///////////////////////////////////
 
-	// iStartDraw ( ev ) {
-	// }
+	iTouchStart ( ev ) {
+		this.isTouchDevice = 1;
 
-	// iDraw ( ev ) {
-	// }
+		// Zweiter Finger?
+		if ( ev.touches.length>1 ) {
 
-	// iEndDraw ( ev ) {
-	// }
+			// Wird schon gemalt?
+			if ( this.paintPoints ) {
+				// // Weiter als X Punkte?
+				// const pos = getPosOfEvent( this.stage, ev );
+				// if ( Math.abs( pos.x - this.firstTouch.x ) + Math.abs( pos.y - this.firstTouch.y ) > startPaintDistance ) {
+				// 	// Dann ignorieren
+				// 	cancelEvent( ev );
+				// 	return;
+				// } else {
+					// Sonst Malen zurücknehmen
+					this.kFreePaintLine.destroy();
+					this.paintPoints = null;
+				// }
 
-	// getDefaultChangeState () {
-	// 	return 0;
-	// }
+			// Schon firstTouch registriert?
+			} else if ( this.firstTouch!==null ) {
+				clearTimeout( this.firstTouch.timeout );
+				this.firstTouch = null;
+			}
+		}
+	}
+
+	iStartDraw ( ev ) {
+		if ( !this.isTouchDevice ) {
+			cancelEvent( ev );
+			return super.iStartDraw( ev );
+		}
+
+		if ( this.firstTouch!==null ) {
+			clearTimeout( this.firstTouch.timeout );
+		}
+		const pos = getPosOfEvent( this.stage, ev );
+		this.firstTouch = {
+			x: pos.x,
+			y: pos.y,
+			timeout: setTimeout( () => {
+				return super.iStartDraw( ev );
+			}, startTimeoutMs ),
+		};
+	}
+
+	iDraw ( ev ) {
+		if ( this.paintPoints || !this.isTouchDevice ) {
+			cancelEvent( ev );
+			return super.iDraw( ev );
+		}
+
+		// Noch nicht gestartet, aber schon weiter als X Punkte?
+		const pos = this.getPosOfEvent( this.stage, ev );
+		if ( this.firstTouch && Math.abs( pos.x - this.firstTouch.x ) + Math.abs( pos.y - this.firstTouch.y ) > startPaintDistance ) {
+			// firstTouch löschen, lass scrollen!
+			clearTimeout( this.firstTouch.timeout );
+			this.firstTouch = null;
+		}
+	}
+
+	iEndDraw ( ev ) {
+		if ( this.firstTouch!==null ) {
+			clearTimeout( this.firstTouch.timeout );
+		}
+		this.firstTouch = null;
+		return super.iEndDraw( ev );
+	}
+
+	///////////////////////////////////
+
+	iScroll ( outerContainer ) {
+		const top = outerContainer.scrollTop;
+		this.base.postLog( 'Scroll', { top: Math.round(top), bottom: Math.round(top+outerContainer.clientHeight) } );
+	}
+
 }

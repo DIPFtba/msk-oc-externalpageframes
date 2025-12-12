@@ -333,26 +333,36 @@ export class freePaintMultFromSchema {
 	getPointsColored (threshold=0) {
 		// Image holen
 		const layer = this.layer;
-		const layerBreite = layer.width();
-		const layerHoehe = layer.height();
 		const canvas = layer.getCanvas()._canvas;
 		const context = canvas.getContext('2d');
-		const imageData = context.getImageData(0, 0, layerBreite, layerHoehe);
+		const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 		const pixelDaten = imageData.data; // Das Array mit [R, G, B, A, R, G, B, A, ...]
-
 		// Durchiterieren und Prüfen
 		let coloredPoints = 0;
 
+		// const histogram = [];
+
 		// Das Array wird in Schritten von 4 durchlaufen (R, G, B, A)
-		for (let i = 0; i < pixelDaten.length; i += 4) {
+		for ( let i = 0; i < pixelDaten.length; i += 4) {
+			// // Histogramm speichern
+			// const entry = histogram.find( h => h.r===pixelDaten[i] && h.g===pixelDaten[i+1] && h.b===pixelDaten[i+2] && h.a===pixelDaten[i+3] );
+			// if ( entry ) {
+			// 	entry.c++;
+			// } else {
+			// 	histogram.push( { r: pixelDaten[i], g: pixelDaten[i+1], b: pixelDaten[i+2], a: pixelDaten[i+3], c: 1 } );
+			// }
+
 			// Wir prüfen hier, ob er nicht weiß ist UND sichtbar (Alpha > 0)
-			if (pixelDaten[i+3]/*A*/ > 0.4 && (pixelDaten[i]/*R*/ < 128 || pixelDaten[i+1]/*G*/ < 128 || pixelDaten[i+2]/*B*/ < 128)) {
+			if (pixelDaten[i+3]/*A*/ > 150 && (pixelDaten[i]/*R*/ < 200 || pixelDaten[i+1]/*G*/ < 200 || pixelDaten[i+2]/*B*/ < 200)) {
 				coloredPoints++;
 				if ( threshold && coloredPoints > threshold ) {
 					return coloredPoints;
 				}
 			}
 		}
+		// // Histogram ausgeben
+		// histogram.sort( (a,b) => b.c - a.c );
+		// console.log("===== getPointsColored histogram:", histogram );
 
 		return coloredPoints;
 	}
@@ -365,7 +375,6 @@ export class freePaintMultFromSchema {
 		const threshold = this.coloredPointsAtStart + 25; // Anzahl der gefärbten Punkte, ab der wir sagen, dass es nicht leer ist
 
 		const coloredPoints = this.getPointsColored( threshold );
-
 		if ( coloredPoints < threshold ) {
 			this.base.postLog( 'clearedByEraser', {} );
 			this.clearAll();
@@ -453,8 +462,13 @@ export class freePaintMultFromSchema {
 			"message",
 			(event) => {
 // console.log('#################',event.data,event.origin)
+				let cmd='', p1='', p2='', p3='';
 				try {
-					const [ cmd, p1, p2, p3 ] = JSON.parse(event.data);
+					[ cmd, p1, p2, p3 ] = JSON.parse(event.data);
+				} catch (e) {
+					// console.error(e);
+				}
+				if ( cmd ) {
 					switch ( cmd ) {
 						case 'undo':
 							this.undo();
@@ -469,8 +483,6 @@ export class freePaintMultFromSchema {
 							this.setBrush( p1, p2, p3 );
 							break;
 					}
-				} catch (e) {
-					// console.error(e);
 				}
 			},
 			false );

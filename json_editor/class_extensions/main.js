@@ -144,7 +144,7 @@ function initJSON ( json ) {
 /// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio' || __CLASS == 'pikasTextEntry' || __CLASS == 'chatBotJson' || __CLASS == 'chatTextAudio' || __CLASS == 'vueExamplePropsEmit' || __CLASS == 'vueExamplePinia' || __CLASS == 'inputfield'
 	// base ohne Konva stage
 	const base = new baseInits( { dataSettings: cfg.dataSettings } );
-/// #elseif __CLASS == 'imageHighlighting'
+/// #elif __CLASS == 'imageHighlighting'
 	let base = null;	// wird in class selbst erzeugt
 /// #else
 	const base = new baseInits( { container: 'container', dataSettings: cfg.dataSettings } );

@@ -78,15 +78,16 @@ export class iconBar {
 
 		Object.assign( this, defaults, opts );
 		this.stage = stage;
-		// search iconBar Layer ore create new
+		// search iconBar Layer or create new
 		if ( this.useExistingIconBarLayer ) {
-			const layer = stage.getAttr('bw__IconBarLayer');
+			const layerName = 'bw__IconBarLayer';
+			const layer = stage.getAttr(layerName);
 			if ( layer ) {
 				this.layer = layer
 			} else {
 				this.layer = new Konva.Layer();
 				stage.add( this.layer );
-				stage.setAttr( 'bw__IconBarLayer', this.layer );
+				stage.setAttr( layerName, this.layer );
 			}
 		} else {
 			this.layer = new Konva.Layer();
@@ -101,17 +102,17 @@ export class iconBar {
 		//Draw icon bar background first if needed
 		if ( this.frameWidth || this.backgroundFill || this.highlightColor ) {
 			this.kBackground = new Konva.Rect({
-				x: this.x - this.frameWidth*2 || 0,
+				x: this.x - ( this.frameWidth || 0 ),
 				y: this.y,
 				width: this.width + 2*this.framePadding + this.frameWidth*4,
-				height: this.getOverallHeight() + 4*this.framePadding,
+				height: this.getOverallHeight() ,//+ 4*this.framePadding,
 				// stroke: this.frameColor,
 				// strokeWidth: 1,
 				fill: this.backgroundFill,
 				dontGrayOut: true,
 			});
 			this.kGroup.add( this.kBackground );
-		}		
+		}
 
 		// Icons
 		const wp = this.frameWidth + this.framePadding;
@@ -246,7 +247,7 @@ export class iconBar {
 				// Function to create modifier overlay (plus/minus)
 				const createModifierOverlay = (modifier, iconX, iconY) => {
 					if (!modifier || (modifier !== 'plus' && modifier !== 'minus')) return null;
-					
+
 					/*
 					const modifierSize = Math.min(this.width, this.height) * 0.4;
 					const modifierX = iconX + this.width - modifierSize + wp - 1;
@@ -271,11 +272,11 @@ export class iconBar {
 						dontGrayOut: true,
 						opacity: 0.8,
 					});
-					
+
 					// Plus or minus symbol
 					const symbolColor = modifier === 'plus' ? '#28a745' : '#dc3545'; // Green for plus, red for cross
-					const symbol = modifier === 'plus' ? '+' : 'X'; 
-					
+					const symbol = modifier === 'plus' ? '+' : 'X';
+
 					const symbolSize = modifierSize;
 					const strokeWidth = Math.max(2, Math.round(symbolSize * 0.06));
 					// Group to hold the cross so it can be added as a single element
@@ -325,7 +326,7 @@ export class iconBar {
 					// 	verticalAlign: 'middle',
 					// 	dontGrayOut: true,
 					// });
-					
+
 					return symbolGroup;
 				}
 
@@ -365,12 +366,12 @@ export class iconBar {
 
 					setInteract( i.kIcon );
 					this.kGroup.add( i.kIcon );
-					
+
 				}
 
 				// Add modifier overlay if specified
 				if ( i.modifier ) {
-					
+
 					const modifierElements = createModifierOverlay( i.modifier, x, y );
 					loadPrs.push(
 						Promise.all( Array.isArray(modifierElements) ? modifierElements : [modifierElements] )
@@ -382,7 +383,7 @@ export class iconBar {
 						}))
 					);
 					i.kModifierElements = modifierElements;
-				}				
+				}
 
 				// get position for next icon
 				// const offs = nr*( this.spacing + this.height+2*wp );
@@ -410,16 +411,33 @@ export class iconBar {
 
 	///////////////////////////////////
 
+	exSpc () {
+		const frameWithPadding = 2 * ( this.frameWidth + this.framePadding );
+		// extraSpace durchgehen
+		let extraSpaceCnt = 0, extraSpace = 0;
+		this.icons.forEach( i => {
+			if ( i.extraSpace && i.extraSpace!==true ) {
+				extraSpaceCnt++;
+				extraSpace += i.extraSpace;
+			}
+		});
+		return [ frameWithPadding, extraSpaceCnt, extraSpace ];
+	}
+
 	getOverallHeight () {
+		const [ frameWithPadding, extraSpaceCnt, extraSpace ] = this.exSpc();
+		// Höhe berechnen
 		return this.direction=='v' ?
-			this.icons.length * ( this.spacing + this.height + 2*( this.frameWidth + this.framePadding ) ) - this.spacing :
-			this.height + 2*( this.frameWidth + this.framePadding );
+			(this.icons.length-extraSpaceCnt) * ( this.spacing + this.height + frameWithPadding ) - this.spacing + extraSpace :
+			this.height + frameWithPadding;
 	}
 
 	getOverallWidth () {
+		const [ frameWithPadding, extraSpaceCnt, extraSpace ] = this.exSpc();
+		// Breite berechnen
 		return this.direction=='v' ?
-			this.width + 2*( this.frameWidth + this.framePadding ) :
-			this.icons.length * ( this.spacing + this.width + 2*( this.frameWidth + this.framePadding ) ) - this.spacing;
+			this.width + frameWithPadding :
+			(this.icons.length-extraSpaceCnt) * ( this.spacing + this.width + frameWithPadding ) - this.spacing + extraSpace;
 	}
 
 	///////////////////////////////////

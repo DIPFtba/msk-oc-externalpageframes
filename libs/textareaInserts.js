@@ -97,31 +97,33 @@ export class textareaBase extends textareaContainer {
 		mergeDeep( defaults, opts );
 		super( divSelector, defaults, base );
 
-		this.div.setAttribute( 'contenteditable', 'true' );
+		const div = this.div;
 
-		this.div.addEventListener( 'keydown', this.ev_keydown.bind(this) );
-		this.div.addEventListener( 'input', this.ev_input.bind(this) );
-		// this.div.addEventListener( 'touchend', this.ev_touchend.bind(this) );
+		div.setAttribute( 'contenteditable', 'true' );
+
+		div.addEventListener( 'keydown', this.ev_keydown.bind(this) );
+		div.addEventListener( 'input', this.ev_input.bind(this) );
+		// div.addEventListener( 'touchend', this.ev_touchend.bind(this) );
 		// ['click','touchstart','change','input','keypress','keyup'].forEach( e => {
-		//	this.div.addEventListener( e, this.checkNodes.bind(this) );
+		//	div.addEventListener( e, this.checkNodes.bind(this) );
 		// })
 
-		if ( !this.div.textContent.length && this.multiLine ) {
-			this.div.textContent = "\n";
-			// this.div.appendChild( document.createElement('div') );
+		if ( !div.textContent.length && this.multiLine ) {
+			div.textContent = "\n";
+			// div.appendChild( document.createElement('div') );
 		}
 
-		this.div.addEventListener( 'paste', (ev) => ev.preventDefault() );
+		div.addEventListener( 'paste', (ev) => ev.preventDefault() );
 
 		if ( this.inputRegexp ) {
 			this.inputRE = new RegExp( this.inputRegexp );
 			this.saveValue();
 		}
 
-		this.div.addEventListener( 'focus',
+		div.addEventListener( 'focus',
 				() => setTimeout( () => this.base.postLog( 'textareaFocus', this.getTextPos() ), 0 ),
 				{ capture: true } );
-		this.div.addEventListener( 'blur',
+		div.addEventListener( 'blur',
 				() => this.base.postLog( 'textareaBlur' ),
 				{ capture: true } );
 
@@ -385,7 +387,6 @@ export class textareaBase extends textareaContainer {
 				}
 				// delete solely <br>
 				if ( this.div.innerHTML.trim() === '<br>' ) {
-					this.div.innerHTML = '';
 					this.div.textContent = "\n";
 				}
 			}
@@ -728,14 +729,19 @@ export class textareaBase extends textareaContainer {
 	///////////////////////////////////
 
 	getState () {
-		return JSON.stringify( this.div.innerHTML );
+		return JSON.stringify( this.div.innerHTML.trim() );
 	}
 
 	setState (state) {
 
 		try {
 
-			this.div.innerHTML = JSON.parse( state );
+			const p = JSON.parse( state );
+			if ( p ) {
+				this.div.innerHTML = p;
+			} else {
+				this.div.innerText = this.multiLine ? "\n" : '';
+			}
 
 		} catch (e) {
 			console.error(e);

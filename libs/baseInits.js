@@ -191,7 +191,7 @@ export class baseInits {
 					switch ( type ) {
 						case 'Boolean':
 							if ( val===null || val===undefined ) {
-								defaultValue = false;
+								defaultValue = 0;
 							}
 							break;
 						case 'String':

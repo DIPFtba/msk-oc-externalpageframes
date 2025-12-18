@@ -118,6 +118,9 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 	if ( !Parser ) {
 		return;
 	}
+	if ( !( 'dontExportVariables' in obj ) ) {
+		obj.dontExportVariables = [];
+	}
 
 	// create Parser, add addFncs
 	const parser = new Parser();
@@ -135,7 +138,10 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 
 	if ( opts.dataSettings && opts.dataSettings.scoringVals && obj.scoreDef ) {
 
-		const scoringVals = opts.dataSettings.scoringVals;
+		const scoringVals = [
+			...( opts.dataSettings.scoringVariables ?? [] ),
+			...( opts.dataSettings.scoringVals ?? [] ),
+		];
 		const pref = opts.dataSettings.variablePrefix || '';
 
 		const scores = obj.scoreDef(true);
@@ -153,6 +159,7 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 					let cond = sv.condition.trim();
 					if ( cond ) {
 						let saveCond = cond;
+						saveCond = saveCond.replaceAll( /\/\/[^\n]*\n|\/\*[\s\S]*?\*\//g, ' ' ); // remove comments
 						const allVarsInCond = cond.matchAll( /\$\{([^}]*)}/g );
 						for ( const vn of allVarsInCond ) {
 							if ( vn[1].length == 0 ) {
@@ -205,8 +212,23 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 								obj.scoringVals = [];
 							}
 							try {
-								const num = Number(sv.val);
-								obj.scoringVals.push( [ !Number.isNaN(num) ? num : sv.val, parser.parse( saveCond ) ] );
+								let a0;
+								if ( sv.name ) {
+									// Scoring Variable
+									a0 = `V_Score_${pref}_${sv.name.trim()}`;
+									if ( !sv.exp ) {
+										obj.dontExportVariables.push( a0 );
+									}
+									varNames.push( a0 ); // ensure variable exists
+								} else {
+									// Scoring Value
+									const num = Number(sv.val);
+									if ( Number.isNaN(num) ) {
+										throw `Scoring-Wert '${sv.val}' ist keine Zahl`;
+									}
+									a0 = num;
+								}
+								obj.scoringVals.push( [ a0, parser.parse( saveCond ) ] );
 							} catch (e) {
 								debugAndConsoleOut( `Fehler (${e}) in Scoring-Condition: ${cond}` );
 							}
@@ -218,7 +240,8 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 	}
 
 	if ( obj.scoringVals && obj.scoringVals.length>0 ) {
-		obj.computeScoringVals = function (res) {
+
+		obj.computeScoringVals = function (res, exportAll=false) {
 			// FIX: StatusVariable in res verfügbar machen
 			let res_in = res;
 			const pref = this.dataSettings?.variablePrefix || '';
@@ -238,17 +261,25 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 			const evalVarNames = scoreDat.filter( sd => typeof sd[0]==='string' && sd[0] ).map( sd => sd[0] );
 			evalVarNames.forEach( vn => {
 				// Erstmal alle auf 0 setzen
-				res[ `V_${vn}_${pref}` ] = 0;
+				res[vn] = 0;
+				res_in[vn] = 0;
 			});
 			const hasEvalVars = evalVarNames.length>0;
 
 			for ( let h=0; ( score===null || hasEvalVars ) && h<scoreDat.length; h++ ) {
 				const [v,c] = scoreDat[h];
 				try {
-					if ( c.evaluate( res_in ) ) {
+					let erg = c.evaluate( res_in );
+					if ( erg ) {
 						if ( typeof v === 'string' && v ) {
-							// String-Wert: Setze die Variable auf 1
-							res[ `V_${v}_${pref}` ] = 1;
+							// String-Wert: Setze die Variable auf erg
+							if ( typeof erg === 'boolean' ) {
+								// Wenn wirklich ma Boolean an IB gesendet werden soll,
+								// undebingt auch default Defs in baeseInits.js anpassen!
+								erg = +erg; // in 0|1 umwandeln
+							}
+							res[v] = erg;
+							res_in[v] = erg;
 						} else if ( score === null ) {
 							// Number-Wert: Setze score, aber nur, wenn noch nicht gesetzt
 							score = v;
@@ -262,13 +293,26 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 				const n = Number(score)
 				res[ `V_Score_${pref}` ] = score!== null && !Number.isNaN(n) ? n : score;
 			}
+
+			if ( !exportAll && this.dontExportVariables.length>0 ) {
+				this.dontExportVariables.forEach( k => delete res[k] );
+			}
 		}
 
-		if ( obj.scoreDef && obj.base ) {
-			obj.base.sendChangeState( obj );
+	} else {
+
+		// Wenn kein Scoring: Trotzdem nicht exportierte Variablen löschen
+		obj.computeScoringVals = function (res, exportAll=false) {
+			if ( !exportAll && this.dontExportVariables.length>0 ) {
+				this.dontExportVariables.forEach( k => delete res[k] );
+			}
+
 		}
 	}
 
+	if ( obj.scoreDef && obj.base ) {
+		obj.base.sendChangeState( obj );
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////

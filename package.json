@@ -8,7 +8,7 @@
     "clean": "rimraf dist/ext_res",
     "buildDist": "npm run clean && webpack --mode=production",
     "doku": "node.exe node_modules/showdown/bin/showdown.js makehtml  -c tables -c ghCompatibleHeaderId -i json_editor/doku.md -o docs/doku.html",
-    "build": "npm run buildDist && npm run doku",
+    "build": "npm run buildDist && npm run doku && bash copy_docs_other_branches.sh",
     "dev": "webpack --mode=development",
     "serve": "webpack serve --mode=development",
     "libs": "webpack --config webpack.libs.config.js --mode=production",

@@ -13,7 +13,7 @@ function copy_branch {
     echo "Copied documentation to branch ${BRANCH} in directory ${TDIR}"
 
     git checkout jsonEditor || { echo "Failed to checkout main branch"; rm -rf "$TDIR"; exit 1; }
-    git stash pop || { echo "Failed to pop stashed changes"; rm -rf "$TDIR"; exit 1; }
+    git stash pop
     mkdir -p ${DEST_DIR} || { echo "Failed to create destination directory ${DEST_DIR}"; rm -rf "$TDIR"; exit 1; }
     cp -v ${TDIR}/* ${DEST_DIR}/ || { echo "Failed to copy documentation from temporary directory to ${DEST_DIR}"; rm -rf "$TDIR"; exit 1; }
     echo "Copied documentation from branch ${BRANCH} to ${DEST_DIR}"

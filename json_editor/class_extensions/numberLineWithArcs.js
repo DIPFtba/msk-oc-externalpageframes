@@ -39,7 +39,7 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 		return 'Integer';
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		if ( this.readonly ) {
 			return {};
 		}
@@ -88,7 +88,7 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( scores );
+			this.computeScoringVals( scores, exportAll );
 		}
 		return scores;
 	}

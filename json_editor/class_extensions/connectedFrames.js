@@ -86,7 +86,7 @@ export class connectedFramesFromSchema extends connectedFrames {
 	}
 
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		let res = {};
 		if ( !this.__inpFrames ) {
 			return res;
@@ -116,7 +116,7 @@ export class connectedFramesFromSchema extends connectedFrames {
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 		return res;
 	}

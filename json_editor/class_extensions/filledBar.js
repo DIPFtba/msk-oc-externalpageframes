@@ -31,7 +31,7 @@ export class filledBarFromSchema extends filledBar {
 		}
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		const res = {};
 		if ( this.readonly ) {
 			return res;
@@ -45,7 +45,7 @@ export class filledBarFromSchema extends filledBar {
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 		return res;
 	}

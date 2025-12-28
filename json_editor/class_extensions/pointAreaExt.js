@@ -73,7 +73,7 @@ export class pointAreaExtFromSchema {
 		return 'integer';
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		const res = {};
 		if ( this.readonly ) {
 			return res;
@@ -87,7 +87,7 @@ export class pointAreaExtFromSchema {
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 
 		return res;

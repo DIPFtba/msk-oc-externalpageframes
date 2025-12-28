@@ -31,7 +31,7 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 		return varName.match( /^V_Input_\w+_Lab_\d+$/ ) ? this.labType : 'Integer';
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		const settings = this.dataSettings;
 		const pref = settings.variablePrefix;
 		const mult = settings.xMult;
@@ -93,7 +93,7 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( scores );
+			this.computeScoringVals( scores, exportAll );
 		}
 		return scores;
 	}

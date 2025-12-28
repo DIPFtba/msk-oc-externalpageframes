@@ -152,6 +152,14 @@ proc_config() {
             patch "$jsonfile" '.___bar.readonly_bar = false' '.___bar.readonly_bar' && pack=1
             patch "$jsonfile" '.___freePaint.linesChangeState = false' '.___freePaint.linesChangeState' && pack=1
         fi
+
+        # +scoringVariables
+        if [[ "$name" = "barPlot" || "$name" = "barSliderFull" || "$name" = "barSlider" || "$name" = "connectedFrames" || "$name" = "filledBar" || "$name" = "inputInserts" || "$name" = "numberLineWithAnnotations" || "$name" = "numberLineWithArcs" || "$name" = "numbersByPictures" || "$name" = "pikasTextEntry" || "$name" = "pointAreaExt" || "$name" = "pointArea" || "$name" = "rectArrayMarkable" ]]
+        then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            patch "$jsonfile" '.dataSettings.scoringVariables = []' '.dataSettings.scoringVariables' && pack=1
+        fi
     fi
 
     return $pack

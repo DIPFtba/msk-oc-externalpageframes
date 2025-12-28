@@ -50,7 +50,7 @@ export class vueExamplePropsEmitFromSchema {
 		return 'String';
 	}
 
-	scoreDef() {
+	scoreDef ( exportAll=false ) {
 		const res = {};
 		if ( this.readonly || !this.vueApp?.state) {
 			return res;
@@ -64,7 +64,7 @@ export class vueExamplePropsEmitFromSchema {
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 		return res;
 	}

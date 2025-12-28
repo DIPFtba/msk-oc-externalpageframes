@@ -57,7 +57,7 @@ export class chatTextAudioFromSchema {
 		return 'number';
 	}
 
-	scoreDef() {
+	scoreDef ( exportAll=false ) {
 		const res = {};
 		if ( !this.vueApp || !this.vueApp.state ) {
 			return res;
@@ -71,7 +71,7 @@ export class chatTextAudioFromSchema {
 		}
 
 	// 	if ( this.computeScoringVals ) {
-	// 		this.computeScoringVals( res );
+	// 		this.computeScoringVals( res , exportAll );
 	// 	}
 		return res;
 	}

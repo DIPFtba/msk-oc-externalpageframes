@@ -141,7 +141,7 @@
 								"title": "IB Variable",
 								"type": "boolean",
 								"format": "checkbox",
-								"default": false
+								"default": true
 							}
 						}
 					}
@@ -157,7 +157,7 @@
 						"disable_properties": true,
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (or, and) | IB Variable: Soll Muster als Variable V_Score_<pref>_<VarName> im IB gespeichert werden?"
+						"infoText": "Ausdruck, der ausgewertet wird, Ergebnis wird in VarName gespeichert. == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (or, and) | IB Variable: Soll Muster als Variable V_Score_<pref>_<VarName> im IB gespeichert werden?"
 					},
 					"items": {
 						"title": "Scoring Variable",
@@ -177,7 +177,7 @@
 								"title": "IB Variable",
 								"type": "boolean",
 								"format": "checkbox",
-								"default": false
+								"default": true
 							}
 						}
 					}
@@ -212,8 +212,6 @@
 					}
 				}
 			}
-
 		}
-
 	}
 }

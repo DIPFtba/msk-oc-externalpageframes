@@ -22,7 +22,7 @@ export class pointAreaFromSchema extends pointArea {
 	}
 
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		let res = {};
 		const pref = this.dataSettings.variablePrefix;
 
@@ -35,7 +35,7 @@ export class pointAreaFromSchema extends pointArea {
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 		return res;
 	}

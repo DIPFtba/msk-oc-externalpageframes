@@ -28,7 +28,7 @@ export class rectArrayMarkableFromSchema extends rectArrayMarkable {
 		}
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		if ( this.readonly ) {
 			return {};
 		}
@@ -36,7 +36,7 @@ export class rectArrayMarkableFromSchema extends rectArrayMarkable {
 		const res = super.scoreDef();
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 		return res;
 	}

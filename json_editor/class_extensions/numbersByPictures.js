@@ -43,7 +43,7 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 		}
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		if ( this.readonly ) {
 			return {};
 		}
@@ -57,7 +57,7 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 		};
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 		return res;
 	}

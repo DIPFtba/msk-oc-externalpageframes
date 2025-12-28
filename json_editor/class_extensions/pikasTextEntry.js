@@ -346,7 +346,7 @@ export class pikasTextEntryFromSchema {
 		return varName.match( /^V_Input_\w+_\d+$/ ) ? this.labType : 'Integer';
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		const res = {};
 		if ( this.readonly || !this.initData ) {
 			return res;
@@ -366,7 +366,7 @@ export class pikasTextEntryFromSchema {
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 
 		return res;

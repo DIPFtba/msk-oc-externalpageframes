@@ -270,7 +270,6 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 			if ( !exportAll && this.dontExportVariables.length>0 ) {
 				this.dontExportVariables.forEach( k => delete res[k] );
 			}
-
 		}
 	}
 

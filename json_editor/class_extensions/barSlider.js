@@ -22,7 +22,7 @@ export class barSliderFromSchema extends barSlider {
 		}
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		const res = {};
 		if ( this.readonly ) {
 			return res;
@@ -36,7 +36,7 @@ export class barSliderFromSchema extends barSlider {
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 		return res;
 	}

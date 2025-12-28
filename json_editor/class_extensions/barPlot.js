@@ -90,7 +90,7 @@ export class barPlotFromSchema extends barPlot {
 		return 'Integer';
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		const res = {};
 		if ( this.readonly || !this.rwBars ) { // readonly or only super() initialized
 			return res;
@@ -132,7 +132,7 @@ export class barPlotFromSchema extends barPlot {
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 
 		return res;

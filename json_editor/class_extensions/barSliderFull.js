@@ -118,7 +118,7 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 		return varName.match( /^V_Input_\w+_\d+$/ ) ? this.labType : 'Integer';
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		const res = {};
 		if ( this.readonly ) {
 			return res;
@@ -147,7 +147,7 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 		return res;
 	}

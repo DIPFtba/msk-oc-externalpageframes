@@ -215,79 +215,15 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 		if ( !this.readonly ) {
 
 			// Start painting
-			stage.on('mousedown touchstart', ev => {
+			stage.on('mousedown touchstart', this.paintStart.bind(this) );
 
-				if ( ['brush','marker','erase'].includes( this.mode ) ) {
-					this.isPainting = 1;
-					const pos = getPosOfEvent( this.stage, ev );
-					this.paintPoints = [ pos.x, pos.y ];
-					if ( this.mode != 'marker' ) {
-						this.kFreePaintLine = new Konva.Line( Object.assign( {}, this.paintLines[ this.mode ], {
-							points: this.paintPoints,
-						}));
-						this.kFreePaintBrushGroup.add( this.kFreePaintLine );
-					} else {
-						this.kFreePaintLine = null;
-					}
-					if ( hasMarker && ( this.hasMarker===undefined || this.hasMarker ) ) {
-						if ( this.mode != 'brush' ) {
-							this.kFreePaintMarkerLine = new Konva.Line( Object.assign( {}, this.paintLines[ this.mode ], {
-								points: this.paintPoints,
-							}));
-							this.kFreePaintMarkerGroup.add( this.kFreePaintMarkerLine );
-						} else {
-							this.kFreePaintMarkerLine = null;
-						}
-					}
-
-					ev.cancelBubble = true;
-				}
-			} );
+			// core function - drawing
+			stage.on('mousemove touchmove', this.paintDo.bind(this) );
 
 			// End painting
-			stage.on('mouseup mouseleave touchend', (ev) => {
+			stage.on('mouseup mouseleave touchend', this.paintEnd.bind(this) );
 
-				if ( ignoreEvent( this.stage, ev ) ) {
-					return;
-				}
-				if ( this.isPainting ) {
-					this.isPainting = 0;
-					if ( this.paintPoints.length>2 ) {
-						this.linesCopy.push( {
-							t: this.mode.substr( 0, 1 ),
-							p: this.paintPoints,
-						})
-						const logNames = {
-							brush: 'paintLine',
-							marker: 'paintMarker',
-							erase: 'paintErase',
-						}
-						this.base.postLog( logNames[ this.mode ], { points: this.paintPoints } );
-						this.base.sendChangeState( this );	// init & send changeState & score
-					}
-					if ( this.mode == 'erase' ) {
-						this.detectCleared();
-					}
-				}
-			});
-
-			// and core function - drawing
-			stage.on('mousemove touchmove', ev => {
-				if ( this.isPainting ) {
-					const pos = getPosOfEvent( this.stage, ev );
-					this.paintPoints.push( pos.x );
-					this.paintPoints.push( pos.y );
-					if ( this.kFreePaintMarkerLine ) {
-						this.kFreePaintMarkerLine.points( this.paintPoints );
-						this.freePaintMarkerLayer.batchDraw();
-					}
-					if ( this.kFreePaintLine ) {
-						this.kFreePaintLine.points( this.paintPoints );
-						this.freePaintLayer.batchDraw();
-					}
-				}
-			} );
-
+			// change cursor on leave/enter
 			stage.on( 'mouseleave', (ev) => {
 				if ( ignoreEvent( this.stage, ev ) ) {
 					return;
@@ -314,6 +250,90 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();
+		}
+	}
+
+	///////////////////////////////////
+
+	paintStart (ev) {
+		if ( ['brush','marker','erase'].includes( this.mode ) ) {
+			this.isPainting = 1;
+			const pos = getPosOfEvent( this.stage, ev );
+			this.paintPoints = [ pos.x, pos.y ];
+			if ( this.mode != 'marker' ) {
+				this.kFreePaintLine = new Konva.Line( Object.assign( {}, this.paintLines[ this.mode ], {
+					points: this.paintPoints,
+				}));
+				this.kFreePaintBrushGroup.add( this.kFreePaintLine );
+			} else {
+				this.kFreePaintLine = null;
+			}
+			if ( hasMarker && ( this.hasMarker===undefined || this.hasMarker ) ) {
+				if ( this.mode != 'brush' ) {
+					this.kFreePaintMarkerLine = new Konva.Line( Object.assign( {}, this.paintLines[ this.mode ], {
+						points: this.paintPoints,
+					}));
+					this.kFreePaintMarkerGroup.add( this.kFreePaintMarkerLine );
+				} else {
+					this.kFreePaintMarkerLine = null;
+				}
+			}
+
+			ev.cancelBubble = true;
+			if (ev.evt.cancelable) {
+				ev.evt.preventDefault();
+			}
+		}
+	}
+
+	paintDo (ev) {
+		if ( this.isPainting ) {
+			const pos = getPosOfEvent( this.stage, ev );
+			this.paintPoints.push( pos.x );
+			this.paintPoints.push( pos.y );
+			if ( this.kFreePaintMarkerLine ) {
+				this.kFreePaintMarkerLine.points( this.paintPoints );
+				this.freePaintMarkerLayer.batchDraw();
+			}
+			if ( this.kFreePaintLine ) {
+				this.kFreePaintLine.points( this.paintPoints );
+				this.freePaintLayer.batchDraw();
+			}
+
+			ev.cancelBubble = true;
+			if (ev.evt.cancelable) {
+				ev.evt.preventDefault();
+			}
+		}
+	}
+
+	paintEnd (ev) {
+		if ( ignoreEvent( this.stage, ev ) ) {
+			return;
+		}
+		if ( this.isPainting ) {
+			this.isPainting = 0;
+			if ( this.paintPoints.length>2 ) {
+				this.linesCopy.push( {
+					t: this.mode.substr( 0, 1 ),
+					p: this.paintPoints,
+				})
+				const logNames = {
+					brush: 'paintLine',
+					marker: 'paintMarker',
+					erase: 'paintErase',
+				}
+				this.base.postLog( logNames[ this.mode ], { points: this.paintPoints } );
+				this.base.sendChangeState( this );	// init & send changeState & score
+			}
+			if ( this.mode == 'erase' ) {
+				this.detectCleared();
+			}
+
+			ev.cancelBubble = true;
+			if (ev.evt.cancelable) {
+				ev.evt.preventDefault();
+			}
 		}
 	}
 

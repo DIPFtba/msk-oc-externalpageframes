@@ -5,7 +5,7 @@ div.simple-input-container {
     margin: 0;
 }
 div.simple-input {
-    position: absolute;
+    /* position: absolute; */ /* set by opts.position */
     display: flex;
     flex-direction: row;
     justify-content: center;

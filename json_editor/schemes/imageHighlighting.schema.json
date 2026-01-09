@@ -144,7 +144,7 @@
 							"format": "color",
 							"default": "#ffff00",
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 6
 							}
 						},
 
@@ -154,23 +154,39 @@
 							"minimum": 1,
 							"default": 15,
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 6,
+								"grid_break": true
 							}
-						},
+						}
+					}
+				},
 
-						"opacity100": {
-							"title": "Deckkraft",
-							"type": "number",
-							"format": "range",
-							"default": 50,
-							"minimum": 0,
-							"maximum": 100,
+				"eraser": {
+					"title": "Eraser",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"titleHidden": false,
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 12,
+						"grid_break": true
+					},
+					"properties": {
+
+						"strokeWidth": {
+							"title": "Dicke",
+							"type": "integer",
+							"minimum": 1,
+							"default": 25,
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 6
 							}
 						}
 					}
 				}
+
 			}
 		},
 

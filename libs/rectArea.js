@@ -9,11 +9,11 @@ export class rectArea {
 
 	constructor ( base, opts = {} ) {
 
-		['x','y','width','height'].forEach( o => {
-			if ( !( o in opts ) ) {
-				throw( `area: parameter '${o}' not specified!` );
-			}
-		})
+		// ['x','y','width','height'].forEach( o => {
+		// 	if ( !( o in opts ) ) {
+		// 		throw( `area: parameter '${o}' not specified!` );
+		// 	}
+		// })
 		if ( base.fsm && base.fsm.incInitCnt ) {
 			base.fsm.incInitCnt();
 		}
@@ -52,21 +52,22 @@ export class rectArea {
 			this.layer.draw();
 		}
 
+		if ( this.frameWidth && this.width>0 && this.height>0 ) {
+
+			// clip to rectangle by default
+			this.freePaintMarkerClipFunc = function (ctx) {
+				ctx.rect( this.x+this.frameWidth*0.5, this.y+this.frameWidth*0.5, this.width-this.frameWidth, this.height-this.frameWidth );
+			}
+
+			// clip to rectangle by default
+			this.freePaintBrushClipFunc = function (ctx) {
+				ctx.rect( this.x+this.frameWidth*0.5, this.y+this.frameWidth*0.5, this.width-this.frameWidth, this.height-this.frameWidth );
+			}
+		}
+
 		if ( base.fsm && base.fsm.decInitCnt ) {
 			base.fsm.decInitCnt();
 		}
-	}
-
-	///////////////////////////////////
-
-	// clip to rectangle by default
-	freePaintMarkerClipFunc (ctx) {
-		ctx.rect( this.x+this.frameWidth*0.5, this.y+this.frameWidth*0.5, this.width-this.frameWidth, this.height-this.frameWidth );
-	}
-
-	// clip to rectangle by default
-	freePaintBrushClipFunc (ctx) {
-		ctx.rect( this.x+this.frameWidth*0.5, this.y+this.frameWidth*0.5, this.width-this.frameWidth, this.height-this.frameWidth );
 	}
 
 	///////////////////////////////////

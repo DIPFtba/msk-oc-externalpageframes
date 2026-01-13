@@ -99,7 +99,18 @@ export class textareaBase extends textareaContainer {
 
 		const div = this.div;
 
-		div.setAttribute( 'contenteditable', 'true' );
+		Object.entries({
+			contenteditable: 'true',
+			spellcheck: 'false',
+			autocorrect: 'off',
+			autocapitalize: 'off',
+			autocomplete: 'off',
+			translate: 'no',
+			class: 'notranslate',
+			'data-gramm': 'false',
+			'data-gramm_editor': 'false',
+			'data-enable-grammarly': 'false',
+		}).forEach( ([k,v]) => div.setAttribute(k,v) );
 
 		div.addEventListener( 'keydown', this.ev_keydown.bind(this) );
 		div.addEventListener( 'input', this.ev_input.bind(this) );

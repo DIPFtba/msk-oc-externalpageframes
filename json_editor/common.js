@@ -216,13 +216,13 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-export function addStatusVarDef ( obj, json ) {
+export function addStatusVarDef ( obj, json={} ) {
 
-	const pref = json.dataSettings?.variablePrefix;
-	if ( !obj.readonly && !obj.statusVarDef && pref ) {
+	const pref = json.dataSettings?.variablePrefix ? '_'+json.dataSettings?.variablePrefix : '';
+	if ( !obj.readonly && !obj.statusVarDef ) {
 
-		const statVarName = `V_Status_${pref}`;
-		const statHistVarName = `V_StatHist_${pref}`;
+		const statVarName = `V_Status${pref}`;
+		const statHistVarName = `V_StatHist${pref}`;
 		let statusHistory = 0;
 
 		obj.statusVarDef = function () {

@@ -73,6 +73,8 @@ export class SimpleInput {
         }
         this.setStyles( div, {
             ...this.stylesNormal,
+            paddingLeft: this.padding + "px",
+            paddingRight: this.padding + "px",
             left: this.x + "px",
             top: this.y + "px",
             width: this.width + "px",
@@ -170,6 +172,10 @@ export class SimpleInput {
 
     setValue ( newValue, newCursorPos=null ) {
 
+        if ( typeof newValue !== 'string' ) {
+            newValue = String( newValue );
+        }
+
         if ( this._value !== newValue ) {
             if ( this.maxlength && newValue.length > this.maxlength ) {
                 this.emit( 'maxlength', newValue );
@@ -188,7 +194,8 @@ export class SimpleInput {
             this.render();
 
             // check if text fits in div
-            if ( newValue.length>0 && this.chars[0].x1 < this.x+this.padding+1 ) {
+            if ( newValue.length>0 && 
+                    ( this.chars[ this.chars.length-1 ].x2 - this.chars[0].x1 ) > ( this.width - 2*this.padding ) ) {
 
                 // shrink if possible
                 if ( !this.minFontSize || !this.resizeFont() ) {
@@ -217,7 +224,7 @@ export class SimpleInput {
                 this.maxFontSize :
                 Math.min(
                     this.maxFontSize,
-                    this.fontSize * ( this.width - 2*this.padding - 2 ) / ( this.chars[ this.chars.length-1 ].x2 - this.chars[0].x1 )
+                    this.fontSize * ( this.width - 2*this.padding ) / ( this.chars[ this.chars.length-1 ].x2 - this.chars[0].x1 )
                 );
             if ( fontSize!=this.fontSize ) {
                 if ( fontSize < this.minFontSize ) {

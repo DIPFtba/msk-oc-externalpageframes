@@ -1246,7 +1246,7 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 		let event;
 		if ( this.switchModeBar.active==0 ) {
 			event = 'Text';
-		} else if ( this.switchModeBar.active==2 ) {
+		} else if ( this.switchModeBar.active==1 ) {
 			event = 'Paint';
 		} else {
 			event = 'Off';

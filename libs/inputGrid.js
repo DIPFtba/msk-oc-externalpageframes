@@ -1207,7 +1207,7 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 					}
 					if ( data == "SetIconBarPaint" ) {
 						this.switchModeBar.deactivate();
-						this.switchModeBar.clickOn(2);
+						this.switchModeBar.clickOn(1);
 					}
 				} catch(e) {}
 			}

@@ -120,6 +120,8 @@ import erasericon from './img/erasericon.png'
 import clearicon from './img/clearicon.png'
 import markericon from './img/markericon.png'
 
+const defaultIconBarClass = iconBar;
+
 export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extraDefaults=null ) => class extends baseClass {
 
 	constructor ( base, opts = {} ) {
@@ -184,6 +186,7 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 						on: () => this.freePaintClearAll(),
 					}],
 			},
+			iconBarClass: defaultIconBarClass,
 
 			linesChangeState: null,	// Overwrites linesChangeState constructor arg, if set
 		};
@@ -224,20 +227,22 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 			stage.on('mouseup mouseleave touchend', this.paintEnd.bind(this) );
 
 			// change cursor on leave/enter
-			stage.on( 'mouseleave', (ev) => {
-				if ( ignoreEvent( this.stage, ev ) ) {
-					return;
-				}
-				this.cursorSaved = document.body.style.cursor;
-				document.body.style.cursor = "default";
-			});
+			if ( this.iconBarClass === defaultIconBarClass ) {
+				stage.on( 'mouseleave', (ev) => {
+					if ( ignoreEvent( this.stage, ev ) ) {
+						return;
+					}
+					this.cursorSaved = document.body.style.cursor;
+					document.body.style.cursor = "default";
+				});
 
-			stage.on( 'mouseenter', () => {
-				if ( this.cursorSaved ) {
-					document.body.style.cursor = this.cursorSaved;
-					this.cursorSaved = null;
-				}
-			})
+				stage.on( 'mouseenter', () => {
+					if ( this.cursorSaved ) {
+						document.body.style.cursor = this.cursorSaved;
+						this.cursorSaved = null;
+					}
+				})
+			}
 		}
 
 		// Wenn alles initialisiert (auch das, was erst später gemalt wird, wie z.B. extraRects/Lines)
@@ -372,7 +377,7 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 		this.kFreePaintLine = null;
 
 		// iconBar
-		this.modeIconBar = new iconBar( this.stage, this.modeIconBarDef );
+		this.modeIconBar = new this.iconBarClass( this.stage, this.modeIconBarDef );
 	}
 
 	///////////////////////////////////

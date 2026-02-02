@@ -27,3 +27,61 @@ div.ihBaseDiv {
     box-sizing: border-box;
     user-select: none;
 }
+
+/* //////////////////////////////////////////////////////////////////////// */
+
+div.iconBarContainer {
+    position: absolute;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    background-color: rgba(220, 220, 220, 0.8);
+    padding: 7px;
+    /* border: 1px solid black; */
+    border-radius: 5px;
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); */
+    z-index: 1000;
+}
+
+/* Das Dreieck (Pfeil) */
+div.iconBarContainer::after {
+  content: '';
+  position: absolute;
+  left: 15px;       /* Position von links */
+  bottom: -14px;    /* Schiebt das Dreieck nach unten aus der Box raus */
+
+  /* Die Dreiecks-Konstruktion */
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-top: 15px solid rgba(220, 220, 220, 0.8); /* Gleiche Farbe wie die Bubble */
+}
+
+div.iconBarIcon {
+    width: 32px;
+    height: 32px;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+div.iconBarIconBg {
+    padding: 3px;
+    border: 2px solid darkgray;
+    border-radius: 3px;
+    background: white;
+}
+div.iconBarIconBg:hover {
+    background: lightgoldenrodyellow;
+}
+div.iconBarIconBg.active {
+    background: rgb(245, 167, 171);
+}
+
+div.iconBarIcon.brush {
+    background-image: url('../../libs/img/penicon.png');
+}
+
+div.iconBarIcon.erase {
+    background-image: url('../../libs/img/erasericon.png');
+}

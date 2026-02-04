@@ -89,6 +89,10 @@ import { pointAreaExtFromSchema } from './class_extensions/pointAreaExt';
 import pointAreaExtJSONSchema from './schemes/pointAreaExt.schema.json';
 import pointAreaExtSVG from './svgs/pointAreaExt.svg';
 
+import { ratingsFromSchema } from './class_extensions/ratings';
+import ratingsJSONSchema from './schemes/ratings.schema.json';
+import ratingsSVG from './svgs/ratings.svg';
+
 import { rectArrayMarkableFromSchema } from './class_extensions/rectArrayMarkable';
 import rectArrayMarkableJSONSchema from './schemes/rectArrayMarkable.schema.json';
 import rectArrayMarkableSVG from './svgs/rectArrayMarkable.svg';
@@ -313,6 +317,12 @@ function loadSchema( schema ) {
 						initContainer(true);
 						creator = (cfgData) => new pointAreaExtFromSchema( base, cfgData, addMods );
 						break;
+					case 'ratings':
+						creator = (cfgData) => {
+							initContainer(false);
+							return new ratingsFromSchema( textContainer.firstChild, cfgData, base );
+						}
+						break;
 					case 'recordAudio':
 						creator = (cfgData) => {
 							initContainer(false);
@@ -394,6 +404,7 @@ const templs = {
 	pikasTextEntry: [ pikasTextEntryJSONSchema, pikasTextEntrySVG ],
 	pointArea: [ pointAreaJSONSchema, pointAreaSVG ],
 	pointAreaExt: [ pointAreaExtJSONSchema, pointAreaExtSVG ],
+	ratings: [ ratingsJSONSchema, ratingsSVG ],
 	recordAudio: [ recordAudioJSONSchema, recordAudioSVG ],
 	rectArrayMarkable: [ rectArrayMarkableJSONSchema, rectArrayMarkableSVG ],
 	stampImages: [ stampImagesJSONSchema, stampImagesSVG ],

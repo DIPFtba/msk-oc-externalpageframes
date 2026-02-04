@@ -5,7 +5,6 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
-const { version } = require('os');
 
 const babel_loader = {
 	loader: "babel-loader",
@@ -230,7 +229,7 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 		new CopyPlugin({
 			patterns: [
 				{ from: path.resolve( __dirname, 'json_editor/schemes/', `${extres}.schema.json` ), to: path.resolve( extres_dir, extres, 'extres_config.schema.json' ) },
-				...CopyPluginAdditionalPatterns[extres] || [],
+				...( CopyPluginAdditionalPatterns[extres] || [] ),
 			],
 		}),
 
@@ -313,6 +312,13 @@ module.exports = ( env, argv ) => {
 		}
 
 	} else {
+
+		// Pfade in CopyPluginAdditionalPatterns patchen (jetzt relativ zu json_editor/class_extensions)
+		Object.values(CopyPluginAdditionalPatterns).forEach( patterns =>{
+			patterns.forEach( ptn =>{
+				ptn.from = '../../'+ptn.from;
+			})
+		});
 
 		cfg = [ cfg ];
 		Object.keys( ExtResFromSchema ).forEach( er =>{

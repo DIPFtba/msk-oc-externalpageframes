@@ -40,6 +40,8 @@ export class inputfieldFromSchema {
 			height: opts.options?.height,
 			...opts.options?.stylesDefault
 		};
+		opts.options.stylesFocus.outline = 'none';
+		opts.options.stylesFocus.boxShadow = 'none';
 		let styleDefs = "";
 		[ ['stylesNormal', ''] , ['stylesHover', ':hover'] , ['stylesFocus', ':focus'] ].forEach( ([styleType, pseudo]) => {
 			const stylesObj = {

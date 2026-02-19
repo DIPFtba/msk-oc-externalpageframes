@@ -2,6 +2,7 @@ import './ratings.css'
 
 import { object_equals, setStatePostProc } from '../../libs/common.js'
 import { setStyles, expStyle } from '../styles.js';
+import { setBodyFont } from '../common.js';
 
 export class ratingsFromSchema  {
 
@@ -14,11 +15,13 @@ export class ratingsFromSchema  {
 		// Daten Init
 		const dims = opts.ratings.defs.map( d => d.name );
 		this.dims = dims;
-		this.ratings = Object.fromEntries(dims.map((dim) => [dim, null]));
-		this.varNmes = Object.fromEntries(
+		this.ratingVals = Object.fromEntries(dims.map((dim) => [dim, null]));
+		this.varNames = Object.fromEntries(
 			dims.map( (dim) => [dim, `V_${dim[0].toUpperCase()}${dim.slice(1)}`] ),
 		);
 		this.allSvgsFills = Object.fromEntries(dims.map((dim) => [dim, {}]));
+
+		setBodyFont( opts.buttons.stil.fontFile );
 
 		// HTML Init
 		const container = typeof divSelector === 'string' ? document.querySelector( divSelector ) : divSelector;
@@ -60,7 +63,7 @@ export class ratingsFromSchema  {
 							// Interactivity
 							if ( !opts.readonly ) {
 								el.addEventListener('click', () => {
-									this.ratings[def.name] = val;
+									this.ratingVals[def.name] = val;
 									base.postLog('rating', { dim: def.name, val: val });
 									this.displayRatings();
 								});
@@ -98,7 +101,7 @@ export class ratingsFromSchema  {
 		if (!this.readonly) {
 			this.linkClear.addEventListener('click', () => {
 				dims.forEach((dim) => {
-					this.ratings[dim] = null;
+					this.ratingVals[dim] = null;
 				});
 				base.postLog('ratingsDeleted', {});
 				this.displayRatings();
@@ -119,20 +122,21 @@ export class ratingsFromSchema  {
 
 	displayRatings() {
 		this.dims.forEach((dim) => {
-			const val = this.ratings[dim];
+			const val = this.ratingVals[dim];
 			const fills = this.allSvgsFills[dim];
 
 			for (let i = 1; i <= 5; i++) {
-				fills[i].setAttribute('fill', val !== null && i <= val ? 'gold' : 'white');
+				const color = this.ratings.colors[ val !== null && i <= val ? 'marked' : 'normal' ];
+				fills[i].setAttribute('fill', color);
 			}
 		});
 
 		this.linkClear.style.visibility =
-			!this.readonly && Object.values(this.ratings).some((val) => val !== null)
+			!this.readonly && Object.values(this.ratingVals).some((val) => val !== null)
 				? 'visible'
 				: 'hidden';
 		this.linkSubmit.style.visibility =
-			this.readonly || Object.values(this.ratings).every((val) => val !== null)
+			this.readonly || Object.values(this.ratingVals).every((val) => val !== null)
 				? 'visible'
 				: 'hidden';
 
@@ -147,7 +151,7 @@ export class ratingsFromSchema  {
 
 	scoreDef () {
 		const res = Object.fromEntries(
-			this.dims.map((dim) => [this.varNmes[dim], this.ratings[dim]]),
+			this.dims.map((dim) => [this.varNames[dim], this.ratingVals[dim]]),
 		);
 		return res;
 	}
@@ -155,7 +159,7 @@ export class ratingsFromSchema  {
 	///////////////////////////////////
 
 	getChState() {
-		return Object.values(this.ratings);
+		return Object.values(this.ratingVals);
 	}
 
 	// Check if User made changes
@@ -164,12 +168,12 @@ export class ratingsFromSchema  {
 	}
 
 	getState () {
-		return JSON.stringify( this.ratings );
+		return JSON.stringify( this.ratingVals );
 	}
 
 	setState ( state ) {
 		try {
-			this.ratings = JSON.parse( state );
+			this.ratingVals = JSON.parse( state );
 		} catch (e) {
 			console.error(e);
 		}

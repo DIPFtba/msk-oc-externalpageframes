@@ -314,11 +314,12 @@ module.exports = ( env, argv ) => {
 	} else {
 
 		// Pfade in CopyPluginAdditionalPatterns patchen (jetzt relativ zu json_editor/class_extensions)
-		Object.values(CopyPluginAdditionalPatterns).forEach( patterns =>{
-			patterns.forEach( ptn =>{
-				ptn.from = '../../'+ptn.from;
-			})
-		});
+		Object.keys(CopyPluginAdditionalPatterns).forEach( key => {
+			CopyPluginAdditionalPatterns[key] = CopyPluginAdditionalPatterns[key].map( pattern => ({
+				...pattern,
+				from: '../../'+pattern.from,
+			}));
+		})
 
 		cfg = [ cfg ];
 		Object.keys( ExtResFromSchema ).forEach( er =>{

@@ -118,6 +118,41 @@
 					}
 				},
 
+				"colors": {
+					"title": "Farben",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"disable_collapse": true,
+						"collapsed": false,
+						"grid_columns": 12,
+						"remove_empty_properties": true,
+						"disable_edit_json": true,
+						"disable_properties": true
+					},
+					"properties": {
+						"normal": {
+							"title": "Normal",
+							"type": "string",
+							"format": "color",
+							"default": "#FFFFFF",
+							"options": {
+								"grid_columns": 4
+							}
+						},
+						"marked": {
+							"title": "Markiert",
+							"type": "string",
+							"format": "color",
+							"default": "#FFD700",
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						}
+					}
+				},
+
 				"defs": {
 					"title": "Ratings",
 					"type": "array",

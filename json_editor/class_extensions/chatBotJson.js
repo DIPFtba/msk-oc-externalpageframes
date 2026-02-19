@@ -75,12 +75,17 @@ export class chatBotJsonFromSchema {
 	///////////////////////////////////
 
 	getState () {
-		return JSON.stringify( this.vueApp?.state.chat );
+		const state = this.vueApp?.state?.chat;
+		return JSON.stringify({
+			curr: state?.curr.filter( entry => !entry.isPrechat ),
+			currLabel: state?.currLabel,
+			prev: state?.prev,
+		});
 	}
 
 	setState ( state ) {
 		try {
-			this.vueApp.state.chat = JSON.parse( state );
+			this.vueApp.state.loadChat( JSON.parse( state ) );
 		} catch (e) {
 			console.error(e);
 		}

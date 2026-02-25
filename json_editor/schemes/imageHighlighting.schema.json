@@ -93,7 +93,7 @@
 							"title": "Bilder",
 							"type": "array",
 							"format": "table",
-							"default": [{"url":"/Rechnung.svg","width":"80%"},{"url":"/Rechnung.svg","width":"98%"}],
+							"default": [{"url":"./Rechnung.svg","width":"80%"},{"url":"./Rechnung.svg","width":"98%"}],
 							"options": {
 								"disable_collapse": true,
 								"disable_edit_json": true,

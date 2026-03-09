@@ -49,8 +49,17 @@ class htmlIconBar {
 	///////////////////////////////////
 
 	renderAt ( x, y ) {
-		this.container.style.left = addPx( x - ( this.cursorOffset.x || 0 ) );
-		this.container.style.top = addPx( y - ( this.cursorOffset.y || 0 ) );
+		if ( y < 80 ) {
+			this.container.classList.add( 'up' );
+			this.container.classList.remove( 'down' );
+			this.container.style.left = addPx( x - ( this.cursorOffsetUp.x || 0 ) );
+			this.container.style.top = addPx( y + ( this.cursorOffsetUp.y || 0 ) );
+		} else {
+			this.container.classList.add( 'down' );
+			this.container.classList.remove( 'up' );
+			this.container.style.left = addPx( x - ( this.cursorOffsetDown.x || 0 ) );
+			this.container.style.top = addPx( y - ( this.cursorOffsetDown.y || 0 ) );
+		}
 		this.hideBar( false );
 	}
 
@@ -228,9 +237,13 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 						off: () => this.setPaintMode('none'),
 					}
 				],
-				cursorOffset: {
+				cursorOffsetDown: {
 					x: 15+7+7,
 					y: 15+42+14+1,
+				},
+				cursorOffsetUp: {
+					x: 15+7+7,
+					y: 15+1,
 				},
 			},
 			iconBarClass: htmlIconBar,

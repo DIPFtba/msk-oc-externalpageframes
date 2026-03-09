@@ -43,8 +43,8 @@ div.iconBarContainer {
     z-index: 1000;
 }
 
-/* Das Dreieck (Pfeil) */
-div.iconBarContainer::after {
+/* Das Dreieck (Pfeil) nach unten */
+div.down.iconBarContainer::after {
   content: '';
   position: absolute;
   left: 15px;       /* Position von links */
@@ -54,6 +54,19 @@ div.iconBarContainer::after {
   border-left: 15px solid transparent;
   border-right: 15px solid transparent;
   border-top: 15px solid rgba(220, 220, 220, 0.8); /* Gleiche Farbe wie die Bubble */
+}
+
+/* Das Dreieck (Pfeil) nach oben */
+div.up.iconBarContainer::after {
+  content: '';
+  position: absolute;
+  left: 15px;       /* Position von links */
+  top: -14px;    /* Schiebt das Dreieck nach oben aus der Box raus */
+
+  /* Die Dreiecks-Konstruktion */
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 15px solid rgba(220, 220, 220, 0.8); /* Gleiche Farbe wie die Bubble */
 }
 
 div.iconBarIcon {

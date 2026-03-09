@@ -306,7 +306,7 @@ function loadSchema( schema ) {
 					case 'pikasTextEntry':
 						creator = (cfgData) => {
 							initContainer(false);
-							return new pikasTextEntryFromSchema( textContainer.firstChild, cfgData, base );
+							return new pikasTextEntryFromSchema( textContainer.firstChild, cfgData, base, addMods );
 						}
 						break;
 					case 'pointArea':

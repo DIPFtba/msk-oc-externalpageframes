@@ -333,10 +333,10 @@ export class pikasTextEntryFromSchema {
 			return inp;
 		});
 
-		addScoring( this, opts, addMods.Parser );
 		this.startButtonListener();
 
 		this.initData = this.getChState();
+		addScoring( this, opts, addMods.Parser );
 		this.base.sendChangeState( this );	// init & send changeState & score
 
 		base.decInitCnt();

@@ -58,7 +58,7 @@ table td, table th {
 
 - Um die Eingabe der Variablen zu vereinfachen, wird die komplette Variablen-Referenz in die Zwischenablage kopiert, wenn in der Variablen-Liste rechts auf eine Variable geklickt wird
 
-- Zur Evaluation der Bedingung wird die Bibliothek `expr-eval` verwendet, s. [Doku](https://github.com/silentmatt/expr-eval?tab=readme-ov-file#expression-syntax)
+- Zur Evaluation der Bedingung wird die Bibliothek `expr-eval` verwendet, s. [Doku](https://github.com/silentmatt/expr-eval?tab=readme-ov-file#expression-syntax). Unter diesem Link sind auch alle verwendbaren Funktionen und Ausdrücke gelistet.
 
 #### Vergleichsoperatoren
 

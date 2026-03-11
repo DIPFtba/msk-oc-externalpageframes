@@ -362,7 +362,8 @@ export const dp2inputRegExp = (obj) => {
 	};
 
 	if ( obj.pdp || obj.dp ) {
-		let re = `^$|^[0-9]${ obj.pdp ? `{1,${obj.pdp}}` : '+' }`;
+		const max = obj.maxlength && !obj.units ? `(?=.{1,${obj.maxlength}}$)` : "";
+		let re = `^$|^${max}[0-9]${ obj.pdp ? `{1,${obj.pdp}}` : '+' }`;
 		if ( obj.dp ) {
 			re += `([,.][0-9]{0,${obj.dp}})?`;
 		}

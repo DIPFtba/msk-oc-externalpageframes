@@ -394,7 +394,17 @@
 							"default": 0,
 							"options": {
 								"grid_columns": 4,
+								"grid_break": true,
 								"infoText": "Wenn >0: max. Nachkomma-Stellen (dann nur Zahleneingaben erlaubt)"
+							}
+						},
+						"maxlength": {
+							"title": "Maximale Anzahl Zeichen",
+							"type": "integer",
+							"minimum": 0,
+							"options": {
+								"grid_columns": 4,
+								"infoText": "0 = keine Begrenzung, wenn > 0: Eingabe wird auf diese Länge begrenzt"
 							}
 						},
 						"inputRegexp": {
@@ -1018,7 +1028,7 @@
 						},
 						"___version": {
 							"type":"number",
-							"default":0.1
+							"default":0.2
 						}
 					},
 					"options": {

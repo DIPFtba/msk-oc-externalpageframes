@@ -81,12 +81,13 @@ export class inputfieldFromSchema {
 
 			const value = this.input.value;
 			const logData = { val: value };
-			if ( maxlength && value.length > maxlength ) {
-				this.input.value = this.lastOkValue || '';
-				base.postLog( 'maxlength', logData );
-			} else if ( re && !re.test( value ) ) {
+			if ( re && !re.test( value ) ) {
 				this.input.value = this.lastOkValue || '';
 				base.postLog( 'invalid', logData );
+				base.triggerInputValidationEvent();
+			} else if ( maxlength && value.length > maxlength ) {
+				this.input.value = this.lastOkValue || '';
+				base.postLog( 'maxlength', logData );
 				base.triggerInputValidationEvent();
 			} else {
 				this.lastOkValue = value;

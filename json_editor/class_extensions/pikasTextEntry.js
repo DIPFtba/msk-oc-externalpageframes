@@ -384,7 +384,7 @@ export class pikasTextEntryFromSchema {
 			delete logDat.target;
 			this.base.postLog( event, logDat );
 
-			if ( event=='invalid' ) {
+			if ( ['invalid','maxlength'].includes(event) ) {
 				this.base.triggerInputValidationEvent();
 			} else if ( ['input','change'].includes(event) ) {
 				this.base.sendChangeState( this );	// init & send changeState & score

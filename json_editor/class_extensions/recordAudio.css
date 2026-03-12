@@ -134,3 +134,16 @@ div.deleted {
 		display: none;
 	}
 }
+
+span.blink {
+	animation: blink 0.3s forwards;
+}
+
+@keyframes blink {
+	from {
+		color: red;
+	}
+	to {
+		color: inherit;
+	}
+}

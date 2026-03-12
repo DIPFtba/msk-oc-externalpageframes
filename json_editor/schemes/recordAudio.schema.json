@@ -41,6 +41,26 @@
 					}
 				},
 
+				"recLimit": {
+					"title": "Max. Aufnahmelänge",
+					"type": "integer",
+					"default": 0,
+					"options": {
+						"grid_columns": 4,
+						"infoText": "0 = keine Begrenzung, sonst max. Aufnahmedauer in Sekunden"
+					}
+				},
+				"cntDwn": {
+					"title": "Countdown ab",
+					"type": "integer",
+					"default": 0,
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true,
+						"infoText": "0 = kein Countdown, sonst Countdown in Sekunden"
+					}
+				},
+
 				"individualDelete": {
 					"title": "Audios können einzeln gelöscht werden",
 					"type": "boolean",
@@ -83,7 +103,7 @@
 						},
 						"___version": {
 							"type":"number",
-							"default":0.1
+							"default":0.2
 						}
 					},
 					"options": {

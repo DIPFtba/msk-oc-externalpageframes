@@ -187,7 +187,7 @@
 					}
 				},
 				"___alt_minTicks": {
-					"format": "object",
+					"type": "object",
 					"options": {
 						"hidden": true,
 						"dependencies": {
@@ -258,7 +258,7 @@
 					}
 				},
 				"___alt_majTicks": {
-					"format": "object",
+					"type": "object",
 					"options": {
 						"hidden": true,
 						"dependencies": {

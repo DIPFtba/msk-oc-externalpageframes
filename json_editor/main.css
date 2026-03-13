@@ -73,6 +73,14 @@ html,body {
 	white-space: wrap;
 	font-weight: bold;
 }
+#loaderOut .error {
+	color: green;
+	background-color: rgb(184, 238, 184);
+	padding: 5px;
+	white-space: wrap;
+	font-weight: bold;
+	margin-bottom: 8px;
+}
 /* #debugOut tr td:nth-child(1) {
 	text-align: right;
 } */

@@ -67,6 +67,42 @@ export function clearCfgJson( json ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
+export function generateDefaultJsonFromSchema(schema,keyPath='') {
+    if (schema.default !== undefined) {
+        // Tiefe Kopie des Default-Wertes zurückgeben, um Referenzen zu vermeiden
+        return JSON.parse(JSON.stringify(schema.default));
+    }
+
+    if (schema.type === 'object' && schema.properties) {
+        const obj = {};
+        for (const key in schema.properties) {
+            const val = generateDefaultJsonFromSchema(schema.properties[key], keyPath ? `${keyPath}.${key}` : key);
+            if (val !== null) {
+                obj[key] = val;
+            }
+        }
+        // Nur zurückgeben, wenn Objekt nicht leer ist
+        return Object.keys(obj).length > 0 ? obj : null;
+    }
+
+	switch (schema.type) {
+		case 'array':
+			return [];
+		case 'boolean':
+			return false;
+		case 'integer':
+		case 'number':
+			return 0;
+		case 'string':
+			return '';
+		default:
+			console.error( `Kein Default-Wert für Schema-Typ '${schema.type}' Pfad '${keyPath}' gefunden.` );
+			return null;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 import { isBetween, isNumUnit } from "../libs/common";
 
 function debugAndConsoleOut (s) {

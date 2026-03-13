@@ -135,9 +135,11 @@ let editor;
 /// #if __DEVELOP
 	window.JSONEditor = JSONEditor;
 /// #endif
-import { object_equals } from '../libs/common';
+import { object_equals, mergeDeep } from '../libs/common';
 import { Parser } from 'expr-eval';
 import { konva2svg } from './konva2svg';
+
+//////////////////////////////////////////////////////////////////////////////
 
 function searchSchemaData( json ) {
 
@@ -161,6 +163,49 @@ function searchSchemaData( json ) {
 	return null;
 }
 
+function parseSchema ( schema ) {
+	try {
+		if ( typeof schema === 'string' ) {
+			return JSON.parse( schema );
+		}
+	} catch(e) {
+		return {};
+	}
+
+	return schema;
+}
+
+import { generateDefaultJsonFromSchema } from './common.js';
+
+function patchConfigJson ( schema, configJson, configJsonSchemaData=searchSchemaData(configJson) ) {
+	const defaultJson = generateDefaultJsonFromSchema( schema );
+
+	const schemaData = searchSchemaData( defaultJson );
+	if ( !schemaData || !schemaData.___name || !configJsonSchemaData || configJsonSchemaData.___name !== schemaData.___name ) {
+		alert( "Fehler in Schema-Data-Definition!" );
+		return;
+	}
+
+	if ( !schemaData.___version || !configJsonSchemaData.___version || schemaData.___version < configJsonSchemaData.___version ) {
+		alert( "Fehler in Schema-Data-Version! Editor ist veraltet!" );
+		return;
+	}
+
+	const patchedConfigJson = mergeDeep(defaultJson, configJson);
+	// console.log( '======= gepatchtes JSON:', patchedConfigJson );
+	// console.log( '======= altes JSON:', configJson );
+	// console.log( '======= gleich:', object_equals( patchedConfigJson, configJson ) );
+	if ( !object_equals( patchedConfigJson, configJson ) ) {
+		document.getElementById("loaderOut").innerHTML = '<div class="error">JSON-Config wurde gepatcht!</span>';
+		const patchedSchemaData = searchSchemaData(patchedConfigJson);
+		patchedSchemaData.___version = schemaData.___version;
+		return patchedConfigJson;
+	}
+
+	return configJson;
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 function initContainer (graph) {
 	document.getElementById('ewk_container').style.display = graph ? 'block' : 'none';
@@ -187,13 +232,7 @@ function initContainer (graph) {
 
 function loadSchema( schema ) {
 
-	try {
-		if ( typeof schema === 'string' ) {
-			schema = JSON.parse( schema );
-		}
-	} catch(e) {
-		schema = {};
-	}
+	schema = parseSchema( schema );
 
 	const div = document.getElementById('JSON_EDITOR');
 	editor = new JSONEditor( div, {
@@ -564,7 +603,7 @@ function loadJsonFromStorage () {
 
 		try {
 // console.log(reader.result);
-			const configJson = JSON.parse( json );
+			let configJson = JSON.parse( json );
 			const schemaData = searchSchemaData(configJson);
 // console.log(configJson);
 			if ( !schemaData || !schemaData.___name || !( schemaData.___name in templs ) ) {
@@ -576,8 +615,12 @@ function loadJsonFromStorage () {
 			schSel.style.display = 'none';
 
 			// schema laden
-			const [ schema ] = templs[schemaData.___name];
+			let [ schema ] = templs[schemaData.___name];
+			schema = parseSchema( schema );
 			loadSchema( schema );
+
+			// Neue Default-Werte patchen (z.B. für Funktionen, die es in alten Versionen noch nicht gab)
+			configJson = patchConfigJson( schema, configJson, schemaData );
 
 			editor.on( 'ready', () => {
 				// JSON laden

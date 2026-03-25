@@ -205,12 +205,12 @@
 					"type": "object",
 					"properties": {
 						"___name": {
-							"type":"string",
-							"default":"imageHighlighting"
+							"type": "string",
+							"default": "imageHighlighting"
 						},
 						"___version": {
-							"type":"number",
-							"default":0.1
+							"type": "string",
+							"default": "0.2"
 						}
 					},
 					"options": {

@@ -128,7 +128,7 @@ const ExtResFromSchema = {
 	freePaint: { version: "0.1.0" },
 	freePaintMult: { version: "0.1.0" },
 	freePaintRecog: { version: "0.1.0" },
-	imageHighlighting: { version: "0.1.0" },
+	imageHighlighting: { version: "0.2.0" },
 	inputfield: { version: "0.1.0" },
 	inputGrid: { version: "0.1.0" },
 	numberLine: { version: "0.1.0" },
@@ -239,6 +239,8 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 
 //////////////////////////////////////////////////////////////////////////////
 
+const branch = require('child_process').execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+
 function createManifestFile( extres, data ) {
 
 	fs.mkdirSync(
@@ -251,6 +253,7 @@ function createManifestFile( extres, data ) {
 		{
 			name: extres,
 			subdirectory: `${extres_subdir}/${extres}`,
+			branch: branch ?? 'jsonEditor',
 		},
 		data
 	);

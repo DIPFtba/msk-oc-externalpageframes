@@ -34,33 +34,33 @@ const babel_plugin = {
 //////////////////////////////////////////////////////////////////////////////
 
 const ExtResFromSchema = {
-	barPlot: { version: "0.1.0" },
-	barSlider: { version: "0.1.0" },
-	barSliderFull: { version: "0.1.0" },
-	chatBotJson: { version: "0.1.0" },
-	chatTextAudio: { version: "0.1.0" },
-	// vueExamplePropsEmit: { version: "0.1.0" },
-	// vueExamplePinia: { version: "0.1.0" },
-	connectedFrames: { version: "0.1.0" },
-	filledBar: { version: "0.1.0" },
-	freePaint: { version: "0.1.0" },
-	freePaintMult: { version: "0.1.0" },
-	freePaintRecog: { version: "0.1.0" },
-	inputfield: { version: "0.1.0" },
-	inputGrid: { version: "0.1.0" },
-	numberLine: { version: "0.1.0" },
-	numberLineWithAnnotations: { version: "0.1.0" },
-	numberLineWithArcs: { version: "0.1.0" },
-	numbersByPictures: { version: "0.1.0" },
-	pikasTextEntry: { version: "0.1.0" },
-	pointArea: { version: "0.1.0" },
-	pointAreaExt: { version: "0.1.0" },
-	ratings: { version: "0.1.0" },
-	recordAudio: { version: "0.1.0" },
-	rectArrayMarkable: { version: "0.1.0" },
-	stampImages: { version: "0.1.0" },
-	inputInserts: { version: "0.1.0" },
-	textareaInserts: { version: "0.1.0" },
+	barPlot: { version: "0.2.0" },
+	barSlider: { version: "0.2.0" },
+	barSliderFull: { version: "0.2.0" },
+	chatBotJson: { version: "0.2.0" },
+	chatTextAudio: { version: "0.2.0" },
+	// vueExamplePropsEmit: { version: "0.2.0" },
+	// vueExamplePinia: { version: "0.2.0" },
+	connectedFrames: { version: "0.2.0" },
+	filledBar: { version: "0.2.0" },
+	freePaint: { version: "0.2.0" },
+	freePaintMult: { version: "0.2.0" },
+	freePaintRecog: { version: "0.2.0" },
+	inputfield: { version: "0.2.0" },
+	inputGrid: { version: "0.2.0" },
+	numberLine: { version: "0.2.0" },
+	numberLineWithAnnotations: { version: "0.2.0" },
+	numberLineWithArcs: { version: "0.2.0" },
+	numbersByPictures: { version: "0.2.0" },
+	pikasTextEntry: { version: "0.2.0" },
+	pointArea: { version: "0.2.0" },
+	pointAreaExt: { version: "0.2.0" },
+	ratings: { version: "0.2.0" },
+	recordAudio: { version: "0.2.0" },
+	rectArrayMarkable: { version: "0.2.0" },
+	stampImages: { version: "0.2.0" },
+	inputInserts: { version: "0.2.0" },
+	textareaInserts: { version: "0.2.0" },
 };
 
 const CopyPluginAdditionalPatterns = {
@@ -248,6 +248,8 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 
 //////////////////////////////////////////////////////////////////////////////
 
+const branch = require('child_process').execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+
 function createManifestFile( extres, data ) {
 
 	fs.mkdirSync(
@@ -260,6 +262,7 @@ function createManifestFile( extres, data ) {
 		{
 			name: extres,
 			subdirectory: `${extres_subdir}/${extres}`,
+			branch: branch ?? 'jsonEditor',
 		},
 		data
 	);
@@ -312,6 +315,12 @@ module.exports = ( env, argv ) => {
 		}
 
 	} else {
+
+		// schreibe extres_versions.json
+		fs.writeFileSync(
+			path.resolve( cfg.output.path, 'extres_versions.json' ),
+			JSON.stringify( ExtResFromSchema ),
+		);
 
 		// Pfade in CopyPluginAdditionalPatterns patchen (jetzt relativ zu json_editor/class_extensions)
 		Object.keys(CopyPluginAdditionalPatterns).forEach( key => {

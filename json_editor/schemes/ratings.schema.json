@@ -204,8 +204,8 @@
 						}
 					},
 					"default": [
-						{ "name":"star", "x":10, "y":5 },
-						{ "name":"barbell", "x":420, "y":5 }
+						{ "name": "star", "x":10, "y":5 },
+						{ "name": "barbell", "x":420, "y":5 }
 					]
 				}
 			}
@@ -466,12 +466,12 @@
 					"type": "object",
 					"properties": {
 						"___name": {
-							"type":"string",
-							"default":"ratings"
+							"type": "string",
+							"default": "ratings"
 						},
 						"___version": {
-							"type":"number",
-							"default":0.1
+							"type": "string",
+							"default": "0.1"
 						}
 					},
 					"options": {

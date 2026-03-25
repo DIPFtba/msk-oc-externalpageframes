@@ -412,8 +412,8 @@
 							"default": "inputGrid"
 						},
 						"___version": {
-							"type": "number",
-							"default": 0.1
+							"type": "string",
+							"default": "0.1"
 						}
 					},
 					"options": {

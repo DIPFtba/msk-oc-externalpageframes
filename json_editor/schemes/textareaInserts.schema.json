@@ -113,12 +113,12 @@
 					"type": "object",
 					"properties": {
 						"___name": {
-							"type":"string",
-							"default":"textareaInserts"
+							"type": "string",
+							"default": "textareaInserts"
 						},
 						"___version": {
-							"type":"number",
-							"default":0.1
+							"type": "string",
+							"default": "0.1"
 						}
 					},
 					"options": {

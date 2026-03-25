@@ -342,12 +342,12 @@
 					"type": "object",
 					"properties": {
 						"___name": {
-							"type":"string",
-							"default":"freePaintMult"
+							"type": "string",
+							"default": "freePaintMult"
 						},
 						"___version": {
-							"type":"number",
-							"default":0.1
+							"type": "string",
+							"default": "0.1"
 						}
 					},
 					"options": {

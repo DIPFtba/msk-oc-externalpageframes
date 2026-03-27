@@ -238,6 +238,8 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 
 //////////////////////////////////////////////////////////////////////////////
 
+const branch = require('child_process').execSync('git rev-parse --abbrev-ref HEAD').toString().trim();
+
 function createManifestFile( extres, data ) {
 
 	fs.mkdirSync(
@@ -250,6 +252,7 @@ function createManifestFile( extres, data ) {
 		{
 			name: extres,
 			subdirectory: `${extres_subdir}/${extres}`,
+			branch: branch ?? 'jsonEditor',
 		},
 		data
 	);

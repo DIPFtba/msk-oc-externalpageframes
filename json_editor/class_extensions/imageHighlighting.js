@@ -8,7 +8,6 @@ function addPx ( val ) {
 
 import penicon from '../../libs/img/penicon.png'
 import erasericon from '../../libs/img/erasericon.png'
-import { getPosOfEvent } from '../../libs/common.js';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -192,6 +191,7 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 						width: imgEl.clientWidth,
 						height: imgEl.clientHeight,
 						idx: index+1,
+						url: img.url,
 					};
 				})
 			);
@@ -355,6 +355,16 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 			// const pos = getPosOfEvent( this.stage, ev );
 			this.modeIconBar.renderAt( ev.evt.clientX,  ev.evt.clientY );
 		}
+	}
+
+	///////////////////////////////////
+
+	getState () {
+		const superState = super.getState();
+		const state = JSON.parse( superState );
+		state.imgPoss = this.imgPoss;
+		state.hlImg = this.getRectPngImage();
+		return JSON.stringify( state );
 	}
 
 	///////////////////////////////////

@@ -6,13 +6,34 @@ export function isBetween ( v, w1, w2 ) {
 };
 
 
+// Eine bestimmte Int Zahl mit oder ohne bestimmter Einheit (z.B. 10px, 10 px, px 10, 10) prüfen
 export function isNumUnit ( v, num, unitRE, unitOpt, orEmpty ) {
 	const numRE = `0*${num}(?:[,.]0*)?`;
 	const r = unitOpt ? `${numRE}(?: *${unitRE})?|(?:${unitRE} *)?${numRE}` : `${numRE} *${unitRE}|${unitRE} *${numRE}`;
 	const re = new RegExp( `^(?:${r})${ orEmpty ? '?' : '' }$` );
-	return v.trim().match(re);
+	return !!v.trim().match(re);
 }
 
+// Irgendeine Zahl mit oder ohne bestimmter Einheit (z.B. 10px, 10 px, px 10, 10) prüfen
+export function isAnyNumUnit ( v, unitRE, unitOpt, orEmpty ) {
+	const numRE = `\\d+(?:[,.]\\d+)?`;
+	const r = unitOpt ? `${numRE}(?: *${unitRE})?|(?:${unitRE} *)?${numRE}` : `${numRE} *${unitRE}|${unitRE} *${numRE}`;
+	const re = new RegExp( `^(?:${r})${ orEmpty ? '?' : '' }$` );
+	return !!v.trim().match(re);
+}
+
+// Zahl eines Strings extrahieren (z.B. aus "10px" oder "px 10" die Zahl 10)
+export function numPartOf( v ) {
+	const m = v.match( /\d+(?:[,.]\d+)?/ );
+	if ( !m ) {
+		return null;
+	}
+	return Number( m[0].replace( ',', '.' ) );
+}
+
+export function isNumUnitBetween ( v, num1, num2, unitRE, unitOpt, orEmpty ) {
+	return isAnyNumUnit( v, unitRE, unitOpt, orEmpty ) && isBetween( numPartOf( v ), num1, num2 );
+}
 
 // Deletes delKeys & unchanged defaults from obj
 // object deep clone, omitting some data defined by defaults and delKeys

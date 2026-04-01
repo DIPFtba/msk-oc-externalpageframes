@@ -102,6 +102,9 @@ folgende Funktionen sind in allen EWK definiert:
 | `isBetween( v, w1, w2 )` | `isBetween( ${Value_1}, 50, 80 )` | Überprüft, ob w1 <= v <= w2 |
 | `match( s, r, fl )` | `match( ${Input}, '^Ganzer Text$' ,'i' )` | Testet String s mit RegExp r und RegExp-Flags fl |
 | `isNumUnit( s, num, unitRE, unitOpt, orEmpty )` | `isNumUnit( ${Input_1}, 80, "[mM][bB]", true, false )` | Überprüft, ob String s die numerischen Wert num und die Einheit unitRE (als RegExp) als "num Unit" oder "Unit num" enthält (unitOpt=true bedeutet, die Einheit ist optional; orEmpty=true bedeutet, der ganze String darf leer sein) |
+| `isAnyNumUnit( s, unitRE, unitOpt, orEmpty )` | `isAnyNumUnit( ${Input_1}, "[mM][bB]", true, false )` | Überprüft, ob String s irgendeinen numerischen Wert und die Einheit unitRE (als RegExp) als "num Unit" oder "Unit num" enthält (unitOpt=true bedeutet, die Einheit ist optional; orEmpty=true bedeutet, der ganze String darf leer sein) |
+| `numPartOf( s )` | `numPartOf( "GB 300,5 xyz" )` | Gibt die erste in einem beliebigen String enthaltene Zahl als `number` zurück |
+| `isNumUnitBetween( s, num1, num2, unitRE, unitOpt, orEmpty )` | `isNumUnitBetween( ${Input_1}, 78, 82, "[mM][bB]", true, false )` | Überprüft, ob String s einen numerischen Wert zwischen num1 und num2 und die Einheit unitRE (als RegExp) als "num Unit" oder "Unit num" enthält (unitOpt=true bedeutet, die Einheit ist optional; orEmpty=true bedeutet, der ganze String darf leer sein). Wird übersetzt als `isAnyNumUnit( s, unitRE, unitOpt, orEmpty ) && isBetween( numPartOf( s ), num1, num2 )` |
 
 
 

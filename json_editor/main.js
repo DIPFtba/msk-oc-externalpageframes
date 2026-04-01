@@ -217,7 +217,7 @@ function patchConfigJson ( schema, configJson, configJsonSchemaData=searchSchema
 	// console.log( '======= altes JSON:', configJson );
 	// console.log( '======= gleich:', object_equals( patchedConfigJson, configJson ) );
 	if ( !object_equals( patchedConfigJson, configJson ) ) {
-		document.getElementById("loaderOut").innerHTML = '<div class="error">JSON-Config wurde gepatcht!</span>';
+		document.getElementById("loaderOut").innerHTML = '<div class="error">JSON-Config wurde gepatcht!</div>';
 		const patchedSchemaData = searchSchemaData(patchedConfigJson);
 		patchedSchemaData.___version = schemaData.___version;
 		return patchedConfigJson;

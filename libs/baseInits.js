@@ -167,7 +167,7 @@ export class baseInits {
 	declareVariables () {
 
 		const varDefs = [];
-		const typetrans = {
+		const typetrans = {		// Nur für "automatische" Typdefinition, wenn keine scoreDefType Funktion definiert ist
 			'string': 'String',
 			'number': 'Integer',
 			'boolean': 'Boolean',

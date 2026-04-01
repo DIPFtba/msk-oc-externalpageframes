@@ -67,7 +67,7 @@ export function clearCfgJson( json ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-import { isBetween, isNumUnit } from "../libs/common";
+import { isBetween, isNumUnit, isAnyNumUnit, numPartOf, isNumUnitBetween } from "../libs/common";
 
 function debugAndConsoleOut (s) {
 	if ( typeof debugOut !== 'undefined' )	{
@@ -91,6 +91,9 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 	Object.assign( addFncs, {
 		isNull: v => v===null,
 		isNumUnit,
+		isAnyNumUnit,
+		numPartOf,
+		isNumUnitBetween,
 		isBetween,
 		match: (a,r,fl='') => a.toString().match( new RegExp(r,fl) ),
 		// regexp: (a,b) => a.match(b),

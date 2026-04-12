@@ -85,8 +85,11 @@ export class ratingsFromSchema  {
 
 		// buttons
 		['clear','submit'].forEach( id => {
-			const btn = document.createElement('div');
 			const def = opts.buttons[id];
+			if ( id=='submit' && !def.enabled ) {
+				return;
+			}
+			const btn = document.createElement('div');
 			btn.innerText = def.text;
 			btn.classList.add('act');
 			btn.style.left = `${def.x}px`;
@@ -108,9 +111,11 @@ export class ratingsFromSchema  {
 			});
 		}
 
-		this.linkSubmit.addEventListener('click', () => {
-			base.fsm?.triggerEvent('EV_NEXT');
-		});
+		if ( this.linkSubmit ) {
+			this.linkSubmit.addEventListener('click', () => {
+				base.fsm?.triggerEvent('EV_NEXT');
+			});
+		}
 
 		this.initData = this.getChState();
 		this.base.sendChangeState(this); // init & send changeState & score
@@ -135,10 +140,12 @@ export class ratingsFromSchema  {
 			!this.readonly && Object.values(this.ratingVals).some((val) => val !== null)
 				? 'visible'
 				: 'hidden';
-		this.linkSubmit.style.visibility =
-			this.readonly || Object.values(this.ratingVals).every((val) => val !== null)
-				? 'visible'
-				: 'hidden';
+		if ( this.linkSubmit ) {
+			this.linkSubmit.style.visibility =
+				this.readonly || Object.values(this.ratingVals).every((val) => val !== null)
+					? 'visible'
+					: 'hidden';
+		}
 
 		this.base.sendChangeState(this);
 	}

@@ -55,7 +55,7 @@ const ExtResFromSchema = {
 	pikasTextEntry: { version: "0.2.0" },
 	pointArea: { version: "0.2.0" },
 	pointAreaExt: { version: "0.2.0" },
-	ratings: { version: "0.2.0" },
+	ratings: { version: "0.3.0" },
 	recordAudio: { version: "0.2.0" },
 	rectArrayMarkable: { version: "0.2.0" },
 	stampImages: { version: "0.2.0" },

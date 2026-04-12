@@ -421,12 +421,26 @@
 					},
 					"properties": {
 
+						"enabled": {
+							"title": "Submit Button anzeigen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": true,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						},
+
 						"text": {
 							"title": "Text",
 							"type": "string",
 							"default": "Weiter",
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 4,
+								"dependencies": {
+									"enabled": true
+								}
 							}
 						},
 						"x": {
@@ -434,7 +448,10 @@
 							"type": "integer",
 							"default": 375,
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 4,
+								"dependencies": {
+									"enabled": true
+								}
 							}
 						},
 						"y": {
@@ -443,7 +460,10 @@
 							"default": 150,
 							"options": {
 								"grid_columns": 4,
-								"grid_break": true
+								"grid_break": true,
+								"dependencies": {
+									"enabled": true
+								}
 							}
 						}
 					}
@@ -471,7 +491,7 @@
 						},
 						"___version": {
 							"type": "string",
-							"default": "0.1"
+							"default": "0.2"
 						}
 					},
 					"options": {

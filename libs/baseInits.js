@@ -180,7 +180,7 @@ export class baseInits {
 				let defaultValue = val;
 
 				if ( this.scoreObj && this.scoreObj.scoreDefType ) {
-					// Typdefinition aus JSON Config
+					// Typdefinition aus JSON Config/Class
 					type = this.scoreObj.scoreDefType.call(this.scoreObj, vname);
 				}
 
@@ -207,17 +207,26 @@ export class baseInits {
 
 				} else {
 					// keine Typdef, automatische Typdefinition
-					if(val===null){
+					if (val===null) {
 						type = 'Integer';
 						defaultValue = 0;
 					}
-					else if(typetrans[ typeof val ]){
+					else if (typetrans[ typeof val ]) {
 						type = typetrans[ typeof val ];
 						defaultValue = Number.isNaN(val) || val===null ? 0 : ( val === '' ? emptyString : val );
 					}
 					else {
 						type = 'String';
 						defaultValue = !val ? emptyString : JSON.stringify(val);
+					}
+				}
+
+				// deaultValue aus JSON Config/Class überschreibt Default-Werte
+				if ( this.scoreObj && this.scoreObj.scoreDefDefault ) {
+					// Default-Definition aus JSON Config/Class
+					const newVal = this.scoreObj.scoreDefDefault.call(this.scoreObj, vname);
+					if ( typeof newVal !== 'undefined' ) {
+						defaultValue = newVal;
 					}
 				}
 

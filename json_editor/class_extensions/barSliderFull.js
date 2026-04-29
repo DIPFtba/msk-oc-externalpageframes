@@ -138,11 +138,11 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 
 				if ( this.dataSettings.createStatusAllVars && this.initData.l ) {
 					res[`V_Status_${pref}_All`] = +( this.pos != this.initData.pos &&
-							this.rwFreeLabels.every( (lab,i) => lab.textObj && lab.textObj.value != this.initData.l[i] ) );
+							this.rwFreeLabels.every( (lab,i) => lab.textObj && lab.textObj.value != this.initData.l[i] ) ) ? 1 : 0;
 				}
 
 			} else if ( this.dataSettings.createStatusAllVars ) {
-				res[`V_Status_${pref}_All`] = ( this.pos != this.initData.pos );
+				res[`V_Status_${pref}_All`] = ( this.pos != this.initData.pos ) ? 1 : 0;
 			}
 		}
 

@@ -25,6 +25,8 @@ html,body {
 }
 #right {
 	width: 245px;
+	display: flex;
+	flex-direction: column;
 }
 
 #doku {
@@ -48,10 +50,10 @@ html,body {
 }
 #debugOut {
 	font-size: 90%;
-	height: calc( 100% - 50px );
 	overflow-y: auto;
 	overflow-x: hidden;
 	padding-left: 5px;
+	flex-grow: 1;
 }
 #debugOut span {
 	display: block;

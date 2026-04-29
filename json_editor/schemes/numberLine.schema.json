@@ -644,7 +644,7 @@
 									}
 								}
 							},
-							"default": { "pos": 0, "label":"Text" },
+							"default": { "pos": 0, "label": "Text" },
 							"options": {
 								"titleHidden": true,
 								"disable_collapse": true,
@@ -676,12 +676,12 @@
 					"type": "object",
 					"properties": {
 						"___name": {
-							"type":"string",
-							"default":"numberLine"
+							"type": "string",
+							"default": "numberLine"
 						},
 						"___version": {
-							"type":"number",
-							"default":0.1
+							"type": "string",
+							"default": "0.1"
 						}
 					},
 					"options": {

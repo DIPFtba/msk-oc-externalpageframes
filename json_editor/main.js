@@ -177,6 +177,27 @@ function parseSchema ( schema ) {
 
 import { generateDefaultJsonFromSchema } from './common.js';
 
+function compareSemVer(version1, version2) {
+  // Strings in Arrays aus Zahlen umwandeln
+  const v1 = version1.toString().split('.').map(Number);
+  const v2 = version2.toString().split('.').map(Number);
+
+  // Die Länge der längeren Version bestimmen
+  const maxLength = Math.max(v1.length, v2.length);
+
+  for (let i = 0; i < maxLength; i++) {
+    // Falls ein Element fehlt, nimm 0
+    const num1 = v1[i] || 0;
+    const num2 = v2[i] || 0;
+
+    if (num1 > num2) return 1;
+    if (num1 < num2) return -1;
+  }
+
+  // Alles ist gleich
+  return 0;
+}
+
 function patchConfigJson ( schema, configJson, configJsonSchemaData=searchSchemaData(configJson) ) {
 	const defaultJson = generateDefaultJsonFromSchema( schema );
 
@@ -186,7 +207,7 @@ function patchConfigJson ( schema, configJson, configJsonSchemaData=searchSchema
 		return;
 	}
 
-	if ( !schemaData.___version || !configJsonSchemaData.___version || schemaData.___version < configJsonSchemaData.___version ) {
+	if ( !schemaData.___version || !configJsonSchemaData.___version || compareSemVer(schemaData.___version, configJsonSchemaData.___version) < 0 ) {
 		alert( "Fehler in Schema-Data-Version! Editor ist veraltet!" );
 		return;
 	}
@@ -196,7 +217,7 @@ function patchConfigJson ( schema, configJson, configJsonSchemaData=searchSchema
 	// console.log( '======= altes JSON:', configJson );
 	// console.log( '======= gleich:', object_equals( patchedConfigJson, configJson ) );
 	if ( !object_equals( patchedConfigJson, configJson ) ) {
-		document.getElementById("loaderOut").innerHTML = '<div class="error">JSON-Config wurde gepatcht!</span>';
+		document.getElementById("loaderOut").innerHTML = '<div class="error">JSON-Config wurde gepatcht!</div>';
 		const patchedSchemaData = searchSchemaData(patchedConfigJson);
 		patchedSchemaData.___version = schemaData.___version;
 		return patchedConfigJson;

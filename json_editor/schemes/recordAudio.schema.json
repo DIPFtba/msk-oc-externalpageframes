@@ -98,12 +98,12 @@
 					"type": "object",
 					"properties": {
 						"___name": {
-							"type":"string",
-							"default":"recordAudio"
+							"type": "string",
+							"default": "recordAudio"
 						},
 						"___version": {
-							"type":"number",
-							"default":0.2
+							"type": "string",
+							"default": "0.2"
 						}
 					},
 					"options": {

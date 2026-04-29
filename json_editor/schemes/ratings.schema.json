@@ -204,8 +204,8 @@
 						}
 					},
 					"default": [
-						{ "name":"star", "x":10, "y":5 },
-						{ "name":"barbell", "x":420, "y":5 }
+						{ "name": "star", "x":10, "y":5 },
+						{ "name": "barbell", "x":420, "y":5 }
 					]
 				}
 			}
@@ -421,12 +421,26 @@
 					},
 					"properties": {
 
+						"enabled": {
+							"title": "Submit Button anzeigen",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": true,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						},
+
 						"text": {
 							"title": "Text",
 							"type": "string",
 							"default": "Weiter",
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 4,
+								"dependencies": {
+									"enabled": true
+								}
 							}
 						},
 						"x": {
@@ -434,7 +448,10 @@
 							"type": "integer",
 							"default": 375,
 							"options": {
-								"grid_columns": 4
+								"grid_columns": 4,
+								"dependencies": {
+									"enabled": true
+								}
 							}
 						},
 						"y": {
@@ -443,7 +460,10 @@
 							"default": 150,
 							"options": {
 								"grid_columns": 4,
-								"grid_break": true
+								"grid_break": true,
+								"dependencies": {
+									"enabled": true
+								}
 							}
 						}
 					}
@@ -466,12 +486,12 @@
 					"type": "object",
 					"properties": {
 						"___name": {
-							"type":"string",
-							"default":"ratings"
+							"type": "string",
+							"default": "ratings"
 						},
 						"___version": {
-							"type":"number",
-							"default":0.1
+							"type": "string",
+							"default": "0.2"
 						}
 					},
 					"options": {

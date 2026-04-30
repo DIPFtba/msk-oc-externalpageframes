@@ -258,6 +258,10 @@ export class baseInits {
 		return this.fsm.getInitDonePromise();
 	}
 
+	isInitDone () {
+		return this.fsm.isInitDone();
+	}
+
 	incInitCnt () {
 		return this.fsm.incInitCnt();
 	}

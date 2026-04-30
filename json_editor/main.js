@@ -490,11 +490,63 @@ function updateEWK () {
 				extres.scoreDef();
 			}
 
+			///// getState Wrapper
 			if ( extres.getState ) {
-				window.getState = extres.getState.bind(extres);
+				if ( process.env.NODE_ENV === 'production' ) {
+
+					window.getState = () => {
+						if ( !base?.isInitDone() ) {
+							console.error("*** getState() called before initialization is done! ***");
+						}
+						return extres.getState();
+					}
+
+				} else {
+
+					window.getState = () => {
+						if ( !base?.isInitDone() ) {
+							console.error("*** getState() called before initialization is done! ***");
+						}
+						const jsonState = extres.getState();
+						try {
+							const state = JSON.parse( jsonState );
+							console.log( "*** getState() called:", state );
+						} catch (e) {
+							console.error("*** getState() called - Error parsing state:", e);
+						}
+						return jsonState;
+					}
+				}
 			}
+
+			///// setState Wrapper
 			if ( extres.setState ) {
-				window.setState = extres.setState.bind(extres);
+				const prInitDone = base?.getInitDonePromise() ?? Promise.resolve();
+				if ( process.env.NODE_ENV === 'production' ) {
+
+					window.setState = (state) => prInitDone.then( extres.setState.bind(extres, state) );
+
+				} else {
+
+					window.setState = (jsonState) => {
+						let state = {};
+						try {
+							state = JSON.parse( jsonState );
+						} catch (e) {
+							console.error("*** setState() called with invalid JSON state! ***");
+						}
+						if ( !base?.isInitDone() ) {
+							console.warn("*** setState() called before initialization is done! The state will be applied after initialization. ***");
+							return prInitDone.then( () => {
+								console.log( "*** setState() executed:", state );
+								extres.setState( jsonState );
+							});
+						} else {
+							console.log( "*** setState() called:", state );
+							return extres.setState( jsonState );
+						}
+					};
+				}
 			}
 		}
 

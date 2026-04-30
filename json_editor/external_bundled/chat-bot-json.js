@@ -5103,8 +5103,8 @@ const fu = { class: "entry" }, au = {
     t({
       chat: o,
       // Freigegebene Property
-      loadChat: (f) => {
-        o.value.curr = [], u(), o.value.curr.push(...f.curr), o.value.prev = f.prev || [], o.value.currLabel = f.currLabel || "START";
+      loadChat: (f, a = !0) => {
+        o.value.curr = [], a && u(), o.value.curr.push(...f.curr), o.value.prev = f.prev || [], o.value.currLabel = f.currLabel || "START";
       }
     });
     const i = () => {
@@ -5173,7 +5173,7 @@ const fu = { class: "entry" }, au = {
       }, null, 8, ["label"])
     ], 4));
   }
-}), bu = /* @__PURE__ */ Kn(Eu, [["__scopeId", "data-v-38d94109"]]);
+}), bu = /* @__PURE__ */ Kn(Eu, [["__scopeId", "data-v-e94c5460"]]);
 function Nu(e) {
   e.postMessagePayload && (e.fsm = {
     setVariable: (t, n) => {

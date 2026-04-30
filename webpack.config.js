@@ -36,7 +36,7 @@ const babel_plugin = {
 const ExtResFromSchema = {
 	barPlot: { version: "0.2.0" },
 	barSlider: { version: "0.2.0" },
-	barSliderFull: { version: "0.2.0" },
+	barSliderFull: { version: "0.2.1" },
 	chatBotJson: { version: "0.2.1" },
 	chatTextAudio: { version: "0.2.0" },
 	// vueExamplePropsEmit: { version: "0.2.0" },

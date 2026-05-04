@@ -19,4 +19,8 @@ export class baseInits {
     decInitCnt (): void;
     regSendInitDone (): void;
 
+    fsm: {
+        triggerEvent( event:string):void;
+    }
+
 }

@@ -449,31 +449,22 @@ export class freePaintMultFromSchema {
 	}
 
 	startButtonListener () {
-		window.addEventListener(
-			"message",
-			(event) => {
-// console.log('#################',event.data,event.origin)
-				try {
-					const [ cmd, p1, p2, p3 ] = JSON.parse(event.data);
-					switch ( cmd ) {
-						case 'undo':
-							this.undo();
-							break;
-						case 'redo':
-							this.redo();
-							break;
-						case 'clearAll':
-							this.clearAll();
-							break;
-						case 'setBrush':
-							this.setBrush( p1, p2, p3 );
-							break;
-					}
-				} catch (e) {
-					console.error(e);
-				}
-			},
-			false );
+		this.base.startListeningToCallEPFOp( ( cmd, p1, p2, p3 ) => {
+			switch ( cmd ) {
+				case 'undo':
+					this.undo();
+					break;
+				case 'redo':
+					this.redo();
+					break;
+				case 'clearAll':
+					this.clearAll();
+					break;
+				case 'setBrush':
+					this.setBrush( p1, p2, p3 );
+					break;
+			}
+		});
 	}
 
 	sendButtonState () {

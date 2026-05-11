@@ -393,47 +393,38 @@ export class pikasTextEntryFromSchema {
 	}
 
 	startButtonListener () {
-		window.addEventListener(
-			"message",
-			(event) => {
+		this.base.startListeningToCallEPFOp( btn => {
+			if ( this.focusField!==null ) {
 
-				try {
-					if ( this.focusField!==null ) {
+				if ( btn.startsWith('btn_' ) ) {
+					const key = btn.substring(4);
 
-						const [ btn ] = JSON.parse(event.data);
-						if ( btn.startsWith('btn_' ) ) {
-							const key = btn.substring(4);
+					const simpleKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+					if ( simpleKeys.includes( key ) ) {
+						// Wenn die durch die externe Tastatur eingebbaren Zeichen geändert
+						// werden, dann unbdeingt auch in checkPossibleInput() ändern!
+						this.fields[ this.focusField ].simulateKeyPress( key );
 
-							const simpleKeys = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-							if ( simpleKeys.includes( key ) ) {
-								// Wenn die durch die externe Tastatur eingebbaren Zeichen geändert
-								// werden, dann unbdeingt auch in checkPossibleInput() ändern!
-								this.fields[ this.focusField ].simulateKeyPress( key );
+					} else {
 
-							} else {
-
-								const keyTrans = {
-									'backspace': "Backspace",
-									'delete': "Delete",
-									'plus': "+",
-									'minus': "-",
-									'result': "=",
-									'left': "ArrowLeft",
-									'right': "ArrowRight",
-								};
-								if ( key in keyTrans ) {
-									// Wenn die durch die externe Tastatur eingebbaren Zeichen geändert
-									// werden, dann unbdeingt auch in checkPossibleInput() ändern!
-									this.fields[ this.focusField ].simulateKeyPress( keyTrans[key] );
-								}
-							}
+						const keyTrans = {
+							'backspace': "Backspace",
+							'delete': "Delete",
+							'plus': "+",
+							'minus': "-",
+							'result': "=",
+							'left': "ArrowLeft",
+							'right': "ArrowRight",
+						};
+						if ( key in keyTrans ) {
+							// Wenn die durch die externe Tastatur eingebbaren Zeichen geändert
+							// werden, dann unbdeingt auch in checkPossibleInput() ändern!
+							this.fields[ this.focusField ].simulateKeyPress( keyTrans[key] );
 						}
-
 					}
-				} catch (e) {}
-
-			},
-			false );
+				}
+			}
+		});
 	}
 
 	///////////////////////////////////

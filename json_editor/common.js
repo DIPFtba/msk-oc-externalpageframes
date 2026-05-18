@@ -214,10 +214,16 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 			const pref = this.dataSettings?.variablePrefix || '';
 			if ( this.statusVarDef ) {
 				res_in = Object.assign( {}, res, this.statusVarDef() );
-			} else if ( pref && !this.readonly ) {
-				// Ist noch nicht verfügbar, wird es aber (sehr wahrscheinlich) später sein
-				res_in[ `V_Status_${pref}` ] = 1;
-				res_in[ `V_StatHist_${pref}` ] = 1;
+			} else {
+				const statNam = `V_Status_${pref}`;
+				if ( pref && !this.readonly && !( statNam in res ) ) {
+					// Ist noch nicht verfügbar, wird es aber (sehr wahrscheinlich) später sein
+					// (Definition erfolgt später?)
+					res_in = Object.assign( {}, res, {
+						[statNam]: 1,
+						[`V_StatHist_${pref}`]:1,
+					});
+				}
 			}
 			// Ende FIX
 			const scoreDat = this.scoringVals;

@@ -26,6 +26,7 @@ echo
 echo "Copying docs of other branches..."
 echo
 
-copy_branch "jsonEditor_Scoring_evalVarNames"
+# am 18.5. gemergt
+#copy_branch "jsonEditor_Scoring_evalVarNames"
 
 copy_branch "jsonEditor_imageHightlight"

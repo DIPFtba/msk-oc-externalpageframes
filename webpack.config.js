@@ -56,7 +56,7 @@ const ExtResFromSchema = {
 	pointArea: { version: "0.3.0" },
 	pointAreaExt: { version: "0.3.0" },
 	ratings: { version: "0.4.0" },
-	recordAudio: { version: "0.3.0" },
+	recordAudio: { version: "0.4.0" },
 	rectArrayMarkable: { version: "0.3.0" },
 	stampImages: { version: "0.3.0" },
 	inputInserts: { version: "0.3.0" },

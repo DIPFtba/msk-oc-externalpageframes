@@ -160,6 +160,15 @@ proc_config() {
             echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
             patch "$jsonfile" '.dataSettings.scoringVariables = []' '.dataSettings.scoringVariables' && pack=1
         fi
+
+        # recordAudio
+        if [[ "$name" = "recordAudio" ]]
+        then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            patch "$jsonfile" '.dataSettings.saveAudioTraces = true' '.dataSettings.saveAudioTraces' && pack=1
+        fi
+
     fi
 
     return $pack

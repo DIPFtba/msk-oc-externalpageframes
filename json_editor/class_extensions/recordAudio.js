@@ -203,9 +203,12 @@ export class recordAudioFromSchema extends textareaContainer {
 			a: audioUrl,
 			v: 1,
 		};
-		this.convertToBase64( audioBlob ).then( base64 =>
-			this.audioList[ currAudioId ].b = base64
-		);
+		this.convertToBase64( audioBlob ).then( base64 => {
+			this.audioList[ currAudioId ].b = base64;
+			if ( this.dataSettings?.saveAudioTraces ) {
+				this.base.postLog( 'RECORD_AUDIO_SAVED', { audioId: currAudioId, base64 } );
+			}
+		});
 
 		this.base.sendChangeState(this);
 	}
@@ -563,8 +566,8 @@ export class recordAudioFromSchema extends textareaContainer {
 
 	getState () {
 		return JSON.stringify( this.audioList.map( l => ({
-			b: l.b,
-			v: l.v,
+			b: l.b,	// audio base64 string
+			v: l.v,	// visible=1
 		})));
 	}
 

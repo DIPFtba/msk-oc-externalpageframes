@@ -103,7 +103,7 @@
 						},
 						"___version": {
 							"type": "string",
-							"default": "0.2"
+							"default": "0.3"
 						}
 					},
 					"options": {
@@ -119,6 +119,16 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true
+					}
+				},
+
+				"saveAudioTraces": {
+					"title": "Audios zusätzlich zum State auch in Traces speichern",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": true,
+					"options": {
+						"grid_columns": 4
 					}
 				}
 			}

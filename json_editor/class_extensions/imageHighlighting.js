@@ -2,12 +2,12 @@ import { freePaintFromSchema } from './freePaint.js';
 import { baseInits } from '../../libs/baseInits.js';
 import './imageHighlighting.css';
 
+import penicon from '../../libs/img/penicon.png'
+import erasericon from '../../libs/img/erasericon.png'
+
 function addPx ( val ) {
 	return typeof val === 'number' || val.match( /^[0-9]+$/ ) ? val+'px' : val;
 }
-
-import penicon from '../../libs/img/penicon.png'
-import erasericon from '../../libs/img/erasericon.png'
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -146,7 +146,7 @@ class htmlIconBar {
 
 export class imageHighlightingFromSchema extends freePaintFromSchema {
 
-	constructor ( container, opts ) {
+	constructor ( container, opts, hitAreaEdit=0 ) {
 
 		// Struktur der IMGs aufbauen
 		const outerContainer = typeof container==='string' ? document.querySelector( container ) : container;
@@ -157,7 +157,7 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 
 		const innerContainer = document.createElement( 'div' );
 		innerContainer.classList.add( 'ihImgContainer' );
-		const gap = opts.gap ? opts.gap+'px' : '';
+		const gap = opts.gap ? addPx(opts.gap) : '';
 		if ( gap ) {
 			innerContainer.style.gap = gap;
 		}
@@ -185,14 +185,20 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 					imgEl.src = img.url;
 				}).then( () => {
 					imgEl.getBoundingClientRect();
-					return {
+					// Daten für imgPoss erzeugen
+					const o = {
 						left: imgEl.offsetLeft,
 						top: imgEl.offsetTop,
 						width: imgEl.clientWidth,
 						height: imgEl.clientHeight,
 						idx: index+1,
-						url: img.url,
 					};
+					if ( img.name ) {
+						o.name = img.name;
+					} else {
+						o.url = img.url;
+					}
+					return o;
 				})
 			);
 			innerContainer.appendChild( imgEl );
@@ -312,9 +318,10 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		// // baseDiv.addEventListener( 'touchstart', this.iStartDraw.bind(this), { capture: true, passive: false } );
 		// baseDiv.addEventListener( 'touchmove', this.iDraw.bind(this), { capture: true, passive: false } );
 
-		outerContainer.addEventListener( 'scroll', () => this.iScroll( outerContainer ) );
-		this.stage.on( 'click', this.click.bind(this) );
-
+		if ( !hitAreaEdit ) {
+			outerContainer.addEventListener( 'scroll', () => this.iScroll( outerContainer ) );
+			this.stage.on( 'click', this.click.bind(this) );
+		}
 		this.initData = this.getChState();
 		this.base.sendChangeState( this );	// init & send changeState & score
 
@@ -375,4 +382,54 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		this.modeIconBar.hideBar( true );
 	}
 
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+//
+// Init der HitArea-Edit-Buttons
+//
+
+import { editHitAreas } from './imageHighlighting_jsonEditorHitAreas.js';
+import { clearCfgJson } from '../common';
+
+function editBtnClicked( buttonEditor, event, posneg ) {
+
+	event.preventDefault(); // Verhindert ggf. Standardverhalten wie Formular-Submits
+
+	// buttonEditor.parent repräsentiert das umgebende Objekt im Array.
+	// Darin suchen wir das Feld "myString" (der Name, den du im Schema vergibst)
+	const stringField = buttonEditor.parent.editors[posneg];
+
+	if (stringField) {
+		// JSON aus Editor lesen
+		const mainEditor = buttonEditor.jsoneditor;
+		// JSON auslesen und kopieren für 100%igen Schreibschutz
+		const readOnlyJson = JSON.parse(JSON.stringify(mainEditor.getValue()));
+		const cfgJson = clearCfgJson( readOnlyJson );
+
+		// Alten String auslesen
+		let currentValue = stringField.getValue();
+
+		// String verändern (hier im Beispiel hängen wir einfach Text an)
+		editHitAreas( currentValue, posneg, cfgJson ).then( newValue => {
+			// Neuen String setzen (aktualisiert die UI sofort)
+			stringField.setValue(newValue);
+		});
+	}
+}
+
+export function edInitImageHighlighting () {
+
+	// 1. Callbacks global deklarieren
+	window.JSONEditor.defaults.callbacks ||= {};
+	window.JSONEditor.defaults.callbacks.button ||= {};
+
+	window.JSONEditor.defaults.callbacks.button.imageHighlightingHitAreaPosBtnAction = function(buttonEditor, event) {
+		editBtnClicked( buttonEditor, event, 'pos' );
+	}
+
+	window.JSONEditor.defaults.callbacks.button.imageHighlightingHitAreaNegBtnAction = function(buttonEditor, event) {
+		editBtnClicked( buttonEditor, event, 'neg' );
+	}
 }

@@ -3,6 +3,8 @@ import { clearCfgJson, addStatusVarDef } from './common';
 
 //////////////////////////////////////////////////////////////////////////////
 
+const editorPreInitCallbacks = [];
+
 import { barPlotFromSchema } from './class_extensions/barPlot';
 import barPlotJSONSchema from './schemes/barPlot.schema.json';
 import barPlotSVG from './svgs/barPlot.svg';
@@ -53,9 +55,10 @@ import { freePaintRecogFromSchema } from './class_extensions/freePaintRecog';
 import freePaintRecogJSONSchema from './schemes/freePaintRecog.schema.json';
 import freePaintRecogSVG from './svgs/freePaintMult.svg';
 
-import { imageHighlightingFromSchema } from './class_extensions/imageHighlighting';
+import { imageHighlightingFromSchema, edInitImageHighlighting } from './class_extensions/imageHighlighting';
 import imageHighlightingJSONSchema from './schemes/imageHighlighting.schema.json';
 import imageHighlightingSVG from './svgs/freePaintMult.svg';
+editorPreInitCallbacks.push( edInitImageHighlighting );
 
 import { inputfieldFromSchema } from './class_extensions/inputfield';
 import inputfieldJSONSchema from './schemes/inputfield.schema.json';
@@ -194,6 +197,9 @@ function loadSchema( schema ) {
 	} catch(e) {
 		schema = {};
 	}
+
+	// Alle preInitCallbacks ausführen, damit sie z.B. Callbacks definieren können, bevor der Editor initialisiert wird
+	editorPreInitCallbacks.forEach( cb => cb() );
 
 	const div = document.getElementById('JSON_EDITOR');
 	editor = new JSONEditor( div, {

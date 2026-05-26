@@ -147,3 +147,14 @@ hr#ruler {
 	z-index: 10000;
 	margin: 0 0 5px 0;
 }
+
+#fullscreen-overlay {
+  width: 100vw;
+  height: 100vh;
+  max-width: 100vw;
+  max-height: 100vh;
+  border: none;
+  padding: 0;
+  margin: 0;
+  background: #ffffff; /* Dein temporärer Hintergrund */
+}

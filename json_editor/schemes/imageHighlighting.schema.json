@@ -93,12 +93,12 @@
 							"title": "Bilder",
 							"type": "array",
 							"format": "table",
-							"default": [{"url":"./Rechnung.svg","width":"80%"},{"url":"./Rechnung.svg","width":"98%"}],
 							"options": {
 								"disable_collapse": true,
 								"disable_edit_json": true,
 								"disable_properties": true,
-								"grid_columns": 12
+								"grid_columns": 12,
+									"infoText": "Bilder in der gewünschten Reihenfolge hochladen, ggf. Breite spezifizieren (px oder %). Wenn 'Name in Logs' leer, dann wird bei jedem Init komplettes Base64 mit Größenangaben gesendet"
 							},
 							"items": {
 								"title": "Bild",
@@ -112,6 +112,14 @@
 								"properties": {
 									"url": {
 										"title": "Bild-URL",
+										"type": "string",
+										"media": {
+											"binaryEncoding": "base64",
+											"type": "image/*"
+										}
+									},
+									"name": {
+										"title": "Name in Logs",
 										"type": "string"
 									},
 									"width": {
@@ -227,8 +235,61 @@
 						"grid_columns": 12,
 						"grid_break": true
 					}
-				}
+				},
 
+				"hitAreas": {
+					"title": "Hit-Areas",
+					"type": "array",
+					"format": "table",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 12
+					},
+					"items": {
+						"type": "object",
+						"properties": {
+							"name": {
+								"title": "Name",
+								"type": "string",
+								"options": {
+									"grid_columns": 6
+								}
+							},
+							"pos": {
+								"title": "Positiv",
+								"type": "string"
+							},
+							"posBtn": {
+								"title": "Edit",
+								"type": "string",
+								"format": "button",
+								"options": {
+									"button": {
+										"action": "imageHighlightingHitAreaPosBtnAction",
+										"text": "Edit"
+									}
+								}
+							},
+							"neg": {
+								"title": "Negativ",
+								"type": "string"
+							},
+							"negBtn": {
+								"title": "Edit",
+								"type": "string",
+								"format": "button",
+								"options": {
+									"button": {
+										"action": "imageHighlightingHitAreaNegBtnAction",
+										"text": "Edit"
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 	}

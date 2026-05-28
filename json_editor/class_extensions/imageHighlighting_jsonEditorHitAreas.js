@@ -1,16 +1,4 @@
-import { imageHighlightingFromSchema } from './imageHighlighting.js';
-
-const fastHash = (str) => {
-    let h = 2166136261 >>> 0;
-    for (let i = 0; i < str.length; i++) {
-        h ^= str.charCodeAt(i);
-        // Schnelle 32-Bit-Multiplikation
-        h = Math.imul(h, 16777619);
-    }
-    return (h >>> 0).toString(16);
-}
-
-const imgPosHash = ( x, y, w, h, u ) => fastHash(`${x}-${y}x${w}-${h}:${u}`);
+import { imageHighlightingFromSchema, getIoImgPoss, hitAreaScaled, validateHitAreaDef } from './imageHighlighting.js';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -29,12 +17,10 @@ export async function editHitAreas( vals, posneg, cfgJson ) {
 	// Areas parsen, verifizieren, ggf. umrechnen
 	// imgPoss gibt immer an, von wo bis wo die einzelnen Bilder ihre Koordinaten haben
 	// Diese werden über Hash verifiziert
-	const ioImgPoss = io.imgPoss.map( pos => imgPosHash(pos.left, pos.top, pos.width, pos.height, pos.url) );
+	const ioImgPoss = getIoImgPoss(io.imgPoss);
 	let areaDef;
-	const stageWidth = io.stage.width();
-	const stageHeight = io.stage.height();
-	const gX = (x, scalX) => Math.min( stageWidth-1, Math.round( x * stageWidth/scalX ) );
-	const gY = (y, scalY) => Math.min( stageHeight-1, Math.round( y * stageHeight/scalY ) );
+	const stageWidth = Math.round( io.stage.width() );
+	const stageHeight = Math.round( io.stage.height() );
 
 	if ( vals.trim() == '' ) {
 
@@ -50,35 +36,13 @@ export async function editHitAreas( vals, posneg, cfgJson ) {
 			const json = JSON.parse( vals );
 
 			// Haben die Bilder die gleichen Hashes?
-			if ( !Array.isArray(json.areas) ||
-				!json.imgPoss || json.imgPoss.length>ioImgPoss.length ||
-				!json.imgPoss.every( (pos, idx) => pos === ioImgPoss[idx] )
-			) {
-				throw new Error('Ungültige Bildpositionen / Bild gewechselt. HitArea-Def bitte löschen!');
-			}
-
-			const isEqual = json.w===stageWidth && json.h===stageHeight;
+			validateHitAreaDef( json, ioImgPoss );
+			// areaDef zusammenstellen
 			areaDef = {
 				imgPoss: ioImgPoss,
 				w: stageWidth,
 				h: stageHeight,
-				areas: json.areas.map( area => {
-						// Sind Koordinatenda?
-						if ( area.x1 === undefined || area.y1 === undefined ||
-							area.x2 === undefined || area.y2 === undefined ) {
-							throw new Error('Ungültige Hit Area Definition. x1,y1,x2,y2 erforderlich!');
-						}
-						return isEqual ?
-							// Bildpositionen unverändert, Koordinaten können direkt übernommen werden
-							area :
-							// Koordinaten von area auf stage umrechnen
-							{
-								x1: gX(area.x1, json.w ),
-								y1: gY(area.y1, json.h ),
-								x2: gX(area.x2, json.w ),
-								y2: gY(area.y2, json.h ),
-							};
-					})
+				areas: hitAreaScaled( json.areas, stageWidth, json.w, stageHeight, json.h ),
 			}
 		} catch (e) {
 			alert( `Ungültige Format für Hit Area (${e.message}) bei '${vals}'` );

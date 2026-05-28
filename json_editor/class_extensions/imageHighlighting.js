@@ -1,12 +1,63 @@
 import { freePaintFromSchema } from './freePaint.js';
 import { baseInits } from '../../libs/baseInits.js';
 import './imageHighlighting.css';
+import { addScoring } from "../common";
 
 import penicon from '../../libs/img/penicon.png'
 import erasericon from '../../libs/img/erasericon.png'
 
+//////////////////////////////////////////////////////////////////////////////
+
 function addPx ( val ) {
 	return typeof val === 'number' || val.match( /^[0-9]+$/ ) ? val+'px' : val;
+}
+
+export const hitAreaScaled = ( hitAreaArea, newW, oldW, newH, oldH ) => {
+	const gX = x => Math.min( newW-1, Math.round( x * newW/oldW ) );
+	const gY = y => Math.min( newH-1, Math.round( y * newH/oldH ) );
+	const equal = newW===oldW && newH===oldH;
+
+	return hitAreaArea.map( area => {
+		// Sind Koordinatenda?
+		if ( area.x1 === undefined || area.y1 === undefined ||
+			area.x2 === undefined || area.y2 === undefined ) {
+			throw new Error('Ungültige Hit Area Definition. x1,y1,x2,y2 erforderlich!');
+		}
+		return equal ?
+			// Bildpositionen unverändert, Koordinaten können direkt übernommen werden
+			area :
+			// Koordinaten von area auf stage umrechnen
+			{
+				x1: gX(area.x1),
+				y1: gY(area.y1),
+				x2: gX(area.x2),
+				y2: gY(area.y2),
+			};
+	})
+}
+
+const fastHash = (str) => {
+    let h = 2166136261 >>> 0;
+    for (let i = 0; i < str.length; i++) {
+        h ^= str.charCodeAt(i);
+        // Schnelle 32-Bit-Multiplikation
+        h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0).toString(16);
+}
+
+const imgPosHash = ( x, y, w, h, u ) => fastHash(`${x}-${y}x${w}-${h}:${u}`);
+
+export const getIoImgPoss = imgPoss => imgPoss.map( pos => imgPosHash(pos.left, pos.top, pos.width, pos.height, pos.url) );
+
+export const validateHitAreaDef = ( hitArea, ioImgPoss ) => {
+	if ( !hitArea.w || !hitArea.h ||
+		!Array.isArray(hitArea.areas) ||
+		!hitArea.imgPoss || hitArea.imgPoss.length>ioImgPoss.length ||
+		!hitArea.imgPoss.every( (pos, idx) => pos === ioImgPoss[idx] )
+	) {
+		throw new Error('Ungültige Bildpositionen / Bild gewechselt. HitArea-Def bitte löschen!');
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -186,6 +237,7 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 				}).then( () => {
 					imgEl.getBoundingClientRect();
 					// Daten für imgPoss erzeugen
+					// Werden bei window.resize nicht aktualisiert!
 					const o = {
 						left: imgEl.offsetLeft,
 						top: imgEl.offsetTop,
@@ -297,13 +349,14 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 			imgPoss.sort( (a,b) => a.idx - b.idx );
 
 			const baseSize = baseDiv.getBoundingClientRect();
-			stage.size({
-				width: Math.max( stage.width(), baseSize.width ),
-				height: Math.max( stage.height(), baseSize.height )
-			});
+			const width = Math.max( Math.round(stage.width()), baseSize.width );
+			const height = Math.max( Math.round(stage.height()), baseSize.height );
+			stage.size({ width, height });
+
+			this.imgPoss = imgPoss;
+			this.createHitAreasConv( width, height );
 
 			base.postLog( 'ImgLoaded', { imgs: imgPoss } );
-			this.imgPoss = imgPoss;
 			base.decInitCnt();
 		});
 
@@ -317,7 +370,6 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		// baseDiv.addEventListener( 'touchstart', this.iTouchStart.bind(this), { capture: true, passive: false } );
 		// // baseDiv.addEventListener( 'touchstart', this.iStartDraw.bind(this), { capture: true, passive: false } );
 		// baseDiv.addEventListener( 'touchmove', this.iDraw.bind(this), { capture: true, passive: false } );
-
 
 		if ( !hitAreaEdit ) {
 			outerContainer.addEventListener( 'scroll', () => this.iScroll( outerContainer ) );
@@ -369,16 +421,84 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 
 	///////////////////////////////////
 
+	createHitAreasConv ( width, height ) {
+
+		this.hitAreasConv = [];
+		const ioImgPoss = getIoImgPoss(this.imgPoss);
+		const pref = this.dataSettings.variablePrefix ? this.dataSettings.variablePrefix+'_' : '';
+
+		for ( const hitArea of this.dataSettings?.hitAreas || [] ) {
+			try {
+				const has = {};
+				const json = {};
+				for ( const posNeg of ['pos','neg'] ) {
+					has[posNeg] = hitArea[posNeg] && hitArea[posNeg].trim() != '';
+					if ( has[posNeg] ) {
+						json[posNeg] = JSON.parse(hitArea[posNeg]);
+						validateHitAreaDef( json[posNeg], ioImgPoss );
+					}
+				}
+
+				this.hitAreasConv.push({
+					name: `V_Score_${pref}${hitArea.name}`,
+					pos: has.pos ? hitAreaScaled( json.pos.area, width, json.pos.w, height, json.pos.h ) : [],
+					posFill: hitArea.posFill,
+					neg: has.neg ? hitAreaScaled( json.neg.area, width, json.neg.w, height, json.neg.h ) : [],
+					negFill: hitArea.negFill,
+					exp: hitArea.exp,
+				});
+			} catch (e) {
+				console.error('Fehler bei HitArea-Definition:', e);
+			}
+		}
+
+		console.log("==============================",this.hitAreasConv);
+	}
+
+	getImageData () {
+		// Image holen
+		const layer = this.layer;
+		const canvas = layer.getCanvas()._canvas;
+		const context = canvas.getContext('2d');
+		const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+		this.pixelDaten = imageData.data; // Das Array mit [R, G, B, A, R, G, B, A, ...]
+		this.pixelDatenWidth = imageData.width;
+		console.log('============================== Image-Daten aktualisiert',canvas.width, canvas.height,this.pixelDaten);
+	}
+
+	getHitAreaScore ( hitAreaConv ) {
+		return 0;
+	}
+
+	///////////////////////////////////
+
 	scoreDef ( exportAll=false ) {
 		const res = {};
 		if ( this.readonly ) {
 			return res;
 		}
 
-		/* Insert HitArea Scoring here */
+		// hitAreas berechnen
+		const delVars = [];
+		if ( this.hitAreasConv?.length>0 ) {
+			this.getImageData();
+			for ( const hitAreaConv of this.hitAreasConv ) {
+				const varName = hitAreaConv.name;
+				res[ varName ] = this.getHitAreaScore( hitAreaConv );
+				if ( !hitAreaConv.exp ) {
+					delVars.push( varName );
+				}
+			}
+		}
 
+		// Restl. Scoring-Vars / Scoring-Vals berechnen
 		if ( this.computeScoringVals ) {
 			this.computeScoringVals( res , exportAll );
+		}
+
+		// hitAreas ohne Export wieder löschen
+		if ( !exportAll && delVars.length>0 ) {
+			delVars.forEach( k => delete res[k] );
 		}
 
 		return res;

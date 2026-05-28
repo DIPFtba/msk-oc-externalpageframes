@@ -146,7 +146,7 @@ class htmlIconBar {
 
 export class imageHighlightingFromSchema extends freePaintFromSchema {
 
-	constructor ( container, opts, hitAreaEdit=0 ) {
+	constructor ( container, opts, addMods={}, hitAreaEdit=0 ) {
 
 		// Struktur der IMGs aufbauen
 		const outerContainer = typeof container==='string' ? document.querySelector( container ) : container;
@@ -318,9 +318,12 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		// // baseDiv.addEventListener( 'touchstart', this.iStartDraw.bind(this), { capture: true, passive: false } );
 		// baseDiv.addEventListener( 'touchmove', this.iDraw.bind(this), { capture: true, passive: false } );
 
+
 		if ( !hitAreaEdit ) {
 			outerContainer.addEventListener( 'scroll', () => this.iScroll( outerContainer ) );
 			this.stage.on( 'click', this.click.bind(this) );
+
+			addScoring( this, opts, addMods.Parser );
 		}
 		this.initData = this.getChState();
 		this.base.sendChangeState( this );	// init & send changeState & score
@@ -362,6 +365,23 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 			// const pos = getPosOfEvent( this.stage, ev );
 			this.modeIconBar.renderAt( ev.evt.clientX,  ev.evt.clientY );
 		}
+	}
+
+	///////////////////////////////////
+
+	scoreDef ( exportAll=false ) {
+		const res = {};
+		if ( this.readonly ) {
+			return res;
+		}
+
+		/* Insert HitArea Scoring here */
+
+		if ( this.computeScoringVals ) {
+			this.computeScoringVals( res , exportAll );
+		}
+
+		return res;
 	}
 
 	///////////////////////////////////

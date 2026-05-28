@@ -23,7 +23,7 @@ export async function editHitAreas( vals, posneg, cfgJson ) {
 	dialog.appendChild( container );
 	dialog.showModal();
 
-	const io = new imageHighlightingFromSchema( container, cfgJson, 1 );
+	const io = new imageHighlightingFromSchema( container, cfgJson, {}, 1 );
 	await io.base.getInitDonePromise();
 
 	// Areas parsen, verifizieren, ggf. umrechnen
@@ -68,24 +68,16 @@ export async function editHitAreas( vals, posneg, cfgJson ) {
 							area.x2 === undefined || area.y2 === undefined ) {
 							throw new Error('Ungültige Hit Area Definition. x1,y1,x2,y2 erforderlich!');
 						}
-console.log('Area:', area, 'isEqual:', isEqual, json.w, stageWidth, json.h, stageHeight );
-console.log({
-							x1: gX(area.x1, json.w ),
-							y1: gY(area.y1, json.h ),
-							x2: gX(area.x2, json.w ),
-							y2: gY(area.y2, json.h ),
-						});
-						if ( isEqual ) {
+						return isEqual ?
 							// Bildpositionen unverändert, Koordinaten können direkt übernommen werden
-							return area;
-						}
-						// Koordinaten von area auf stage umrechnen
-						return {
-							x1: gX(area.x1, json.w ),
-							y1: gY(area.y1, json.h ),
-							x2: gX(area.x2, json.w ),
-							y2: gY(area.y2, json.h ),
-						}
+							area :
+							// Koordinaten von area auf stage umrechnen
+							{
+								x1: gX(area.x1, json.w ),
+								y1: gY(area.y1, json.h ),
+								x2: gX(area.x2, json.w ),
+								y2: gY(area.y2, json.h ),
+							};
 					})
 			}
 		} catch (e) {
@@ -95,9 +87,7 @@ console.log({
 		}
 	}
 
-console.log('Nei:', areaDef.areas );
 	areaDef.areas = await drawRects( io.stage, areaDef.areas, container, posneg=='pos' );
-console.log('Finale Hit Areas:', areaDef.areas );
 
 	dialog.close();
 

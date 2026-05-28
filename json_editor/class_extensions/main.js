@@ -159,7 +159,10 @@ function initJSON ( json ) {
 	// load Parser lazy or not
 	(
 
-		( cfg.dataSettings && cfg.dataSettings.scoringVals && cfg.dataSettings.scoringVals.length>0 ) ?
+		( cfg.dataSettings && (
+				cfg.dataSettings.scoringVals && cfg.dataSettings.scoringVals.length>0 ||
+				cfg.dataSettings.scoringVariables && cfg.dataSettings.scoringVariables.length>0
+		) ) ?
 			import( /* webpackChunkName: "sce" */ 'expr-eval' ).then( ({ Parser }) => ({ Parser }) ) :
 			Promise.resolve({})
 
@@ -196,7 +199,7 @@ function initJSON ( json ) {
 /// #elif __CLASS == 'freePaintRecog'
 		const io = new freePaintRecogFromSchema( base, cfg );
 /// #elif __CLASS == 'imageHighlighting'
-		const io = new imageHighlightingFromSchema( '#container', cfg ); // Das muss base selbst erzeugen!
+		const io = new imageHighlightingFromSchema( '#container', cfg, addMods ); // Das muss base selbst erzeugen!
 		base = io.base;
 
 		// base Inits von oben nachholen

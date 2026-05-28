@@ -349,7 +349,7 @@ function loadSchema( schema ) {
 						creator = (cfgData) => {
 							initContainer(false);
 							// erzeugt base selbst!
-							const io = new imageHighlightingFromSchema( textContainer.firstChild, cfgData );
+							const io = new imageHighlightingFromSchema( textContainer.firstChild, cfgData, addMods );
 							base = io.base;
 							return io;
 						}

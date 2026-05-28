@@ -181,7 +181,11 @@ export class baseInits {
 				let type = '';
 				let defaultValue = val;
 
-				if ( this.scoreObj && this.scoreObj.scoreDefType ) {
+				// Die S_Score_<pref> und V_Score_<pref>_xyz sind später dazugekommen und
+				// scoreDefType() ist darauf nicht vorbereitet, also werden für die sowieso
+				// durch eval erzeugten V_Score_ Variablen nicht scoreDefType() gerufen,
+				// sondern deren erzeugter Wert ausgewertet
+				if ( this.scoreObj && this.scoreObj.scoreDefType && !vname.startsWith('V_Score_') ) {
 					// Typdefinition aus JSON Config
 					type = this.scoreObj.scoreDefType.call(this.scoreObj, vname);
 				}

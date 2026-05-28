@@ -51,7 +51,7 @@ table td, table th {
 <li><p>Variablen müssen durch <code>${ XYZ }</code> gekennzeichnet, wobei "XYZ" der komplette oder der letzte Teil eines Variablennamens sein muss, so dass dieser Variablenname eindeutig ist, z.B. <code>${Lab_1}</code>, <code>${ArcCnt}</code> oder <code>${Val}</code>. Nur <code>${_1}</code> zu verwenden, wenn es z.B. <code>V_Variable_1a_Lab_1</code> und <code>V_Variable_1a_Val_1</code> in einer Komponente gibt, reicht nicht aus</p></li>
 <li><p>Soll der "Variablen-Prefix" der Komponente mit in einer Variablen-Referfenz enthalten sein (weil der komplette Variablenname angegeben wird), dann nicht den Prefix selbst einsetzen, sondern statt dessen <code>&lt;pref&gt;</code> verwenden. Wenn also z.B. der Variablen-Prefix der Komponente <code>1a</code> lautet und die Variable <code>V_Input_1a_Lab_1</code> referenziert werden soll, dann muss <code>${V_Input_&lt;pref&gt;_Lab_1}</code> in der Bedingung verwendet werden</p></li>
 <li><p>Um die Eingabe der Variablen zu vereinfachen, wird die komplette Variablen-Referenz in die Zwischenablage kopiert, wenn in der Variablen-Liste rechts auf eine Variable geklickt wird</p></li>
-<li><p>Zur Evaluation der Bedingung wird die Bibliothek <code>expr-eval</code> verwendet, s. <a href="https://github.com/silentmatt/expr-eval?tab=readme-ov-file#expression-syntax">Doku</a></p></li>
+<li><p>Zur Evaluation der Bedingung wird die Bibliothek <code>expr-eval</code> verwendet, s. <a href="https://github.com/silentmatt/expr-eval?tab=readme-ov-file#expression-syntax">Doku</a>. Unter diesem Link sind auch alle verwendbaren Funktionen und Ausdrücke gelistet.</p></li>
 </ul>
 <h4 id="vergleichsoperatoren">Vergleichsoperatoren</h4>
 <table>
@@ -186,6 +186,21 @@ table td, table th {
 <td style="text-align:left;"><code>isNumUnit( s, num, unitRE, unitOpt, orEmpty )</code></td>
 <td style="text-align:left;"><code>isNumUnit( ${Input_1}, 80, "[mM][bB]", true, false )</code></td>
 <td style="text-align:left;">Überprüft, ob String s die numerischen Wert num und die Einheit unitRE (als RegExp) als "num Unit" oder "Unit num" enthält (unitOpt=true bedeutet, die Einheit ist optional; orEmpty=true bedeutet, der ganze String darf leer sein)</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>isAnyNumUnit( s, unitRE, unitOpt, orEmpty )</code></td>
+<td style="text-align:left;"><code>isAnyNumUnit( ${Input_1}, "[mM][bB]", true, false )</code></td>
+<td style="text-align:left;">Überprüft, ob String s irgendeinen numerischen Wert und die Einheit unitRE (als RegExp) als "num Unit" oder "Unit num" enthält (unitOpt=true bedeutet, die Einheit ist optional; orEmpty=true bedeutet, der ganze String darf leer sein)</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>numPartOf( s )</code></td>
+<td style="text-align:left;"><code>numPartOf( "GB 300,5 xyz" )</code></td>
+<td style="text-align:left;">Gibt die erste in einem beliebigen String enthaltene Zahl als <code>number</code> zurück</td>
+</tr>
+<tr>
+<td style="text-align:left;"><code>isNumUnitBetween( s, num1, num2, unitRE, unitOpt, orEmpty )</code></td>
+<td style="text-align:left;"><code>isNumUnitBetween( ${Input_1}, 78, 82, "[mM][bB]", true, false )</code></td>
+<td style="text-align:left;">Überprüft, ob String s einen numerischen Wert zwischen num1 und num2 und die Einheit unitRE (als RegExp) als "num Unit" oder "Unit num" enthält (unitOpt=true bedeutet, die Einheit ist optional; orEmpty=true bedeutet, der ganze String darf leer sein). Wird übersetzt als <code>isAnyNumUnit( s, unitRE, unitOpt, orEmpty ) &amp;&amp; isBetween( numPartOf( s ), num1, num2 )</code></td>
 </tr>
 </tbody>
 </table>

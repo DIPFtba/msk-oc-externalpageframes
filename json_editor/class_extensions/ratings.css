@@ -1,0 +1,28 @@
+.ratings-container {
+	position: relative;
+	user-select: none;
+}
+
+.ratings-container .rating {
+	position: absolute;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-evenly;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.ratings-container .rating svg {
+	cursor: pointer;
+}
+
+.ratings-container div.act {
+	position: absolute;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	/* text-align: center;
+	vertical-align: middle; */
+	visibility: hidden;
+}

@@ -25,6 +25,8 @@ html,body {
 }
 #right {
 	width: 245px;
+	display: flex;
+	flex-direction: column;
 }
 
 #doku {
@@ -48,10 +50,10 @@ html,body {
 }
 #debugOut {
 	font-size: 90%;
-	height: calc( 100% - 50px );
 	overflow-y: auto;
 	overflow-x: hidden;
 	padding-left: 5px;
+	flex-grow: 1;
 }
 #debugOut span {
 	display: block;
@@ -72,6 +74,14 @@ html,body {
 	padding: 5px;
 	white-space: wrap;
 	font-weight: bold;
+}
+#loaderOut .error {
+	color: green;
+	background-color: rgb(184, 238, 184);
+	padding: 5px;
+	white-space: wrap;
+	font-weight: bold;
+	margin-bottom: 8px;
 }
 /* #debugOut tr td:nth-child(1) {
 	text-align: right;

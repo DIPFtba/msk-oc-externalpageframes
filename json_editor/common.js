@@ -67,7 +67,43 @@ export function clearCfgJson( json ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-import { isBetween, isNumUnit } from "../libs/common";
+export function generateDefaultJsonFromSchema(schema,keyPath='') {
+    if (schema.default !== undefined) {
+        // Tiefe Kopie des Default-Wertes zurückgeben, um Referenzen zu vermeiden
+        return JSON.parse(JSON.stringify(schema.default));
+    }
+
+    if (schema.type === 'object' && schema.properties) {
+        const obj = {};
+        for (const key in schema.properties) {
+            const val = generateDefaultJsonFromSchema(schema.properties[key], keyPath ? `${keyPath}.${key}` : key);
+            if (val !== null) {
+                obj[key] = val;
+            }
+        }
+        // Nur zurückgeben, wenn Objekt nicht leer ist
+        return Object.keys(obj).length > 0 ? obj : null;
+    }
+
+	switch (schema.type) {
+		case 'array':
+			return [];
+		case 'boolean':
+			return false;
+		case 'integer':
+		case 'number':
+			return 0;
+		case 'string':
+			return '';
+		default:
+			console.error( `Kein Default-Wert für Schema-Typ '${schema.type}' Pfad '${keyPath}' gefunden.` );
+			return null;
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+import { isBetween, isNumUnit, isAnyNumUnit, numPartOf, isNumUnitBetween } from "../libs/common";
 
 function debugAndConsoleOut (s) {
 	if ( typeof debugOut !== 'undefined' )	{
@@ -82,12 +118,18 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 	if ( !Parser ) {
 		return;
 	}
+	if ( !( 'dontExportVariables' in obj ) ) {
+		obj.dontExportVariables = [];
+	}
 
 	// create Parser, add addFncs
 	const parser = new Parser();
 	Object.assign( addFncs, {
 		isNull: v => v===null,
 		isNumUnit,
+		isAnyNumUnit,
+		numPartOf,
+		isNumUnitBetween,
 		isBetween,
 		match: (a,r,fl='') => a.toString().match( new RegExp(r,fl) ),
 		// regexp: (a,b) => a.match(b),
@@ -99,13 +141,18 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 
 	if ( opts.dataSettings && opts.dataSettings.scoringVals && obj.scoreDef ) {
 
-		const scoringVals = opts.dataSettings.scoringVals;
+		const scoringVals = [
+			...( opts.dataSettings.scoringVariables ?? [] ),
+			...( opts.dataSettings.scoringVals ?? [] ),
+		];
+		const pref = opts.dataSettings.variablePrefix || '';
 
 		const scores = obj.scoreDef(true);
 		if ( typeof scores === 'object' ) {
 			// FIX: (sehr wahrscheinlich vorhandene) StatusVariable in res verfügbar machen
-			if ( obj.dataSettings.variablePrefix && !obj.readonly ) {
-				scores[ `V_Status_${obj.dataSettings.variablePrefix}` ] = 1;
+			if ( pref && !obj.readonly ) {
+				scores[ `V_Status_${pref}` ] = 1;
+				scores[ `V_StatHist_${pref}` ] = 1;
 			}
 			// Ende FIX
 			const varNames = Object.keys( scores ).map( s => s.trim() );
@@ -115,12 +162,13 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 					let cond = sv.condition.trim();
 					if ( cond ) {
 						let saveCond = cond;
+						saveCond = saveCond.replaceAll( /\/\/[^\n]*\n|\/\*[\s\S]*?\*\//g, ' ' ); // remove comments
 						const allVarsInCond = cond.matchAll( /\$\{([^}]*)}/g );
 						for ( const vn of allVarsInCond ) {
 							if ( vn[1].length == 0 ) {
 								debugAndConsoleOut( `Variablen-Name '\${}' in Scoring nicht zulässig` );
 							} else {
-								const varsearch = ( opts.dataSettings.variablePrefix ? vn[1].replace( /<pref>/i, opts.dataSettings.variablePrefix ) : vn[1] ).trim();
+								const varsearch = ( pref ? vn[1].replace( /<pref>/i, pref ) : vn[1] ).trim();
 								const re = new RegExp( `${varsearch}$`, 'i' );
 								const selVarNames = varNames.filter( v => v.match(re) );
 								if ( selVarNames.length>1 ) {
@@ -167,7 +215,23 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 								obj.scoringVals = [];
 							}
 							try {
-								obj.scoringVals.push( [ sv.val, parser.parse( saveCond ) ] );
+								let a0;
+								if ( sv.name ) {
+									// Scoring Variable
+									a0 = `V_Score_${pref}_${sv.name.trim()}`;
+									if ( !sv.exp ) {
+										obj.dontExportVariables.push( a0 );
+									}
+									varNames.push( a0 ); // ensure variable exists
+								} else {
+									// Scoring Value
+									const num = Number(sv.val);
+									if ( Number.isNaN(num) ) {
+										throw `Scoring-Wert '${sv.val}' ist keine Zahl`;
+									}
+									a0 = num;
+								}
+								obj.scoringVals.push( [ a0, parser.parse( saveCond ) ] );
 							} catch (e) {
 								debugAndConsoleOut( `Fehler (${e}) in Scoring-Condition: ${cond}` );
 							}
@@ -178,51 +242,96 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 		}
 	}
 
-	if ( obj.scoringVals ) {
-		obj.computeScoringVals = function (res) {
+	if ( obj.scoringVals && obj.scoringVals.length>0 ) {
+
+		obj.computeScoringVals = function (res, exportAll=false) {
 			// FIX: StatusVariable in res verfügbar machen
 			let res_in = res;
+			const pref = this.dataSettings?.variablePrefix || '';
 			if ( this.statusVarDef ) {
 				res_in = Object.assign( {}, res, this.statusVarDef() );
-			} else if ( this.dataSettings.variablePrefix && !this.readonly ) {
-				// Ist noch nicht verfügbar, wird es aber (sehr wahrscheinlich) später sein
-				res_in = Object.assign( {}, res, {
-					[ `V_Status_${this.dataSettings.variablePrefix}` ]: 1
-				});
+			} else {
+				const statNam = `V_Status_${pref}`;
+				if ( pref && !this.readonly && !( statNam in res ) ) {
+					// Ist noch nicht verfügbar, wird es aber (sehr wahrscheinlich) später sein
+					// (Definition erfolgt später?)
+					res_in = Object.assign( {}, res, {
+						[statNam]: 1,
+						[`V_StatHist_${pref}`]:1,
+					});
+				}
 			}
 			// Ende FIX
-			let score = null;
 			const scoreDat = this.scoringVals;
-			for ( let h=0; score===null && h<scoreDat.length; h++ ) {
+			// Wenn die Werte von scoringVals Numbers sind, wird der erste, bei dem die Condition true ist,
+			// in `V_Score_${pref}` geschrieben.
+			// Gibt es auch String-Werte, werden die Vaiablen `V_<xyz>_${pref}` je nach Condition mit 0|1 gesetzt
+			let score = null; // Hier wird der `V_Score_${pref}` "gesammelt"
+			const evalVarNames = scoreDat.filter( sd => typeof sd[0]==='string' && sd[0] ).map( sd => sd[0] );
+			evalVarNames.forEach( vn => {
+				// Erstmal alle auf 0 setzen
+				res[vn] = 0;
+				res_in[vn] = 0;
+			});
+			const hasEvalVars = evalVarNames.length>0;
+
+			for ( let h=0; ( score===null || hasEvalVars ) && h<scoreDat.length; h++ ) {
 				const [v,c] = scoreDat[h];
 				try {
-					if ( c.evaluate( res_in ) ) {
-						score = v;
+					let erg = c.evaluate( res_in );
+					if ( erg ) {
+						if ( typeof v === 'string' && v ) {
+							// String-Wert: Setze die Variable auf erg
+							if ( typeof erg === 'boolean' ) {
+								// Wenn wirklich ma Boolean an IB gesendet werden soll,
+								// undebingt auch default Defs in baeseInits.js anpassen!
+								erg = +erg; // in 0|1 umwandeln
+							}
+							res[v] = erg;
+							res_in[v] = erg;
+						} else if ( score === null ) {
+							// Number-Wert: Setze score, aber nur, wenn noch nicht gesetzt
+							score = v;
+						}
 					}
 				} catch (e) {
 					debugAndConsoleOut( `Error in scoring-condition: ${e}` );
 				}
 			}
-			const n = Number(score)
-			res[ `V_Score_${this.dataSettings.variablePrefix}` ] = score!== null && n!==NaN ? n : score;
+			if ( !hasEvalVars || evalVarNames.length<scoreDat.length ) {
+				const n = Number(score)
+				res[ `V_Score_${pref}` ] = score!== null && !Number.isNaN(n) ? n : score;
+			}
+
+			if ( !exportAll && this.dontExportVariables.length>0 ) {
+				this.dontExportVariables.forEach( k => delete res[k] );
+			}
 		}
 
-		if ( obj.scoreDef && obj.base ) {
-			obj.base.sendChangeState( obj );
+	} else {
+
+		// Wenn kein Scoring: Trotzdem nicht exportierte Variablen löschen
+		obj.computeScoringVals = function (res, exportAll=false) {
+			if ( !exportAll && this.dontExportVariables.length>0 ) {
+				this.dontExportVariables.forEach( k => delete res[k] );
+			}
 		}
 	}
 
+	if ( obj.scoreDef && obj.base ) {
+		obj.base.sendChangeState( obj );
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-export function addStatusVarDef ( obj, json ) {
+export function addStatusVarDef ( obj, json={} ) {
 
-	const pref = json.dataSettings?.variablePrefix;
-	if ( !obj.readonly && !obj.statusVarDef && pref ) {
+	const pref = json.dataSettings?.variablePrefix ? '_'+json.dataSettings?.variablePrefix : '';
+	if ( !obj.readonly && !obj.statusVarDef ) {
 
-		const statVarName = `V_Status_${pref}`;
-		const statHistVarName = `V_StatHist_${pref}`;
+		const statVarName = `V_Status${pref}`;
+		const statHistVarName = `V_StatHist${pref}`;
 		let statusHistory = 0;
 
 		obj.statusVarDef = function () {
@@ -362,7 +471,8 @@ export const dp2inputRegExp = (obj) => {
 	};
 
 	if ( obj.pdp || obj.dp ) {
-		let re = `^$|^[0-9]${ obj.pdp ? `{1,${obj.pdp}}` : '+' }`;
+		const max = obj.maxlength && !obj.units ? `(?=.{1,${obj.maxlength}}$)` : ""; // Eigentlich nicht notwendig, wenn maxlength separat beachtet wird
+		let re = `^$|^${max}[0-9]${ obj.pdp ? `{1,${obj.pdp}}` : '+' }`;
 		if ( obj.dp ) {
 			re += `([,.][0-9]{0,${obj.dp}})?`;
 		}

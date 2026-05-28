@@ -1073,6 +1073,9 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 		super( base, opts );
 
 		if ( opts.switchModeBarDef === null ) {
+			if ( base.fsm && base.fsm.decInitCnt ) {
+				base.fsm.decInitCnt();
+			}
 			return;
 		}
 
@@ -1089,8 +1092,8 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 				height: 1.5*this.cell.height - 2,
 				width: 3*1.5*this.cell.width,
 				framePadding: 0,
-				spacing: 0,
-				dist: 10,
+				spacing: 10,
+				// dist: 10,
 				bars: [ [ this.textModeBar ].concat( this.insertIconBars ), [ this.modeIconBar ] ],
 				isSticky: true,
 				frameFill: 'white',
@@ -1140,9 +1143,9 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 						this.iconBarOff( 0 );
 					},
 				},
-				{
-					extraSpace: switchModeBarDef.dist,
-				},
+				// {
+				// 	extraSpace: switchModeBarDef.dist,
+				// },
 				{
 					// | Stift
 					kCreateFunc: ( x, y ) => [
@@ -1204,7 +1207,7 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 					}
 					if ( data == "SetIconBarPaint" ) {
 						this.switchModeBar.deactivate();
-						this.switchModeBar.clickOn(2);
+						this.switchModeBar.clickOn(1);
 					}
 				} catch(e) {}
 			}
@@ -1243,7 +1246,7 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 		let event;
 		if ( this.switchModeBar.active==0 ) {
 			event = 'Text';
-		} else if ( this.switchModeBar.active==2 ) {
+		} else if ( this.switchModeBar.active==1 ) {
 			event = 'Paint';
 		} else {
 			event = 'Off';

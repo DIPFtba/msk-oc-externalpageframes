@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="793.33" height="1122.7" version="1.1" viewBox="0 0 793.33 1122.7" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+ <defs>
+  <clipPath id="clipPath5758">
+   <path d="m0 0.11025h595.28v841.89h-595.28z"/>
+  </clipPath>
+  <clipPath id="clipPath5768">
+   <path d="m62.511 759.31h183.9v75.6h-183.9z"/>
+  </clipPath>
+  <clipPath id="clipPath5780">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5796">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5808">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5824">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5840">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5852">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5868">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5884">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5896">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5912">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5924">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5940">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5956">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5968">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5984">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath5996">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6012">
+   <path d="m60 682.11h482v67.2h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6028">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6044">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6056">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6072">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6084">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6100">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6112">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6128">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6140">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6156">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6168">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6184">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6196">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6212">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6224">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6240">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6252">
+   <path d="m60 712.86h482v10.56h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6268">
+   <path d="m70.465 687.08h261.05v14.801h-261.05z"/>
+  </clipPath>
+  <clipPath id="clipPath6282">
+   <path d="m70.465 672.28h261.05v14.801h-261.05z"/>
+  </clipPath>
+  <clipPath id="clipPath6296">
+   <path d="m70.465 657.48h261.05v14.801h-261.05z"/>
+  </clipPath>
+  <clipPath id="clipPath6310">
+   <path d="m70.465 642.67h261.05v14.801h-261.05z"/>
+  </clipPath>
+  <clipPath id="clipPath6324">
+   <path d="m70.465 627.87h261.05v14.801h-261.05z"/>
+  </clipPath>
+  <clipPath id="clipPath6338">
+   <path d="m342.38 599.72h194.29v14.801h-194.29z"/>
+  </clipPath>
+  <clipPath id="clipPath6352">
+   <path d="m342.38 584.92h194.29v14.801h-194.29z"/>
+  </clipPath>
+  <clipPath id="clipPath6366">
+   <path d="m342.38 570.12h194.29v14.801h-194.29z"/>
+  </clipPath>
+  <clipPath id="clipPath6380">
+   <path d="m342.38 555.32h193.15v14.801h-193.15z"/>
+  </clipPath>
+  <clipPath id="clipPath6394">
+   <path d="m63.95 531.58h473.5v22.781h-473.5z"/>
+  </clipPath>
+  <clipPath id="clipPath6408">
+   <path d="m61.818 516.78h473.5v14.801h-473.5z"/>
+  </clipPath>
+  <clipPath id="clipPath6422">
+   <path d="m61.817 494h472.51v16.56h-472.51z"/>
+  </clipPath>
+  <clipPath id="clipPath6436">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6452">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6464">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6480">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6492">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6508">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6520">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6536">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6548">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6564">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6576">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6592">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6604">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6620">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6632">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6648">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6660">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6676">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6688">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6704">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6716">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6732">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6744">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6760">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6772">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6788">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6800">
+   <path d="m60 451.64h482v40.32h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6816">
+   <path d="m60 67h482v690h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6826">
+   <path d="m62.551 436.84h35.858v14.801h-35.858z"/>
+  </clipPath>
+  <clipPath id="clipPath6840">
+   <path d="m60 67h482v690h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6850">
+   <path d="m98.409 436.84h153.46v14.801h-153.46z"/>
+  </clipPath>
+  <clipPath id="clipPath6864">
+   <path d="m60 67h482v690h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6874">
+   <path d="m251.87 436.84h84.541v14.801h-84.541z"/>
+  </clipPath>
+  <clipPath id="clipPath6888">
+   <path d="m60 67h482v690h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6898">
+   <path d="m336.41 436.84h56.001v14.801h-56.001z"/>
+  </clipPath>
+  <clipPath id="clipPath6912">
+   <path d="m60 67h482v690h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6922">
+   <path d="m392.41 436.84h26.87v14.801h-26.87z"/>
+  </clipPath>
+  <clipPath id="clipPath6932">
+   <path d="m60 67h482v690h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6942">
+   <path d="m419.28 436.84h38.743v14.801h-38.743z"/>
+  </clipPath>
+  <clipPath id="clipPath6952">
+   <path d="m60 67h482v690h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath6962">
+   <path d="m458.03 436.84h80.418v14.801h-80.418z"/>
+  </clipPath>
+  <clipPath id="clipPath6976">
+   <path d="m60.378 422.04h397.05v14.801h-397.05z"/>
+  </clipPath>
+  <clipPath id="clipPath6990">
+   <path d="m63.378 407.24h35.031v14.801h-35.031z"/>
+  </clipPath>
+  <clipPath id="clipPath7004">
+   <path d="m98.409 407.24h195.87v14.801h-195.87z"/>
+  </clipPath>
+  <clipPath id="clipPath7018">
+   <path d="m251.87 407.24h84.541v14.801h-84.541z"/>
+  </clipPath>
+  <clipPath id="clipPath7032">
+   <path d="m336.41 407.24h56.001v14.801h-56.001z"/>
+  </clipPath>
+  <clipPath id="clipPath7046">
+   <path d="m458.03 407.24h80.123v14.801h-80.123z"/>
+  </clipPath>
+  <clipPath id="clipPath7060">
+   <path d="m98.409 393.77h439.74v13.471h-439.74z"/>
+  </clipPath>
+  <clipPath id="clipPath7074">
+   <path d="m63.378 378.97h35.031v14.801h-35.031z"/>
+  </clipPath>
+  <clipPath id="clipPath7088">
+   <path d="m98.409 378.97h195.87v14.801h-195.87z"/>
+  </clipPath>
+  <clipPath id="clipPath7102">
+   <path d="m251.87 378.97h84.541v14.801h-84.541z"/>
+  </clipPath>
+  <clipPath id="clipPath7116">
+   <path d="m336.41 378.97h56.001v14.801h-56.001z"/>
+  </clipPath>
+  <clipPath id="clipPath7130">
+   <path d="m458.03 378.97h80.123v14.801h-80.123z"/>
+  </clipPath>
+  <clipPath id="clipPath7144">
+   <path d="m98.409 365.5h439.74v13.471h-439.74z"/>
+  </clipPath>
+  <clipPath id="clipPath7158">
+   <path d="m98.409 350.7h331.82v14.801h-331.82z"/>
+  </clipPath>
+  <clipPath id="clipPath7172">
+   <path d="m430.22 350.7h108.22v14.801h-108.22z"/>
+  </clipPath>
+  <clipPath id="clipPath7186">
+   <path d="m60.378 335.89h397.05v14.801h-397.05z"/>
+  </clipPath>
+  <clipPath id="clipPath7200">
+   <path d="m63.378 321.09h35.031v14.801h-35.031z"/>
+  </clipPath>
+  <clipPath id="clipPath7214">
+   <path d="m98.409 321.09h195.87v14.801h-195.87z"/>
+  </clipPath>
+  <clipPath id="clipPath7228">
+   <path d="m251.87 321.09h84.541v14.801h-84.541z"/>
+  </clipPath>
+  <clipPath id="clipPath7242">
+   <path d="m336.41 321.09h56.001v14.801h-56.001z"/>
+  </clipPath>
+  <clipPath id="clipPath7256">
+   <path d="m458.03 321.09h80.123v14.801h-80.123z"/>
+  </clipPath>
+  <clipPath id="clipPath7270">
+   <path d="m63.378 306.29h35.031v14.801h-35.031z"/>
+  </clipPath>
+  <clipPath id="clipPath7284">
+   <path d="m98.409 306.29h195.87v14.801h-195.87z"/>
+  </clipPath>
+  <clipPath id="clipPath7298">
+   <path d="m251.87 306.29h84.541v14.801h-84.541z"/>
+  </clipPath>
+  <clipPath id="clipPath7312">
+   <path d="m336.41 306.29h56.001v14.801h-56.001z"/>
+  </clipPath>
+  <clipPath id="clipPath7326">
+   <path d="m458.03 306.29h80.123v14.801h-80.123z"/>
+  </clipPath>
+  <clipPath id="clipPath7340">
+   <path d="m98.409 291.49h331.82v14.801h-331.82z"/>
+  </clipPath>
+  <clipPath id="clipPath7354">
+   <path d="m430.22 291.49h108.22v14.801h-108.22z"/>
+  </clipPath>
+  <clipPath id="clipPath7368">
+   <path d="m60.378 276.69h397.05v14.801h-397.05z"/>
+  </clipPath>
+  <clipPath id="clipPath7382">
+   <path d="m63.378 261.89h35.031v14.801h-35.031z"/>
+  </clipPath>
+  <clipPath id="clipPath7396">
+   <path d="m98.409 261.89h195.87v14.801h-195.87z"/>
+  </clipPath>
+  <clipPath id="clipPath7410">
+   <path d="m251.87 261.89h84.541v14.801h-84.541z"/>
+  </clipPath>
+  <clipPath id="clipPath7424">
+   <path d="m336.41 261.89h56.001v14.801h-56.001z"/>
+  </clipPath>
+  <clipPath id="clipPath7438">
+   <path d="m458.03 261.89h80.123v14.801h-80.123z"/>
+  </clipPath>
+  <clipPath id="clipPath7452">
+   <path d="m98.409 247.09h331.82v14.801h-331.82z"/>
+  </clipPath>
+  <clipPath id="clipPath7466">
+   <path d="m430.22 247.09h108.22v14.801h-108.22z"/>
+  </clipPath>
+  <clipPath id="clipPath7480">
+   <path d="m62.239 241.74h476.7v4.6778h-476.7z"/>
+  </clipPath>
+  <clipPath id="clipPath7490">
+   <path d="m79.225 227.44h360.75v14.801h-360.75z"/>
+  </clipPath>
+  <clipPath id="clipPath7504">
+   <path d="m439.98 227.27h98.174v14.801h-98.174z"/>
+  </clipPath>
+  <clipPath id="clipPath7518">
+   <path d="m79.225 212.63h360.75v14.801h-360.75z"/>
+  </clipPath>
+  <clipPath id="clipPath7532">
+   <path d="m439.98 212.46h98.174v14.801h-98.174z"/>
+  </clipPath>
+  <clipPath id="clipPath7546">
+   <path d="m79.225 197.83h360.75v14.801h-360.75z"/>
+  </clipPath>
+  <clipPath id="clipPath7560">
+   <path d="m439.98 197.66h98.174v14.801h-98.174z"/>
+  </clipPath>
+  <clipPath id="clipPath7574">
+   <path d="m61.412 193.07h477.97v4.7501h-477.97z"/>
+  </clipPath>
+  <clipPath id="clipPath7584">
+   <path d="m380.28 181.51h58.133v12.06h-58.133z"/>
+  </clipPath>
+  <clipPath id="clipPath7598">
+   <path d="m439.68 178.77h98.468v14.801h-98.468z"/>
+  </clipPath>
+  <clipPath id="clipPath7612">
+   <path d="m439.68 163.97h98.468v14.801h-98.468z"/>
+  </clipPath>
+  <clipPath id="clipPath7626">
+   <path d="m371.1 166.71h40.68v12.06h-40.68z"/>
+  </clipPath>
+  <clipPath id="clipPath7640">
+   <path d="m62.739 153.49h309.28v13.471h-309.28z"/>
+  </clipPath>
+  <clipPath id="clipPath7654">
+   <path d="m61.817 181.45h309.28v11.31h-309.28z"/>
+  </clipPath>
+  <clipPath id="clipPath7668">
+   <path d="m411.78 166.71h26.633v12.06h-26.633z"/>
+  </clipPath>
+  <clipPath id="clipPath7682">
+   <path d="m380.28 151.91h58.133v12.06h-58.133z"/>
+  </clipPath>
+  <clipPath id="clipPath7696">
+   <path d="m439.68 149.17h98.468v14.801h-98.468z"/>
+  </clipPath>
+  <clipPath id="clipPath7710">
+   <path d="m403.22 145.66h135.47v4.0109h-135.47z"/>
+  </clipPath>
+  <clipPath id="clipPath7720">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7736">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7748">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7764">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7780">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7792">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7808">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7820">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7836">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7848">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7864">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7876">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7892">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7908">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7920">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7936">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7948">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7964">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7976">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath7992">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath8008">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath8024">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath8040">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath8052">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath8068">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath8080">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath8096">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath8108">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath8124">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+  <clipPath id="clipPath8136">
+   <path d="m60 7.1083h482v60.75h-482z"/>
+  </clipPath>
+ </defs>
+ <g transform="matrix(1.3333 0 0 -1.3333 0 1122.7)">
+  <g clip-path="url(#clipPath5758)">
+   <path d="m0 0.11025h595.28v841.89h-595.28z" fill="#fff"/>
+  </g>
+  <g clip-path="url(#clipPath5768)">
+   <g transform="matrix(115.39 0 0 75.6 96.768 759.31)">
+    <image transform="matrix(1,0,0,-1,0,1)" width="1" height="1" image-rendering="optimizeSpeed" preserveAspectRatio="none" xlink:href="data:image/png;base64,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"/>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath5780)">
+   <g transform="translate(377.15 -92.693)">
+    <text transform="matrix(1 0 0 -1 0 831.25)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" xml:space="preserve"><tspan x="0 8.943574 14.580117 18.806309 22.181425 27.389999 30.852657 39.431484 44.499023 50.135567" y="0">Mustermann</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath5796)">
+   <g transform="translate(377.15 -92.693)"></g>
+  </g>
+  <g clip-path="url(#clipPath5808)">
+   <g transform="translate(377.15 -92.693)">
+    <text transform="matrix(1 0 0 -1 58.56 831.25)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" xml:space="preserve"><tspan x="0 6.8329105 15.411738 21.267128 28.338339" y="0">GmbH.</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath5824)">
+   <g transform="translate(377.15 -92.693)">
+    <text transform="matrix(1 0 0 -1 0 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" xml:space="preserve"><tspan x="0 7.0712104 12.13875 17.775293 23.630684 27.0058 31.231993 34.607109 38.069767 43.137306 48.555" y="0">Hauptstraße</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath5840)">
+   <g transform="translate(377.15 -92.693)"></g>
+  </g>
+  <g clip-path="url(#clipPath5852)">
+   <g transform="translate(377.15 -92.693)">
+    <text transform="matrix(1 0 0 -1 56.64 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" xml:space="preserve"><tspan x="0 5.3690624 10.738125" y="0">123</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath5868)">
+   <g transform="translate(377.15 -92.693)">
+    <text transform="matrix(1 0 0 -1 0 804.37)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" xml:space="preserve"><tspan x="0 5.3690624 10.738125 16.107187 21.47625" y="0">10115</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath5884)">
+   <g transform="translate(377.15 -92.693)"></g>
+  </g>
+  <g clip-path="url(#clipPath5896)">
+   <g transform="translate(377.15 -92.693)">
+    <text transform="matrix(1 0 0 -1 29.52 804.37)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" xml:space="preserve"><tspan x="0 5.7094922 10.918066 14.380723 16.792912 19.205097 24.84164" y="0">Berlin,</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath5912)">
+   <g transform="translate(377.15 -92.693)"></g>
+  </g>
+  <g clip-path="url(#clipPath5924)">
+   <g transform="translate(377.15 -92.693)">
+    <text transform="matrix(1 0 0 -1 59.28 804.37)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" xml:space="preserve"><tspan x="0 6.9836721 12.192246 17.828789 21.203907 25.430098 30.030762 35.667305 38.079494 43.147034 48.783577" y="0">Deutschland</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath5940)">
+   <g transform="translate(377.15 -92.693)">
+    <text transform="matrix(1 0 0 -1 0 790.93)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" xml:space="preserve"><tspan x="0 5.2183008 10.426875 12.839063 14.99836 17.157658 23.971113 29.340176" y="0">Tel.:+49</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath5956)">
+   <g transform="translate(377.15 -92.693)"></g>
+  </g>
+  <g clip-path="url(#clipPath5968)">
+   <g transform="translate(377.15 -92.693)">
+    <text transform="matrix(1 0 0 -1 37.44 790.93)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" xml:space="preserve"><tspan x="0 5.3690624 10.738125 16.107187" y="0">1234</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath5984)">
+   <g transform="translate(377.15 -92.693)"></g>
+  </g>
+  <g clip-path="url(#clipPath5996)">
+   <g transform="translate(377.15 -92.693)">
+    <text transform="matrix(1 0 0 -1 61.68 790.93)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" xml:space="preserve"><tspan x="0 5.3690624 10.738125 16.107187 21.47625 26.845312" y="0">456789</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6012)">
+   <g transform="translate(377.15 -92.693)">
+    <text transform="matrix(1 0 0 -1 0 777.49)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" xml:space="preserve"><tspan x="0 5.8359375 8.9533014 12.070664 14.482852 19.083517 24.292089 33.804668 42.383495 48.020039 52.246231 55.621349 60.829922 64.29258 72.871407 77.93895 83.575493 89.212036 91.37133 95.971992 101.80793" y="0">office@mustermann.com</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6028)">
+   <g transform="translate(63.378 -118.58)">
+    <text transform="matrix(1 0 0 -1 0 833.45)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 5.1085544 9.7646484 13.125234 14.842265" y="0">Abs.:</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6044)">
+   <g transform="translate(63.378 -118.58)"></g>
+  </g>
+  <g clip-path="url(#clipPath6056)">
+   <g transform="translate(63.378 -118.58)">
+    <text transform="matrix(1 0 0 -1 18.72 833.45)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 7.1117578 11.593828 14.954414 17.638243 21.780001 24.533438 31.355156 35.384766 39.866837" y="0">Mustermann</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6072)">
+   <g transform="translate(63.378 -118.58)"></g>
+  </g>
+  <g clip-path="url(#clipPath6084)">
+   <g transform="translate(63.378 -118.58)">
+    <text transform="matrix(1 0 0 -1 65.28 833.45)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 5.4333987 12.255117 16.911211 22.534101" y="0">GmbH.</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6100)">
+   <g transform="translate(63.378 -118.58)"></g>
+  </g>
+  <g clip-path="url(#clipPath6112)">
+   <g transform="translate(63.378 -118.58)">
+    <text transform="matrix(1 0 0 -1 91.92 833.45)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0" y="0">|</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6128)">
+   <g transform="translate(63.378 -118.58)"></g>
+  </g>
+  <g clip-path="url(#clipPath6140)">
+   <g transform="translate(63.378 -118.58)">
+    <text transform="matrix(1 0 0 -1 96 833.45)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 5.6228905 9.6525002 14.13457 18.790665 21.474493 24.835077 27.518906 30.272345 34.301952 38.610001" y="0">Hauptstraße</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6156)">
+   <g transform="translate(63.378 -118.58)"></g>
+  </g>
+  <g clip-path="url(#clipPath6168)">
+   <g transform="translate(63.378 -118.58)">
+    <text transform="matrix(1 0 0 -1 141.12 833.45)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.2693748 8.5387497" y="0">123</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6184)">
+   <g transform="translate(63.378 -118.58)"></g>
+  </g>
+  <g clip-path="url(#clipPath6196)">
+   <g transform="translate(63.378 -118.58)">
+    <text transform="matrix(1 0 0 -1 156.24 833.45)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0" y="0">|</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6212)">
+   <g transform="translate(63.378 -118.58)"></g>
+  </g>
+  <g clip-path="url(#clipPath6224)">
+   <g transform="translate(63.378 -118.58)">
+    <text transform="matrix(1 0 0 -1 160.32 833.45)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.2693748 8.5387497 12.808125 17.077499" y="0">10115</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6240)">
+   <g transform="translate(63.378 -118.58)"></g>
+  </g>
+  <g clip-path="url(#clipPath6252)">
+   <g transform="translate(63.378 -118.58)">
+    <text transform="matrix(1 0 0 -1 183.84 833.45)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.5400782 8.6818361 11.435274 13.353398 15.271523" y="0">Berlin</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6268)">
+   <text transform="matrix(1 0 0 -1 71.882 691.09)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.0585942 10.146485 14.389649 19.228516 24.111328 26.533203 30.009768 38.623047 43.710938 46.450195 53.310551 61.923828 67.802734 74.902344 77.641602 85.644531 88.383789 94.575195 100.43457 103.17383 108.97461" y="0">EasyFirma GmbH &amp; Co KG</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6282)">
+   <text transform="matrix(1 0 0 -1 71.882 676.29)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 7.0996089 12.329101 15.805664 19.282227 22.021484 24.682617 30.341799 36.230469 38.398438 41.137695 50.117188 55.205078 61.093754 63.261723 66.000977 75.341797 81.201172 83.623047 86.75293 92.641602 97.729492 103.38867 109.27734 112.0166 118.4668 123.05664 128.14453 136.75781 139.17969" y="0">Herr Ing. Mag. Wolfgang Axamit</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6296)">
+   <text transform="matrix(1 0 0 -1 71.882 661.49)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.3125 9.9316406 15.590821 21.450195 27.329102 30.458984 35.688477 39.165039 45.053711 50.141602 54.384766 58.62793 63.857422 66.59668" y="0">Schöpfergasse 6</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6310)">
+   <text transform="matrix(1 0 0 -1 71.882 646.68)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 16.171875 21.5625 24.301758 33.642578 36.303711 41.362305" y="0">1120 WIEN</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6324)">
+   <text transform="matrix(1 0 0 -1 71.882 631.88)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 7.539063 12.851563 18.09082 23.149414 29.130859 35.112305 40.170898 42.832031 49.023438" y="0">ÖSTERREICH</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6338)">
+   <text transform="matrix(1 0 0 -1 429.15 603.73)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.9814448 11.210937 15.830078 21.489258 27.148438 32.807617 38.466797 44.355469 46.523438 49.262695 55.244141 60.473633 64.472656 69.863281 75.253906 80.644531 84.541016 89.931641 95.322266 100.71289" y="0">Rechnung: Re-147/2025</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6352)">
+   <text transform="matrix(1 0 0 -1 453.12 588.93)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 7.0117192 12.09961 15.488282 21.147463 29.760742 31.928713 34.667969 40.058594 45.449219 47.617188 53.007812 58.398438 60.566406 65.957031 71.347656 76.738281" y="0">Datum: 08.08.2025</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6366)">
+   <text transform="matrix(1 0 0 -1 443.32 574.13)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 4.882813 9.9707041 12.392579 14.814454 17.236328 23.125002 25.86426 30.95215 39.56543 41.733398 44.472656 49.863281 55.253906 57.421879 62.812504 68.203125 70.371094 75.761719 81.152344 86.542969" y="0">Fällig am: 22.08.2025</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6380)">
+   <text transform="matrix(1 0 0 -1 447.28 559.33)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.8007808 11.459961 17.119141 23.007812 28.237305 33.896484 39.555664 45.214844 53.828125 62.441406 67.670898 71.147461 73.31543 76.054688 81.445312" y="0">Kundennummer: 19</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6394)">
+   <text transform="matrix(1 0 0 -1 263.02 537.1)" fill="#000000" font-family="'Segoe UI'" font-size="16px" font-weight="bold" xml:space="preserve"><tspan x="0 10.445312 19.101562 26.78125 36.414062 46.09375 55.773438 65.453125" y="0">Rechnung</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6408)">
+   <text transform="matrix(1 0 0 -1 63.235 520.79)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 6.4111328 11.821289 14.663086 19.0625 25.263672 28.105469 33.515625 36.357422 39.116211 45.644531 51.054688 55.854492 61.875 67.924805 73.974609 80.024414 86.21582 90.615234 96.035156 102.14844 106.12793 108.96973 114.35059 120.54199 125.95215 132.00195 134.76074 138.80371 141.5625 148.09082 153.50098 158.30078 164.32129 170.37109 176.4209 182.4707 188.66211 191.4209 197.94922 203.35938 207.40234 213.1543 218.90625 224.6582 229.0918 234.84375 240.5957 246.34766" y="0">Beispiel Rechnungsvorlagen - Rechnung Re-147/2025</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6422)">
+   <text transform="matrix(1 0 0 -1 63.235 499.77)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.3125 10.541992 16.201172 19.677734 22.416992 28.305664 33.535156 38.764648 44.423828 47.900391 51.289062 56.518555 59.995117 62.734379 69.833984 75.063477 78.540039 82.016602 84.755859 87.416992 93.076172 98.964844 101.13281 103.87207 112.85156 117.93946 123.82813 125.9961 128.73535 135.18555 139.77539 144.86328 153.47656 155.89844 159.28711" y="0">Sehr geehrter Herr Ing. Mag. Axamit,</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6436)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 0 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 7.0906644 9.6682043" y="0">Die</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6452)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6464)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 17.28 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 2.5775394 6.5119338" y="0">ist</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6480)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6492)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 29.76 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 4.8486915 7.4262309 13.023868" y="0">eine</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6508)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6520)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 50.4 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 5.7094922 10.558184 13.135723 17.070118 22.468359 25.045898 29.89459" y="0">Beispiel</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6536)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6548)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 85.68 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 5.7970319 10.645723 14.988634 20.537638 26.135275 31.694004 37.291641" y="0">Rechnung</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6564)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6576)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 131.04 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 4.5033979 10.062129" y="0">zur</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6592)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6604)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 147.36 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 7.0906644 11.939356 20.484142 25.814299 31.411934 35.346329 38.565823 42.101425 47.499668 50.719162 53.2967 58.626858" y="0">Demonstration</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6620)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6632)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 214.32 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 5.5587306 11.156367 15.090761 19.939453 23.47506 28.32375" y="0">unserer</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6648)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6660)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 248.88 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 5.7970319 10.645723 14.988634 20.537638 26.135275 31.694004 37.291641 42.689884 46.624279 51.336796 56.666954 60.20256 62.780098 68.178345 73.576584 78.425278" y="0">Rechnungsvorlagen</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6676)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6688)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 335.76 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 2.5775394" y="0">in</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6704)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6716)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 346.8 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 2.169023 7.5672655 12.965508 15.90293" y="0">.pdf,</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6732)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6744)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 367.68 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 9.2548237 14.584981 18.120586" y="0">Word</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6760)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6772)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 393.84 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 5.5587306 11.156367" y="0">und</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6788)">
+   <g transform="translate(64.795 -350.04)"></g>
+  </g>
+  <g clip-path="url(#clipPath6800)">
+   <g transform="translate(64.795 -350.04)">
+    <text transform="matrix(1 0 0 -1 413.04 817.81)" fill="#000000" font-family="'Segoe UI'" font-size="9.96px" font-style="italic" xml:space="preserve"><tspan x="0 4.970273 9.5028505 13.845761 18.694452 21.271992" y="0">Excel.</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath6816)">
+   <path d="m62.551 436.84h35.858v14.801h-35.858z" fill="#e0e0e0"/>
+  </g>
+  <g clip-path="url(#clipPath6826)">
+   <text transform="matrix(1 0 0 -1 63.968 440.85)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 6.1425781 12.255859 16.655273" y="0">Pos.</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6840)">
+   <path d="m98.409 436.84h153.46v14.801h-153.46z" fill="#e0e0e0"/>
+  </g>
+  <g clip-path="url(#clipPath6850)">
+   <text transform="matrix(1 0 0 -1 99.827 440.85)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 6.4111328 11.821289 16.611328 22.021484 24.863281 29.663086 35.683594 41.733398 47.783203 53.833008" y="0">Bezeichnung</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6864)">
+   <path d="m251.87 436.84h84.541v14.801h-84.541z" fill="#e0e0e0"/>
+  </g>
+  <g clip-path="url(#clipPath6874)">
+   <text transform="matrix(1 0 0 -1 302.36 440.85)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 9.5703135 14.980469 21.030273 27.22168" y="0">Menge</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6888)">
+   <path d="m336.41 436.84h56.001v14.801h-56.001z" fill="#e0e0e0"/>
+  </g>
+  <g clip-path="url(#clipPath6898)">
+   <text transform="matrix(1 0 0 -1 340.91 440.85)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.3222661 8.1640635 14.213868 19.003906 24.414062 27.255859 33.457031 37.436523 42.84668 45.688477" y="0">Einzelpreis</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6912)">
+   <path d="m392.41 436.84h26.87v14.801h-26.87z" fill="#e0e0e0"/>
+  </g>
+  <g clip-path="url(#clipPath6922)"></g>
+  <g clip-path="url(#clipPath6932)">
+   <path d="m419.28 436.84h38.743v14.801h-38.743z" fill="#e0e0e0"/>
+  </g>
+  <g clip-path="url(#clipPath6942)"></g>
+  <g clip-path="url(#clipPath6952)">
+   <path d="m458.03 436.84h80.418v14.801h-80.418z" fill="#e0e0e0"/>
+  </g>
+  <g clip-path="url(#clipPath6962)">
+   <text transform="matrix(1 0 0 -1 478.84 440.85)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 7.109375 12.519531 16.918945 22.299805 31.459961 35.351562 41.552734 45.532227 50.942383 53.78418" y="0">Gesamtpreis</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6976)">
+   <text transform="matrix(1 0 0 -1 61.795 426.05)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.7519531 8.4619141 11.220703 20.791016 26.171875 30.063477 35.473633 39.453125 42.294922 47.675781" y="0">1. Material</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath6990)">
+   <text transform="matrix(1 0 0 -1 64.795 411.25)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 7.5585942" y="0">1.1</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7004)">
+   <text transform="matrix(1 0 0 -1 99.827 411.25)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 4.882813 9.9707041 13.447267 19.326174 24.555664 27.294924 34.521484 39.750977 42.172852 46.416016 49.155273 53.154297 55.893555 60.952148 63.374023 71.987305 77.216797 80.693359 83.432617 88.823242 90.991211 96.381836 99.121094 103.82812 106.25 109.63867 114.86816" y="0">Farbe weis - Eimer 2,5 Liter</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7018)">
+   <text transform="matrix(1 0 0 -1 283.72 411.25)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 12.949219 18.339844 23.730469 26.469727 31.52832 33.950195 42.563477 47.792969" y="0">10,00 Eimer</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7032)">
+   <text transform="matrix(1 0 0 -1 367.26 411.25)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 12.949219 18.339844" y="0">72,49</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7046)">
+   <text transform="matrix(1 0 0 -1 499.48 411.25)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 16.171875 18.339844 23.730469 29.121094 31.860352" y="0">724,90 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7060)">
+   <text transform="matrix(1 0 0 -1 99.827 397.53)" fill="#000000" font-family="'Segoe UI'" font-size="9px" xml:space="preserve"><tspan x="0 4.8515625 7.3168945 11.869629 14.049316 21.80127 26.507812 29.636719 32.102051 36.496582 41.075684 44.20459 49.495605 54.202148 56.66748 64.419434 66.599121 69.648926 72.114258 76.96582 78.916992 83.768555 86.233887 90.470215 92.649902 95.699707 100.40625 103.53516 106.00049 108.39551 113.48877 118.58203 123.16113 125.34082 128.39062" y="0">1 Eimer Farbe mit 2,5 Liter Inhalt.</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7074)">
+   <text transform="matrix(1 0 0 -1 64.795 382.98)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 7.5585942" y="0">1.2</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7088)">
+   <text transform="matrix(1 0 0 -1 99.827 382.98)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 4.882813 9.9707041 13.447267 19.326174 24.555664 27.294924 33.173828 35.595703 40.683594 46.342773 49.082031 53.081055 55.820312 60.878906 63.300781 71.914062 77.143555 80.620117 83.359375 88.75 90.917969 96.308594 99.047852 103.75488 106.17676 109.56543 114.79492" y="0">Farbe blau - Eimer 2,5 Liter</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7102)">
+   <text transform="matrix(1 0 0 -1 283.72 382.98)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 12.949219 18.339844 23.730469 26.469727 31.52832 33.950195 42.563477 47.792969" y="0">10,00 Eimer</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7116)">
+   <text transform="matrix(1 0 0 -1 367.26 382.98)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 12.949219 18.339844" y="0">50,00</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7130)">
+   <text transform="matrix(1 0 0 -1 499.48 382.98)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 16.171875 18.339844 23.730469 29.121094 31.860352" y="0">500,00 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7144)">
+   <text transform="matrix(1 0 0 -1 99.827 369.25)" fill="#000000" font-family="'Segoe UI'" font-size="9px" xml:space="preserve"><tspan x="0 4.8515625 7.3168945 11.869629 14.049316 21.80127 26.507812 29.636719 32.102051 36.496582 41.075684 44.20459 49.495605 54.202148 56.66748 64.419434 66.599121 69.648926 72.114258 76.96582 78.916992 83.768555 86.233887 90.470215 92.649902 95.699707 100.40625 103.53516 106.00049 108.39551 113.48877 118.58203 123.16113 125.34082 128.39062" y="0">1 Eimer Farbe mit 2,5 Liter Inhalt.</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7158)">
+   <text transform="matrix(1 0 0 -1 348.66 354.7)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.6054692 11.655274 20.81543 29.975586 35.385742 38.144531 47.714844 53.095703 56.987305 62.397461 66.376953 69.21875 74.599609 77.441406" y="0">Summe Material:</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7172)">
+   <text transform="matrix(1 0 0 -1 488.58 354.7)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.7519531 8.4619141 14.213867 19.96582 25.717773 28.427734 34.179688 39.931641 42.69043" y="0">1.224,90 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7186)">
+   <text transform="matrix(1 0 0 -1 61.795 339.9)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.7519531 8.4619141 11.220703 18.251953 22.231445 28.432617 33.842773 36.68457" y="0">2. Arbeit</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7200)">
+   <text transform="matrix(1 0 0 -1 64.795 325.1)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 7.5585942" y="0">2.1</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7214)">
+   <text transform="matrix(1 0 0 -1 99.827 325.1)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 6.4501948 9.9267578 15.805664 21.035156 23.457031 26.845703 31.088867 35.332031 38.720703 44.379883 50.039062 55.927734 61.157227 63.896484 70.996094 76.225586 78.647461 81.777344 87.006836" y="0">Arbeitsstunde Helfer</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7228)">
+   <text transform="matrix(1 0 0 -1 291.77 325.1)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 12.949219 18.339844 23.730469 26.469727 31.782227 35.170898 41.05957" y="0">15,00 Std.</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7242)">
+   <text transform="matrix(1 0 0 -1 367.26 325.1)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 12.949219 18.339844" y="0">50,00</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7256)">
+   <text transform="matrix(1 0 0 -1 499.48 325.1)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 16.171875 18.339844 23.730469 29.121094 31.860352" y="0">750,00 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7270)">
+   <text transform="matrix(1 0 0 -1 64.795 310.3)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 7.5585942" y="0">2.2</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7284)">
+   <text transform="matrix(1 0 0 -1 99.827 310.3)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 6.4501948 9.9267578 15.805664 21.035156 23.457031 26.845703 31.088867 35.332031 38.720703 44.379883 50.039062 55.927734 61.157227 63.896484 72.875977 78.105469 80.527344 84.770508 88.15918 93.388672" y="0">Arbeitsstunde Meister</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7298)">
+   <text transform="matrix(1 0 0 -1 291.77 310.3)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 12.949219 18.339844 23.730469 26.469727 31.782227 35.170898 41.05957" y="0">15,00 Std.</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7312)">
+   <text transform="matrix(1 0 0 -1 367.26 310.3)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 12.949219 18.339844" y="0">74,99</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7326)">
+   <text transform="matrix(1 0 0 -1 491.92 310.3)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 7.5585942 12.949219 18.339844 23.730469 25.898438 31.289062 36.679688 39.418945" y="0">1.124,85 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7340)">
+   <text transform="matrix(1 0 0 -1 358.6 295.5)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.6054692 11.655274 20.81543 29.975586 35.385742 38.144531 45.175781 49.155273 55.356445 60.766602 63.608398 67.5" y="0">Summe Arbeit:</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7354)">
+   <text transform="matrix(1 0 0 -1 488.58 295.5)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.7519531 8.4619141 14.213867 19.96582 25.717773 28.427734 34.179688 39.931641 42.69043" y="0">1.874,85 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7368)">
+   <text transform="matrix(1 0 0 -1 61.795 280.7)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.7519531 8.4619141 11.220703 21.269531 26.679688 32.871094 37.661133 43.071289 45.913086" y="0">3. Wegzeit</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7382)">
+   <text transform="matrix(1 0 0 -1 64.795 265.9)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 7.5585942" y="0">3.1</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7396)">
+   <text transform="matrix(1 0 0 -1 99.827 265.9)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 6.4501948 12.109375 15.239258 20.327148 25.986328 29.462893" y="0">Anfahrt</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7410)">
+   <text transform="matrix(1 0 0 -1 318.24 265.9)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.3125 8.7011719 14.589844" y="0">Std.</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7424)">
+   <text transform="matrix(1 0 0 -1 367.26 265.9)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 12.949219 18.339844" y="0">59,50</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7438)">
+   <text transform="matrix(1 0 0 -1 504.87 265.9)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.390625 10.78125 12.949219 18.339844 23.730469 26.469727" y="0">59,50 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7452)">
+   <text transform="matrix(1 0 0 -1 349.37 251.1)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.6054692 11.655274 20.81543 29.975586 35.385742 38.144531 48.193359 53.603516 59.794922 64.584961 69.995117 72.836914 76.728516" y="0">Summe Wegzeit:</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7466)">
+   <text transform="matrix(1 0 0 -1 502.8 251.1)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.7519531 11.503906 14.213867 19.96582 25.717773 28.476562" y="0">59,50 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7480)">
+   <path d="m62.739 244.08h475.7" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width=".75"/>
+  </g>
+  <g clip-path="url(#clipPath7490)">
+   <text transform="matrix(1 0 0 -1 402.96 231.45)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 5.3125 10.97168 19.584961 28.198242 33.427734" y="0">Summe:</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7504)">
+   <text transform="matrix(1 0 0 -1 488.29 231.27)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.7519531 8.4619141 14.213867 19.96582 25.717773 28.427734 34.179688 39.931641 42.69043" y="0">3.159,25 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7518)">
+   <text transform="matrix(1 0 0 -1 366.18 216.64)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 3.999023 9.3896484 14.780273 16.948242 22.338867 27.729492 30.46875 38.652344 41.391602 47.373047 52.460938 58.339844 63.427734 66.816406 70.205078" y="0">-10,00 % Rabatt:</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7532)">
+   <text transform="matrix(1 0 0 -1 492.71 216.47)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 4.0429692 9.7949219 15.546875 21.298828 24.008789 29.760742 35.512695 38.271484" y="0">-315,93 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7546)">
+   <text transform="matrix(1 0 0 -1 396.14 201.84)" fill="#000000" font-family="'Segoe UI'" font-size="10px" xml:space="preserve"><tspan x="0 6.4501948 12.329101 16.572266 21.191406 26.850586 29.272461 34.360352 40.249023" y="0">Abschlag:</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7560)">
+   <text transform="matrix(1 0 0 -1 504.21 201.67)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 4.0429692 9.7949219 12.504883 18.256836 24.008789 26.767578" y="0">-3,32 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7574)">
+   <path d="m61.912 195.45h476.97" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width=".75"/>
+  </g>
+  <g clip-path="url(#clipPath7584)">
+   <text transform="matrix(1 0 0 -1 407.08 182.78)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 7.9003911 13.310547 17.202148 21.093752 27.207031" y="0">Netto:</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7598)">
+   <text transform="matrix(1 0 0 -1 488.29 182.78)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.7519531 8.4619141 14.213867 19.96582 25.717773 28.427734 34.179688 39.931641 42.69043" y="0">2.386,55 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7612)">
+   <text transform="matrix(1 0 0 -1 496.75 167.98)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.7519531 11.503906 17.255859 19.96582 25.717773 31.469727 34.228516" y="0">453,45 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7626)">
+   <text transform="matrix(1 0 0 -1 390.19 167.98)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.7519531 11.503906" y="0">19%</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7640)">
+   <text transform="matrix(1 0 0 -1 64.157 157.25)" fill="#000000" font-family="'Segoe UI'" font-size="9px" xml:space="preserve"><tspan x="0 4.2363281 8.9428711 11.122559 14.941406 17.991211 23.084473 28.177734 33.477539 37.296387 42.596191 47.175293 50.225098 55.318359 63.070312 65.535645 71.692383 74.157715 80.468262 85.047363 88.097168 93.19043 100.94238 103.40771 108.70752 113.41406 117.23291 119.69824 126.00879 131.28223 135.75586 140.84912 148.60107 153.30762 158.40088 161.45068" y="0">Leistungsdatum = Datum des Dokuments</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7654)">
+   <text transform="matrix(1 0 0 -1 63.235 183.05)" fill="#000000" font-family="'Segoe UI'" font-size="9px" xml:space="preserve"><tspan x="0 2.3950198 7.4882817 10.617188 15.323731 17.789062 23.972168 26.367188 32.677734 34.628906 37.094238 42.899414 47.614746 53.797852 58.649414 63.500977 68.352539 73.204102 78.055664 82.907227 87.758789" y="0">Ihre UID: ATU12345678</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7668)">
+   <text transform="matrix(1 0 0 -1 414.85 167.98)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 7.2314448 12.836914 16.728516 19.438477" y="0">USt.:</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7682)">
+   <text transform="matrix(1 0 0 -1 403.95 153.18)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 6.4111328 10.390625 16.44043 20.332031 24.223635 30.336914" y="0">Brutto:</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7696)">
+   <text transform="matrix(1 0 0 -1 488.29 153.18)" fill="#000000" font-family="'Segoe UI'" font-size="10px" font-weight="bold" xml:space="preserve"><tspan x="0 5.7519531 8.4619141 14.213867 19.96582 25.717773 28.427734 34.179688 39.931641 42.69043" y="0">2.840,00 €</tspan></text>
+  </g>
+  <g clip-path="url(#clipPath7710)">
+   <path d="m403.72 147.67h134.47" fill="none" stroke="#000" stroke-miterlimit="10" stroke-width=".75"/>
+  </g>
+  <g clip-path="url(#clipPath7720)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 203.28 833.45)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 7.1117578 11.593828 14.954414 17.638243 21.780001 24.533438 31.355156 35.384766 39.866837" y="0">Mustermann</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath7736)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath7748)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 249.84 833.45)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 5.4333987 12.255117 16.911211 22.534101" y="0">GmbH.</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath7764)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 164.16 822.89)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 5.6228905 9.6525002 14.13457 18.790665 21.474493 24.835077 27.518906 30.272345 34.301952 38.610001" y="0">Hauptstraße</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath7780)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath7792)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 209.28 822.89)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.2693748 8.5387497" y="0">123</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath7808)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath7820)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 224.4 822.89)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.2693748 8.5387497 12.808125 17.077499" y="0">10115</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath7836)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath7848)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 247.92 822.89)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.5400782 8.6818361 11.435274 13.353398 15.271523" y="0">Berlin</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath7864)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath7876)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 270 822.89)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 5.5532813 9.6950388 14.17711 16.860937 20.221523 23.879883 28.361954 30.280079 34.309689 38.791759" y="0">Deutschland</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath7892)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 156.24 812.33)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.1494923 8.2912502 10.209375 11.926407 13.643438 19.061367 23.330742" y="0">Tel.:+49</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath7908)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath7920)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 186.24 812.33)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.2693748 8.5387497 12.808125" y="0">1234</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath7936)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath7948)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 205.68 812.33)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.2693748 8.5387497 12.808125 17.077499 21.346874" y="0">456789</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath7964)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath7976)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 233.52 812.33)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.640625 7.1194925 9.5983601 11.516484 15.174845 19.316603 26.880821 33.702538 38.184608 41.545197 44.229023 48.370781 51.124218 57.945938 61.975548 66.457619 70.93969 72.656723 76.315079 80.955704" y="0">office@mustermann.com</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath7992)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 109.68 801.77)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.2075 6.8913283" y="0">St.</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath8008)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 118.32 801.77)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0" y="0">-</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath8024)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 121.68 801.77)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 5.9245315 8.677969 10.395" y="0">Nr.:</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath8040)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath8052)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 136.08 801.77)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 4.2693748 8.5387497 11.624765 15.89414 20.163515 24.43289 27.518906 31.78828 36.057655 40.32703 43.413048 47.682423 51.951797 56.221172 61.662304 63.76992 69.323204" y="0">23/123/456/789UID:</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath8068)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath8080)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 209.52 801.77)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 5.5532813 9.5596876 13.829062 18.098438 22.367813 26.637188 30.906563 35.175938 39.445312 43.714687" y="0">DE123456789</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath8096)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath8108)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 259.68 801.77)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 2.1076174 6.6476955 11.75625 17.680782" y="0">IBAN:</tspan></text>
+   </g>
+  </g>
+  <g clip-path="url(#clipPath8124)">
+   <g transform="translate(60.378 -774.14)"></g>
+  </g>
+  <g clip-path="url(#clipPath8136)">
+   <g transform="translate(60.378 -774.14)">
+    <text transform="matrix(1 0 0 -1 281.28 801.77)" fill="#000000" font-family="'Segoe UI'" font-size="7.92px" xml:space="preserve"><tspan x="0 5.5532813 9.5596876 13.829062 18.098438 22.367813 26.637188 30.906563 35.175938 39.445312 43.714687 47.984062 52.253437 56.522812 60.792187 65.061562 69.33094 73.600311 77.86969 82.139061" y="0">DE491700000122001632</tspan></text>
+   </g>
+  </g>
+ </g>
+</svg>

@@ -96,6 +96,10 @@ import { pointAreaExtFromSchema } from './class_extensions/pointAreaExt';
 import pointAreaExtJSONSchema from './schemes/pointAreaExt.schema.json';
 import pointAreaExtSVG from './svgs/pointAreaExt.svg';
 
+import { ratingsFromSchema } from './class_extensions/ratings';
+import ratingsJSONSchema from './schemes/ratings.schema.json';
+import ratingsSVG from './svgs/ratings.svg';
+
 import { rectArrayMarkableFromSchema } from './class_extensions/rectArrayMarkable';
 import rectArrayMarkableJSONSchema from './schemes/rectArrayMarkable.schema.json';
 import rectArrayMarkableSVG from './svgs/rectArrayMarkable.svg';
@@ -138,9 +142,11 @@ let editor;
 /// #if __DEVELOP
 	window.JSONEditor = JSONEditor;
 /// #endif
-import { object_equals } from '../libs/common';
+import { object_equals, mergeDeep } from '../libs/common';
 import { Parser } from 'expr-eval';
 import { konva2svg } from './konva2svg';
+
+//////////////////////////////////////////////////////////////////////////////
 
 function searchSchemaData( json ) {
 
@@ -164,6 +170,70 @@ function searchSchemaData( json ) {
 	return null;
 }
 
+function parseSchema ( schema ) {
+	try {
+		if ( typeof schema === 'string' ) {
+			return JSON.parse( schema );
+		}
+	} catch(e) {
+		return {};
+	}
+
+	return schema;
+}
+
+import { generateDefaultJsonFromSchema } from './common.js';
+
+function compareSemVer(version1, version2) {
+  // Strings in Arrays aus Zahlen umwandeln
+  const v1 = version1.toString().split('.').map(Number);
+  const v2 = version2.toString().split('.').map(Number);
+
+  // Die Länge der längeren Version bestimmen
+  const maxLength = Math.max(v1.length, v2.length);
+
+  for (let i = 0; i < maxLength; i++) {
+    // Falls ein Element fehlt, nimm 0
+    const num1 = v1[i] || 0;
+    const num2 = v2[i] || 0;
+
+    if (num1 > num2) return 1;
+    if (num1 < num2) return -1;
+  }
+
+  // Alles ist gleich
+  return 0;
+}
+
+function patchConfigJson ( schema, configJson, configJsonSchemaData=searchSchemaData(configJson) ) {
+	const defaultJson = generateDefaultJsonFromSchema( schema );
+
+	const schemaData = searchSchemaData( defaultJson );
+	if ( !schemaData || !schemaData.___name || !configJsonSchemaData || configJsonSchemaData.___name !== schemaData.___name ) {
+		alert( "Fehler in Schema-Data-Definition!" );
+		return;
+	}
+
+	if ( !schemaData.___version || !configJsonSchemaData.___version || compareSemVer(schemaData.___version, configJsonSchemaData.___version) < 0 ) {
+		alert( "Fehler in Schema-Data-Version! Editor ist veraltet!" );
+		return;
+	}
+
+	const patchedConfigJson = mergeDeep(defaultJson, configJson);
+	// console.log( '======= gepatchtes JSON:', patchedConfigJson );
+	// console.log( '======= altes JSON:', configJson );
+	// console.log( '======= gleich:', object_equals( patchedConfigJson, configJson ) );
+	if ( !object_equals( patchedConfigJson, configJson ) ) {
+		document.getElementById("loaderOut").innerHTML = '<div class="error">JSON-Config wurde gepatcht!</div>';
+		const patchedSchemaData = searchSchemaData(patchedConfigJson);
+		patchedSchemaData.___version = schemaData.___version;
+		return patchedConfigJson;
+	}
+
+	return configJson;
+}
+
+//////////////////////////////////////////////////////////////////////////////
 
 function initContainer (graph) {
 	document.getElementById('ewk_container').style.display = graph ? 'block' : 'none';
@@ -190,13 +260,7 @@ function initContainer (graph) {
 
 function loadSchema( schema ) {
 
-	try {
-		if ( typeof schema === 'string' ) {
-			schema = JSON.parse( schema );
-		}
-	} catch(e) {
-		schema = {};
-	}
+	schema = parseSchema( schema );
 
 	// Alle preInitCallbacks ausführen, damit sie z.B. Callbacks definieren können, bevor der Editor initialisiert wird
 	editorPreInitCallbacks.forEach( cb => cb() );
@@ -321,7 +385,7 @@ function loadSchema( schema ) {
 					case 'pikasTextEntry':
 						creator = (cfgData) => {
 							initContainer(false);
-							return new pikasTextEntryFromSchema( textContainer.firstChild, cfgData, base );
+							return new pikasTextEntryFromSchema( textContainer.firstChild, cfgData, base, addMods );
 						}
 						break;
 					case 'pointArea':
@@ -331,6 +395,12 @@ function loadSchema( schema ) {
 					case 'pointAreaExt':
 						initContainer(true);
 						creator = (cfgData) => new pointAreaExtFromSchema( base, cfgData, addMods );
+						break;
+					case 'ratings':
+						creator = (cfgData) => {
+							initContainer(false);
+							return new ratingsFromSchema( textContainer.firstChild, cfgData, base );
+						}
 						break;
 					case 'recordAudio':
 						creator = (cfgData) => {
@@ -414,6 +484,7 @@ const templs = {
 	pikasTextEntry: [ pikasTextEntryJSONSchema, pikasTextEntrySVG ],
 	pointArea: [ pointAreaJSONSchema, pointAreaSVG ],
 	pointAreaExt: [ pointAreaExtJSONSchema, pointAreaExtSVG ],
+	ratings: [ ratingsJSONSchema, ratingsSVG ],
 	recordAudio: [ recordAudioJSONSchema, recordAudioSVG ],
 	rectArrayMarkable: [ rectArrayMarkableJSONSchema, rectArrayMarkableSVG ],
 	stampImages: [ stampImagesJSONSchema, stampImagesSVG ],
@@ -625,7 +696,7 @@ function loadJsonFromStorage () {
 
 		try {
 // console.log(reader.result);
-			const configJson = JSON.parse( json );
+			let configJson = JSON.parse( json );
 			const schemaData = searchSchemaData(configJson);
 // console.log(configJson);
 			if ( !schemaData || !schemaData.___name || !( schemaData.___name in templs ) ) {
@@ -637,8 +708,12 @@ function loadJsonFromStorage () {
 			schSel.style.display = 'none';
 
 			// schema laden
-			const [ schema ] = templs[schemaData.___name];
+			let [ schema ] = templs[schemaData.___name];
+			schema = parseSchema( schema );
 			loadSchema( schema );
+
+			// Neue Default-Werte patchen (z.B. für Funktionen, die es in alten Versionen noch nicht gab)
+			configJson = patchConfigJson( schema, configJson, schemaData );
 
 			editor.on( 'ready', () => {
 				// JSON laden

@@ -33,6 +33,45 @@ const babel_plugin = {
 
 //////////////////////////////////////////////////////////////////////////////
 
+const ExtResFromSchema = {
+	barPlot: { version: "0.3.0" },
+	barSlider: { version: "0.3.0" },
+	barSliderFull: { version: "0.3.0" },
+	chatBotJson: { version: "0.3.0" },
+	chatTextAudio: { version: "0.3.0" },
+	// vueExamplePropsEmit: { version: "0.3.0" },
+	// vueExamplePinia: { version: "0.3.0" },
+	connectedFrames: { version: "0.3.0" },
+	filledBar: { version: "0.3.0" },
+	freePaint: { version: "0.3.0" },
+	freePaintMult: { version: "0.3.0" },
+	freePaintRecog: { version: "0.3.0" },
+	inputfield: { version: "0.3.0" },
+	inputGrid: { version: "0.3.0" },
+	numberLine: { version: "0.3.0" },
+	numberLineWithAnnotations: { version: "0.3.0" },
+	numberLineWithArcs: { version: "0.3.0" },
+	numbersByPictures: { version: "0.3.0" },
+	pikasTextEntry: { version: "0.3.0" },
+	pointArea: { version: "0.3.0" },
+	pointAreaExt: { version: "0.3.0" },
+	ratings: { version: "0.4.0" },
+	recordAudio: { version: "0.4.0" },
+	rectArrayMarkable: { version: "0.3.0" },
+	stampImages: { version: "0.3.0" },
+	inputInserts: { version: "0.3.0" },
+	textareaInserts: { version: "0.3.0" },
+};
+
+const CopyPluginAdditionalPatterns = {
+	ratings: [
+		{ from: './libs/img/star.svg', to: 'star.svg' },
+		{ from: './libs/img/barbell.svg', to: 'barbell.svg' },
+	],
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
 function getEditorCfg ( env, argv ) {
 
 	const outName = 'jsonEditor';
@@ -90,6 +129,7 @@ function getEditorCfg ( env, argv ) {
 			new CopyPlugin({
 				patterns: [
 					{ from: path.resolve( __dirname, 'json_editor/', 'jsoneditor-nightly.js' ), to: path.resolve( __dirname, dst_dir, 'jsoneditor-nightly.js' ) },
+					...Object.values(CopyPluginAdditionalPatterns).flat(),
 				],
 			}),
 		],
@@ -112,38 +152,6 @@ function hasSchemaScoringVals( extres ) {
 //	console.log( '##########################################', extres, erg );
 	return erg;
 }
-
-//////////////////////////////////////////////////////////////////////////////
-
-const ExtResFromSchema = {
-	barPlot: { version: "0.1.0" },
-	barSlider: { version: "0.1.0" },
-	barSliderFull: { version: "0.1.0" },
-	chatBotJson: { version: "0.1.0" },
-	chatTextAudio: { version: "0.1.0" },
-	// vueExamplePropsEmit: { version: "0.1.0" },
-	// vueExamplePinia: { version: "0.1.0" },
-	connectedFrames: { version: "0.1.0" },
-	filledBar: { version: "0.1.0" },
-	freePaint: { version: "0.1.0" },
-	freePaintMult: { version: "0.1.0" },
-	freePaintRecog: { version: "0.1.0" },
-	imageHighlighting: { version: "0.3.0" },
-	inputfield: { version: "0.1.0" },
-	inputGrid: { version: "0.1.0" },
-	numberLine: { version: "0.1.0" },
-	numberLineWithAnnotations: { version: "0.1.0" },
-	numberLineWithArcs: { version: "0.1.0" },
-	numbersByPictures: { version: "0.1.0" },
-	pikasTextEntry: { version: "0.1.0" },
-	pointArea: { version: "0.1.0" },
-	pointAreaExt: { version: "0.1.0" },
-	recordAudio: { version: "0.1.0" },
-	rectArrayMarkable: { version: "0.1.0" },
-	stampImages: { version: "0.1.0" },
-	inputInserts: { version: "0.1.0" },
-	textareaInserts: { version: "0.1.0" },
-};
 
 const extres_subdir = 'dist/ext_res';
 const extres_dir = path.resolve( __dirname, extres_subdir );
@@ -221,6 +229,7 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 		new CopyPlugin({
 			patterns: [
 				{ from: path.resolve( __dirname, 'json_editor/schemes/', `${extres}.schema.json` ), to: path.resolve( extres_dir, extres, 'extres_config.schema.json' ) },
+				...( CopyPluginAdditionalPatterns[extres] || [] ),
 			],
 		}),
 
@@ -306,6 +315,20 @@ module.exports = ( env, argv ) => {
 		}
 
 	} else {
+
+		// schreibe extres_versions.json
+		fs.writeFileSync(
+			path.resolve( cfg.output.path, 'extres_versions.json' ),
+			JSON.stringify( ExtResFromSchema ),
+		);
+
+		// Pfade in CopyPluginAdditionalPatterns patchen (jetzt relativ zu json_editor/class_extensions)
+		Object.keys(CopyPluginAdditionalPatterns).forEach( key => {
+			CopyPluginAdditionalPatterns[key] = CopyPluginAdditionalPatterns[key].map( pattern => ({
+				...pattern,
+				from: '../../'+pattern.from,
+			}));
+		})
 
 		cfg = [ cfg ];
 		Object.keys( ExtResFromSchema ).forEach( er =>{

@@ -108,6 +108,8 @@ import { numberLineWithArcsFromSchema } from './numberLineWithArcs';
 import { pointAreaFromSchema } from './pointArea';
 /// #elif __CLASS == 'pointAreaExt'
 import { pointAreaExtFromSchema } from './pointAreaExt';
+/// #elif __CLASS == 'ratings'
+import { ratingsFromSchema } from './ratings';
 /// #elif __CLASS == 'recordAudio'
 import { recordAudioFromSchema } from './recordAudio';
 /// #elif __CLASS == 'rectArrayMarkable'
@@ -141,7 +143,7 @@ function initJSON ( json ) {
 		cfg.dataSettings.variablePrefix = cfg.dataSettings.variablePrefix.trim();
 	}
 
-/// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio' || __CLASS == 'pikasTextEntry' || __CLASS == 'chatBotJson' || __CLASS == 'chatTextAudio' || __CLASS == 'vueExamplePropsEmit' || __CLASS == 'vueExamplePinia' || __CLASS == 'inputfield'
+/// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio' || __CLASS == 'pikasTextEntry' || __CLASS == 'chatBotJson' || __CLASS == 'chatTextAudio' || __CLASS == 'vueExamplePropsEmit' || __CLASS == 'vueExamplePinia' || __CLASS == 'inputfield' || __CLASS == 'ratings'
 	// base ohne Konva stage
 	const base = new baseInits( { dataSettings: cfg.dataSettings } );
 /// #elif __CLASS == 'imageHighlighting'
@@ -219,6 +221,8 @@ function initJSON ( json ) {
 		const io = new pointAreaFromSchema( base, cfg, addMods );
 /// #elif __CLASS == 'pointAreaExt'
 		const io = new pointAreaExtFromSchema( base, cfg, addMods );
+/// #elif __CLASS == 'ratings'
+		const io = new ratingsFromSchema( '#container', cfg, base, addMods );
 /// #elif __CLASS == 'recordAudio'
 		const io = new recordAudioFromSchema( '#container', cfg, base, addMods );
 /// #elif __CLASS == 'rectArrayMarkable'

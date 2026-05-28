@@ -187,7 +187,7 @@
 					}
 				},
 				"___alt_minTicks": {
-					"format": "object",
+					"type": "object",
 					"options": {
 						"hidden": true,
 						"dependencies": {
@@ -258,7 +258,7 @@
 					}
 				},
 				"___alt_majTicks": {
-					"format": "object",
+					"type": "object",
 					"options": {
 						"hidden": true,
 						"dependencies": {
@@ -374,12 +374,12 @@
 					"type": "object",
 					"properties": {
 						"___name": {
-							"type":"string",
-							"default":"filledBar"
+							"type": "string",
+							"default": "filledBar"
 						},
 						"___version": {
-							"type":"number",
-							"default":0.1
+							"type": "string",
+							"default": "0.1"
 						}
 					},
 					"options": {
@@ -411,8 +411,8 @@
 					}
 				},
 
-				"scoringVals": {
-					"title": "Scoring Werte",
+				"scoringVariables": {
+					"title": "(interne) Scoring Variablen V_Score_&ltpref&gt;_&ltvarName&gt;",
 					"type": "array",
 					"format": "table",
 					"options": {
@@ -421,7 +421,43 @@
 						"disable_properties": true,
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (or, and)"
+						"infoText": "Ausdruck, der ausgewertet wird, Ergebnis wird in VarName gespeichert. == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (or, and) | IB Variable: Soll Muster als Variable V_Score_<pref>_<VarName> im IB gespeichert werden?"
+					},
+					"items": {
+						"title": "Scoring Variable",
+						"type": "object",
+						"properties": {
+							"name": {
+								"title": "VarName",
+								"type": "string",
+								"pattern": "^[a-zA-Z0-9_]+$"
+							},
+							"condition": {
+								"title": "Ausdruck (VarNamen in ${} setzen)",
+								"type": "string",
+								"format": "textarea"
+							},
+							"exp": {
+								"title": "IB Variable",
+								"type": "boolean",
+								"format": "checkbox",
+								"default": true
+							}
+						}
+					}
+				},
+
+				"scoringVals": {
+					"title": "Scoring Werte für V_Score_&ltpref&gt;",
+					"type": "array",
+					"format": "table",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 12,
+						"grid_break": true,
+						"infoText": "Scoring-Wert der ersten wahren Bedingung wird evaluiert. Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (or, and)"
 					},
 					"items": {
 						"title": "Scoring Wert",

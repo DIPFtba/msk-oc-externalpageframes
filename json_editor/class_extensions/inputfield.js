@@ -40,6 +40,8 @@ export class inputfieldFromSchema {
 			height: opts.options?.height,
 			...opts.options?.stylesDefault
 		};
+		opts.options.stylesFocus.outline = 'none';
+		opts.options.stylesFocus.boxShadow = 'none';
 		let styleDefs = "";
 		[ ['stylesNormal', ''] , ['stylesHover', ':hover'] , ['stylesFocus', ':focus'] ].forEach( ([styleType, pseudo]) => {
 			const stylesObj = {
@@ -79,12 +81,13 @@ export class inputfieldFromSchema {
 
 			const value = this.input.value;
 			const logData = { val: value };
-			if ( maxlength && value.length > maxlength ) {
-				this.input.value = this.lastOkValue || '';
-				base.postLog( 'maxlength', logData );
-			} else if ( re && !re.test( value ) ) {
+			if ( re && !re.test( value ) ) {
 				this.input.value = this.lastOkValue || '';
 				base.postLog( 'invalid', logData );
+				base.triggerInputValidationEvent();
+			} else if ( maxlength && value.length > maxlength ) {
+				this.input.value = this.lastOkValue || '';
+				base.postLog( 'maxlength', logData );
 				base.triggerInputValidationEvent();
 			} else {
 				this.lastOkValue = value;

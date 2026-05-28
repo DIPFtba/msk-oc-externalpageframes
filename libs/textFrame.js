@@ -29,6 +29,7 @@ export class textFrame {
 			frameColor: 'black',
 			cornerRadius: 0,
 			inputRegexp: null,
+			maxlength: null,
 			thousandsSep: ' ',
 			readonly: 0,
 			onChange: null,
@@ -144,19 +145,24 @@ export class textFrame {
 					}
 				}
 
-				if ( this.inputRegexp ) {
-					const re = new RegExp( this.inputRegexp );
+				if ( this.maxlength || this.inputRegexp ) {
+					const re = this.inputRegexp ? new RegExp( this.inputRegexp ) : null;
 					function handler (e) {
 						const el = e.target;
-						if ( !el.value.match( re ) ) {
+						const revert = (log) =>{
 							if( el.hasOwnProperty('oldValue') ) {
 								el.value = el.oldValue;
 								el.setSelectionRange(el.oldSelectionStart, el.oldSelectionEnd);
 							} else {
 								el.value = '';
 							}
-							this.logKey( 'inputRevert', el.oldSelectionStart, e, { toText: el.value } );
+							this.logKey( log, el.oldSelectionStart, e, { toText: el.value } );
 							this.base.triggerInputValidationEvent();
+						}
+						if ( re && !el.value.match( re ) ) {
+							revert('inputRevert');
+						} else if ( this.maxlength && el.value.length > this.maxlength ) {
+							revert('inputRevertLen');
 						} else {
 							el.oldValue = el.value;
 							el.oldSelectionStart = el.selectionStart;

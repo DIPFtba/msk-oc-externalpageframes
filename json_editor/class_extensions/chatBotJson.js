@@ -19,12 +19,6 @@ export class chatBotJsonFromSchema {
 			dataSettings: {},
 		}
 
-		// !!!!!
-		// !!!!!
-		// !!!!! get/setState testen!
-		// !!!!!
-		// !!!!!
-
 		mergeDeep( Object.assign( this, defaultOpts ), cfgData );
 		this.base = base;
 
@@ -75,14 +69,33 @@ export class chatBotJsonFromSchema {
 	///////////////////////////////////
 
 	getState () {
-		return JSON.stringify( this.vueApp?.state.chat );
+		const state = this.vueApp?.state?.chat;
+		return JSON.stringify({
+			curr: state?.curr.filter( entry => !entry.isPrechat ),
+			currLabel: state?.currLabel,
+			prev: state?.prev,
+		});
 	}
 
-	setState ( state ) {
+	setState ( jsonState ) {
 		try {
-			this.vueApp.state.chat = JSON.parse( state );
+			const state = JSON.parse(jsonState);
+
+			this.vueApp.state.loadChat({
+				curr: state.curr.map( entry => {
+					// Bei Eintrag .curr wird isStillTyping entfernt, da das sonst nicht entfernt wird
+					if ('isStillTyping' in entry) {
+						const { isStillTyping: _isStillTyping, ...rest } = entry;
+						return rest;
+					}
+					return entry;
+				}),
+				currLabel: state.currLabel,
+				prev: state.prev,
+			});
+
 		} catch (e) {
-			console.error(e);
+			console.error('setState() error:', e);
 		}
 
 		setStatePostProc(this);

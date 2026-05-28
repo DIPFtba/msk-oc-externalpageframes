@@ -78,15 +78,16 @@ export class iconBar {
 
 		Object.assign( this, defaults, opts );
 		this.stage = stage;
-		// search iconBar Layer ore create new
+		// search iconBar Layer or create new
 		if ( this.useExistingIconBarLayer ) {
-			const layer = stage.getAttr('bw__IconBarLayer');
+			const layerName = 'bw__IconBarLayer';
+			const layer = stage.getAttr(layerName);
 			if ( layer ) {
 				this.layer = layer
 			} else {
 				this.layer = new Konva.Layer();
 				stage.add( this.layer );
-				stage.setAttr( 'bw__IconBarLayer', this.layer );
+				stage.setAttr( layerName, this.layer );
 			}
 		} else {
 			this.layer = new Konva.Layer();
@@ -410,16 +411,33 @@ export class iconBar {
 
 	///////////////////////////////////
 
+	exSpc () {
+		const frameWithPadding = 2 * ( this.frameWidth + this.framePadding );
+		// extraSpace durchgehen
+		let extraSpaceCnt = 0, extraSpace = 0;
+		this.icons.forEach( i => {
+			if ( i.extraSpace && i.extraSpace!==true ) {
+				extraSpaceCnt++;
+				extraSpace += i.extraSpace;
+			}
+		});
+		return [ frameWithPadding, extraSpaceCnt, extraSpace ];
+	}
+
 	getOverallHeight () {
+		const [ frameWithPadding, extraSpaceCnt, extraSpace ] = this.exSpc();
+		// Höhe berechnen
 		return this.direction=='v' ?
-			this.icons.length * ( this.spacing + this.height + 2*( this.frameWidth + this.framePadding ) ) - this.spacing :
-			this.height + 2*( this.frameWidth + this.framePadding );
+			(this.icons.length-extraSpaceCnt) * ( this.spacing + this.height + frameWithPadding ) - this.spacing + extraSpace :
+			this.height + frameWithPadding;
 	}
 
 	getOverallWidth () {
+		const [ frameWithPadding, extraSpaceCnt, extraSpace ] = this.exSpc();
+		// Breite berechnen
 		return this.direction=='v' ?
-			this.width + 2*( this.frameWidth + this.framePadding ) :
-			this.icons.length * ( this.spacing + this.width + 2*( this.frameWidth + this.framePadding ) ) - this.spacing;
+			this.width + frameWithPadding :
+			(this.icons.length-extraSpaceCnt) * ( this.spacing + this.width + frameWithPadding ) - this.spacing + extraSpace;
 	}
 
 	///////////////////////////////////

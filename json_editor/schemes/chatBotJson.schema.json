@@ -851,6 +851,46 @@
 			}
 		},
 
+		"___prechat": {
+			"title": "Vordef. Chat",
+			"type": "object",
+			"options": {
+				"titleHidden": true,
+				"disable_collapse": true,
+				"disable_edit_json": true,
+				"disable_properties": true
+			},
+			"properties": {
+
+				"prechat": {
+					"title": "Vordef. Texte",
+					"type": "array",
+					"format": "table",
+					"items": {
+						"title": "Text",
+						"type": "object",
+						"properties": {
+							"role": {
+								"title": "Rolle",
+								"type": "string",
+								"enum": ["bot", "user"]
+							},
+							"text": {
+								"title": "Text",
+								"type": "string"
+							}
+						}
+					},
+					"options": {
+						"titleHidden": true,
+						"disable_collapse": true,
+						"grid_columns": 12,
+						"grid_break": true
+					}
+				}
+			}
+		},
+
 		"chat": {
 			"title": "Bot- & UserTexte",
 			"type": "object",
@@ -950,12 +990,12 @@
 					"type": "object",
 					"properties": {
 						"___name": {
-							"type":"string",
-							"default":"chatBotJson"
+							"type": "string",
+							"default": "chatBotJson"
 						},
 						"___version": {
-							"type":"number",
-							"default":0.1
+							"type": "string",
+							"default": "0.1"
 						}
 					},
 					"options": {

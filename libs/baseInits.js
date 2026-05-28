@@ -73,11 +73,13 @@ export class baseInits {
 	triggerInputValidationEvent () {
 		if ( this.fsm.triggerEvent ) {
 /// #if __item == ''
-			if ( this.dataSettings && this.dataSettings.variablePrefix ) {
+			if ( this.dataSettings?.variablePrefix ) {
 				this.fsm.triggerEvent( 'ev_InputValidation_' + this.dataSettings.variablePrefix );
 			}
 /// #else
-			this.fsm.triggerEvent( 'ev_InputValidation_' + __itemFN.replace("msk_","") );
+			if ( typeof __itemFN !== 'undefined' ) {
+				this.fsm.triggerEvent( 'ev_InputValidation_' + __itemFN.replace("msk_","") );
+			}
 /// #endif
 			this.fsm.triggerEvent( 'ev_InputValidation_ExtRes' );
 		}
@@ -165,7 +167,7 @@ export class baseInits {
 	declareVariables () {
 
 		const varDefs = [];
-		const typetrans = {
+		const typetrans = {		// Nur für "automatische" Typdefinition, wenn keine scoreDefType Funktion definiert ist
 			'string': 'String',
 			'number': 'Integer',
 			'boolean': 'Boolean',
@@ -189,7 +191,7 @@ export class baseInits {
 					switch ( type ) {
 						case 'Boolean':
 							if ( val===null || val===undefined ) {
-								defaultValue = false;
+								defaultValue = 0;
 							}
 							break;
 						case 'String':
@@ -273,7 +275,7 @@ export class baseInits {
 	regSendInitDone () {
 		this.getInitDonePromise().then( () => {
 			this.fsm.triggerEvent( "EV_InitDone_ExtRes" );
-			if ( this.dataSettings && this.dataSettings.variablePrefix ) {
+			if ( this.dataSettings?.variablePrefix ) {
 				this.fsm.triggerEvent( `EV_InitDone_${this.dataSettings.variablePrefix}` );
 			}
 		});

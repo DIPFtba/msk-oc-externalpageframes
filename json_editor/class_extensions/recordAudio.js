@@ -65,6 +65,10 @@ export class recordAudioFromSchema extends textareaContainer {
 				'</div>',
 
 			recordText: "<span style=\"color: darkred; font-weight: bold;\">... Neue Aufnahme läuft ...</span>",
+			cntDwnText: "<span style=\"color: darkred; font-weight: bold;\">... Aufnahme noch <span class=\"blink\">${}</span> Sekunden ...</span>",
+
+			recLimit: 0,
+			cntDwn: 0,
 
 			textareaStyle: {
 				'background-color': 'white',
@@ -199,9 +203,12 @@ export class recordAudioFromSchema extends textareaContainer {
 			a: audioUrl,
 			v: 1,
 		};
-		this.convertToBase64( audioBlob ).then( base64 =>
-			this.audioList[ currAudioId ].b = base64
-		);
+		this.convertToBase64( audioBlob ).then( base64 => {
+			this.audioList[ currAudioId ].b = base64;
+			if ( this.dataSettings?.saveAudioTraces ) {
+				this.base.postLog( 'RECORD_AUDIO_SAVED', { audioId: currAudioId, base64 } );
+			}
+		});
 
 		this.base.sendChangeState(this);
 	}
@@ -249,6 +256,17 @@ export class recordAudioFromSchema extends textareaContainer {
 				el.addEventListener( key, evs[key] );
 			}
 		})
+	}
+
+	displayCountdown ( cnt ) {
+		if ( cnt>0 ) {
+			if ( this.recording && this.displayDiv ) {
+				this.displayDiv.innerHTML = this.cntDwnText.replace('${}', cnt);
+			}
+			this.cntDwnTimer = setTimeout( () => this.displayCountdown( cnt-1 ), 1000 );
+		} else {
+			this.stopRecord();
+		}
 	}
 
 	///////////////////////////////////
@@ -403,10 +421,19 @@ export class recordAudioFromSchema extends textareaContainer {
 	}
 
 	async startRecord () {
+		this.setMicroStat(null);	// damit der Button nicht mehr klickbar ist, bis getUserMedia durchgelaufen ist
 		( this.audioStream ? Promise.resolve( this.audioStream ) : this.getUserMedia(0) )
 			.then( () => {
 
 				this.displayDiv = this.newDisplayDiv( this.audioId );
+
+				if ( this.recLimit ) {
+					if ( this.cntDwn ) {
+						this.cntDwnTimer = setTimeout( () => this.displayCountdown( this.cntDwn ), (this.recLimit - this.cntDwn) * 1000 + 200 );
+					} else {
+						this.cntDwnTimer = setTimeout( () => this.stopRecord(), this.recLimit*1000 + 200 );
+					}
+				}
 
 				this.recording = true;
 				this.audioRecStart();
@@ -414,13 +441,18 @@ export class recordAudioFromSchema extends textareaContainer {
 				this.setMicroStat('recording');
 				this.statLog( 'RECORD_STARTED', { audioId: this.audioId } );
 			})
-			.catch();
+			.catch( () => this.setMicroStat('notAvailable') );
 	}
 
 	stopRecord () {
 
 		if ( this.recording ) {
 			this.statLog( 'RECORD_STOPPED', { audioId: this.audioId } );
+
+			if ( this.cntDwnTimer ) {
+				clearTimeout( this.cntDwnTimer );
+				this.cntDwnTimer = null;
+			}
 
 			this.recording = false;
 			this.audioRecStop();
@@ -534,8 +566,8 @@ export class recordAudioFromSchema extends textareaContainer {
 
 	getState () {
 		return JSON.stringify( this.audioList.map( l => ({
-			b: l.b,
-			v: l.v,
+			b: l.b,	// audio base64 string
+			v: l.v,	// visible=1
 		})));
 	}
 

@@ -177,13 +177,13 @@ export class SimpleInput {
         }
 
         if ( this._value !== newValue ) {
-            if ( this.maxlength && newValue.length > this.maxlength ) {
-                this.emit( 'maxlength', newValue );
-                return; // do not set value if it exceeds maxlength
-            }
             if ( this.inputRegexp && !this.inputRegexp.test( newValue ) ) {
                 this.emit( 'invalid', newValue );
                 return; // do not set value if it does not match the regexp
+            }
+            if ( this.maxlength && newValue.length > this.maxlength ) {
+                this.emit( 'maxlength', newValue );
+                return; // do not set value if it exceeds maxlength
             }
 
             const oldValue = this._value;

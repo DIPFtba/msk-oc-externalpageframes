@@ -333,10 +333,11 @@ export class pikasTextEntryFromSchema {
 			return inp;
 		});
 
-		addScoring( this, opts, addMods.Parser );
 		this.startButtonListener();
 
+		addScoring( this, opts, addMods.Parser );
 		this.initData = this.getChState();
+		addScoring( this, opts, addMods.Parser );
 		this.base.sendChangeState( this );	// init & send changeState & score
 
 		base.decInitCnt();
@@ -346,9 +347,9 @@ export class pikasTextEntryFromSchema {
 		return varName.match( /^V_Input_\w+_\d+$/ ) ? this.labType : 'Integer';
 	}
 
-	scoreDef () {
+	scoreDef ( exportAll=false ) {
 		const res = {};
-		if ( this.readonly || !this.initData ) {
+		if ( this.readonly ) {
 			return res;
 		}
 
@@ -361,12 +362,12 @@ export class pikasTextEntryFromSchema {
 			});
 
 			if ( this.dataSettings?.createInpAllVars ) {
-				res[`V_Status_${pref}_All`] = +this.getChState().every( ( val, i ) => val != this.initData[i] );
+				res[`V_Status_${pref}_All`] = this.initData ? +this.getChState().every( ( val, i ) => val != this.initData[i] ) : 0;
 			}
 		}
 
 		if ( this.computeScoringVals ) {
-			this.computeScoringVals( res );
+			this.computeScoringVals( res , exportAll );
 		}
 
 		return res;
@@ -384,7 +385,7 @@ export class pikasTextEntryFromSchema {
 			delete logDat.target;
 			this.base.postLog( event, logDat );
 
-			if ( event=='invalid' ) {
+			if ( ['invalid','maxlength'].includes(event) ) {
 				this.base.triggerInputValidationEvent();
 			} else if ( ['input','change'].includes(event) ) {
 				this.base.sendChangeState( this );	// init & send changeState & score
@@ -444,7 +445,7 @@ export class pikasTextEntryFromSchema {
 
 	// Check if User made changes
 	getDefaultChangeState () {
-		return this.getChState().some( (val, i) => val != this.initData[i] );
+		return this.initData ? this.getChState().some( (val, i) => val != this.initData[i] ) : false;
 	}
 
 	getState () {

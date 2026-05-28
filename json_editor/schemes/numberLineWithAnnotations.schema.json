@@ -988,7 +988,7 @@
 						"disable_properties": true,
 						"grid_columns": 12,
 						"grid_break": true,
-						"infoText": "Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (or, and)"
+						"infoText": "Scoring-Wert der ersten wahren Bedingung wird evaluiert. Bedingung: == ist gleich, logische Verknüpfung mehrerer Bedingungen möglich (or, and)"
 					},
 					"items": {
 						"title": "Scoring Wert",

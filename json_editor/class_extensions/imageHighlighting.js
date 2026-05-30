@@ -46,15 +46,29 @@ const fastHash = (str) => {
     return (h >>> 0).toString(16);
 }
 
-const imgPosHash = ( x, y, w, h, u ) => fastHash(`${x}-${y}x${w}-${h}:${u}`);
+const imgPosHash = ( x, y, w, h, u ) => {
+	console.log(`${x}-${y}x${w}-${h}:${u}`.substring(0, 100));
+	return fastHash(`${x}-${y}x${w}-${h}:${u}`);
+}
 
-export const getIoImgPoss = imgPoss => imgPoss.map( pos => imgPosHash(pos.left, pos.top, pos.width, pos.height, pos.url) );
+// Liefert die imgPoss.poss skaliert auf newWxnewH
+export const getObjImgPossScaledHashed = ( imgPoss, newW, newH ) => {
+	const maxScale = ( x, newW, oldW ) => Math.min( newW-1, Math.round( x * newW/oldW ) );
+	return imgPoss.poss.map( pos => imgPosHash(
+		maxScale( pos.left, newW, imgPoss.w ),
+		maxScale( pos.top, newH, imgPoss.h ),
+		maxScale( pos.width, newW, imgPoss.w ),
+		maxScale( pos.height, newH, imgPoss.h ),
+		pos.url
+	));
+}
 
-export const validateHitAreaDef = ( hitArea, ioImgPoss ) => {
+// Validiert hitArea (u.a. passen hitArea.imgs zu objImgPossScaledHashed)
+export const validateHitAreaDef = ( hitArea, objImgPossScaledHashed ) => {
 	if ( !hitArea.w || !hitArea.h ||
 		!Array.isArray(hitArea.areas) ||
-		!hitArea.imgPoss || hitArea.imgPoss.length>ioImgPoss.length ||
-		!hitArea.imgPoss.every( (pos, idx) => pos === ioImgPoss[idx] )
+		!hitArea.posHashs || hitArea.posHashs.length>objImgPossScaledHashed.length ||
+		!hitArea.posHashs.every( (pos, idx) => pos === objImgPossScaledHashed[idx] )
 	) {
 		throw new Error('Ungültige Bildpositionen / Bild gewechselt. HitArea-Def bitte löschen!');
 	}
@@ -209,16 +223,15 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		const innerContainer = document.createElement( 'div' );
 		innerContainer.classList.add( 'ihImgContainer' );
 		const gap = opts.gap ? addPx(opts.gap) : '';
-		if ( gap ) {
-			innerContainer.style.gap = gap;
-		}
 		if ( opts.areaWidth ) {
 			innerContainer.style.width = addPx(opts.areaWidth);
 		}
-		if ( gap ) {
-			innerContainer.style.paddingTop = gap;
-			innerContainer.style.paddingBottom = gap;
-		}
+		// if ( gap ) {
+		// 	// GEht mit % nicht
+		// 	innerContainer.style.gap = gap;
+		// 	innerContainer.style.paddingTop = gap;
+		// 	innerContainer.style.paddingBottom = gap;
+		// }
 		if ( opts.areaColor ) {
 			innerContainer.style.backgroundColor = opts.areaColor;
 		}
@@ -230,6 +243,12 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		opts.imgs.forEach( (img, index) => {
 			const imgEl = document.createElement( 'img' );
 			imgEl.style.width= img.width || '100%';
+			if ( gap ) {
+				imgEl.style.marginBottom = gap;
+				if ( !index ) {
+					imgEl.style.marginTop = gap;
+				}
+			}
 			imgLoadPrs.push(
 				new Promise( (res) => {
 					imgEl.onload = res;
@@ -353,16 +372,22 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 			const height = Math.max( Math.round(stage.height()), baseSize.height );
 			stage.size({ width, height });
 
-			this.imgPoss = imgPoss;
+			this.imgPoss = {
+				w: width,
+				h: height,
+				poss: imgPoss,
+			};
+// console.log("~~~~~~~~~~ imgPoss",this.imgPoss);
 			this.createHitAreasConv( width, height );
 
-			base.postLog( 'ImgLoaded', { imgs: imgPoss } );
+			base.postLog( 'ImgLoaded', { imgPoss: this.imgPoss } );
 			base.decInitCnt();
 		});
 
 		// Restl Inits
 		this.stage = stage;
 		this.base = base;
+		Object.assign( this, opts );
 
 		this.modeIconBar.hideBar(true);
 
@@ -423,19 +448,21 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 
 	createHitAreasConv ( width, height ) {
 
+// console.trace();
 		this.hitAreasConv = [];
-		const ioImgPoss = getIoImgPoss(this.imgPoss);
+		const imgPossScaledHashed = getObjImgPossScaledHashed( this.imgPoss, width, height );
+// console.log("++++++++++ imgPossScaledHashed",imgPossScaledHashed,JSON.parse(JSON.stringify(this.imgPoss)),this.imgPoss);
 		const pref = this.dataSettings.variablePrefix ? this.dataSettings.variablePrefix+'_' : '';
-
 		for ( const hitArea of this.dataSettings?.hitAreas || [] ) {
 			try {
 				const has = {};
 				const json = {};
 				for ( const posNeg of ['pos','neg'] ) {
 					has[posNeg] = hitArea[posNeg] && hitArea[posNeg].trim() != '';
+// console.log("++++++++++ posNeg",posNeg,has[posNeg],hitArea[posNeg]);
 					if ( has[posNeg] ) {
 						json[posNeg] = JSON.parse(hitArea[posNeg]);
-						validateHitAreaDef( json[posNeg], ioImgPoss );
+						validateHitAreaDef( json[posNeg], imgPossScaledHashed );
 					}
 				}
 
@@ -452,7 +479,7 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 			}
 		}
 
-		console.log("==============================",this.hitAreasConv);
+console.log("==============================",this.hitAreasConv);
 	}
 
 	getImageData () {
@@ -463,7 +490,7 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 		this.pixelDaten = imageData.data; // Das Array mit [R, G, B, A, R, G, B, A, ...]
 		this.pixelDatenWidth = imageData.width;
-		console.log('============================== Image-Daten aktualisiert',canvas.width, canvas.height,this.pixelDaten);
+console.log('============================== Image-Daten aktualisiert',canvas.width, canvas.height,this.pixelDaten);
 	}
 
 	getHitAreaScore ( hitAreaConv ) {

@@ -1,4 +1,4 @@
-import { imageHighlightingFromSchema, getIoImgPoss, hitAreaScaled, validateHitAreaDef } from './imageHighlighting.js';
+import { imageHighlightingFromSchema, getObjImgPossScaledHashed, hitAreaScaled, validateHitAreaDef, getObjImgPossScaledHashed } from './imageHighlighting.js';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -17,7 +17,7 @@ export async function editHitAreas( vals, posneg, cfgJson ) {
 	// Areas parsen, verifizieren, ggf. umrechnen
 	// imgPoss gibt immer an, von wo bis wo die einzelnen Bilder ihre Koordinaten haben
 	// Diese werden über Hash verifiziert
-	const ioImgPoss = getIoImgPoss(io.imgPoss);
+	const imgPossScaledHashed = getObjImgPossScaledHashed(io.imgPoss);
 	let areaDef;
 	const stageWidth = Math.round( io.stage.width() );
 	const stageHeight = Math.round( io.stage.height() );
@@ -25,7 +25,7 @@ export async function editHitAreas( vals, posneg, cfgJson ) {
 	if ( vals.trim() == '' ) {
 
 		areaDef = {
-			imgPoss: ioImgPoss,	// Für welches Bilder-Set wurden die Hit-Areas erzeugt?
+			posHashs: imgPossScaledHashed,	// Für welches Bilder-Set wurden die Hit-Areas erzeugt?
 			w: stageWidth,	// Damit können die Koordinaten später umgerechnet werden, falls die Hit-Areas für andere Stage erstellt wurden
 			h: stageHeight,
 			areas: [],	// Die Hit-Areas
@@ -36,10 +36,10 @@ export async function editHitAreas( vals, posneg, cfgJson ) {
 			const json = JSON.parse( vals );
 
 			// Haben die Bilder die gleichen Hashes?
-			validateHitAreaDef( json, ioImgPoss );
+			validateHitAreaDef( json, imgPossScaledHashed );
 			// areaDef zusammenstellen
 			areaDef = {
-				imgPoss: ioImgPoss,
+				posHashs: imgPossScaledHashed,
 				w: stageWidth,
 				h: stageHeight,
 				areas: hitAreaScaled( json.areas, stageWidth, json.w, stageHeight, json.h ),

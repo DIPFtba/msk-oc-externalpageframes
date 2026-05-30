@@ -1,5 +1,7 @@
 #!/bin/bash
 
+exit 1
+
 function copy_branch {
     local BRANCH=$1
     local DEST_DIR="docs/${BRANCH}"

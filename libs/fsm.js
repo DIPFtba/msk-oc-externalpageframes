@@ -169,6 +169,7 @@ export class fsmSend {
 							callCbs( data );
 						}
 					} else if ( typeof data === 'string' ) {
+
 						const dataTr = data.trim();
 						if ( dataTr.length>0 ) {
 							// Handle string messages (runtime < 10.5)

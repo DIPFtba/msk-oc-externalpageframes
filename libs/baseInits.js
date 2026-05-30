@@ -265,7 +265,7 @@ export class baseInits {
 	}
 
 	isInitDone () {
-		return this.fsm.isInitDone();
+		return this.fsm.isInitDone;
 	}
 
 	incInitCnt () {

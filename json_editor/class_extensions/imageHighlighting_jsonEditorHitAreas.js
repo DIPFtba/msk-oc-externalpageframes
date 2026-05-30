@@ -1,4 +1,4 @@
-import { imageHighlightingFromSchema, getObjImgPossScaledHashed, hitAreaScaled, validateHitAreaDef, getObjImgPossScaledHashed } from './imageHighlighting.js';
+import { imageHighlightingFromSchema, getObjImgPossScaledHashed, hitAreaScaled, validateHitAreaDef } from './imageHighlighting.js';
 
 //////////////////////////////////////////////////////////////////////////////
 

@@ -124,7 +124,7 @@ export class freePaintMultFromSchema {
 
 		// this.startGetImageListener();
 /// #if __DEVELOP
-		window.getRectPngImage = this.getRectPngImage.bind(this);
+		// window.getRectPngImage = this.getRectPngImage.bind(this);
 /// #endif
 
 		// Wenn alles initialisiert (auch das, was erst später gemalt wird)
@@ -293,40 +293,32 @@ export class freePaintMultFromSchema {
 
 	///////////////////////////////////
 
-	getRectPngImage () {
-		const url = this.stage.toDataURL({
-			mimeType: "image/png",
-			x: Math.max( 0, this.x - Math.ceil( this.frameWidth/2 ) ),
-			y: Math.max( 0, this.y - Math.ceil( this.frameWidth/2 ) ),
-			width: this.width + 2*Math.ceil( this.frameWidth/2 ),
-			height: this.height + 2*Math.ceil( this.frameWidth/2 ),
-		});
-// console.log(url);
-		return url;
-	}
+// 	getRectPngImage () {
+// 		const url = this.stage.toDataURL({
+// 			mimeType: "image/png",
+// 			x: Math.max( 0, this.x - Math.ceil( this.frameWidth/2 ) ),
+// 			y: Math.max( 0, this.y - Math.ceil( this.frameWidth/2 ) ),
+// 			width: this.width + 2*Math.ceil( this.frameWidth/2 ),
+// 			height: this.height + 2*Math.ceil( this.frameWidth/2 ),
+// 		});
+// // console.log(url);
+// 		return url;
+// 	}
 
-	startGetImageListener () {
+// 	startGetImageListener () {
+// 		// listener for providing image as BASE64 URL
+// 		this.base.startListeningToCallEPFOp( cmd => {
+// 			if ( cmd === "getImage" ) {
+// 				const image = this.getRectPngImage();
+// 				const pass_data = {
+// 					image,
+// 					callId: "getImage"
+// 				};
 
-		// listener for providing image as BASE64 URL
-		window.addEventListener(
-			"message",
-			(event) => {
-
-				try {
-					const { callId } = JSON.parse(event.data);
-					if ( callId !== undefined && callId.includes("getImage") ) {
-						const image = this.getRectPngImage();
-						const pass_data = {
-							image,
-							callId
-						};
-
-						window.parent.postMessage( JSON.stringify( pass_data ), '*' );
-					}
-				} catch (e) {}
-			},
-			false );
-	}
+// 				window.parent.postMessage( JSON.stringify( pass_data ), '*' );
+// 			}
+// 		});
+// 	}
 
 	///////////////////////////////////
 
@@ -449,31 +441,22 @@ export class freePaintMultFromSchema {
 	}
 
 	startButtonListener () {
-		window.addEventListener(
-			"message",
-			(event) => {
-// console.log('#################',event.data,event.origin)
-				try {
-					const [ cmd, p1, p2, p3 ] = JSON.parse(event.data);
-					switch ( cmd ) {
-						case 'undo':
-							this.undo();
-							break;
-						case 'redo':
-							this.redo();
-							break;
-						case 'clearAll':
-							this.clearAll();
-							break;
-						case 'setBrush':
-							this.setBrush( p1, p2, p3 );
-							break;
-					}
-				} catch (e) {
-					console.error(e);
-				}
-			},
-			false );
+		this.base.startListeningToCallEPFOp( ( cmd, p1, p2, p3 ) => {
+			switch ( cmd ) {
+				case 'undo':
+					this.undo();
+					break;
+				case 'redo':
+					this.redo();
+					break;
+				case 'clearAll':
+					this.clearAll();
+					break;
+				case 'setBrush':
+					this.setBrush( p1, p2, p3 );
+					break;
+			}
+		});
 	}
 
 	sendButtonState () {

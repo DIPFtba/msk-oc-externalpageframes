@@ -1193,23 +1193,22 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 		});
 
 		// set mode on message from IB
-		const me = this;
-		window.addEventListener( "message", (ev) => {
-			if ( ev.data ) {
-				try {
-					const data = JSON.parse(ev.data);
-					if ( data == "SetIconBarOff" ) {
-						this.switchModeBar.deactivate();
-					}
-					if ( data == "SetIconBarText" ) {
-						this.switchModeBar.deactivate();
-						this.switchModeBar.clickOn(0);
-					}
-					if ( data == "SetIconBarPaint" ) {
-						this.switchModeBar.deactivate();
-						this.switchModeBar.clickOn(1);
-					}
-				} catch(e) {}
+		this.base.startListeningToCallEPFOp( ( cmd ) => {
+			switch (cmd) {
+				case "SetIconBarOff": {
+					this.switchModeBar.deactivate();
+					break;
+				}
+				case "SetIconBarText": {
+					this.switchModeBar.deactivate();
+					this.switchModeBar.clickOn(0);
+					break;
+				}
+				case "SetIconBarPaint": {
+					this.switchModeBar.deactivate();
+					this.switchModeBar.clickOn(1);
+					break;
+				}
 			}
 		});
 

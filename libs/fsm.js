@@ -6,6 +6,9 @@ export class fsmSend {
 		this.indexPath = this.getQueryVariable('indexPath');
 		this.userDefIdPath = this.getQueryVariable('userDefIdPath');
 
+		this.callEPFcbs = [];
+		this.sendVDcb = null;
+
 		// Trace Counter
 		this.traceCount = 0;
 
@@ -21,6 +24,8 @@ export class fsmSend {
 			}
 		});
 		this.initDoneCnt = 0;
+
+		this.startListener();
 
 		if ( process.env.NODE_ENV !== 'production' ) {
 			window.bw__debugOut = this.debugOut.bind(this);
@@ -59,7 +64,6 @@ export class fsmSend {
 	}
 
 	triggerEvent ( event ) {
-
 		if ( process.env.NODE_ENV !== 'production' ) {
 			this.debugOut("triggerEvent: " + event);
 		}
@@ -70,7 +74,6 @@ export class fsmSend {
 	}
 
 	postMessageWithPathsAndTraceCount( payload ) {
-
 		try
 		{
 			payload.indexPath = this.indexPath;
@@ -82,7 +85,6 @@ export class fsmSend {
 		} catch (e) {
 			console.error(e);
 		}
-
 	}
 
 	postMessage ( payload ) {
@@ -105,15 +107,25 @@ export class fsmSend {
 		return parsedUrl.searchParams.get(variable);
 	}
 
+	// Listener
 	startListeningToVarDeclReq (declareVariableCallback) {
+		if ( typeof declareVariableCallback === 'function' ) {
+			this.sendVDcb = declareVariableCallback;
+		}
+	}
 
-		const prInitDone = this.getInitDonePromise();
+	startListeningToCallEPFOp (callEPFOptionsCallback) {
+		if ( typeof callEPFOptionsCallback === 'function' ) {
+			this.callEPFcbs.push( callEPFOptionsCallback );
+		}
+	}
 
+	startListener () {
 		this.answerVarDeclReq = function (callId) {
-			prInitDone.then( () => {
+			this.prInitDone.then( () => {
 				let variables = []
-				if(typeof declareVariableCallback == 'function') {
-					variables = declareVariableCallback();
+				if ( this.sendVDcb ) {
+					variables = this.sendVDcb();
 				}
 
 				const pass_data = {
@@ -125,26 +137,51 @@ export class fsmSend {
 			});
 		}
 
-		// listener for providing initial variable data signal.
+		const callCbs = (data) => this.prInitDone.then( () => {
+			if ( process.env.NODE_ENV !== 'production' ) {
+				this.debugOut( `callExternalPageFrameOperator ${this.callEPFcbs.length} listener(s) called with data: ${JSON.stringify(data)}` );
+			};
+			for ( const cb of this.callEPFcbs ) {
+				cb( ...data );
+			}
+		});
+
 		window.addEventListener(
 			"message",
-			(event) => {
+			(json) => {
 
 				try {
-					const { callId } = JSON.parse(event.data);
-					if ( callId !== undefined && callId.includes("importVariables") ) {
-						this.answerVarDeclReq(callId);
+					const data = JSON.parse(json.data);
+					if ( typeof data === 'object' && data !== null  ) {
+						if ( !Array.isArray(data) ) {
+
+							// sendVariableDeclarationReq?
+							if ( typeof data.callId === 'string' && data.callId.includes("importVariables") ) {
+								this.answerVarDeclReq(data.callId);
+							}
+							// callExternalPageFrameOperator? (runtime >= 10.5)
+							else if ( data.messageKey==='callExternalPageFrameOperator' && Array.isArray(data.parameters) ) {
+								callCbs( data.parameters );
+							}
+
+						} else {
+							// Array message, callEPFcbs? (runtime < 10.5)
+							callCbs( data );
+						}
+					} else if ( typeof data === 'string' ) {
+
+						const dataTr = data.trim();
+						if ( dataTr.length>0 ) {
+							// Handle string messages (runtime < 10.5)
+							callCbs( [dataTr] );
+						}
 					}
-				} catch (error) {
-					if ( process.env.NODE_ENV !== 'production' ) {
-						console.log("error on external listener - ", error);
-					}
-				}
+				} catch (e) {}
 			},
 			false );
-	 }
+	}
 
-	 debugOut (s) {
+	debugOut (s) {
 		if ( process.env.NODE_ENV !== 'production' ) {
 
 			// if ( !this.debugOutput ) {
@@ -174,7 +211,7 @@ export class fsmSend {
 			// console.trace();
 
 		}
-	 }
+	}
 
 	///////////////////////////////////
 
@@ -189,7 +226,7 @@ export class fsmSend {
 	decInitCnt () {
 		if ( this.initDoneCnt > 0 ) {
 			this.initDoneCnt--;
-			if (this.initDoneCnt === 0) {
+			if ( this.initDoneCnt === 0 ) {
 				this.prInitDoneResolve();
 			}
 		}

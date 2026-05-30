@@ -272,4 +272,8 @@ export class baseInits {
 		});
 	}
 
+	startListeningToCallEPFOp (callEPFOptionsCallback) {
+		this.fsm.startListeningToCallEPFOp(callEPFOptionsCallback);
+	}
+
 }

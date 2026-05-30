@@ -499,20 +499,11 @@ export class pointAreaExtFromSchema {
 	///////////////////////////////////
 
 	startButtonListener () {
-		window.addEventListener(
-			"message",
-			(event) => {
-// console.log('#################',event.data,event.origin)
-				try {
-					const [ cmd, p1 ] = JSON.parse(event.data);
-					switch ( cmd ) {
-						case 'setColorIdx':
-							this.setColor(p1);
-							break;
-					}
-				} catch (e) {}
-			},
-			false );
+		this.base.startListeningToCallEPFOp( ( cmd, p1 ) => {
+			if ( cmd === 'setColorIdx' ) {
+				this.setColor(p1);
+			}
+		});
 	}
 
 	setColor ( idx ) {

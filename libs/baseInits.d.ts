@@ -14,6 +14,7 @@ export class baseInits {
     sendChangeState ( obj:record<string,any>, newState:record<string, any>|null = null ): void;
 
     getInitDonePromise (): Promise<void>;
+    isInitDone (): boolean;
     incInitCnt (): void;
     decInitCnt (): void;
     regSendInitDone (): void;

@@ -187,10 +187,11 @@ export function getYofEvent ( stage, event ) {
 
 
 export function getPosOfEvent ( stage, ev ) {
-	return {
-		x: getXofEvent( stage, ev ),
-		y: getYofEvent( stage, ev ),
-	}
+	return stage.getPointerPosition();
+	// return {
+	// 	x: getXofEvent( stage, ev ),
+	// 	y: getYofEvent( stage, ev ),
+	// }
 }
 
 

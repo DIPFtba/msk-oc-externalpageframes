@@ -24,6 +24,7 @@ export class fsmSend {
 			}
 		});
 		this.initDoneCnt = 0;
+		this.isInitDone = false;
 
 		this.startListener();
 
@@ -228,6 +229,7 @@ export class fsmSend {
 			this.initDoneCnt--;
 			if ( this.initDoneCnt === 0 ) {
 				this.prInitDoneResolve();
+				this.isInitDone = true;
 			}
 		}
 		return this.initDoneCnt;

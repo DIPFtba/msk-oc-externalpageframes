@@ -102,10 +102,10 @@ export class iconBar {
 		//Draw icon bar background first if needed
 		if ( this.frameWidth || this.backgroundFill || this.highlightColor ) {
 			this.kBackground = new Konva.Rect({
-				x: this.x - ( this.frameWidth || 0 ),
+				x: this.x,
 				y: this.y,
-				width: this.width + 2*this.framePadding + this.frameWidth*4,
-				height: this.getOverallHeight() ,//+ 4*this.framePadding,
+				width: this.width + 2*this.framePadding,
+				height: this.getOverallHeight(),
 				// stroke: this.frameColor,
 				// strokeWidth: 1,
 				fill: this.backgroundFill,

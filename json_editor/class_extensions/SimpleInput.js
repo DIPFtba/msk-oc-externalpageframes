@@ -10,6 +10,7 @@ export class SimpleInput {
 
             id: null, // optional id for the input element
 
+            position: "absolute", // 'absolute' or 'relative' (inside parent container)
             x: 0, y:0,
             width: 100, height: 30,
 
@@ -60,20 +61,20 @@ export class SimpleInput {
                 throw new Error( `Parent container "${parentContainer}" not found` );
             }
         }
-        const contBound = parentContainer.getBoundingClientRect();
-        this.offsX = contBound.left + window.scrollX;
-        this.offsY = contBound.top + window.scrollY;
         parentContainer.appendChild( container );
         this.container = container;
 
         // create input element
         const div = document.createElement( "div" );
         div.classList.add( "simple-input" );
+        div.style.position = this.position;
         if ( this.id ) {
             div.id = this.id;
         }
         this.setStyles( div, {
             ...this.stylesNormal,
+            paddingLeft: this.padding + "px",
+            paddingRight: this.padding + "px",
             left: this.x + "px",
             top: this.y + "px",
             width: this.width + "px",
@@ -95,6 +96,22 @@ export class SimpleInput {
 
         container.appendChild( div );
         this.div = div;
+
+        // Position und Änderungen erfassen
+        const contBound = parentContainer.getBoundingClientRect();
+        this.offsX = contBound.left + window.scrollX;
+        this.offsY = contBound.top + window.scrollY;
+
+        const resizeObserver = new ResizeObserver(entries => {
+            for ( let entry of entries ) {
+                if ( entry.target === parentContainer ) {
+                    const contBound = parentContainer.getBoundingClientRect();
+                    this.offsX = contBound.left + window.scrollX;
+                    this.offsY = contBound.top + window.scrollY;
+                }
+            }
+        });
+        resizeObserver.observe( parentContainer );
 
         // create cursor element
         const cursorElement = document.createElement( "span" );
@@ -141,7 +158,7 @@ export class SimpleInput {
         }
     }
 
-    blur () {
+    blur (ev) {
         if ( this.hasFocus ) {
             if ( this._value !== this.focusStartValue ) {
                 this.emit( 'change', this._value );
@@ -154,6 +171,10 @@ export class SimpleInput {
     }
 
     setValue ( newValue, newCursorPos=null ) {
+
+        if ( typeof newValue !== 'string' ) {
+            newValue = String( newValue );
+        }
 
         if ( this._value !== newValue ) {
             if ( this.inputRegexp && !this.inputRegexp.test( newValue ) ) {
@@ -173,7 +194,8 @@ export class SimpleInput {
             this.render();
 
             // check if text fits in div
-            if ( newValue.length>0 && this.chars[0].x1 < this.x+this.padding+1 ) {
+            if ( newValue.length>0 && 
+                    ( this.chars[ this.chars.length-1 ].x2 - this.chars[0].x1 ) > ( this.width - 2*this.padding ) ) {
 
                 // shrink if possible
                 if ( !this.minFontSize || !this.resizeFont() ) {
@@ -202,7 +224,7 @@ export class SimpleInput {
                 this.maxFontSize :
                 Math.min(
                     this.maxFontSize,
-                    this.fontSize * ( this.width - 2*this.padding - 2 ) / ( this.chars[ this.chars.length-1 ].x2 - this.chars[0].x1 )
+                    this.fontSize * ( this.width - 2*this.padding ) / ( this.chars[ this.chars.length-1 ].x2 - this.chars[0].x1 )
                 );
             if ( fontSize!=this.fontSize ) {
                 if ( fontSize < this.minFontSize ) {
@@ -322,13 +344,13 @@ export class SimpleInput {
     }
 
     h_mouseenter () {
-        if ( !this.hasFocus ) {
+        if ( !this.hasFocus && !this.readonly ) {
             this.setStyles( this.div, this.stylesHover );
         };
     }
 
     h_mouseleave () {
-        if ( !this.hasFocus ) {
+        if ( !this.hasFocus && !this.readonly ) {
             this.setStyles( this.div, this.stylesNormal );
         }
     }
@@ -378,16 +400,16 @@ export class SimpleInput {
                 break;
             case "Enter":
                 if ( this.blurOnEnter ) {
-                    this.emit( 'enterPressed', this._value );
                     this.blur();
+                    this.emit( 'enterPressed', this._value );
                     handled = 1;
                 }
                 break;
             case "Escape":
                 if ( this.revertOnEsc ) {
-                    this.emit( 'escPressed', this._value );
                     this.setValue( this.focusStartValue, this._cursorPos );
                     this.blur();
+                    this.emit( 'escPressed', this._value );
                     handled = 1;
                 }
                 break;
@@ -409,7 +431,7 @@ export class SimpleInput {
 // console.log('*** whClick', ev );
         // click outside the input, blur it
         if ( this.hasFocus && ev.target !== this.div && !this.div.contains( ev.target ) ) {
-            this.blur();
+            this.blur(ev);
         }
     }
 

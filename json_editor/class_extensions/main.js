@@ -88,6 +88,8 @@ import { freePaintFromSchema } from './freePaint';
 import { freePaintMultFromSchema } from './freePaintMult';
 /// #elif __CLASS == 'freePaintRecog'
 import { freePaintRecogFromSchema } from './freePaintRecog';
+/// #elif __CLASS == 'imageHighlighting'
+import { imageHighlightingFromSchema } from './imageHighlighting';
 /// #elif __CLASS == 'inputfield'
 import { inputfieldFromSchema } from './inputfield';
 /// #elif __CLASS == 'inputGrid'
@@ -144,16 +146,23 @@ function initJSON ( json ) {
 /// #if __CLASS == 'inputInserts' || __CLASS == 'textareaInserts' || __CLASS == 'recordAudio' || __CLASS == 'pikasTextEntry' || __CLASS == 'chatBotJson' || __CLASS == 'chatTextAudio' || __CLASS == 'vueExamplePropsEmit' || __CLASS == 'vueExamplePinia' || __CLASS == 'inputfield' || __CLASS == 'ratings'
 	// base ohne Konva stage
 	const base = new baseInits( { dataSettings: cfg.dataSettings } );
+/// #elif __CLASS == 'imageHighlighting'
+	let base = null;	// wird in class selbst erzeugt
 /// #else
 	const base = new baseInits( { container: 'container', dataSettings: cfg.dataSettings } );
 /// #endif
-	baseInitialized.resolvePromise( base );
+	if ( base ) {
+		baseInitialized.resolvePromise( base );
+	}
 
 /// #if __CANHAVESCORINGVALS
 	// load Parser lazy or not
 	(
 
-		( cfg.dataSettings && cfg.dataSettings.scoringVals && cfg.dataSettings.scoringVals.length>0 ) ?
+		( cfg.dataSettings && (
+				cfg.dataSettings.scoringVals && cfg.dataSettings.scoringVals.length>0 ||
+				cfg.dataSettings.scoringVariables && cfg.dataSettings.scoringVariables.length>0
+		) ) ?
 			import( /* webpackChunkName: "sce" */ 'expr-eval' ).then( ({ Parser }) => ({ Parser }) ) :
 			Promise.resolve({})
 
@@ -163,9 +172,7 @@ function initJSON ( json ) {
 /// #endif
 
 		// there will be subsequent inits
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base?.incInitCnt();
 
 /// #if __CLASS == 'barPlot'
 		const io = new barPlotFromSchema( base, cfg, addMods );
@@ -191,7 +198,15 @@ function initJSON ( json ) {
 		const io = new freePaintMultFromSchema( base, cfg );
 /// #elif __CLASS == 'freePaintRecog'
 		const io = new freePaintRecogFromSchema( base, cfg );
-/// #elif __CLASS == 'inputfield'
+/// #elif __CLASS == 'imageHighlighting'
+		const io = new imageHighlightingFromSchema( '#container', cfg, addMods ); // Das muss base selbst erzeugen!
+		base = io.base;
+
+		// base Inits von oben nachholen
+		baseInitialized.resolvePromise( base );
+		base.incInitCnt();
+
+		/// #elif __CLASS == 'inputfield'
 		const io = new inputfieldFromSchema( '#container', cfg, base, addMods );
 /// #elif __CLASS == 'inputGrid'
 		const io = new inputGridFromSchema( base, cfg );
@@ -226,17 +241,66 @@ function initJSON ( json ) {
 		addStatusVarDef( io, json );
 		base.sendChangeState( io );
 
-
+		///// getState Wrapper
 		if ( io.getState ) {
-			window.getState = io.getState.bind(io);
-		}
-		if ( io.setState ) {
-			window.setState = io.setState.bind(io);
+			if ( process.env.NODE_ENV === 'production' ) {
+
+				window.getState = () => {
+					if ( !base?.isInitDone() ) {
+						console.error("*** getState() called before initialization is done! ***");
+					}
+					return io.getState();
+				}
+
+			} else {
+
+				window.getState = () => {
+					if ( !base?.isInitDone() ) {
+						console.error("*** getState() called before initialization is done! ***");
+					}
+					const jsonState = io.getState();
+					try {
+						const state = JSON.parse( jsonState );
+						console.log( "*** getState() called:", state );
+					} catch (e) {
+						console.error("*** getState() called - Error parsing state:", e);
+					}
+					return jsonState;
+				}
+			}
 		}
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
+		///// setState Wrapper
+		if ( io.setState ) {
+			const prInitDone = base?.getInitDonePromise() ?? Promise.resolve();
+			if ( process.env.NODE_ENV === 'production' ) {
+
+				window.setState = (state) => prInitDone.then( io.setState.bind(io, state) );
+
+			} else {
+
+				window.setState = (jsonState) => {
+					let state = {};
+					try {
+						state = JSON.parse( jsonState );
+					} catch (e) {
+						console.error("*** setState() called with invalid JSON state! ***");
+					}
+					if ( !base?.isInitDone() ) {
+						console.warn("*** setState() called before initialization is done! The state will be applied after initialization. ***");
+						return prInitDone.then( () => {
+							console.log( "*** setState() executed:", state );
+							io.setState( jsonState );
+						});
+					} else {
+						console.log( "*** setState() called:", state );
+						return io.setState( jsonState );
+					}
+				};
+			}
 		}
+
+		base?.decInitCnt();
 
 /// #if __CANHAVESCORINGVALS
 	})

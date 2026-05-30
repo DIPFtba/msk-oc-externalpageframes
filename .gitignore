@@ -5,3 +5,4 @@ node_modules
 /dist/tools
 /json_editor/myScriptApiCfg.js
 /dist/ext_res/**/*_config.json
+/public

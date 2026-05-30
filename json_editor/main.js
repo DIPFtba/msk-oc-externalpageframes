@@ -3,6 +3,8 @@ import { clearCfgJson, addStatusVarDef } from './common';
 
 //////////////////////////////////////////////////////////////////////////////
 
+const editorPreInitCallbacks = [];
+
 import { barPlotFromSchema } from './class_extensions/barPlot';
 import barPlotJSONSchema from './schemes/barPlot.schema.json';
 import barPlotSVG from './svgs/barPlot.svg';
@@ -52,6 +54,11 @@ import freePaintMultSVG from './svgs/freePaintMult.svg';
 import { freePaintRecogFromSchema } from './class_extensions/freePaintRecog';
 import freePaintRecogJSONSchema from './schemes/freePaintRecog.schema.json';
 import freePaintRecogSVG from './svgs/freePaintMult.svg';
+
+import { imageHighlightingFromSchema, edInitImageHighlighting } from './class_extensions/imageHighlighting';
+import imageHighlightingJSONSchema from './schemes/imageHighlighting.schema.json';
+import imageHighlightingSVG from './svgs/freePaintMult.svg';
+editorPreInitCallbacks.push( edInitImageHighlighting );
 
 import { inputfieldFromSchema } from './class_extensions/inputfield';
 import inputfieldJSONSchema from './schemes/inputfield.schema.json';
@@ -255,6 +262,9 @@ function loadSchema( schema ) {
 
 	schema = parseSchema( schema );
 
+	// Alle preInitCallbacks ausführen, damit sie z.B. Callbacks definieren können, bevor der Editor initialisiert wird
+	editorPreInitCallbacks.forEach( cb => cb() );
+
 	const div = document.getElementById('JSON_EDITOR');
 	editor = new JSONEditor( div, {
 		schema: schema,
@@ -334,6 +344,15 @@ function loadSchema( schema ) {
 					case 'freePaintRecog':
 						initContainer(true);
 						creator = (cfgData) => new freePaintRecogFromSchema( base, cfgData );
+						break;
+					case 'imageHighlighting':
+						creator = (cfgData) => {
+							initContainer(false);
+							// erzeugt base selbst!
+							const io = new imageHighlightingFromSchema( textContainer.firstChild, cfgData, addMods );
+							base = io.base;
+							return io;
+						}
 						break;
 					case 'inputfield':
 						creator = (cfgData) => {
@@ -434,7 +453,7 @@ function loadSchema( schema ) {
 // /// #if __DEVELOP
 
 // // for Development: always load one JSON schema
-// loadSchema( pikasTextEntryJSONSchema );
+// loadSchema( freePaintJSONSchema );
 // window.updateEWK = updateEWK;
 
 // /// #else
@@ -455,6 +474,7 @@ const templs = {
 	freePaint: [ freePaintJSONSchema, freePaintSVG ],
 	freePaintMult: [ freePaintMultJSONSchema, freePaintMultSVG ],
 	freePaintRecog: [ freePaintRecogJSONSchema, freePaintRecogSVG ],
+	imageHighlighting: [ imageHighlightingJSONSchema, imageHighlightingSVG ],
 	inputfield: [ inputfieldJSONSchema, inputfieldSVG ],
 	inputGrid: [ inputGridJSONSchema, inputGridSVG ],
 	numberLine: [ numberLineJSONSchema, numberLineSVG ],
@@ -547,11 +567,63 @@ function updateEWK () {
 				extres.scoreDef();
 			}
 
+			///// getState Wrapper
 			if ( extres.getState ) {
-				window.getState = extres.getState.bind(extres);
+				if ( process.env.NODE_ENV === 'production' ) {
+
+					window.getState = () => {
+						if ( !base?.isInitDone() ) {
+							console.error("*** getState() called before initialization is done! ***");
+						}
+						return extres.getState();
+					}
+
+				} else {
+
+					window.getState = () => {
+						if ( !base?.isInitDone() ) {
+							console.error("*** getState() called before initialization is done! ***");
+						}
+						const jsonState = extres.getState();
+						try {
+							const state = JSON.parse( jsonState );
+							console.log( "*** getState() called:", state );
+						} catch (e) {
+							console.error("*** getState() called - Error parsing state:", e);
+						}
+						return jsonState;
+					}
+				}
 			}
+
+			///// setState Wrapper
 			if ( extres.setState ) {
-				window.setState = extres.setState.bind(extres);
+				const prInitDone = base?.getInitDonePromise() ?? Promise.resolve();
+				if ( process.env.NODE_ENV === 'production' ) {
+
+					window.setState = (state) => prInitDone.then( extres.setState.bind(extres, state) );
+
+				} else {
+
+					window.setState = (jsonState) => {
+						let state = {};
+						try {
+							state = JSON.parse( jsonState );
+						} catch (e) {
+							console.error("*** setState() called with invalid JSON state! ***");
+						}
+						if ( !base?.isInitDone() ) {
+							console.warn("*** setState() called before initialization is done! The state will be applied after initialization. ***");
+							return prInitDone.then( () => {
+								console.log( "*** setState() executed:", state );
+								extres.setState( jsonState );
+							});
+						} else {
+							console.log( "*** setState() called:", state );
+							return extres.setState( jsonState );
+						}
+					};
+				}
 			}
 		}
 

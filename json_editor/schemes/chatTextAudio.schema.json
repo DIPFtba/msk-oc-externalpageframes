@@ -412,21 +412,22 @@
 			},
 			"properties": {
 
+				"textInputDisabled": {
+					"title": "Texteingabe nicht möglich",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 4
+					}
+				},
+
 				"inputRows": {
 					"title": "Zeilen Chat-Eingabefeld",
 					"type": "string",
 					"default": "2",
 					"options": {
 						"grid_columns": 4
-					}
-				},
-				"inputPlaceholder": {
-					"title": "Text Chat-Eingabefeld",
-					"type": "string",
-					"default": "Nachricht hier eingeben",
-					"options": {
-						"grid_columns": 4,
-						"grid_break": true
 					}
 				},
 
@@ -555,6 +556,18 @@
 					}
 				},
 
+				"inputPlaceholder": {
+					"title": "Text Chat-Eingabefeld",
+					"type": "string",
+					"default": "Nachricht hier eingeben",
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true,
+						"dependencies": {
+							"textInputDisabled": false
+						}
+					}
+				},
 				"inputStyleTextinput": {
 					"title": "Stil Eingabefeld Texteingabe",
 					"type": "object",
@@ -564,7 +577,10 @@
 						"grid_columns": 12,
 						"remove_empty_properties": true,
 						"disable_edit_json": true,
-						"disable_properties": true
+						"disable_properties": true,
+						"dependencies": {
+							"textInputDisabled": false
+						}
 					},
 					"properties": {
 
@@ -702,7 +718,7 @@
 						},
 						"___version": {
 							"type": "string",
-							"default": "0.1"
+							"default": "0.2"
 						}
 					},
 					"options": {
@@ -729,6 +745,16 @@
 						"grid_columns": 12,
 						"grid_break": true,
 						"infoText": "Erzeuge zusätzliche Variable, die angeben, wieviel Text-/Audio-/gelöschte Einträge im Chat sind (Zähler)."
+					}
+				},
+
+				"saveAudioTraces": {
+					"title": "Audios zusätzlich zum State auch in Traces speichern",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": true,
+					"options": {
+						"grid_columns": 4
 					}
 				}
 			}

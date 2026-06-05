@@ -169,6 +169,15 @@ proc_config() {
             patch "$jsonfile" '.dataSettings.saveAudioTraces = true' '.dataSettings.saveAudioTraces' && pack=1
         fi
 
+        # chatTextAudio
+        if [[ "$name" = "chatTextAudio" ]]
+        then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            patch "$jsonfile" '.dataSettings.saveAudioTraces = true' '.dataSettings.saveAudioTraces' && pack=1
+            patch "$jsonfile" '.___input.textInputDisabled = false' '.___input.textInputDisabled' && pack=1
+        fi
+
     fi
 
     return $pack

@@ -26,7 +26,7 @@ export class chatTextAudioFromSchema {
 				base.sendChangeState( this );
 			},
 			// postMessage-Function
-			base.fsm.postMessageWithPathsAndTraceCount.bind( base.fsm ) );
+			this.postMessagesFiltered.bind( this ) );
 
 		// console.log(this.vueApp,this.vueApp.state);
 
@@ -39,6 +39,16 @@ export class chatTextAudioFromSchema {
 		// addScoring( this, cfgData, addMods.Parser );
 
 		base.decInitCnt();
+	}
+
+	///////////////////////////////////
+
+	postMessagesFiltered ( data ) {
+		// Send/don't send Audio to traces depending on setting
+		if ( data.traceMessage?.event==='RECORDING_RECEIVED' && !this.dataSettings?.saveAudioTraces ) {
+			return;
+		}
+		this.base.fsm.postMessageWithPathsAndTraceCount( data );
 	}
 
 	///////////////////////////////////

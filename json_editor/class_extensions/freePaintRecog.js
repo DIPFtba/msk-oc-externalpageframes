@@ -10,6 +10,7 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 	constructor ( base, opts = {} ) {
 
 		base.incInitCnt();
+		base.regSendInitDone();
 
 		super( base, opts );
 
@@ -19,6 +20,11 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 		this.base.sendChangeState(this);
 
 		this.myScriptApi = new myScriptApi( opts.myScript );
+		base.startListeningToCallEPFOp( ( cmd, ak, hk ) => {
+			if ( cmd === "SetMyScriptKeys" ) {
+				this.myScriptApi.setMyScriptKeys( ak, hk );
+			}
+		});
 
 		base.decInitCnt();
 	}

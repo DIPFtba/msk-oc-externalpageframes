@@ -93,17 +93,17 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 		}
 	}
 
-// 	getRectPngImage () {
-// 		const url = this.stage.toDataURL({
-// 			mimeType: "image/png",
-// 			x: Math.max( 0, this.x - Math.ceil( this.frameWidth/2 ) ),
-// 			y: Math.max( 0, this.y - Math.ceil( this.frameWidth/2 ) ),
-// 			width: this.width + 2*Math.ceil( this.frameWidth/2 ),
-// 			height: this.height + 2*Math.ceil( this.frameWidth/2 ),
-// 		});
-// // console.log(url);
-// 		return url;
-// 	}
+	getRectPngImage () {
+		const url = this.stage.toDataURL({
+			mimeType: "image/png",
+			x: Math.max( 0, this.x - Math.ceil( this.frameWidth/2 ) ),
+			y: Math.max( 0, this.y - Math.ceil( this.frameWidth/2 ) ),
+			width: this.width + 2*Math.ceil( this.frameWidth/2 ),
+			height: this.height + 2*Math.ceil( this.frameWidth/2 ),
+		});
+// console.log(url);
+		return url;
+	}
 
 // 	startGetImageListener () {
 // 		// listener for providing image as BASE64 URL

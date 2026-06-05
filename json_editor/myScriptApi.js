@@ -39,9 +39,17 @@ export class myScriptApi {
 			},
 		}
 
-		mergeDeep( Object.assign( this, defaultOpts, extCfg ), opts );
+		mergeDeep( Object.assign( this, defaultOpts ), opts );
+		this.setMyScriptKeys( extCfg.ak, extCfg.hk );
 
 		this.reqController = [];
+	}
+
+	///////////////////////////////////
+
+	setMyScriptKeys ( ak, hk ) {
+		this.ak = ak;
+		this.hk = hk;
 	}
 
 	///////////////////////////////////

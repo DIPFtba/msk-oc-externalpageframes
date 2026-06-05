@@ -293,17 +293,17 @@ export class freePaintMultFromSchema {
 
 	///////////////////////////////////
 
-// 	getRectPngImage () {
-// 		const url = this.stage.toDataURL({
-// 			mimeType: "image/png",
-// 			x: Math.max( 0, this.x - Math.ceil( this.frameWidth/2 ) ),
-// 			y: Math.max( 0, this.y - Math.ceil( this.frameWidth/2 ) ),
-// 			width: this.width + 2*Math.ceil( this.frameWidth/2 ),
-// 			height: this.height + 2*Math.ceil( this.frameWidth/2 ),
-// 		});
-// // console.log(url);
-// 		return url;
-// 	}
+	getRectPngImage () {
+		const url = this.stage.toDataURL({
+			mimeType: "image/png",
+			x: Math.max( 0, this.x - Math.ceil( this.frameWidth/2 ) ),
+			y: Math.max( 0, this.y - Math.ceil( this.frameWidth/2 ) ),
+			width: this.width + 2*Math.ceil( this.frameWidth/2 ),
+			height: this.height + 2*Math.ceil( this.frameWidth/2 ),
+		});
+// console.log(url);
+		return url;
+	}
 
 // 	startGetImageListener () {
 // 		// listener for providing image as BASE64 URL
@@ -327,6 +327,9 @@ export class freePaintMultFromSchema {
 		const layer = this.layer;
 		const canvas = layer.getCanvas()._canvas;
 		const context = canvas.getContext('2d');
+		if ( !canvas.width || !canvas.height ) {
+			return 0;
+		}
 		const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
 		const pixelDaten = imageData.data; // Das Array mit [R, G, B, A, R, G, B, A, ...]
 		// Durchiterieren und Prüfen

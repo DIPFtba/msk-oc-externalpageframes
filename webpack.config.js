@@ -45,7 +45,7 @@ const ExtResFromSchema = {
 	filledBar: { version: "0.3.2" },
 	freePaint: { version: "0.3.2" },
 	freePaintMult: { version: "0.3.2" },
-	freePaintRecog: { version: "0.3.2" },
+	freePaintRecog: { version: "0.4.0" },
 	imageHighlighting: { version: "0.1.0" },
 	inputfield: { version: "0.3.2" },
 	inputGrid: { version: "0.3.2" },

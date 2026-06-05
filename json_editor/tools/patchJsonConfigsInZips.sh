@@ -154,11 +154,19 @@ proc_config() {
         fi
 
         # +scoringVariables
-        if [[ "$name" = "barPlot" || "$name" = "barSliderFull" || "$name" = "barSlider" || "$name" = "connectedFrames" || "$name" = "filledBar" || "$name" = "inputInserts" || "$name" = "numberLineWithAnnotations" || "$name" = "numberLineWithArcs" || "$name" = "numbersByPictures" || "$name" = "pikasTextEntry" || "$name" = "pointAreaExt" || "$name" = "pointArea" || "$name" = "rectArrayMarkable" ]]
+        if [[ "$name" = "barPlot" || "$name" = "barSliderFull" || "$name" = "barSlider" || "$name" = "connectedFrames" || "$name" = "filledBar" || "$name" = "imageHighlighting" || "$name" = "inputInserts" || "$name" = "numberLineWithAnnotations" || "$name" = "numberLineWithArcs" || "$name" = "numbersByPictures" || "$name" = "pikasTextEntry" || "$name" = "pointAreaExt" || "$name" = "pointArea" || "$name" = "rectArrayMarkable" ]]
         then
             echo
             echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
             patch "$jsonfile" '.dataSettings.scoringVariables = []' '.dataSettings.scoringVariables' && pack=1
+        fi
+
+        # +scoringVals
+        if [[ "$name" = "barPlot" || "$name" = "barSliderFull" || "$name" = "barSlider" || "$name" = "connectedFrames" || "$name" = "filledBar" || "$name" = "imageHighlighting" || "$name" = "inputInserts" || "$name" = "numberLineWithAnnotations" || "$name" = "numberLineWithArcs" || "$name" = "numbersByPictures" || "$name" = "pikasTextEntry" || "$name" = "pointAreaExt" || "$name" = "pointArea" || "$name" = "rectArrayMarkable" ]]
+        then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            patch "$jsonfile" '.dataSettings.scoringVals = []' '.dataSettings.scoringVals' && pack=1
         fi
 
         # recordAudio

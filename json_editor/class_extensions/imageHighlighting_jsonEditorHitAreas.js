@@ -1,8 +1,83 @@
-import { imageHighlightingFromSchema, getObjImgPossScaledHashed, hitAreaScaled, validateHitAreaDef } from './imageHighlighting.js';
+import { imageHighlightingFromSchema, getObjImgPossScaledHashed, hitAreaScaled, validatePosHashs } from './imageHighlighting.js';
+
+import { clearCfgJson } from '../common';
 
 //////////////////////////////////////////////////////////////////////////////
 
-export async function editHitAreas( vals, posneg, cfgJson ) {
+//
+// Handler der HitArea-Edit-Buttons im json-Editor
+//
+
+function editBtnClicked( buttonEditor, event, posneg ) {
+
+	event.preventDefault(); // Verhindert ggf. Standardverhalten wie Formular-Submits
+
+	// buttonEditor.parent repräsentiert das umgebende Objekt im Array.
+	const parent = buttonEditor.parent;
+	// pos/neg String-Felder suchen, HitArea editieren
+	const stringPos = parent.editors['pos'];
+	const stringNeg = parent.editors['neg'];
+	// hidden posHashs suchen
+	const posHashs = parent.parent?.parent?.editors?.posHashs;
+
+
+	if ( stringPos && stringNeg && posHashs ) {
+		// JSON aus Editor lesen
+		const mainEditor = buttonEditor.jsoneditor;
+		// JSON auslesen und kopieren für 100%igen Schreibschutz
+		const readOnlyJson = JSON.parse(JSON.stringify(mainEditor.getValue()));
+		const cfgJson = clearCfgJson( readOnlyJson );
+
+		// editieren
+		const posHashsVal = posHashs.getValue();
+		const stringPosVal = stringPos.getValue();
+		const stringNegVal = stringNeg.getValue();
+		editHitAreas( posHashsVal, stringPosVal, stringNegVal, posneg, cfgJson,  )
+			.then( ([newPosHash, newValue]) => {
+				//neue posHash setzen?
+				if ( newPosHash !== posHashsVal ) {
+					posHashs.setValue( newPosHash );
+				}
+				// Neuen String setzen (aktualisiert die UI sofort)
+				if (posneg === 'pos') {
+					if ( newValue !== stringPosVal ) {
+						stringPos.setValue(newValue);
+					}
+				} else {
+					if ( newValue !== stringNegVal ) {
+						stringNeg.setValue(newValue);
+					}
+				}
+			});
+	} else {
+		alert( 'Fehler: Interner Fehler (editHitAreas)' );
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+//
+// Init der HitArea-Edit-Buttons im json-Editor
+//
+
+export function edInitImageHighlighting () {
+
+	// 1. Callbacks global deklarieren
+	window.JSONEditor.defaults.callbacks ||= {};
+	window.JSONEditor.defaults.callbacks.button ||= {};
+
+	window.JSONEditor.defaults.callbacks.button.imageHighlightingHitAreaPosBtnAction = function(buttonEditor, event) {
+		editBtnClicked( buttonEditor, event, 'pos' );
+	}
+
+	window.JSONEditor.defaults.callbacks.button.imageHighlightingHitAreaNegBtnAction = function(buttonEditor, event) {
+		editBtnClicked( buttonEditor, event, 'neg' );
+	}
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+async function editHitAreas( posHashs, valPos, valNeg, posneg, cfgJson ) {
 
 	// Overlay darstellen, Imgs laden
 	const dialog = document.querySelector( '#fullscreen-overlay' );
@@ -11,76 +86,88 @@ export async function editHitAreas( vals, posneg, cfgJson ) {
 	dialog.appendChild( container );
 	dialog.showModal();
 
+	// EWK laden (Hintergrund-Bilder darstellen)
 	const io = new imageHighlightingFromSchema( container, cfgJson, {}, 1 );
 	await io.base.getInitDonePromise();
 
-	// Areas parsen, verifizieren, ggf. umrechnen
-	// imgPoss gibt immer an, von wo bis wo die einzelnen Bilder ihre Koordinaten haben
-	// Diese werden über Hash verifiziert
-	const imgPossScaledHashed = getObjImgPossScaledHashed(io.imgPoss);
-	let areaDef;
 	const stageWidth = Math.round( io.stage.width() );
 	const stageHeight = Math.round( io.stage.height() );
+	const initVals = posneg === 'pos' ? valPos : valNeg;
 
-	if ( vals.trim() == '' ) {
-
-		areaDef = {
-			posHashs: imgPossScaledHashed,	// Für welches Bilder-Set wurden die Hit-Areas erzeugt?
-			w: stageWidth,	// Damit können die Koordinaten später umgerechnet werden, falls die Hit-Areas für andere Stage erstellt wurden
-			h: stageHeight,
-			areas: [],	// Die Hit-Areas
-		};
-
+	// posHashs default setzen / verifizieren
+	// Also kontrollieren, ob hitAreas für diese (oder weniger) Bilder gemacht wurden
+	const ioImgPossHashScaled = getObjImgPossScaledHashed( io.imgPoss, stageWidth, stageHeight );
+	if ( posHashs.trim() === '' ) {
+		posHashs = JSON.stringify( ioImgPossHashScaled );
 	} else {
 		try {
-			const json = JSON.parse( vals );
-
-			// Haben die Bilder die gleichen Hashes?
-			validateHitAreaDef( json, imgPossScaledHashed );
-			// areaDef zusammenstellen
-			areaDef = {
-				posHashs: imgPossScaledHashed,
-				w: stageWidth,
-				h: stageHeight,
-				areas: hitAreaScaled( json.areas, stageWidth, json.w, stageHeight, json.h ),
-			}
+			const posHashsObj = JSON.parse( posHashs );
+			validatePosHashs( posHashsObj, ioImgPossHashScaled );
 		} catch (e) {
-			alert( `Ungültige Format für Hit Area (${e.message}) bei '${vals}'` );
+			alert( `PosHashs stimmen nicht (${e.message})` );
 			dialog.close();
-			return vals;
+			return [ posHashs, initVals ];
 		}
 	}
 
-	areaDef.areas = await drawRects( io.stage, areaDef.areas, container, posneg=='pos' );
+	// Areas parsen, verifizieren, ggf. umrechnen
+	const areas = {};
+	for ( const posNegverify of [ 'pos', 'neg' ] ) {
+
+		const vals = posNegverify === 'pos' ? valPos : valNeg;
+		if ( vals.trim() == '' ) {
+			areas[posNegverify] = [];	// Die Hit-Areas
+		} else {
+			try {
+				const json = JSON.parse( vals );
+				// areaDef zusammenstellen
+				areas[posNegverify] = hitAreaScaled( json.areas, stageWidth, json.w, stageHeight, json.h );
+			} catch (e) {
+				alert( `Ungültige Format für Hit Area (${e.message}) bei '${vals}'` );
+				dialog.close();
+				return [ posHashs, initVals ];
+			}
+		}
+	}
+
+	const newAreas = await drawRects( io.stage, areas.pos, areas.neg, container, posneg=='pos' );
 
 	dialog.close();
 
 	// Rects sortieren
-	for ( const area of areaDef.areas ) {
+	for ( const area of newAreas ) {
 		area.x1 = Math.round( Math.min( area.x1, area.x2 ) );
 		area.y1 = Math.round( Math.min( area.y1, area.y2 ) );
 		area.x2 = Math.round( Math.max( area.x1, area.x2 ) );
 		area.y2 = Math.round( Math.max( area.y1, area.y2 ) );
 	};
-	areaDef.areas.sort( (a,b) => a.y1 - b.y1 || a.x1 - b.x1 || a.y2 - b.y2 || a.x2 - b.x2 );
+	newAreas.sort( (a,b) => a.y1 - b.y1 || a.x1 - b.x1 || a.y2 - b.y2 || a.x2 - b.x2 );
 
-	return JSON.stringify( areaDef );
+	const areaDef = {
+		w: stageWidth,
+		h: stageHeight,
+		areas: newAreas,
+	}
+	return [ posHashs, JSON.stringify( areaDef ) ];
 }
 
 //////////////////////////////////////////////////////////////////////////////
 
-function drawRects( stage, initialAreas, zoomDiv, green=true ) {
+function drawRects( stage, greenAreas, redAreas, zoomDiv, green=true ) {
 
 	return new Promise( (resolve) => {
 
 		const HANDLE_SZ = 8;
 
-		const FILL_PALETTE = green
-			? [ 'rgba(27,94,32,0.45)', 'rgba(56,142,60,0.45)', 'rgba(76,175,80,0.45)', 'rgba(129,199,132,0.45)', 'rgba(165,214,167,0.45)' ]
-			: [ 'rgba(183,28,28,0.45)', 'rgba(198,40,40,0.45)', 'rgba(229,57,53,0.45)', 'rgba(239,83,80,0.45)', 'rgba(239,154,154,0.45)' ];
-		const STROKE_PALETTE = green
-			? [ '#1b5e20', '#388e3c', '#4caf50', '#81c784', '#a5d6a7' ]
-			: [ '#b71c1c', '#c62828', '#e53935', '#ef5350', '#ef9a9a' ];
+		const FILL_GREEN_PALETTE = [ 'rgba(27,94,32,0.45)', 'rgba(56,142,60,0.45)', 'rgba(76,175,80,0.45)', 'rgba(129,199,132,0.45)', 'rgba(165,214,167,0.45)' ];
+		const STROKE_GREEN_PALETTE = [ '#1b5e20', '#388e3c', '#4caf50', '#81c784', '#a5d6a7' ];
+		const FILL_RED_PALETTE = [ 'rgba(183,28,28,0.45)', 'rgba(198,40,40,0.45)', 'rgba(229,57,53,0.45)', 'rgba(239,83,80,0.45)', 'rgba(239,154,154,0.45)' ];
+		const STROKE_RED_PALETTE = [ '#b71c1c', '#c62828', '#e53935', '#ef5350', '#ef9a9a' ];
+
+		const FILL_PALETTE = green ? FILL_GREEN_PALETTE : FILL_RED_PALETTE;
+		const STROKE_PALETTE = green ? STROKE_GREEN_PALETTE : STROKE_RED_PALETTE;
+		const BG_FILL_PALETTE = green ? FILL_RED_PALETTE : FILL_GREEN_PALETTE;
+		const BG_STROKE_PALETTE = green ? STROKE_RED_PALETTE : STROKE_GREEN_PALETTE;
 
 		const SEL_STROKE_COLOR = '#ff9800';
 		const SEL_STROKE_WIDTH = 2.5;
@@ -92,7 +179,9 @@ function drawRects( stage, initialAreas, zoomDiv, green=true ) {
 		];
 
 		let zoom = 1;
-		let rects = initialAreas.map( a => ({ ...a }) );
+		const initialEditable = green ? greenAreas : redAreas;
+		const bgRects = green ? redAreas : greenAreas;
+		let rects = initialEditable.map( a => ({ ...a }) );
 		let selectedIdx = -1;
 
 		const zoomParent = zoomDiv.parentElement;
@@ -133,7 +222,7 @@ function drawRects( stage, initialAreas, zoomDiv, green=true ) {
 		};
 
 		const btnBar = document.createElement( 'div' );
-		btnBar.style.cssText = 'display:flex; gap:6px; padding:6px 10px; background:lightyellow; border-top:1px solid #ccc; flex-shrink:0; align-items:center;';
+		btnBar.style.cssText = `display:flex; gap:6px; padding:6px 10px; background:${green ? '#c8e6c9' : '#ffcdd2'}; border-top:1px solid #ccc; flex-shrink:0; align-items:center;`;
 		outerWrapper.appendChild( btnBar );
 
 		mkBtn( btnBar, '✓ Übernehmen', 'ENTER - Änderungen übernehmen', () => finish( true ) );
@@ -184,6 +273,24 @@ function drawRects( stage, initialAreas, zoomDiv, green=true ) {
 		function renderAll () {
 			layer.destroyChildren();
 
+			// Nicht-editierbare Rects im Hintergrund darstellen
+			bgRects.forEach( (r, idx) => {
+				const rx = Math.min( r.x1, r.x2 );
+				const ry = Math.min( r.y1, r.y2 );
+				const rw = Math.abs( r.x2 - r.x1 );
+				const rh = Math.abs( r.y2 - r.y1 );
+
+				const kr = new Konva.Rect({
+					x: rx, y: ry, width: rw, height: rh,
+					fill: BG_FILL_PALETTE[idx % BG_FILL_PALETTE.length],
+					stroke: BG_STROKE_PALETTE[idx % BG_STROKE_PALETTE.length],
+					strokeWidth: 1.5,
+					listening: false,
+				});
+				layer.add( kr );
+			} );
+
+			// Editierbare Rects darstellen
 			rects.forEach( (r, idx) => {
 				const rx = Math.min( r.x1, r.x2 );
 				const ry = Math.min( r.y1, r.y2 );
@@ -389,7 +496,7 @@ function drawRects( stage, initialAreas, zoomDiv, green=true ) {
 			zoomDiv.style.height = '';
 			zoomParent.insertBefore( zoomDiv, outerWrapper );
 			outerWrapper.remove();
-			resolve( accept ? rects : initialAreas.map( a => ({ ...a }) ) );
+			resolve( accept ? rects : initialEditable.map( a => ({ ...a }) ) );
 		}
 
 		renderAll();

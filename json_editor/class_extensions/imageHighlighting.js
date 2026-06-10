@@ -64,13 +64,11 @@ export const getObjImgPossScaledHashed = ( imgPoss, newW, newH ) => {
 }
 
 // Validiert hitArea (u.a. passen hitArea.imgs zu objImgPossScaledHashed)
-export const validateHitAreaDef = ( hitArea, objImgPossScaledHashed ) => {
-	if ( !hitArea.w || !hitArea.h ||
-		!Array.isArray(hitArea.areas) ||
-		!hitArea.posHashs || hitArea.posHashs.length>objImgPossScaledHashed.length ||
-		!hitArea.posHashs.every( (pos, idx) => pos === objImgPossScaledHashed[idx] )
+export const validatePosHashs = ( posHashs, objImgPossScaledHashed ) => {
+	if ( !posHashs || posHashs.length>objImgPossScaledHashed.length ||
+		!posHashs.every( (pos, idx) => pos === objImgPossScaledHashed[idx] )
 	) {
-		throw new Error('Ungültige Bildpositionen / Bild gewechselt. HitArea-Def bitte löschen!');
+		throw new Error('Ungültige Bildpositionen / Bild gewechselt. HitArea-Defs bitte löschen!');
 	}
 }
 
@@ -222,7 +220,7 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 
 		const innerContainer = document.createElement( 'div' );
 		innerContainer.classList.add( 'ihImgContainer' );
-		const gap = opts.gap ? addPx(opts.gap) : '';
+		const gap = opts.gap ?? '';
 		if ( opts.areaWidth ) {
 			innerContainer.style.width = addPx(opts.areaWidth);
 		}
@@ -244,10 +242,10 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 			const imgEl = document.createElement( 'img' );
 			imgEl.style.width= img.width || '100%';
 			if ( gap ) {
-				imgEl.style.marginBottom = gap;
 				if ( !index ) {
 					imgEl.style.marginTop = gap;
 				}
+				imgEl.style.marginBottom = gap;
 			}
 			imgLoadPrs.push(
 				new Promise( (res) => {
@@ -549,54 +547,4 @@ console.log('============================== Image-Daten aktualisiert',canvas.wid
 		this.modeIconBar.hideBar( true );
 	}
 
-}
-
-//////////////////////////////////////////////////////////////////////////////
-
-//
-// Init der HitArea-Edit-Buttons
-//
-
-import { editHitAreas } from './imageHighlighting_jsonEditorHitAreas.js';
-import { clearCfgJson } from '../common';
-
-function editBtnClicked( buttonEditor, event, posneg ) {
-
-	event.preventDefault(); // Verhindert ggf. Standardverhalten wie Formular-Submits
-
-	// buttonEditor.parent repräsentiert das umgebende Objekt im Array.
-	// Darin suchen wir das Feld "myString" (der Name, den du im Schema vergibst)
-	const stringField = buttonEditor.parent.editors[posneg];
-
-	if (stringField) {
-		// JSON aus Editor lesen
-		const mainEditor = buttonEditor.jsoneditor;
-		// JSON auslesen und kopieren für 100%igen Schreibschutz
-		const readOnlyJson = JSON.parse(JSON.stringify(mainEditor.getValue()));
-		const cfgJson = clearCfgJson( readOnlyJson );
-
-		// Alten String auslesen
-		let currentValue = stringField.getValue();
-
-		// String verändern (hier im Beispiel hängen wir einfach Text an)
-		editHitAreas( currentValue, posneg, cfgJson ).then( newValue => {
-			// Neuen String setzen (aktualisiert die UI sofort)
-			stringField.setValue(newValue);
-		});
-	}
-}
-
-export function edInitImageHighlighting () {
-
-	// 1. Callbacks global deklarieren
-	window.JSONEditor.defaults.callbacks ||= {};
-	window.JSONEditor.defaults.callbacks.button ||= {};
-
-	window.JSONEditor.defaults.callbacks.button.imageHighlightingHitAreaPosBtnAction = function(buttonEditor, event) {
-		editBtnClicked( buttonEditor, event, 'pos' );
-	}
-
-	window.JSONEditor.defaults.callbacks.button.imageHighlightingHitAreaNegBtnAction = function(buttonEditor, event) {
-		editBtnClicked( buttonEditor, event, 'neg' );
-	}
 }

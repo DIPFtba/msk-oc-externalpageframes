@@ -55,9 +55,10 @@ import { freePaintRecogFromSchema } from './class_extensions/freePaintRecog';
 import freePaintRecogJSONSchema from './schemes/freePaintRecog.schema.json';
 import freePaintRecogSVG from './svgs/freePaintMult.svg';
 
-import { imageHighlightingFromSchema, edInitImageHighlighting } from './class_extensions/imageHighlighting';
+import { imageHighlightingFromSchema } from './class_extensions/imageHighlighting';
 import imageHighlightingJSONSchema from './schemes/imageHighlighting.schema.json';
 import imageHighlightingSVG from './svgs/freePaintMult.svg';
+import { edInitImageHighlighting } from './class_extensions/imageHighlighting_jsonEditorHitAreas';
 editorPreInitCallbacks.push( edInitImageHighlighting );
 
 import { inputfieldFromSchema } from './class_extensions/inputfield';

@@ -238,6 +238,16 @@
 					}
 				},
 
+				"posHashs": {
+					"title": "posHashs",
+					"type": "string",
+					"default": "",
+					"options": {
+						"hidden": true,
+						"infoText": "Nur für Experten: Kommagetrennte Liste von Hashes für gewählte Bilder + imgPoss, wird automatisch generiert, wenn HitArea angelegt oder editiert wird"
+					}
+				},
+
 				"hitAreas": {
 					"title": "Hit-Areas",
 					"type": "array",

@@ -158,7 +158,10 @@ export class ratingsFromSchema  {
 
 	scoreDef () {
 		const res = Object.fromEntries(
-			this.dims.map((dim) => [this.varNames[dim], this.ratingVals[dim]]),
+			this.dims.map((dim) => {
+				const r = this.ratingVals[dim];
+				return [this.varNames[dim], r !== null ? r : 0];
+			}),
 		);
 		return res;
 	}

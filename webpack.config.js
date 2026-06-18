@@ -38,7 +38,7 @@ const ExtResFromSchema = {
 	barSlider: { version: "0.3.2" },
 	barSliderFull: { version: "0.3.2" },
 	chatBotJson: { version: "0.4.0" },
-	chatTextAudio: { version: "0.4.0" },
+	chatTextAudio: { version: "0.5.0" },
 	// vueExamplePropsEmit: { version: "0.3.2" },
 	// vueExamplePinia: { version: "0.3.2" },
 	connectedFrames: { version: "0.3.2" },

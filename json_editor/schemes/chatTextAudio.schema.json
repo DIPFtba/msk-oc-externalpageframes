@@ -42,6 +42,18 @@
 					}
 				},
 
+				"fontFile": {
+					"title": "Schriftart",
+					"type": "string",
+					"default": "",
+					"format": "font",
+					"options": {
+						"grid_break": true,
+						"grid_columns": 4,
+						"infoText": "relativer Pfad (zur Laufzeit!) zur Schriftart-Datei, die für die Eingabefelder verwendet werden soll. Wenn leer, dann wird die Standard-Schriftart verwendet"
+					}
+				},
+
 				"listStyle": {
 					"title": "Stil Chat-Liste",
 					"type": "object",
@@ -404,6 +416,7 @@
 		"___input": {
 			"title": "Chat-Eingabefeld",
 			"type": "object",
+			"format": "grid-strict",
 			"options": {
 				"titleHidden": true,
 				"disable_collapse": true,
@@ -412,13 +425,34 @@
 			},
 			"properties": {
 
+				"recLimit": {
+					"title": "Max. Aufnahmelänge",
+					"type": "integer",
+					"default": 0,
+					"options": {
+						"grid_columns": 4,
+						"infoText": "0 = keine Begrenzung, sonst max. Aufnahmedauer in Sekunden"
+					}
+				},
+				"cntDwn": {
+					"title": "Countdown ab",
+					"type": "integer",
+					"default": 0,
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true,
+						"infoText": "0 = kein Countdown, sonst Countdown in Sekunden"
+					}
+				},
+
 				"textInputDisabled": {
 					"title": "Texteingabe nicht möglich",
 					"type": "boolean",
 					"format": "checkbox",
 					"default": false,
 					"options": {
-						"grid_columns": 4
+						"grid_columns": 4,
+						"grid_break": true
 					}
 				},
 
@@ -718,7 +752,7 @@
 						},
 						"___version": {
 							"type": "string",
-							"default": "0.2"
+							"default": "0.3"
 						}
 					},
 					"options": {

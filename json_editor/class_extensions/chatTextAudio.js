@@ -3,6 +3,8 @@ import { object_equals, mergeDeep, setStatePostProc } from '../../libs/common.js
 import { initializeAndMount } from '../external_bundled/chat-text-audio.js';
 
 import '../external_bundled/chat-text-audio.css';
+import { setBodyFont } from '../common.js';
+
 export class chatTextAudioFromSchema {
 
 	constructor(divSelector, cfgData, base ) {
@@ -10,8 +12,12 @@ export class chatTextAudioFromSchema {
 		base.regSendInitDone();
 		base.incInitCnt();
 
+		setBodyFont( cfgData.fontFile );
+
 		const defaultOpts = {
 			readonly: false,
+			recLimit: 0,
+			cntDwn: 0,
 			dataSettings: {},
 		}
 
@@ -64,7 +70,7 @@ export class chatTextAudioFromSchema {
 	}
 
 	scoreDefType () {
-		return 'number';
+		return 'Integer';
 	}
 
 	scoreDef ( exportAll=false ) {

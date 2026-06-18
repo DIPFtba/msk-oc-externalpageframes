@@ -30,7 +30,7 @@ export class chatBotJsonFromSchema {
 				base.sendChangeState( this );
 			},
 			// postMessage-Function
-			base.fsm.postMessageWithPathsAndTraceCount.bind( base.fsm ) );
+			this.postMessageWrapper.bind(this) );
 
 		// console.log(this.vueApp,this.vueApp.state);
 
@@ -38,11 +38,32 @@ export class chatBotJsonFromSchema {
 		// window.setText = (t) => this.vueApp.state.textValue = t;
 
 		this.initData = this.getChState();
+		this.botTextVar = '';
+		this.userTextVar = '';
+		this.pref = this.dataSettings?.variablePrefix ? `_${this.dataSettings.variablePrefix}` : '';
 		this.base.sendChangeState( this );	// init & send changeState & score
 
 		// addScoring( this, cfgData, addMods.Parser );
 
 		base.decInitCnt();
+	}
+
+	///////////////////////////////////
+
+	postMessageWrapper( msgObject ) {
+		// V_BotText setzen ?
+		if ( this.dataSettings?.botTextVar && msgObject?.traceMessage?.event==='ENTRY_ADDED_BOT' && msgObject.traceMessage.label ) {
+			this.botTextVar = msgObject.traceMessage.label;
+			this.base.sendChangeState( this );	// damit Score neu gesetzt wird
+			this.base.fsm.triggerEvent('EV_BOT_TEXT');
+		}
+		// V_UserText setzen ?
+		if ( this.dataSettings?.userTextVar && msgObject?.traceMessage?.event==='ENTRY_ADDED_USER' && msgObject.traceMessage.logLabel ) {
+			this.userTextVar = msgObject.traceMessage.logLabel;
+			this.base.sendChangeState( this );	// damit Score neu gesetzt wird
+			this.base.fsm.triggerEvent('EV_USER_TEXT');
+		}
+		this.base.fsm.postMessageWithPathsAndTraceCount( msgObject )
 	}
 
 	///////////////////////////////////
@@ -58,11 +79,17 @@ export class chatBotJsonFromSchema {
 	}
 
 	scoreDefType () {
-		return 'number';
+		return 'String';
 	}
 
 	scoreDef() {
 		const res = {};
+		if ( this.dataSettings?.botTextVar ) {
+			res[`V_BotText${this.pref}`] = this.botTextVar;
+		}
+		if ( this.dataSettings?.userTextVar ) {
+			res[`V_UserText${this.pref}`] = this.userTextVar;
+		}
 		return res;
 	}
 

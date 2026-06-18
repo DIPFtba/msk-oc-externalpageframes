@@ -62,6 +62,7 @@
 						"infoText": "relativer Pfad (zur Laufzeit!) zur Schriftart-Datei, die für die Eingabefelder verwendet werden soll. Wenn leer, dann wird die Standard-Schriftart verwendet"
 					}
 				},
+
 				"chatBotTypingText":{
 					"title": "Bot-Tippt-Text",
 					"type": "string",
@@ -948,6 +949,10 @@
 								"title": "Text",
 								"type": "string"
 							},
+							"logLabel": {
+								"title": "Log-Label",
+								"type": "string"
+							},
 							"next": {
 								"title": "zu Bot-Text (Label)",
 								"type": "string"
@@ -995,7 +1000,7 @@
 						},
 						"___version": {
 							"type": "string",
-							"default": "0.1"
+							"default": "0.2"
 						}
 					},
 					"options": {
@@ -1011,6 +1016,30 @@
 					"options": {
 						"grid_columns": 12,
 						"grid_break": true
+					}
+				},
+
+				"botTextVar": {
+					"title": "Setze V_BotText_&lt;pref&gt;",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 6,
+						"grid_break": true,
+						"infoText": "Wenn aktiviert, dann wird bei jedem neuen Bot-Text die Variable V_BotText_<pref> auf das entsprechende Label gesetzt und Event EV_BOT_TEXT getriggert."
+					}
+				},
+
+				"userTextVar": {
+					"title": "Setze V_UserText_&lt;pref&gt;",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 6,
+						"grid_break": true,
+						"infoText": "Wenn aktiviert, dann wird bei jedem neuen User-Text die Variable V_UserText_<pref> auf das entsprechende Log-Label (muss definiert sein!) gesetzt und Event EV_USER_TEXT getriggert."
 					}
 				}
 

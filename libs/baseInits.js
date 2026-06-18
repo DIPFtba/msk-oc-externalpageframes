@@ -181,17 +181,24 @@ export class baseInits {
 				let type = '';
 				let defaultValue = val;
 
-				// Die S_Score_<pref> und V_Score_<pref>_xyz sind später dazugekommen und
-				// scoreDefType() ist darauf nicht vorbereitet, also werden für die sowieso
-				// durch eval erzeugten V_Score_ Variablen nicht scoreDefType() gerufen,
-				// sondern deren erzeugter Wert ausgewertet
-				if ( this.scoreObj && this.scoreObj.scoreDefType && !vname.startsWith('V_Score_') ) {
-					// Typdefinition aus JSON Config/Class
-					type = this.scoreObj.scoreDefType.call(this.scoreObj, vname);
+				// Die V_Status(_<pref>) und V_StatHist(_<pref>) sind immer Integer
+				const pref = this.scoreObj?.dataSettings?.variablePrefix ? '_'+this.scoreObj.dataSettings.variablePrefix : '';
+				if ( vname === `V_Status${pref}` || vname === `V_StatHist${pref}` ) {
+					type = 'Integer';
+				} else {
+
+					// Die V_Score_<pref> und V_Score_<pref>_xyz sind später dazugekommen und
+					// scoreDefType() ist darauf nicht vorbereitet, also werden für die sowieso
+					// durch eval erzeugten V_Score_ Variablen nicht scoreDefType() gerufen,
+					// sondern deren erzeugter Wert ausgewertet
+					if ( this.scoreObj?.scoreDefType && !vname.startsWith(`V_Score${pref}`) ) {
+						// Typdefinition aus JSON Config/Class
+						type = this.scoreObj.scoreDefType.call(this.scoreObj, vname);
+					}
 				}
 
 				if ( type ) {
-					// Typdef vorhanden
+					// Typdef vorhanden, noch defaultValue setzen
 					switch ( type ) {
 						case 'Boolean':
 							if ( val===null || val===undefined ) {

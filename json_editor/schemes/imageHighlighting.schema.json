@@ -219,7 +219,7 @@
 						},
 						"___version": {
 							"type": "string",
-							"default": "0.3"
+							"default": "0.4"
 						}
 					},
 					"options": {
@@ -270,9 +270,10 @@
 								"type": "string"
 							},
 							"posFill": {
-								"title": "Min%",
-								"type": "integer",
-								"default": 70
+								"title": "Min %",
+								"type": "string",
+								"default": "70%",
+								"pattern": "^[0-9]+(\\.[0-9]+)?%$"
 							},
 							"posBtn": {
 								"title": "Edit",
@@ -290,9 +291,10 @@
 								"type": "string"
 							},
 							"negFill": {
-								"title": "Min%",
-								"type": "integer",
-								"default": 10
+								"title": "Min %",
+								"type": "string",
+								"default": "10%",
+								"pattern": "^[0-9]+(\\.[0-9]+)?%$"
 							},
 							"negBtn": {
 								"title": "Edit",

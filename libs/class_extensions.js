@@ -131,6 +131,7 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 		}
 
 		super( base, opts );
+
 		if ( opts.paintLines===null || opts.modeIconBarDef===null ) {
 			if ( base.fsm && base.fsm.decInitCnt ) {
 				base.fsm.decInitCnt();

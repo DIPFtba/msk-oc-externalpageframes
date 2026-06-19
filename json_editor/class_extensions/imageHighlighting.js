@@ -17,7 +17,7 @@ export const hitAreaScaled = ( hitAreaArea, newW, oldW, newH, oldH ) => {
 	const gY = y => Math.min( newH-1, Math.round( y * newH/oldH ) );
 	const equal = newW===oldW && newH===oldH;
 
-	return hitAreaArea.map( area => {
+	const r =  hitAreaArea.map( area => {
 		// Sind Koordinatenda?
 		if ( area.x1 === undefined || area.y1 === undefined ||
 			area.x2 === undefined || area.y2 === undefined ) {
@@ -34,6 +34,10 @@ export const hitAreaScaled = ( hitAreaArea, newW, oldW, newH, oldH ) => {
 				y2: gY(area.y2),
 			};
 	})
+	if ( process.env.NODE_ENV !== 'production' ) {
+		console.log( '+++ hitAreaScaled: scale', hitAreaArea, `von ${oldW}x${oldH} nach ${newW}x${newH} ergibt`, r );
+	}
+	return r;
 }
 
 const fastHash = (str) => {
@@ -46,28 +50,39 @@ const fastHash = (str) => {
     return (h >>> 0).toString(16);
 }
 
-const imgPosHash = ( x, y, w, h, u ) => {
-	console.log(`${x}-${y}x${w}-${h}:${u}`.substring(0, 100));
-	return fastHash(`${x}-${y}x${w}-${h}:${u}`);
+// Liefert die imgPoss hashed in Kurzformat
+export const getObjImgPossHashedShort = ( imgPoss ) => {
+	const r = {
+		w: imgPoss.w,
+		h: imgPoss.h,
+		p: imgPoss.poss.map( pos => [ pos.left, pos.top, pos.width, pos.height, fastHash(pos.url) ] ),
+	};
+	return r;
 }
 
-// Liefert die imgPoss.poss skaliert auf newWxnewH
-export const getObjImgPossScaledHashed = ( imgPoss, newW, newH ) => {
-	const maxScale = ( x, newW, oldW ) => Math.min( newW-1, Math.round( x * newW/oldW ) );
-	return imgPoss.poss.map( pos => imgPosHash(
-		maxScale( pos.left, newW, imgPoss.w ),
-		maxScale( pos.top, newH, imgPoss.h ),
-		maxScale( pos.width, newW, imgPoss.w ),
-		maxScale( pos.height, newH, imgPoss.h ),
-		pos.url
-	));
-}
+// Validiert zwei hashed poss
+export const validatePossHashs = ( possHashs, objImgPossHashes ) => {
+	const xEqual = ( possHashX, objImgHashX ) =>
+		Math.abs( possHashX - Math.round( objImgHashX * possHashs.w/objImgPossHashes.w ) ) <= 2;
+	const yEqual = ( possHashY, objImgHashY ) =>
+		Math.abs( possHashY - Math.round( objImgHashY * possHashs.h/objImgPossHashes.h ) ) <= 2;
 
-// Validiert hitArea (u.a. passen hitArea.imgs zu objImgPossScaledHashed)
-export const validatePosHashs = ( posHashs, objImgPossScaledHashed ) => {
-	if ( !posHashs || posHashs.length>objImgPossScaledHashed.length ||
-		!posHashs.every( (pos, idx) => pos === objImgPossScaledHashed[idx] )
+// console.log( "***** validatePossHashs", possHashs, objImgPossHashes );
+	const possEqual = ( poss1, poss2 ) =>
+		poss1[4] === poss2[4] &&
+		xEqual( poss1[0], poss2[0] ) &&
+		yEqual( poss1[1], poss2[1] ) &&
+		xEqual( poss1[2], poss2[2] ) &&
+		yEqual( poss1[3], poss2[3] );
+
+	if ( !possHashs || !possHashs.p ||
+		possHashs.p.length>objImgPossHashes.p.length ||
+		!possHashs.p.every( (pos, idx) => possEqual( pos, objImgPossHashes.p[idx] ) )
 	) {
+// console.log( "***** validatePossHashs negativ" );
+		if ( process.env.NODE_ENV !== 'production' ) {
+			console.error( "validatePossHashs:", possHashs, objImgPossHashes );
+		}
 		throw new Error('Ungültige Bildpositionen / Bild gewechselt. HitArea-Defs bitte löschen!');
 	}
 }
@@ -261,11 +276,10 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 						width: imgEl.clientWidth,
 						height: imgEl.clientHeight,
 						idx: index+1,
+						url: img.url,
 					};
 					if ( img.name ) {
 						o.name = img.name;
-					} else {
-						o.url = img.url;
 					}
 					return o;
 				})
@@ -358,7 +372,6 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		base.incInitCnt();
 
 		// freePaintMult init
-
 		super( base, fpOpts );
 
 		// Wenn alle Bilder geladen: richtige stage Größe setzen
@@ -366,19 +379,30 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 			imgPoss.sort( (a,b) => a.idx - b.idx );
 
 			const baseSize = baseDiv.getBoundingClientRect();
-			const width = Math.max( Math.round(stage.width()), baseSize.width );
-			const height = Math.max( Math.round(stage.height()), baseSize.height );
+			const width = Math.round( Math.max( stage.width(), baseSize.width ) );
+			const height = Math.round( Math.max( stage.height(), baseSize.height ) );
 			stage.size({ width, height });
-
+// console.log("+++++++++++++++",stage.width(), stage.height(), baseSize.width, baseSize.height);
 			this.imgPoss = {
 				w: width,
 				h: height,
 				poss: imgPoss,
 			};
 // console.log("~~~~~~~~~~ imgPoss",this.imgPoss);
-			this.createHitAreasConv( width, height );
+			this.createHitAreasConv();
 
-			base.postLog( 'ImgLoaded', { imgPoss: this.imgPoss } );
+			base.postLog( 'ImgLoaded', { imgPoss: {
+				w: width,
+				h: height,
+				poss: imgPoss.map( pos => {
+					// ohne url, wenn name gegeben
+					if ( pos.name ) {
+						const { url, ...rest } = pos;
+						return rest;
+					}
+					return pos;
+				}),
+			}});
 			base.decInitCnt();
 		});
 
@@ -387,6 +411,7 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		this.base = base;
 		Object.assign( this, opts );
 
+		// Restl Inits
 		this.modeIconBar.hideBar(true);
 
 		// this.firstTouch = null;
@@ -394,14 +419,26 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		// // baseDiv.addEventListener( 'touchstart', this.iStartDraw.bind(this), { capture: true, passive: false } );
 		// baseDiv.addEventListener( 'touchmove', this.iDraw.bind(this), { capture: true, passive: false } );
 
+		// // ResizeObserver für baseDiv Größenänderungen
+		// const resizeObserver = new ResizeObserver( () => {
+		// 	const baseSize = baseDiv.getBoundingClientRect();
+		// 	const width = Math.round( baseSize.width );
+		// 	const height = Math.round( baseSize.height );
+		// 	stage.size({ width, height });
+		// });
+		// resizeObserver.observe( baseDiv );
+
 		if ( !hitAreaEdit ) {
 			outerContainer.addEventListener( 'scroll', () => this.iScroll( outerContainer ) );
 			this.stage.on( 'click', this.click.bind(this) );
 
 			addScoring( this, opts, addMods.Parser );
+
+			base.getInitDonePromise().then( () => {
+				this.initData = this.getChState();
+				this.base.sendChangeState( this );	// init & send changeState & score
+			});
 		}
-		this.initData = this.getChState();
-		this.base.sendChangeState( this );	// init & send changeState & score
 
 		base.decInitCnt();
 	}
@@ -444,11 +481,38 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 
 	///////////////////////////////////
 
-	createHitAreasConv ( width, height ) {
+	createHitAreasConv () {
 
 // console.trace();
 		this.hitAreasConv = [];
-		const imgPossScaledHashed = getObjImgPossScaledHashed( this.imgPoss, width, height );
+
+		const canvas = this.freePaintLayer.getCanvas()._canvas;
+		const width = canvas.width;
+		const height = canvas.height;
+		if ( !width || !height ) {
+			return
+		}
+// console.log("************",width,height);
+
+		// Stimmt posHashes, also sind HitAreas für diese Bilder definiert?
+		try {
+			const posHashObj = JSON.parse( this.dataSettings?.posHashs );
+			validatePossHashs( posHashObj, getObjImgPossHashedShort( this.imgPoss ) );
+			this.hitAreasMult = 1;
+		} catch (e) {
+			console.error('HitAreas sind nicht für diese Bilder definiert!',e);
+			this.hitAreasMult = -11111;
+		}
+
+		const getFill = ( val ) => {
+			const tr = val.trim();
+			if ( tr.endsWith('%') ) {
+				// relativ, d.h. < 1 !
+				return Math.min( 1 - 1e-15, parseFloat( tr.slice(0,-1) ) / 100 );
+			}
+			return parseInt( tr );
+		}
+
 // console.log("++++++++++ imgPossScaledHashed",imgPossScaledHashed,JSON.parse(JSON.stringify(this.imgPoss)),this.imgPoss);
 		const pref = this.dataSettings.variablePrefix ? this.dataSettings.variablePrefix+'_' : '';
 		for ( const hitArea of this.dataSettings?.hitAreas || [] ) {
@@ -460,39 +524,110 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 // console.log("++++++++++ posNeg",posNeg,has[posNeg],hitArea[posNeg]);
 					if ( has[posNeg] ) {
 						json[posNeg] = JSON.parse(hitArea[posNeg]);
-						validateHitAreaDef( json[posNeg], imgPossScaledHashed );
 					}
 				}
 
-				this.hitAreasConv.push({
+				this.hitAreasConv.push(dbg={
 					name: `V_Score_${pref}${hitArea.name}`,
-					pos: has.pos ? hitAreaScaled( json.pos.area, width, json.pos.w, height, json.pos.h ) : [],
-					posFill: hitArea.posFill,
-					neg: has.neg ? hitAreaScaled( json.neg.area, width, json.neg.w, height, json.neg.h ) : [],
-					negFill: hitArea.negFill,
+					pos: has.pos ? hitAreaScaled( json.pos.areas, width, json.pos.w, height, json.pos.h ) : [],
+					posFill: getFill(hitArea.posFill),
+					neg: has.neg ? hitAreaScaled( json.neg.areas, width, json.neg.w, height, json.neg.h ) : [],
+					negFill: getFill(hitArea.negFill),
 					exp: hitArea.exp,
 				});
 			} catch (e) {
 				console.error('Fehler bei HitArea-Definition:', e);
+				this.hitAreasMult = -11111;
 			}
 		}
 
-console.log("==============================",this.hitAreasConv);
+// console.log("==============================",this.hitAreasConv);
 	}
 
 	getImageData () {
 		// Image holen
-		const layer = this.layer;
-		const canvas = layer.getCanvas()._canvas;
+		const canvas = this.freePaintLayer.getCanvas()._canvas;
+		if ( !canvas.width ) {
+			return 0;
+		}
+
 		const context = canvas.getContext('2d');
-		const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-		this.pixelDaten = imageData.data; // Das Array mit [R, G, B, A, R, G, B, A, ...]
-		this.pixelDatenWidth = imageData.width;
-console.log('============================== Image-Daten aktualisiert',canvas.width, canvas.height,this.pixelDaten);
+		const imageData = context.getImageData( 0, 0, canvas.width, canvas.height );
+		// const imageData = this.freePaintLayer.toImage({
+		// 	x: 0,
+		// 	y: 0,
+		// 	width: this.stage.width(),
+		// 	height: this.stage.height(),
+		// })
+
+		// // Debug: Histogramm der Punkte
+		// const histogram = [];
+		// for ( let i = 0; i < imageData.data.length; i += 4) {
+		// 	const r = imageData.data[i], g = imageData.data[i+1], b = imageData.data[i+2], a = imageData.data[i+3];
+		// 	const entry = histogram.find( h => h.r===r && h.g===g && h.b===b && h.a===a );
+		// 	if ( entry ) {
+		// 		entry.c++;
+		// 	} else {
+		// 		histogram.push( { r, g, b, a, c: 1 } );
+		// 	}
+		// }
+		// histogram.sort( (a,b) => b.c - a.c );
+		// console.log("===== getPointsColored histogram:", histogram );
+		// // Ende Debug Histrogramm
+
+		this.imageData = imageData.data; // Das Array mit [R, G, B, A, R, G, B, A, ...]
+		this.imageDataWidth = imageData.width;
+// console.log('============================== Image-Daten aktualisiert',canvas.width, canvas.height, this.pixelDaten);
+		return 1;
 	}
 
 	getHitAreaScore ( hitAreaConv ) {
-		return 0;
+		const imageData = this.imageData;
+
+		// // Debug: Histogramm der Punkte
+		// const histogram = [];
+		// for ( let i = 0; i < imageData.length; i += 4) {
+		// 	const r = imageData[i], g = imageData[i+1], b = imageData[i+2], a = imageData[i+3];
+		// 	const entry = histogram.find( h => h.r===r && h.g===g && h.b===b && h.a===a );
+		// 	if ( entry ) {
+		// 		entry.c++;
+		// 	} else {
+		// 		histogram.push( { r, g, b, a, c: 1 } );
+		// 	}
+		// }
+		// histogram.sort( (a,b) => b.c - a.c );
+		// console.log("===== getPointsColored histogram:", histogram );
+		// // Ende Debug Histrogramm
+
+		for ( const posneg of ['pos','neg'] ) {
+
+// console.log("************** getHitAreaScore",hitAreaConv.name,posneg,hitAreaConv[posneg], this.imageDataWidth);
+			for ( const area of hitAreaConv[posneg] ) {
+				// Wieviel Punkte in pos-Bereich?
+				let pointsColored = 0;
+				for ( let y=area.y1; y<=area.y2; y++ ) {
+					const yoffs = ( y * this.imageDataWidth )*4/* y1 Offs */ + 3/* Alpha-Kanal */; // Anfang des y-ten Zeile in pixelDaten
+					const offsBegin = yoffs + (area.x1*4);
+					const offsEnd = Math.min( yoffs + (area.x2*4), imageData.length-1 );
+					for ( let offs = offsBegin; offs <= offsEnd; offs += 4 ) {
+						if ( imageData[offs] > 150 ) {
+							pointsColored++;
+						}
+					}
+				}
+
+				const allPoints = (area.x2 - area.x1 + 1) * (area.y2 - area.y1 + 1);
+				const fillMin = fill => fill<1 ? allPoints * fill : fill; // realtiv (<1) oder absolut?
+// console.log(`++++++++++ HitArea-Score ${hitAreaConv.name} (${posneg}), pointsColored: ${pointsColored} von ${allPoints}, fillMin: ${fillMin(hitAreaConv[posneg=='pos' ? 'posFill' : 'negFill'])}`);
+				// Bedingung nicht erfüllt? -> 0 Punkte
+				if ( posneg=='pos' && pointsColored < fillMin(hitAreaConv.posFill) ||
+					posneg=='neg' && pointsColored > fillMin(hitAreaConv.negFill) ) {
+					return 0;
+				}
+			}
+		}
+
+		return this.hitAreasMult;
 	}
 
 	///////////////////////////////////
@@ -505,8 +640,8 @@ console.log('============================== Image-Daten aktualisiert',canvas.wid
 
 		// hitAreas berechnen
 		const delVars = [];
-		if ( this.hitAreasConv?.length>0 ) {
-			this.getImageData();
+// console.log("++++++++++ scoreDef - hitAreasConv",this.hitAreasConv);
+		if ( this.hitAreasConv?.length>0 && this.getImageData() ) {
 			for ( const hitAreaConv of this.hitAreasConv ) {
 				const varName = hitAreaConv.name;
 				res[ varName ] = this.getHitAreaScore( hitAreaConv );

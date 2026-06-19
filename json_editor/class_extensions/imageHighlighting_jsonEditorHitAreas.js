@@ -1,4 +1,4 @@
-import { imageHighlightingFromSchema, getObjImgPossScaledHashed, hitAreaScaled, validatePosHashs } from './imageHighlighting.js';
+import { imageHighlightingFromSchema, getObjImgPossHashedShort, hitAreaScaled, validatePossHashs } from './imageHighlighting.js';
 
 import { clearCfgJson } from '../common';
 
@@ -96,13 +96,13 @@ async function editHitAreas( posHashs, valPos, valNeg, posneg, cfgJson ) {
 
 	// posHashs default setzen / verifizieren
 	// Also kontrollieren, ob hitAreas für diese (oder weniger) Bilder gemacht wurden
-	const ioImgPossHashScaled = getObjImgPossScaledHashed( io.imgPoss, stageWidth, stageHeight );
+	const ioImgPossHashShort = getObjImgPossHashedShort( io.imgPoss );
 	if ( posHashs.trim() === '' ) {
-		posHashs = JSON.stringify( ioImgPossHashScaled );
+		posHashs = JSON.stringify( ioImgPossHashShort );
 	} else {
 		try {
 			const posHashsObj = JSON.parse( posHashs );
-			validatePosHashs( posHashsObj, ioImgPossHashScaled );
+			validatePossHashs( posHashsObj, ioImgPossHashShort );
 		} catch (e) {
 			alert( `PosHashs stimmen nicht (${e.message})` );
 			dialog.close();
@@ -148,6 +148,8 @@ async function editHitAreas( posHashs, valPos, valNeg, posneg, cfgJson ) {
 		h: stageHeight,
 		areas: newAreas,
 	}
+// console.log('#####areaDef', areaDef);
+
 	return [ posHashs, JSON.stringify( areaDef ) ];
 }
 

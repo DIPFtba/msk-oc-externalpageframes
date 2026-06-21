@@ -52,16 +52,22 @@ export class chatBotJsonFromSchema {
 
 	postMessageWrapper( msgObject ) {
 		// V_BotText setzen ?
-		if ( this.dataSettings?.botTextVar && msgObject?.traceMessage?.event==='ENTRY_ADDED_BOT' && msgObject.traceMessage.label ) {
-			this.botTextVar = msgObject.traceMessage.label;
-			this.base.sendChangeState( this );	// damit Score neu gesetzt wird
-			this.base.fsm.triggerEvent('EV_BOT_TEXT');
+		if ( this.dataSettings?.botTextVar && msgObject?.traceMessage?.event==='ENTRY_ADDED_BOT' ) {
+			const newVal = msgObject.traceMessage.label ?? '';
+			if ( newVal !== this.botTextVar ) {
+				this.botTextVar = newVal;
+				this.base.sendChangeState( this );	// damit Score neu gesetzt wird
+				this.base.fsm.triggerEvent('EV_BOT_TEXT');
+			}
 		}
 		// V_UserText setzen ?
-		if ( this.dataSettings?.userTextVar && msgObject?.traceMessage?.event==='ENTRY_ADDED_USER' && msgObject.traceMessage.logLabel ) {
-			this.userTextVar = msgObject.traceMessage.logLabel;
-			this.base.sendChangeState( this );	// damit Score neu gesetzt wird
-			this.base.fsm.triggerEvent('EV_USER_TEXT');
+		if ( this.dataSettings?.userTextVar && msgObject?.traceMessage?.event==='ENTRY_ADDED_USER' ) {
+			const newVal = msgObject.traceMessage.logLabel ?? '';
+			if ( newVal !== this.userTextVar ) {
+				this.userTextVar = newVal;
+				this.base.sendChangeState( this );	// damit Score neu gesetzt wird
+				this.base.fsm.triggerEvent('EV_USER_TEXT');
+			}
 		}
 		this.base.fsm.postMessageWithPathsAndTraceCount( msgObject )
 	}
@@ -101,6 +107,8 @@ export class chatBotJsonFromSchema {
 			curr: state?.curr.filter( entry => !entry.isPrechat ),
 			currLabel: state?.currLabel,
 			prev: state?.prev,
+			userTextVar: this.userTextVar,
+			botTextVar: this.botTextVar,
 		});
 	}
 
@@ -120,6 +128,22 @@ export class chatBotJsonFromSchema {
 				currLabel: state.currLabel,
 				prev: state.prev,
 			});
+
+			// Variablen setzen, Events schicken
+			let userNew = false, botNew = false;
+			if ( state.botTextVar !== this.botTextVar ) {
+				this.botTextVar = state.botTextVar;
+				botNew = true;
+			}
+			if ( state.userTextVar !== this.userTextVar ) {
+				this.userTextVar = state.userTextVar;
+				userNew = true;
+			}
+			if ( botNew || userNew ) {
+				this.base.sendChangeState( this );
+				if ( botNew ) this.base.fsm.triggerEvent('EV_BOT_TEXT');
+				if ( userNew ) this.base.fsm.triggerEvent('EV_USER_TEXT');
+			}
 
 		} catch (e) {
 			console.error('setState() error:', e);

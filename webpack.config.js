@@ -37,7 +37,7 @@ const ExtResFromSchema = {
 	barPlot: { version: "0.3.3" },
 	barSlider: { version: "0.3.3" },
 	barSliderFull: { version: "0.3.3" },
-	chatBotJson: { version: "0.4.0" },
+	chatBotJson: { version: "0.4.1" },
 	chatTextAudio: { version: "0.5.0" },
 	// vueExamplePropsEmit: { version: "0.3.2" },
 	// vueExamplePinia: { version: "0.3.2" },

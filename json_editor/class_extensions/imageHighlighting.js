@@ -432,9 +432,8 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 			outerContainer.addEventListener( 'scroll', () => this.iScroll( outerContainer ) );
 			this.stage.on( 'click', this.click.bind(this) );
 
-			addScoring( this, opts, addMods.Parser );
-
 			base.getInitDonePromise().then( () => {
+				addScoring( this, opts, addMods.Parser );
 				this.initData = this.getChState();
 				this.base.sendChangeState( this );	// init & send changeState & score
 			});
@@ -527,14 +526,33 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 					}
 				}
 
-				this.hitAreasConv.push(dbg={
+				const res = {
 					name: `V_Score_${pref}${hitArea.name}`,
 					pos: has.pos ? hitAreaScaled( json.pos.areas, width, json.pos.w, height, json.pos.h ) : [],
 					posFill: getFill(hitArea.posFill),
 					neg: has.neg ? hitAreaScaled( json.neg.areas, width, json.neg.w, height, json.neg.h ) : [],
 					negFill: getFill(hitArea.negFill),
 					exp: hitArea.exp,
-				});
+				};
+				this.hitAreasConv.push( res );
+
+				// // DEBUG: Areas in aktuelle stage einzeichnen
+				// for ( const [areas,color] of [ [res.pos, 'green'], [res.neg, 'red'] ] ) {
+				// 	const mres = hitAreaScaled( areas, this.stage.width(), width, this.stage.height(), height );
+				// 	mres.forEach( area => {
+				// 		this.freePaintLayer.add( new Konva.Rect({
+				// 			x: area.x1,
+				// 			y: area.y1,
+				// 			width: area.x2 - area.x1 + 1,
+				// 			height: area.y2 - area.y1 + 1,
+				// 			stroke: color,
+				// 			strokeWidth: 1,
+				// 			fill: 'rgba('+ (color === 'green' ? '0,255,0' : '255,0,0') + ', 0.05)',
+				// 		}));
+				// 	});
+				// }
+				// this.stage.batchDraw();
+
 			} catch (e) {
 				console.error('Fehler bei HitArea-Definition:', e);
 				this.hitAreasMult = -11111;
@@ -648,6 +666,11 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 				if ( !hitAreaConv.exp ) {
 					delVars.push( varName );
 				}
+			}
+		} else if ( exportAll ) {
+			// Alle HitArea-Variablen mit 0 anlegen, damit sie im Export auftauchen, auch wenn keine HitAreas definiert oder gültig sind
+			for ( const hitAreaConv of this.hitAreasConv || [] ) {
+				res[ hitAreaConv.name ] = 0;
 			}
 		}
 

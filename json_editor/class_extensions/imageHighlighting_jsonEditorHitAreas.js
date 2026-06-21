@@ -94,6 +94,13 @@ async function editHitAreas( posHashs, valPos, valNeg, posneg, cfgJson ) {
 	const stageHeight = Math.round( io.stage.height() );
 	const initVals = posneg === 'pos' ? valPos : valNeg;
 
+	const closeOverlay = () => {
+		dialog.close();
+		io.stage.destroy();
+		dialog.innerHTML = '';
+		return [ posHashs, initVals ];
+	}
+
 	// posHashs default setzen / verifizieren
 	// Also kontrollieren, ob hitAreas für diese (oder weniger) Bilder gemacht wurden
 	const ioImgPossHashShort = getObjImgPossHashedShort( io.imgPoss );
@@ -105,8 +112,7 @@ async function editHitAreas( posHashs, valPos, valNeg, posneg, cfgJson ) {
 			validatePossHashs( posHashsObj, ioImgPossHashShort );
 		} catch (e) {
 			alert( `PosHashs stimmen nicht (${e.message})` );
-			dialog.close();
-			return [ posHashs, initVals ];
+			return closeOverlay();
 		}
 	}
 
@@ -124,15 +130,19 @@ async function editHitAreas( posHashs, valPos, valNeg, posneg, cfgJson ) {
 				areas[posNegverify] = hitAreaScaled( json.areas, stageWidth, json.w, stageHeight, json.h );
 			} catch (e) {
 				alert( `Ungültige Format für Hit Area (${e.message}) bei '${vals}'` );
-				dialog.close();
-				return [ posHashs, initVals ];
+				return closeOverlay();
 			}
 		}
 	}
 
-	const newAreas = await drawRects( io.stage, areas.pos, areas.neg, container, posneg=='pos' );
+	const ihImgContainer = container.getElementsByClassName('ihImgContainer')?.[0];
+	if ( !ihImgContainer ) {
+		alert("Interner Fehler im DOM!")
+		return closeOverlay();
+	}
+	const newAreas = await drawRects( io.stage, areas.pos, areas.neg, ihImgContainer, posneg=='pos' );
 
-	dialog.close();
+	closeOverlay();
 
 	// Rects sortieren
 	for ( const area of newAreas ) {
@@ -186,6 +196,9 @@ function drawRects( stage, greenAreas, redAreas, zoomDiv, green=true ) {
 		let rects = initialEditable.map( a => ({ ...a }) );
 		let selectedIdx = -1;
 
+		const baseWidth = stage.width();
+		const baseHeight = stage.height();
+
 		const zoomParent = zoomDiv.parentElement;
 		const outerWrapper = document.createElement( 'div' );
 		outerWrapper.style.cssText = 'display:flex; flex-direction:column; width:100%; height:100%;';
@@ -196,11 +209,8 @@ function drawRects( stage, greenAreas, redAreas, zoomDiv, green=true ) {
 		outerWrapper.appendChild( scrollArea );
 
 		const sizeDiv = document.createElement( 'div' );
-		sizeDiv.style.cssText = `width:${stage.width()}px; height:${stage.height()}px; position:relative;`;
+		sizeDiv.style.cssText = `width:${baseWidth}px; height:${baseHeight}px; position:relative;`;
 		scrollArea.appendChild( sizeDiv );
-
-		const baseWidth = stage.width();
-		const baseHeight = stage.height();
 
 		zoomDiv.style.transformOrigin = 'top left';
 		zoomDiv.style.position = 'absolute';
@@ -284,7 +294,7 @@ function drawRects( stage, greenAreas, redAreas, zoomDiv, green=true ) {
 
 				const kr = new Konva.Rect({
 					x: rx, y: ry, width: rw, height: rh,
-					fill: BG_FILL_PALETTE[idx % BG_FILL_PALETTE.length],
+					fill: null,
 					stroke: BG_STROKE_PALETTE[idx % BG_STROKE_PALETTE.length],
 					strokeWidth: 1.5,
 					listening: false,

@@ -7210,7 +7210,7 @@ function $p(e = {}) {
       fetch(`${f}__open-in-editor?file=${encodeURI(r)}`).then((c) => {
         if (!c.ok) {
           const h = `Opening component ${d} failed`;
-          console.log(`%c${h}`, "color:red");
+          // console.log(`%c${h}`, "color:red");
         }
       });
     } else if (pe.vitePluginDetected) {

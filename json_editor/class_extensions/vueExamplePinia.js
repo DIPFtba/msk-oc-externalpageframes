@@ -20,7 +20,7 @@ export class vueExamplePiniaFromSchema {
 
 		this.vueApp = initializeAndMount( this.base.container, cfgData, (a) => {
 			// Das hier passiert, wenn state in Vue App geändert wird
-			console.log("========",a.textValue);
+			// console.log("========",a.textValue);
 			base.sendChangeState( this );
 		});
 

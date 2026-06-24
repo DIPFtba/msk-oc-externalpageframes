@@ -926,7 +926,6 @@
 						"text": "Willkommen!"
 					}],
 					"options": {
-						"titleHidden": true,
 						"disable_collapse": true,
 						"grid_columns": 12,
 						"grid_break": true
@@ -934,7 +933,7 @@
 				},
 
 				"user": {
-					"title": "User-Texte",
+					"title": "User-Texte zur Auswahl",
 					"type": "array",
 					"format": "table",
 					"items": {
@@ -956,6 +955,12 @@
 							"next": {
 								"title": "zu Bot-Text (Label)",
 								"type": "string"
+							},
+							"IBVar": {
+								"title": "IB-Var",
+								"type": "boolean",
+								"format": "checkbox",
+								"default": false
 							}
 						}
 					},
@@ -970,10 +975,10 @@
 						"text": "Text 3"
 					}],
 					"options": {
-						"titleHidden": true,
 						"disable_collapse": true,
 						"grid_columns": 12,
-						"grid_break": true
+						"grid_break": true,
+						"infoText": "Es werden jeweils die Texte zu Auswahl gestellt, die das gleiche Label wie der aktuelle Bot-Text haben. Wenn logLabel gesetzt ist, wird das in die Traces geschrieben und ggf. V_ChatUser_<pref> darauf gesetzt. Ist logLabel gegeben und IB-Var gesetzt, wird eine Variable mit Name V_Chat_<pref>_<logLabel> definiert, die anzeigt, ob im aktuellen Chat irgendwann diese Antwort gewählt wurde. 'zu Bot-Text (Label)' gibt ggf. an, welcher Bot-Text folgen würde."
 					}
 				}
 
@@ -1000,7 +1005,7 @@
 						},
 						"___version": {
 							"type": "string",
-							"default": "0.2"
+							"default": "0.4"
 						}
 					},
 					"options": {
@@ -1019,27 +1024,27 @@
 					}
 				},
 
-				"botTextVar": {
-					"title": "Setze V_BotText_&lt;pref&gt;",
+				"chatBotVar": {
+					"title": "Setze V_ChatBot_&lt;pref&gt;",
 					"type": "boolean",
 					"format": "checkbox",
 					"default": false,
 					"options": {
 						"grid_columns": 6,
 						"grid_break": true,
-						"infoText": "Wenn aktiviert, dann wird bei jedem neuen Bot-Text die Variable V_BotText_<pref> auf das entsprechende Label gesetzt und Event EV_BOT_TEXT getriggert."
+						"infoText": "Wenn aktiviert, dann wird bei jedem neuen Bot-Text die Variable V_ChatBot_<pref> auf das entsprechende Label gesetzt und Event EV_CHAT_BOT getriggert."
 					}
 				},
 
-				"userTextVar": {
-					"title": "Setze V_UserText_&lt;pref&gt;",
+				"chatUserVar": {
+					"title": "Setze V_ChatUser_&lt;pref&gt;",
 					"type": "boolean",
 					"format": "checkbox",
 					"default": false,
 					"options": {
 						"grid_columns": 6,
 						"grid_break": true,
-						"infoText": "Wenn aktiviert, dann wird bei jedem neuen User-Text die Variable V_UserText_<pref> auf das entsprechende Log-Label (muss definiert sein!) gesetzt und Event EV_USER_TEXT getriggert."
+						"infoText": "Wenn aktiviert, dann wird bei jedem neuen User-Text die Variable V_ChatUser_<pref> auf das entsprechende Log-Label (muss definiert sein!) gesetzt und Event EV_CHAT_USER getriggert."
 					}
 				}
 

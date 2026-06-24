@@ -38,9 +38,10 @@ export class chatBotJsonFromSchema {
 		// window.setText = (t) => this.vueApp.state.textValue = t;
 
 		this.initData = this.getChState();
-		this.botTextVar = '';
-		this.userTextVar = '';
+		this.chatBotVar = '';
+		this.chatUserVar = '';
 		this.pref = this.dataSettings?.variablePrefix ? `_${this.dataSettings.variablePrefix}` : '';
+		this.createIBCharVars();
 		this.base.sendChangeState( this );	// init & send changeState & score
 
 		// addScoring( this, cfgData, addMods.Parser );
@@ -51,28 +52,71 @@ export class chatBotJsonFromSchema {
 	///////////////////////////////////
 
 	postMessageWrapper( msgObject ) {
-		// V_BotText setzen ?
-		if ( this.dataSettings?.botTextVar && msgObject?.traceMessage?.event==='ENTRY_ADDED_BOT' ) {
+		const triggerEvents = [];
+		let sendChange = 0;
+
+		// Chat Restart?
+		if ( msgObject?.traceMessage?.event==='CHAT_RESTARTED' ) {
+			if ( Object.values(this.IBChatVars).some( v => v!==0 ) ) {
+				sendChange = 1;
+				this.clearIBChatVars();
+			}
+		}
+
+		// V_ChatBot setzen ?
+		if ( this.dataSettings?.chatBotVar && msgObject?.traceMessage?.event==='ENTRY_ADDED_BOT' ) {
 			const newVal = msgObject.traceMessage.label ?? '';
-			if ( newVal !== this.botTextVar ) {
-				this.botTextVar = newVal;
-				this.base.sendChangeState( this );	// damit Score neu gesetzt wird
-				this.base.fsm.triggerEvent('EV_BOT_TEXT');
+			if ( newVal !== this.chatBotVar ) {
+				this.chatBotVar = newVal;
+				sendChange = 1;
+				triggerEvents.push('EV_CHAT_BOT');
 			}
 		}
-		// V_UserText setzen ?
-		if ( this.dataSettings?.userTextVar && msgObject?.traceMessage?.event==='ENTRY_ADDED_USER' ) {
+		if ( msgObject?.traceMessage?.event==='ENTRY_ADDED_USER' ) {
 			const newVal = msgObject.traceMessage.logLabel ?? '';
-			if ( newVal !== this.userTextVar ) {
-				this.userTextVar = newVal;
-				this.base.sendChangeState( this );	// damit Score neu gesetzt wird
-				this.base.fsm.triggerEvent('EV_USER_TEXT');
+			// V_ChatUser setzen ?
+			if ( this.dataSettings?.chatUserVar && newVal !== this.chatUserVar ) {
+				this.chatUserVar = newVal;
+				sendChange = 1;
+				triggerEvents.push('EV_CHAT_USER');
+			}
+
+			// IB-Var gesetzt?
+			if ( newVal ) {
+				const entry = this.chat?.user?.find( user => user.IBVar && user.logLabel === newVal );
+				if ( entry ) {
+					const varName = this.IBChatTr[newVal];
+					if ( varName && !this.IBChatVars[varName] ) {
+						this.IBChatVars[varName] = 1;
+						sendChange = 1;
+					}
+				}
 			}
 		}
+		if ( sendChange ) {
+			this.base.sendChangeState( this );
+		}
+		triggerEvents.forEach( ev => this.base.fsm.triggerEvent(ev) );
+
 		this.base.fsm.postMessageWithPathsAndTraceCount( msgObject )
 	}
 
 	///////////////////////////////////
+
+	createIBCharVars() {
+		// { logLabel1: VarName1, logLabel2, VarName2, ... }
+		const entries = Object.fromEntries(
+			this.chat?.user?.
+				filter( user => user.IBVar && user.logLabel.trim().length>0 ).
+				map( user => [ user.logLabel, `V_Chat${this.pref}_${user.logLabel.replaceAll( /^(?:_|[^a-zA-Z0-9])+|(?:_|[^a-zA-Z0-9])+$/g, '' ).replaceAll( /(?:_|[^a-zA-Z0-9]){2,}/g, '_' )}` ] )
+		);
+		this.IBChatTr = entries;
+		this.clearIBChatVars();
+	}
+
+	clearIBChatVars() {
+		this.IBChatVars = Object.fromEntries( Object.values( this.IBChatTr ).map( v => [v, 0] ) );
+	}
 
 	getChState() {
 		// Einträge können nicht geändert werden, also nur Länge ansehen
@@ -84,18 +128,19 @@ export class chatBotJsonFromSchema {
 		return !object_equals( this.getChState(), this.initData );
 	}
 
-	scoreDefType () {
-		return 'String';
+	scoreDefType (varName) {
+		return varName.startsWith('V_Chat_') ? 'Integer' : 'String';
 	}
 
 	scoreDef() {
 		const res = {};
-		if ( this.dataSettings?.botTextVar ) {
-			res[`V_BotText${this.pref}`] = this.botTextVar;
+		if ( this.dataSettings?.chatBotVar ) {
+			res[`V_ChatBot${this.pref}`] = this.chatBotVar;
 		}
-		if ( this.dataSettings?.userTextVar ) {
-			res[`V_UserText${this.pref}`] = this.userTextVar;
+		if ( this.dataSettings?.chatUserVar ) {
+			res[`V_ChatUser${this.pref}`] = this.chatUserVar;
 		}
+		Object.assign( res, this.IBChatVars );
 		return res;
 	}
 
@@ -107,8 +152,9 @@ export class chatBotJsonFromSchema {
 			curr: state?.curr.filter( entry => !entry.isPrechat ),
 			currLabel: state?.currLabel,
 			prev: state?.prev,
-			userTextVar: this.userTextVar,
-			botTextVar: this.botTextVar,
+			chatUserVar: this.chatUserVar,
+			chatBotVar: this.chatBotVar,
+			chatVars: this.IBChatVars,
 		});
 	}
 
@@ -129,20 +175,31 @@ export class chatBotJsonFromSchema {
 				prev: state.prev,
 			});
 
+			let userNew = false, botNew = false, chatNew=false;
+
+			// ChatVars laden
+			if ( state.chatVars ) {
+				for ( const varName in state.chatVars ) {
+					if ( state.chatVars[varName] !== this.IBChatVars[varName] ) {
+						this.IBChatVars[varName] = state.chatVars[varName];
+						chatNew = true;
+					}
+				}
+			}
+
 			// Variablen setzen, Events schicken
-			let userNew = false, botNew = false;
-			if ( state.botTextVar !== this.botTextVar ) {
-				this.botTextVar = state.botTextVar;
+			if ( state.chatBotVar !== this.chatBotVar ) {
+				this.chatBotVar = state.chatBotVar;
 				botNew = true;
 			}
-			if ( state.userTextVar !== this.userTextVar ) {
-				this.userTextVar = state.userTextVar;
+			if ( state.chatUserVar !== this.chatUserVar ) {
+				this.chatUserVar = state.chatUserVar;
 				userNew = true;
 			}
-			if ( botNew || userNew ) {
+			if ( botNew || userNew || chatNew ) {
 				this.base.sendChangeState( this );
-				if ( botNew ) this.base.fsm.triggerEvent('EV_BOT_TEXT');
-				if ( userNew ) this.base.fsm.triggerEvent('EV_USER_TEXT');
+				if ( botNew ) this.base.fsm.triggerEvent('EV_CHAT_BOT');
+				if ( userNew ) this.base.fsm.triggerEvent('EV_CHAT_USER');
 			}
 
 		} catch (e) {

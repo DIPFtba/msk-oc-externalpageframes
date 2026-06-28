@@ -431,6 +431,12 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		if ( !hitAreaEdit ) {
 			outerContainer.addEventListener( 'scroll', () => this.iScroll( outerContainer ) );
 			this.stage.on( 'click', this.click.bind(this) );
+			this.stage.on( 'mouseleave', (ev) => {
+				// Wenn nicht auf iconbar
+				if ( !ev.evt?.relatedTarget?.closest('.iconBarContainer') ) {
+					this.hideIconbar();
+				}
+		 	});
 
 			base.getInitDonePromise().then( () => {
 				addScoring( this, opts, addMods.Parser );
@@ -667,10 +673,15 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 					delVars.push( varName );
 				}
 			}
-		} else if ( exportAll ) {
+		} else if ( !this.hitAreasConv ) {
 			// Alle HitArea-Variablen mit 0 anlegen, damit sie im Export auftauchen, auch wenn keine HitAreas definiert oder gültig sind
-			for ( const hitAreaConv of this.hitAreasConv || [] ) {
-				res[ hitAreaConv.name ] = 0;
+			const pref = this.dataSettings.variablePrefix ? this.dataSettings.variablePrefix+'_' : '';
+			for ( const hitArea of this.dataSettings.hitAreas || [] ) {
+				const varName = `V_Score_${pref}${hitArea.name}`;
+				res[varName] = 0;
+				if ( !hitArea.exp ) {
+					delVars.push( varName );
+				}
 			}
 		}
 
@@ -696,6 +707,10 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		state.hlImg = this.getRectPngImage();
 		return JSON.stringify( state );
 	}
+
+	// setState () {
+	// 	// in super.setState() wird das Highlight-Bild gesetzt, daher hier keine weitere Aktion
+	// }
 
 	///////////////////////////////////
 

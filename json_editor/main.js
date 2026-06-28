@@ -443,7 +443,7 @@ function loadSchema( schema ) {
 			window.location.reload();
 		}
 
-		updateEWK();
+		// updateEWK();
 	});
 
 	document.querySelector( '#json_button' ).style.display = "block";
@@ -560,9 +560,11 @@ function updateEWK () {
 			if ( extres.scoreDef ) {
 				const oldScoreDef = extres.scoreDef.bind( extres );
 				let oldScoreVals = {};
-				extres.scoreDef = function () {
-					const res = oldScoreDef();
-					oldScoreVals = debugOutObj( 'Variables', res, oldScoreVals );
+				extres.scoreDef = function (exportAll=false) {
+					const res = oldScoreDef(exportAll);
+					if ( !exportAll && Object.keys(res).length > 0 ) {
+						oldScoreVals = debugOutObj( 'Variables', res, oldScoreVals );
+					}
 					return res;
 				}
 				extres.scoreDef();

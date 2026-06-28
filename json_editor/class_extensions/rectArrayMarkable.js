@@ -33,7 +33,7 @@ export class rectArrayMarkableFromSchema extends rectArrayMarkable {
 			return {};
 		}
 
-		const res = super.scoreDef();
+		const res = super.scoreDef(exportAll);
 
 		if ( this.computeScoringVals ) {
 			this.computeScoringVals( res , exportAll );

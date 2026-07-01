@@ -37,12 +37,12 @@ export class chatBotJsonFromSchema {
 		// // Für debug Zwecke, um von außen den Text setzen zu können
 		// window.setText = (t) => this.vueApp.state.textValue = t;
 
-		this.initData = this.getChState();
 		this.chatBotVar = '';
 		this.chatUserVar = '';
 		this.pref = this.dataSettings?.variablePrefix ? `_${this.dataSettings.variablePrefix}` : '';
 		this.createIBCharVars();
 		this.base.sendChangeState( this );	// init & send changeState & score
+		this.initData = this.getChState();
 
 		// addScoring( this, cfgData, addMods.Parser );
 
@@ -118,7 +118,7 @@ export class chatBotJsonFromSchema {
 		this.IBChatVars = Object.fromEntries( Object.values( this.IBChatTr ).map( v => [v, 0] ) );
 	}
 
-	getChState() {
+	getChState () {
 		// Einträge können nicht geändert werden, also nur Länge ansehen
 		return this.vueApp?.state?.chat?.curr?.length;
 	}
@@ -132,15 +132,19 @@ export class chatBotJsonFromSchema {
 		return varName.startsWith('V_Chat_') ? 'Integer' : 'String';
 	}
 
-	scoreDef() {
+	scoreDef () {
 		const res = {};
-		if ( this.dataSettings?.chatBotVar ) {
-			res[`V_ChatBot${this.pref}`] = this.chatBotVar;
+		if ( this.pref !== undefined ) {
+			if ( this.dataSettings?.chatBotVar ) {
+				res[`V_ChatBot${this.pref}`] = this.chatBotVar;
+			}
+			if ( this.dataSettings?.chatUserVar ) {
+				res[`V_ChatUser${this.pref}`] = this.chatUserVar;
+			}
+			if ( this.IBChatVars ) {
+				Object.assign( res, this.IBChatVars );
+			}
 		}
-		if ( this.dataSettings?.chatUserVar ) {
-			res[`V_ChatUser${this.pref}`] = this.chatUserVar;
-		}
-		Object.assign( res, this.IBChatVars );
 		return res;
 	}
 

@@ -40,10 +40,21 @@ patch() {
     return 0
 }
 
+diff_only() {
+    JSONFILE="$1"
+
+    echo
+    diff -u <(jq '.' "$JSONFILE") <(jq '.' "$JSONFILE.tmp") && echo "Nichts gepatcht ($PATCH)!" >&2 && rm "$JSONFILE.tmp" && return 1
+    echo
+    mv -vf "$JSONFILE.tmp" "$JSONFILE" || { echo "ABBRUCH!" >&2; exit 1; }
+
+    return 0
+}
+
 proc_config() {
     local jsonfile="$1"
+    local pack=0
 
-    pack=0
     name=$(jq -r '.dataSettings.___jsonSchemaData.___name' "$jsonfile")
     if [ "$name" != "null" ]; then
         # echo "File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
@@ -184,6 +195,18 @@ proc_config() {
             echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
             patch "$jsonfile" '.dataSettings.saveAudioTraces = true' '.dataSettings.saveAudioTraces' && pack=1
             patch "$jsonfile" '.___input.textInputDisabled = false' '.___input.textInputDisabled' && pack=1
+        fi
+
+        # chatBotJson
+        if [[ "$name" = "chatBotJson" ]]
+        then
+            echo
+            echo "======================== File: $zipfile, ExtRes: ${jsonfile#$tempdir/external-resources/}, Name: $name"
+            patch "$jsonfile" '.dataSettings.chatBotVar = false' '.dataSettings.chatBotVar' && pack=1
+            patch "$jsonfile" '.dataSettings.chatUserVar = false' '.dataSettings.chatUserVar' && pack=1
+            jq 'del(.dataSettings.botTextVar, .dataSettings.userTextVar)' "$jsonfile" > "$jsonfile.tmp" && diff_only "$jsonfile" && pack=1
+            jq '.chat.user[] |= if .IBVar == null then . + { "IBVar": false } else . end' "$jsonfile" > "$jsonfile.tmp" && diff_only "$jsonfile" && pack=1
+            jq '.chat.user[] |= if .logLabel == null then . + { "logLabel": false } else . end' "$jsonfile" > "$jsonfile.tmp" && diff_only "$jsonfile" && pack=1
         fi
 
     fi

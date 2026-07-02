@@ -2,6 +2,7 @@ import { freePaintFromSchema } from './freePaint.js';
 import { baseInits } from '../../libs/baseInits.js';
 import './imageHighlighting.css';
 import { addScoring } from "../common";
+import { getPosOfEvent } from '../../libs/common'
 
 import penicon from '../../libs/img/penicon.png'
 import erasericon from '../../libs/img/erasericon.png'
@@ -117,7 +118,7 @@ class htmlIconBar {
 
 			this.container.appendChild( elBg );
 		});
-		document.body.appendChild( this.container );
+		( opts.container ?? document.body ).appendChild( this.container );
 
 		this.active = null;
 		this.hideBar( true );
@@ -126,7 +127,7 @@ class htmlIconBar {
 	///////////////////////////////////
 
 	renderAt ( x, y ) {
-		if ( y < 80 ) {
+		if ( y - ( window.visualViewport?.offsetTop ?? 0 ) < 80 ) {
 			this.container.classList.add( 'up' );
 			this.container.classList.remove( 'down' );
 			this.container.style.left = addPx( x - ( this.cursorOffsetUp.x || 0 ) );
@@ -328,11 +329,11 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 				],
 				cursorOffsetDown: {
 					x: 15+7+7,
-					y: 15+42+14+1,
+					y: 15+42+14+1 +8,
 				},
 				cursorOffsetUp: {
 					x: 15+7+7,
-					y: 15+1,
+					y: 15+1 +8,
 				},
 			},
 			iconBarClass: htmlIconBar,
@@ -407,6 +408,7 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		});
 
 		// Restl Inits
+		this.outerContainer = outerContainer;
 		this.stage = stage;
 		this.base = base;
 		Object.assign( this, opts );
@@ -479,8 +481,8 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 
 	click ( ev ) {
 		if ( !this.mode || this.mode == 'none' ) {
-			// const pos = getPosOfEvent( this.stage, ev );
-			this.modeIconBar.renderAt( ev.evt.clientX,  ev.evt.clientY );
+			const pos = getPosOfEvent( this.stage, ev );
+			this.modeIconBar.renderAt( pos.x, pos.y - this.outerContainer.scrollTop );
 		}
 	}
 

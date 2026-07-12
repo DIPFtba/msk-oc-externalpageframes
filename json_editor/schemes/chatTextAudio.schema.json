@@ -445,6 +445,18 @@
 					}
 				},
 
+				"audioAck":{
+					"title": "Audio-Aufnahmen müssen versendet werden",
+					"type": "boolean",
+					"format": "checkbox",
+					"default": false,
+					"options": {
+						"grid_columns": 4,
+						"grid_break": true,
+						"infoText": "Wenn aktiviert, werden nach Audio-Aufnahme nach Aufnahme in Eingabefeld dargestellt und müssen versendet werden"
+					}
+				},
+
 				"textInputDisabled": {
 					"title": "Texteingabe nicht möglich",
 					"type": "boolean",
@@ -752,7 +764,7 @@
 						},
 						"___version": {
 							"type": "string",
-							"default": "0.3"
+							"default": "0.4"
 						}
 					},
 					"options": {

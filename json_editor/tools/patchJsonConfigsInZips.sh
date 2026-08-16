@@ -207,6 +207,7 @@ proc_config() {
             jq 'del(.dataSettings.botTextVar, .dataSettings.userTextVar)' "$jsonfile" > "$jsonfile.tmp" && diff_only "$jsonfile" && pack=1
             jq '.chat.user[] |= if .IBVar == null then . + { "IBVar": false } else . end' "$jsonfile" > "$jsonfile.tmp" && diff_only "$jsonfile" && pack=1
             jq '.chat.user[] |= if .logLabel == null then . + { "logLabel": false } else . end' "$jsonfile" > "$jsonfile.tmp" && diff_only "$jsonfile" && pack=1
+            # jq '.chat.user[-1] |= if .text == "Gerne, bis dann!" then .next = "END" else . end' "$jsonfile" > "$jsonfile.tmp" && diff_only "$jsonfile" && pack=1
         fi
 
     fi

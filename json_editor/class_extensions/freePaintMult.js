@@ -52,7 +52,7 @@ export class freePaintMultFromSchema {
 		this.stage = stage;
 
 		// define extra-Rects clip Functions (if selected)
-		let freePaintBrushClipFunc;
+		let freePaintBrushClipFunc = undefined;
 		const clipBrush = opts.extraRects.filter( r => r.clipBrush );
 
 		if ( clipBrush.length>0 ) {
@@ -226,6 +226,9 @@ export class freePaintMultFromSchema {
 					return;
 				}
 				document.body.style.cursor = "default";
+				if ( this.paintPoints!==null ) {
+					this.base.postLog( 'paintingPointerLeavesIFrame' );
+				}
 			});
 
 			this.paintObj.on( 'mouseenter', (ev) => {
@@ -294,12 +297,13 @@ export class freePaintMultFromSchema {
 	///////////////////////////////////
 
 	getRectPngImage () {
+		const fwh = Math.ceil( this.frameWidth/2 );
 		const url = this.stage.toDataURL({
 			mimeType: "image/png",
-			x: Math.max( 0, this.x - Math.ceil( this.frameWidth/2 ) ),
-			y: Math.max( 0, this.y - Math.ceil( this.frameWidth/2 ) ),
-			width: this.width + 2*Math.ceil( this.frameWidth/2 ),
-			height: this.height + 2*Math.ceil( this.frameWidth/2 ),
+			x: Math.max( 0, this.x - fwh ),
+			y: Math.max( 0, this.y - fwh ),
+			width: this.width + 2 * fwh,
+			height: this.height + 2 * fwh,
 		});
 // console.log(url);
 		return url;
@@ -398,6 +402,8 @@ export class freePaintMultFromSchema {
 			this.linesUpdated();
 
 			this.drawLog( 'undo', line );
+		} else {
+			this.base.postLog( 'undoNothing' );
 		}
 	}
 
@@ -411,27 +417,31 @@ export class freePaintMultFromSchema {
 
 			this.drawLog( 'redo', line );
 			this.detectCleared();
+		} else {
+			this.base.postLog( 'redoNothing' );
 		}
 	}
 
 	clearAll () {
-		this.undoClearAll = this.linesCopy;
-		this.undoTwice = false;
-		this.linesCopy = [];
-		this.linesRedo = [];
-		this.kGroupBrush.destroyChildren();
-		this.linesUpdated();
+		if ( this.linesCopy.length > 0 ) {
+			this.undoClearAll = this.linesCopy;
+			this.undoTwice = false;
+			this.linesCopy = [];
+			this.linesRedo = [];
+			this.kGroupBrush.destroyChildren();
+			this.linesUpdated();
 
-		this.drawLog( 'clearAll' );
+			this.drawLog( 'clearAll' );
+		} else {
+			this.base.postLog( 'clearAllNothing' );
+		}
 	}
 
 	drawLog ( log1, log2={} ) {
 		this.layer.draw();
 // console.log(`======== CMD ${log1} received ========`);
 		this.sendButtonState();
-		if ( log1, log2 ) {
-			this.base.postLog( log1, log2 );
-		}
+		this.base.postLog( log1, log2 );
 		this.base.sendChangeState( this );
 	}
 
@@ -490,7 +500,7 @@ export class freePaintMultFromSchema {
 	}
 
 	linesUpdated () {
-		// wird in abgeleiteten Klassen überschrieben
+		// wird ggf. in abgeleiteten Klassen überschrieben
 	}
 
 	///////////////////////////////////

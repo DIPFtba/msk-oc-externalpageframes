@@ -36,13 +36,14 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 		}
 
 		const obj = {};
+		const pref = this.dataSettings.variablePrefix ? `_${this.dataSettings.variablePrefix}` : "";
 
 		if ( this.myScript.withOut_sk ) {
-			obj[ `V_RecogTxt_${this.dataSettings.variablePrefix}` ] = this.recogTxt;
+			obj[ `V_RecogTxt${pref}` ] = this.recogTxt;
 		}
 
 		for (let i = 0; i < this.myScript.sk_enabled_subsets.length; i++) {
-			obj[ `V_RecogTxt${i+1}_${this.dataSettings.variablePrefix}` ] = this.recogTxtX[i];
+			obj[ `V_RecogTxt${i+1}${pref}` ] = this.recogTxtX[i];
 		}
 
 		return obj;

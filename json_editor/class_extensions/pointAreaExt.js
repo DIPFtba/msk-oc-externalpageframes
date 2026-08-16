@@ -228,11 +228,12 @@ export class pointAreaExtFromSchema {
 		// Rechteck ziehen
 		const getCurrRect = (e) => {
 			const newPos = getPosOfEvent( this.stage, e );
+			const drawStart = this.drawStart;
 			return {
-				x0: Math.min(this.drawStart.x, newPos.x),
-				x1: Math.max(this.drawStart.x, newPos.x),
-				y0: Math.min(this.drawStart.y, newPos.y),
-				y1: Math.max(this.drawStart.y, newPos.y),
+				x0: Math.min(drawStart.x, newPos.x),
+				x1: Math.max(drawStart.x, newPos.x),
+				y0: Math.min(drawStart.y, newPos.y),
+				y1: Math.max(drawStart.y, newPos.y),
 			}
 		}
 
@@ -378,8 +379,9 @@ export class pointAreaExtFromSchema {
 		let strikeChanged = false;
 		for ( let row=rowFrom; row<=rowTo; row++ ) {
 			let renderStrikeRow = false;
+			const setNewRow = ( idx && row>=idx.r0 && row<=idx.r1 );
 			for ( let col=colFrom; col<=colTo; col++ ) {
-				const setNew = ( idx && row>=idx.r0 && row<=idx.r1 && col>=idx.c0 && col<=idx.c1 );
+				const setNew = ( setNewRow && col>=idx.c0 && col<=idx.c1 );
 
 				let strike;
 				if ( this.currColor<0 ) {

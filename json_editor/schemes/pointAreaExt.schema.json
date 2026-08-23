@@ -38,7 +38,7 @@
 							"title": "X",
 							"type": "integer",
 							"minimum": 0,
-							"default": 2,
+							"default": 50,
 							"options": {
 								"grid_columns": 4
 							}
@@ -47,7 +47,7 @@
 							"title": "Y",
 							"type": "integer",
 							"minimum": 0,
-							"default": 2,
+							"default": 10,
 							"options": {
 								"grid_columns": 4,
 								"grid_break": true
@@ -333,8 +333,406 @@
 							"minimum": 1,
 							"default": 3,
 							"options": {
+								"grid_columns": 4
+							}
+						},
+
+						"strikedOpacity100": {
+							"title": "Deckkraft",
+							"type": "number",
+							"format": "range",
+							"default": 100,
+							"minimum": 0,
+							"maximum": 100,
+							"options": {
 								"grid_columns": 4,
 								"grid_break": true
+							}
+						},
+
+						"strikedFill": {
+							"title": "Rahmen + Füllung",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": false,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						},
+
+						"strikedFillColor": {
+							"title": "Füllung Farbe",
+							"type": "string",
+							"format": "color",
+							"default": "#000000",
+							"options": {
+								"grid_columns": 4,
+								"dependencies": {
+									"strikedFill": true
+								}
+							}
+						},
+
+						"strikedFillHeight": {
+							"title": "Höhe gesamt",
+							"type": "integer",
+							"minimum": 1,
+							"default": 7,
+							"options": {
+								"grid_columns": 4,
+								"dependencies": {
+									"strikedFill": true
+								}
+							}
+						},
+
+						"strikedFillOpacity100": {
+							"title": "Deckkraft Füllung",
+							"type": "number",
+							"format": "range",
+							"default": 50,
+							"minimum": 0,
+							"maximum": 100,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"strikedFill": true
+								}
+							}
+						}
+					}
+				},
+
+				"___buttons": {
+					"title": "Buttons",
+					"type": "object",
+					"format": "grid-strict",
+					"options": {
+						"disable_collapse": true,
+						"disable_edit_json": true,
+						"disable_properties": true,
+						"grid_columns": 12,
+						"grid_break": true
+					},
+					"properties": {
+						"buttonsInEWK": {
+							"title": "Buttons in EWK",
+							"type": "boolean",
+							"format": "checkbox",
+							"default": true,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true
+							}
+						},
+
+						"btnX": {
+							"title": "Position X",
+							"type": "integer",
+							"minimum": 0,
+							"default": 5,
+							"options": {
+								"grid_columns": 4,
+								"dependencies": {
+									"buttonsInEWK": true
+								}
+							}
+						},
+						"btnY": {
+							"title": "Position Y",
+							"type": "integer",
+							"minimum": 0,
+							"default": 5,
+							"options": {
+								"grid_columns": 4,
+								"dependencies": {
+									"buttonsInEWK": true
+								}
+							}
+						},
+						"btnRadius": {
+							"title": "Radius",
+							"type": "integer",
+							"minimum": 1,
+							"default": 10,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"buttonsInEWK": true
+								}
+							}
+						},
+
+						"btnDir": {
+							"title": "Button-Richtung",
+							"type": "string",
+							"enum": [ "vertikal", "horizontal" ],
+							"options": {
+								"grid_columns": 4,
+								"dependencies": {
+									"buttonsInEWK": true
+								}
+							}
+						},
+						"btnSpace": {
+							"title": "Button-Abstand",
+							"type": "integer",
+							"minimum": 0,
+							"default": 5,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"buttonsInEWK": true
+								}
+							}
+						},
+
+						"btnNormalColor": {
+							"title": "Umrahmung NORMAL Farbe",
+							"type": "string",
+							"format": "color",
+							"default": "#c8c8c8",
+							"options": {
+								"grid_columns": 4,
+								"dependencies": {
+									"buttonsInEWK": true
+								}
+							}
+						},
+						"btnNormalWidth": {
+							"title": "Umrahmung NORMAL Dicke",
+							"type": "integer",
+							"minimum": 1,
+							"default": 1,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"buttonsInEWK": true
+								}
+							}
+						},
+						"btnMarkedColor": {
+							"title": "Umrahmung MARKIERT Farbe",
+							"type": "string",
+							"format": "color",
+							"default": "#000000",
+							"options": {
+								"grid_columns": 4,
+								"dependencies": {
+									"buttonsInEWK": true
+								}
+							}
+						},
+						"btnMarkedWidth": {
+							"title": "Umrahmung MARKIERT Dicke",
+							"type": "integer",
+							"minimum": 1,
+							"default": 3,
+							"options": {
+								"grid_columns": 4,
+								"grid_break": true,
+								"dependencies": {
+									"buttonsInEWK": true
+								}
+							}
+						},
+
+						"___btnStrikeObj": {
+							"title": "Durchstreichen-Button",
+							"type": "object",
+							"format": "grid-strict",
+							"options": {
+								"disable_collapse": true,
+								"disable_edit_json": true,
+								"disable_properties": true,
+								"grid_columns": 12,
+								"grid_break": true,
+								"dependencies": {
+									"buttonsInEWK": true
+								}
+							},
+							"properties": {
+
+								"btnStrikeImgX": {
+									"title": "Position X",
+									"type": "integer",
+									"minimum": 0,
+									"default": 0,
+									"options": {
+										"grid_columns": 4,
+										"infoText": "0 = Auto"
+									}
+								},
+								"btnStrikeImgY": {
+									"title": "Position Y",
+									"type": "integer",
+									"minimum": 0,
+									"default": 0,
+									"options": {
+										"grid_columns": 4,
+										"grid_break": true,
+										"infoText": "0 = Auto"
+									}
+								},
+
+								"btnStrikeImg": {
+									"title": "Images hochladen",
+									"type": "boolean",
+									"format": "checkbox",
+									"default": false,
+									"options": {
+										"grid_columns": 4,
+										"grid_break": true,
+										"dependencies": {
+											"buttonsInEWK": true
+										}
+									}
+								},
+								"btnStrikeImgSrc": {
+									"title": "Durchstreichen-Button Image",
+									"type": "string",
+									"media": {
+										"binaryEncoding": "base64",
+										"type": "image/*"
+									},
+									"options": {
+										"grid_columns": 4,
+										"dependencies": {
+											"btnStrikeImg": true
+										}
+									}
+								},
+								"btnStrikeImgMarkedSrc": {
+									"title": "Durchstreichen-Button MARKIERT Image",
+									"type": "string",
+									"media": {
+										"binaryEncoding": "base64",
+										"type": "image/*"
+									},
+									"options": {
+										"grid_columns": 4,
+										"dependencies": {
+											"btnStrikeImg": true
+										}
+									}
+								},
+
+								"btnStrikeImgWidth": {
+									"title": "Breite",
+									"type": "integer",
+									"minimum": 0,
+									"default": 0,
+									"options": {
+										"grid_columns": 4,
+										"grid_break": true,
+										"dependencies": {
+											"btnStrikeImg": true
+										},
+										"infoText": "0 = Originalgröße, sonst Breite in Pixel"
+									}
+								}
+							}
+						},
+
+						"___btnDelObj": {
+							"title": "Löschen-Button",
+							"type": "object",
+							"format": "grid-strict",
+							"options": {
+								"disable_collapse": true,
+								"disable_edit_json": true,
+								"disable_properties": true,
+								"grid_columns": 12,
+								"grid_break": true,
+								"dependencies": {
+									"buttonsInEWK": true
+								}
+							},
+							"properties": {
+
+								"btnDelImgX": {
+									"title": "Position X",
+									"type": "integer",
+									"minimum": 0,
+									"default": 0,
+									"options": {
+										"grid_columns": 4,
+										"infoText": "0 = Auto"
+									}
+								},
+								"btnDelImgY": {
+									"title": "Position Y",
+									"type": "integer",
+									"minimum": 0,
+									"default": 0,
+									"options": {
+										"grid_columns": 4,
+										"grid_break": true,
+										"infoText": "0 = Auto"
+									}
+								},
+
+								"btnDelImg": {
+									"title": "Images hochladen",
+									"type": "boolean",
+									"format": "checkbox",
+									"default": false,
+									"options": {
+										"grid_columns": 4,
+										"grid_break": true,
+										"dependencies": {
+											"buttonsInEWK": true
+										}
+									}
+								},
+								"btnDelImgSrc": {
+									"title": "Löschen-Button Image",
+									"type": "string",
+									"media": {
+										"binaryEncoding": "base64",
+										"type": "image/*"
+									},
+									"options": {
+										"grid_columns": 4,
+										"dependencies": {
+											"btnDelImg": true
+										}
+									}
+								},
+								"btnDelImgMarkedSrc": {
+									"title": "Löschen-Button MARKIERT Image",
+									"type": "string",
+									"media": {
+										"binaryEncoding": "base64",
+										"type": "image/*"
+									},
+									"options": {
+										"grid_columns": 4,
+										"dependencies": {
+											"btnDelImg": true
+										}
+									}
+								},
+
+								"btnDelImgWidth": {
+									"title": "Breite",
+									"type": "integer",
+									"minimum": 0,
+									"default": 0,
+									"options": {
+										"grid_columns": 4,
+										"grid_break": true,
+										"dependencies": {
+											"btnDelImg": true
+										},
+										"infoText": "0 = Originalgröße, sonst Breite in Pixel"
+									}
+								}
 							}
 						}
 					}
@@ -425,7 +823,7 @@
 						},
 						"___version": {
 							"type": "string",
-							"default": "0.1"
+							"default": "1.0"
 						}
 					},
 					"options": {

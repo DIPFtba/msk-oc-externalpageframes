@@ -451,13 +451,13 @@ function loadSchema( schema ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-// /// #if __DEVELOP
+/// #if __DEVELOP
 
-// // for Development: always load one JSON schema
-// loadSchema( freePaintJSONSchema );
-// window.updateEWK = updateEWK;
+// for Development: always load one JSON schema
+loadSchema( pointAreaExtJSONSchema );
+window.updateEWK = updateEWK;
 
-// /// #else
+/// #else
 
 // load schema Links
 const templs = {
@@ -509,7 +509,7 @@ Object.entries(templs).forEach( ([templ,[schema,svg]]) => {
 	schSel.appendChild( a );
 })
 
-// /// #endif
+/// #endif
 
 //////////////////////////////////////////////////////////////////////////////
 

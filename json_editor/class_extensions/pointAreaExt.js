@@ -92,7 +92,10 @@ export class pointAreaExtFromSchema {
 			for ( let i=1; i<this.colorDefs.length; i++ ) {
 				res[`V_Color_${pref}_${i}`] = this.getColorCntStriked( i, null );
 				res[`V_Color_${pref}_${i}_Hidden`] = this.getColorCntStriked( i, true );
-				res[`V_Color_${pref}_${i}_RowOne`] = this.getColorCntStriked( i, null, 0 );
+				for ( let row=0; row<this.rows; row++ ) {
+					res[`V_Color_${pref}_${i}_Row${row+1}`] = this.getColorCntStriked( i, null, row );
+					res[`V_Color_${pref}_${i}_Hidden_Row${row+1}`] = this.getColorCntStriked( i, true, row );
+				}
 			}
 		}
 
@@ -458,7 +461,7 @@ export class pointAreaExtFromSchema {
 				});
 
 				// Drag Buttons
-				if ( this.draggable && idx >= 0 ) {
+				if ( this.draggable /*&& idx!==-1*/ ) {	// Strike auch draggable?
 					kBtn.draggable( true );
 					kBtn.on('dragstart', (e) => {
 						this.dragStart(e, idx);
@@ -467,28 +470,55 @@ export class pointAreaExtFromSchema {
 			}
 		}
 
-		// click point
+		// click & drag point
 		this.dots.forEach( (dotRow, row) => {
 			dotRow.forEach( (dot, col) => {
 				if ( !this.dotReadonly[row][col] ) {
-					dot.k.on('click tap', (e) => {
+					const clickHandler = (e) => {
 						if ( ignoreEvent(e) ) {
 							return
 						}
 // console.log("=========== dot clicked",row,col)
 						e.cancelBubble = true;
 						this.clickDot( row, col );
-					});
-					if ( this.draggable ) {
+					};
+
+					if ( !this.draggable ) {
+						dot.k.on('click tap', clickHandler );
+
+					} else {
+						// click, not drag?
+						// (bei 'click tap' wird Handler auf jeden Fall gerufen, auch wenn später Drag daraus wird)
+						dot.k.on('mousedown touchstart', (e) => {
+// console.log("############# down")
+							e.cancelBubble = true;
+							this.clickDetect = e;	// Wenn mousedown doch zu drag wurde, dann muss das gelöscht werden
+							this.clickHandler = clickHandler;
+						});
+
+						// drag stat click
 						dot.k.draggable( true );
 						dot.k.on('dragstart', (e) => {
+// console.log("############# drag")
 // console.log("+++ will dragstart",this.dotColors[0],row, col)
+							this.clickDetect = null;
 							this.dragStart(e, null, row, col);
 						})
 					}
 				}
 			});
 		});
+		if ( this.draggable ) {
+			// Wenn dragstart doch nicht zu drag wurde, dann muss clickHandler gerufen werden
+			this.stage.on('mouseup touchend', (e) => {
+// console.log("############# up")
+				if ( this.clickDetect ) {
+					// Das hier übergebene Event stimmt ggf. nicht mehr, ist für mein Handler aber egal
+					this.clickHandler(this.clickDetect);
+				}
+				this.clickDetect = null;
+			});
+		}
 
 		// Rechteck ziehen
 		this.stage.on('mousedown touchstart', this.h_mousedown.bind(this) );
@@ -509,6 +539,9 @@ export class pointAreaExtFromSchema {
 
 			this.base.postLog( 'clickedNothing', getPosOfEvent( this.stage, e ) );
 		});
+	}
+
+	setClickNotDragHandler ( k, clickHandler ) {
 	}
 
 	h_mousedown (e) {
@@ -642,21 +675,24 @@ export class pointAreaExtFromSchema {
 
 	clickDot ( row, col, color=this.currColor, log=true ) {
 // console.log("====== clickDot",color,row,col)
+// console.trace();
+		const oldColor = this.dotColors[row][col];
+		const oldStriked = this.dotStriked[row][col];
 		let same = true;
 		if ( color<0 ) {
-			if ( !this.dotStriked[row][col] && this.dotColors[row][col]>0 ) {
+			if ( !oldStriked && oldColor>0 ) {
 				same = false;
 				this.dotStriked[row][col] = true;
 				this.hasStriked = true;
 				this.renderStrikedRow(row);
 			}
 		} else {
-			if ( this.dotColors[row][col] !== color ) {
+			if ( oldColor !== color ) {
 				same = false;
 				this.dotColors[row][col] = color;
 				this.dots[row][col].k.fill( this.colorDefs[color] );
 			}
-			if ( this.dotStriked[row][col] ) {
+			if ( oldStriked ) {
 				same = false;
 				this.dotStriked[row][col] = false;
 				this.hasStriked = this.getHasStriked();
@@ -668,7 +704,9 @@ export class pointAreaExtFromSchema {
 			this.base.postLog( same ? 'dotClickedSame' : 'dotClicked', {
 				c: col+1,
 				r: row+1,
-				color: this.currColor
+				color: this.currColor,
+				oldColor,
+				oldStriked,
 			});
 			this.logAllCnts();
 			this.base.sendChangeState( this );	// send changeState & score
@@ -791,10 +829,18 @@ export class pointAreaExtFromSchema {
 		e.cancelBubble = true;
 // console.log("===== dragstart",color,row, col,this.dotColors[row])
 
+		// Weißer dot draggen? nicht erlaubt
+		if ( row!==null && this.dotColors[row][col]===0 ) {
+			this.dots[row][col].k.stopDrag();
+			this.base.postLog( 'dotDragStartNoEffect', { r:row+1, c:col+1, color: 0 } );
+			return;
+		}
+
+		// dragVars Inits
 		const dragVars = this.drag;
 		const startPos = getPosOfEvent( this.stage, e );
 		if ( row===null && this.kBtnsImgs[color] ) {
-			// offs korrigieren bei Imgs
+			// Buttons: offs korrigieren bei Imgs
 			const width = this.kBtnsImgs[color][0].width() / 2;
 			startPos.x -= width;
 			startPos.y -= width;
@@ -827,33 +873,58 @@ export class pointAreaExtFromSchema {
 // console.log("222222",this.dotColors[row])
 			color = this.dotColors[row][col];
 
-			this.base.postLog( 'dotDragStart', { r:row+1, c:col+1, color } );
-			this.lastDotColors[row][col] = 0; // gedraggter Dot wird als gelöscht wieder hergestellt (wenn Drop irgendwo)
-			this.dotColors[row][col] = 0;
-			if ( this.dotStriked[row][col] ) {
+			if ( !this.dotStriked[row][col] ) {
+				// Farb-Drag
+				this.dotColors[row][col] = 0; // gedraggter Dot wird als gelöscht wieder hergestellt (wenn Drop irgendwo)
+				this.dots[row][col].k.fill( this.colorDefs[0] );
+			} else {
+				// Strike-Drag
 				dragVars.orgStriked = true;
-				this.lastDotStriked[row][col] = false;
-				this.dotStriked[row][col] = false;
+				color = -1;
+				this.dotStriked[row][col] = false; // gedraggter Dot wird als nicht Striked wieder hergestellt (wenn Drop irgendwo)
 				this.renderStrikedRow(row);
 			}
 			dragVars.startCol = col;
 			dragVars.startRow = row;
+			this.base.postLog( 'dotDragStart', { r:row+1, c:col+1, color: dragVars.orgStriked ? -1 : color } );
 		}
 
 		this.lastDotStriked = this.copyColors( this.dotStriked );
-		if ( this.currColor>=0 ) {
-			this.lastDotColors = this.copyColors( this.dotColors);
-		}
+		this.lastDotColors = this.copyColors( this.dotColors);
 		dragVars.color = color;
 
 		// Dragged KonvaObj
-		const kDragObj = new Konva.Circle({
-			...this.dotAttrs,
-			x: startPos.x - dragVars.offsX,
-			y: startPos.y - dragVars.offsY,
-			fill: this.colorDefs[ color ],
-			opacity: 0.5,
-		});
+		const zx = startPos.x - dragVars.offsX;
+		const zy = startPos.y - dragVars.offsY;
+		const radius = this.btnRadius;
+		const kDragObj =
+			color>-1 ?
+			// eine Farbe dragged
+			new Konva.Circle({
+				...this.dotAttrs,
+				x: zx,
+				y: zy,
+				fill: this.colorDefs[ color ],
+				opacity: 0.5,
+			}) :
+			// Durchstreichen gedraggt
+			this.strikedFill ?
+				new Konva.Rect({
+					x: zx - radius,
+					y: zy - this.strikedFillHeight / 2,
+					width: 2*radius,
+					height: this.strikedFillHeight,
+					stroke: this.strikedColor,
+					strokeWidth: this.strikedWidth,
+					fill: this.strikedFillColor,
+					opacity: this.strikedFillOpacity100/100 * 0.5,
+				}) :
+				new Konva.Line({
+					points: [ zx - radius, zy, zx + radius, zy ],
+					stroke: this.strikedColor,
+					strokeWidth: this.strikedWidth,
+					opacity: this.strikedOpacity100/100 * 0.5,
+				})
 		dragVars.k = kDragObj;
 		this.layer.add( kDragObj );
 		this.layer.batchDraw();
@@ -865,11 +936,13 @@ export class pointAreaExtFromSchema {
 
 	dragEnter ( row, col ) {
 		const oldColor = this.dotColors[row][col];
-		const same = this.drag.color===oldColor && !this.lastDotStriked[row][col];
+		const oldStriked = this.dotStriked[row][col];
+		const same = this.drag.color===oldColor && this.drag.orgStriked===oldStriked;
 		this.base.postLog( 'dragMoveOverDot'+( same ? 'Unchanged' : '' ), {
 			c: col+1,
 			r: row+1,
 			oldColor,
+			oldStriked,
 			dragColor: this.drag.color,
 		} );
 		if ( !same ) {
@@ -879,19 +952,25 @@ export class pointAreaExtFromSchema {
 
 	dragLeave ( row, col ) {
 		const oldColor = this.lastDotColors[row][col];
-		const same = this.drag.color===oldColor && !this.lastDotStriked[row][col];
+		const oldStriked = this.lastDotStriked[row][col];
+		const same = this.drag.color===oldColor && this.drag.orgStriked===oldStriked;
 		this.base.postLog( 'dragLeaveDot'+( same ? 'Unchanged' : '' ), {
 			c: col+1,
 			r: row+1,
 			oldColor,
+			oldStriked,
 			dragColor: this.drag.color,
 		} );
 		if ( !same ) {
 			this.dotColors[row][col] = oldColor;
 			this.dots[row][col].k.fill(this.colorDefs[ oldColor ] );
-			if ( this.lastDotStriked[row][col] ) {
-				this.dotStriked[row][col] = true;
-				this.hasStriked = true;
+			if ( this.dotStriked[row][col] != oldStriked ) {
+				this.dotStriked[row][col] = oldStriked;
+				if ( oldStriked ) {
+					this.hasStriked = true;
+				} else {
+					this.hasStriked = this.getHasStriked();
+				}
 				this.renderStrikedRow(row);
 			}
 		}
@@ -936,12 +1015,15 @@ export class pointAreaExtFromSchema {
 	dragEnd (e) {
 		const droppedSame = this.drag.startCol!==null && this.drag.lastCol === this.drag.startCol && this.drag.lastRow === this.drag.startRow;
 
-		// Original war striked und wieder gedraggt?
-		if ( this.drag.orgStriked && droppedSame ) {
-			// Striked wieder herstellen
-			this.dotStriked[ this.drag.lastRow ][ this.drag.lastCol ] = true;
-			this.renderStrikedRow( this.drag.lastRow );
-		}
+		// Aktuell dargestellter Zustand wird beibehalten
+
+		// Früher:
+		// // Original war striked und wieder gedraggt?
+		// if ( this.drag.orgStriked && droppedSame ) {
+		// 	// Striked wieder herstellen
+		// 	this.dotStriked[ this.drag.lastRow ][ this.drag.lastCol ] = true;
+		// 	this.renderStrikedRow( this.drag.lastRow );
+		// }
 // console.log("===== dragend",this.drag.lastRow,this.drag.lastCol,this.dotColors[0])
 
 		if ( this.drag.lastCol===null ) {
@@ -950,7 +1032,7 @@ export class pointAreaExtFromSchema {
 			this.base.postLog( droppedSame ? 'droppedSamePos' : 'droppedPos', {
 				c: this.drag.lastCol+1,
 				r: this.drag.lastRow+1,
-				color: this.drag.color
+				color: this.drag.color,
 			})
 		}
 		this.logAllCnts();

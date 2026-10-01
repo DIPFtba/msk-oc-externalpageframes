@@ -321,6 +321,13 @@ export class freePaintMultFromSchema {
 
 // 				window.parent.postMessage( JSON.stringify( pass_data ), '*' );
 // 			}
+// /// #if __EDITOR
+// 			else if ( cmd === '__DESCRIBE_CALLBACK_PARAMS__' ) {
+// 				return [
+// 					[ 'getImage', `Schickt aktuelles Bild als PNG als Message`, '' ]
+// 				];
+// 			}
+// /// #endif
 // 		});
 // 	}
 
@@ -477,6 +484,15 @@ export class freePaintMultFromSchema {
 				case 'setBrush':
 					this.setBrush( p1, p2, p3 );
 					break;
+/// #if __EDITOR
+				case '__DESCRIBE_CALLBACK_PARAMS__':
+					return [
+						[ 'undo', `Macht letzte Aktion rückgängig`, '' ],
+						[ 'redo', `Wiedholt letzte rückgängig gemachte Aktion`, '' ],
+						[ 'clearAll', `Löscht alles`, '' ],
+						[ 'setBrush', `Setzt aktiven Pinsel`, 'color (HtmlColor), width (number), mode (add|sub)' ],
+					];
+/// #endif
 			}
 		});
 	}

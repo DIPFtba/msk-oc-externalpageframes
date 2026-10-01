@@ -24,6 +24,13 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 			if ( cmd === "SetMyScriptKeys" ) {
 				this.myScriptApi.setMyScriptKeys( ak, hk );
 			}
+/// #if __EDITOR
+			else if ( cmd === '__DESCRIBE_CALLBACK_PARAMS__' ) {
+				return [
+					[ 'SetMyScriptKeys', `Setzt MyScript Keys`, 'ak (String), hk (String)' ],
+				];
+			}
+/// #endif
 		});
 
 		base.decInitCnt();

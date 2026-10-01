@@ -121,6 +121,17 @@ export class fsmSend {
 		}
 	}
 
+	callCbs (data) {
+		this.prInitDone.then( () => {
+			if ( process.env.NODE_ENV !== 'production' ) {
+				this.debugOut( `callExternalPageFrameOperator ${this.callEPFcbs.length} listener(s) called with data: ${JSON.stringify(data)}` );
+			};
+			for ( const cb of this.callEPFcbs ) {
+				cb( ...data );
+			}
+		});
+	}
+
 	startListener () {
 		this.answerVarDeclReq = function (callId) {
 			this.prInitDone.then( () => {
@@ -138,19 +149,9 @@ export class fsmSend {
 			});
 		}
 
-		const callCbs = (data) => this.prInitDone.then( () => {
-			if ( process.env.NODE_ENV !== 'production' ) {
-				this.debugOut( `callExternalPageFrameOperator ${this.callEPFcbs.length} listener(s) called with data: ${JSON.stringify(data)}` );
-			};
-			for ( const cb of this.callEPFcbs ) {
-				cb( ...data );
-			}
-		});
-
 		window.addEventListener(
 			"message",
 			(json) => {
-
 				try {
 					const data = JSON.parse(json.data);
 					if ( typeof data === 'object' && data !== null  ) {
@@ -162,22 +163,24 @@ export class fsmSend {
 							}
 							// callExternalPageFrameOperator? (runtime >= 10.5)
 							else if ( data.messageKey==='callExternalPageFrameOperator' && Array.isArray(data.parameters) ) {
-								callCbs( data.parameters );
+								this.callCbs( data.parameters );
 							}
 
 						} else {
 							// Array message, callEPFcbs? (runtime < 10.5)
-							callCbs( data );
+							this.callCbs( data );
 						}
 					} else if ( typeof data === 'string' ) {
 
 						const dataTr = data.trim();
 						if ( dataTr.length>0 ) {
 							// Handle string messages (runtime < 10.5)
-							callCbs( [dataTr] );
+							this.callCbs( [dataTr] );
 						}
 					}
-				} catch (e) {}
+				} catch (e) {
+					// console.error(e);
+				}
 			},
 			false );
 	}

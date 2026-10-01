@@ -1209,6 +1209,15 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 					this.switchModeBar.clickOn(1);
 					break;
 				}
+/// #if __EDITOR
+				case '__DESCRIBE_CALLBACK_PARAMS__':
+					return [
+						[ 'SetIconBarOff', `Blendet IconBar aus`, '' ],
+						[ 'SetIconBarText', `Setzt IconBar auf Text-Modus`, '' ],
+						[ 'SetIconBarPaint', `Setzt IconBar auf Paint-Modus`, '' ],
+					];
+					break;
+/// #endif
 			}
 		});
 

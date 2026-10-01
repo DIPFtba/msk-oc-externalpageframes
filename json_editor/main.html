@@ -45,12 +45,29 @@
 		<div id="right">
 			<div id="doku"><a target="_blank" href="doku.html">Doku</a></div>
 			<div id="loaderOut"></div>
-			<div id="debugOut"></div>
+			<div id="debugVarsOut"></div>
+			<hr id="ruler2">
+			<div id="debugLogsOut">
+				<span class="flex-container">
+					<span id="logs" class="header enabled">Logs</span>
+					<span id="events" class="header enabled">Events</span>
+					<!-- <span id="messages" class="header enabled">Messages</span> -->
+					<span id="clear">&#x274C;</span>
+				</span>
+			</div>
 		</div>
 	</div>
 
-	<!-- Das temporäre Overlay -->
-	<dialog id="fullscreen-overlay">
+	<!-- Send message -->
+	<dialog id="send-msg">
+		<h3>Message an EWK senden</h3>
+		<div class="select">Welche Message: <select name="msg"></select></div>
+		<div class="descr" id="send-msg-descr"></div>
+		<div class="input"><textarea id="send-msg-data"></textarea></div>
+		<div class="button"><button id="send-msg-ok">Senden</button><button id="send-msg-cancel">Abbruch</button></div>
 	</dialog>
+
+	<!-- Das temporäre Overlay -->
+	<dialog id="fullscreen-overlay"></dialog>
 </body>
 </html>

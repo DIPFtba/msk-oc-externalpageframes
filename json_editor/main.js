@@ -129,11 +129,13 @@ const textContainer = document.getElementById('ewk_textcontainer');
 
 function getBase () {
 	const container = document.getElementById('ewk_container');
-	return new baseInits({
+	const base = new baseInits({
 		container,
 		width: container.offsetWidth,
 		height: container.offsetHeight,
 	});
+	initNewBase( base );
+	return base;
 }
 
 let creator = null;
@@ -352,6 +354,7 @@ function loadSchema( schema ) {
 							// erzeugt base selbst!
 							const io = new imageHighlightingFromSchema( textContainer.firstChild, cfgData, addMods );
 							base = io.base;
+							initNewBase( base );
 							return io;
 						}
 						break;
@@ -451,13 +454,13 @@ function loadSchema( schema ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-/// #if __DEVELOP
+// /// #if __DEVELOP
 
-// for Development: always load one JSON schema
-loadSchema( pointAreaExtJSONSchema );
-window.updateEWK = updateEWK;
+// // for Development: always load one JSON schema
+// loadSchema( pointAreaExtJSONSchema );
+// window.updateEWK = updateEWK;
 
-/// #else
+// /// #else
 
 // load schema Links
 const templs = {
@@ -509,7 +512,7 @@ Object.entries(templs).forEach( ([templ,[schema,svg]]) => {
 	schSel.appendChild( a );
 })
 
-/// #endif
+// /// #endif
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -521,7 +524,7 @@ function updateEWK () {
 	base.stage.destroyChildren();
 	base.stage.setAttr( 'bw__IconBarLayer', null );
 	base.stage.off();
-	debugOutClear();
+	debugVarsOutClear();
 
 	try {
 
@@ -550,7 +553,7 @@ function updateEWK () {
 				let oldStatusVar = {};
 				extres.statusVarDef = function () {
 					const res = oldStatusVarDef();
-					oldStatusVar = debugOutObj( 'Status', res, oldStatusVar );
+					oldStatusVar = debugVarsOutObj( 'Status', res, oldStatusVar );
 					return res;
 				}
 				extres.statusVarDef();
@@ -563,7 +566,7 @@ function updateEWK () {
 				extres.scoreDef = function (exportAll=false) {
 					const res = oldScoreDef(exportAll);
 					if ( !exportAll && Object.keys(res).length > 0 ) {
-						oldScoreVals = debugOutObj( 'Variables', res, oldScoreVals );
+						oldScoreVals = debugVarsOutObj( 'Variables', res, oldScoreVals );
 					}
 					return res;
 				}
@@ -784,26 +787,28 @@ loadButton.style.display = 'inline';
 // Resize EWK
 //
 
-let hrPosY = null;
+let hrPosY = null, hrElement=null;
 const ewk_div = document.getElementById('EWK');
 const editor_div = document.getElementById('editor_container');
 
 function hrmove (ev) {
 	const diff = ev.clientY - hrPosY;
-	ewk_div.style.height = `${ ewk_div.offsetHeight + diff }px`;
-	editor_div.style.height = `${ editor_div.offsetHeight - diff }px`;
+	hrElement.previousElementSibling.style.height = `${ hrElement.previousElementSibling.offsetHeight + diff }px`;
+	hrElement.nextElementSibling.style.height = `${ hrElement.nextElementSibling.offsetHeight - diff }px`;
 	hrPosY = ev.clientY;
 	ev.stopPropagation();
 	ev.preventDefault();
 }
-
-const hr = document.getElementById( 'ruler' );
-hr.addEventListener( 'mousedown', (ev) => {
-	if ( hrPosY === null ) {
-		hrPosY = ev.clientY;
-		document.addEventListener( 'mousemove', hrmove );
-		ev.stopPropagation();
-	}
+['ruler', 'ruler2'].forEach( el => {
+	const hr = document.getElementById( el );
+	hr.addEventListener( 'mousedown', (ev) => {
+		if ( hrPosY === null ) {
+			hrElement = hr;
+			hrPosY = ev.clientY;
+			document.addEventListener( 'mousemove', hrmove );
+			ev.stopPropagation();
+		}
+	});
 });
 document.addEventListener( 'mouseup', () => {
 	if ( hrPosY !== null ) {
@@ -820,7 +825,7 @@ function updateSizeEwk () {
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Resize debugOut
+// Resize debugVarsOut
 //
 
 let vrPosX = null;
@@ -835,7 +840,6 @@ function vrmove (ev) {
 	ev.stopPropagation();
 	ev.preventDefault();
 }
-
 const vr = document.getElementById( 'vruler' );
 vr.addEventListener( 'mousedown', (ev) => {
 	if ( vrPosX === null ) {
@@ -863,21 +867,21 @@ function var2clip( ev, k ) {
 }
 window.var2clip = var2clip;
 
-function debugOutObj ( t, res, oldRes ) {
+function debugVarsOutObj ( t, res, oldRes ) {
 
 	if ( typeof res === 'object' && !object_equals( res, oldRes ) ) {
 		// let dbg = `<span style="background-color:${ t == 'Scores' ? '#FADBD8' : '#FCF3CF'}">${t}:</span><br><table>`;
 		// Object.entries( res )
 		// 	// .sort( (a,b) => a[0]==b[0] ? NaN : a[0]<b[0] ? -1 : 1 )
 		// 	.forEach( ([k,v]) => dbg += `<tr><td>${k}:</td><td>${JSON.stringify(v)}</td></tr>` );
-		// debugOut( dbg + "</table><br>" );
+		// debugVarsOut( dbg + "</table><br>" );
 		let dbg = `<span class="${t}">${t}:</span>`;
 		Object.entries( res )
 			// .sort( (a,b) => a[0]==b[0] ? NaN : a[0]<b[0] ? -1 : 1 )
 			.forEach( ([k,v]) => {
 				dbg += `<span class="${ oldRes[k] !== v ? 'c' :'nc' }" onclick="var2clip(event,'${k}')">${k}: ${JSON.stringify(v)}</span>`
 			});
-		debugOut( dbg + "<br>" );
+		debugVarsOut( dbg + "<br>" );
 
 		return res;
 	}
@@ -885,16 +889,185 @@ function debugOutObj ( t, res, oldRes ) {
 	return oldRes;
 }
 
-function debugOutClear () {
-	debugOutDiv.innerHTML = '';
+function debugVarsOutClear () {
+	debugVarsOutDiv.innerHTML = '';
 }
 
-const debugOutDiv = document.getElementById( 'debugOut' );
-function debugOut (s) {
-	debugOutDiv.innerHTML += "\n"+s.replace("<pref>","&lt;pref&gt;");
-	debugOutDiv.scrollTop = debugOutDiv.scrollHeight;
+const debugVarsOutDiv = document.getElementById( 'debugVarsOut' );
+function debugVarsOut (s) {
+	debugVarsOutDiv.innerHTML += "\n"+s.replace("<pref>","&lt;pref&gt;");
+	debugVarsOutDiv.scrollTop = debugVarsOutDiv.scrollHeight;
 }
-window.debugOut = debugOut;
+window.debugVarsOut = debugVarsOut;
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// debugLogsOut
+//
+
+const debugLogsOut = document.getElementById('debugLogsOut');
+
+// Enable/Disable type
+const headers = Array.from( debugLogsOut.getElementsByClassName('header') );
+headers.forEach( header => {
+	header.addEventListener( 'click', ev => {
+		const enabled = header.classList.toggle('enabled');
+		const type = ['logs','events'].find( cl => header.id === cl );
+		const divs = debugLogsOut.querySelectorAll('div');
+		if ( divs ) {
+			divs.forEach( el => {
+				if ( el.classList.contains(type) ) {
+					if ( enabled ) {
+						el.classList.remove('hidden');
+					} else {
+						el.classList.add('hidden');
+					}
+				}
+			});
+		}
+	});
+})
+
+// clear Button
+const clearDebugLogOut = () => {
+	const allDivs = debugLogsOut.querySelectorAll('div');
+	allDivs.forEach( div => div.remove() )
+}
+const trash = debugLogsOut.querySelector('#clear');
+trash.addEventListener( 'click', clearDebugLogOut )
+
+// Ausgabe
+const shortJsonOutput = data => {
+	if ( typeof data === 'object' && data !== null ) {
+		if ( Array.isArray(data) ) {
+			if ( data.length > 15 ) {
+				return [ ...data.slice(0, 14), "[..]" ];
+			}
+		} else {
+			return Object.fromEntries( Object.entries(data).map( ([k,v]) => [k, shortJsonOutput(v)]) )
+		}
+	} else if ( typeof data === 'string' && data.length>30 ) {
+		return data.substring( 0, 28 ) + "[..]";
+	}
+	return data
+}
+
+function debugLogsOutFnc (obj, method, type, transFnc) {
+	const oldMethod = obj[method];
+
+	obj[method] = function (...args) {
+		const [ title, data ] = transFnc(...args);
+		if ( !title && !data ) {
+			return;
+		}
+		const headerEl = debugLogsOut.querySelector( '#'+type );
+		const typeEnabled = !headerEl || headerEl.classList.contains('enabled');
+		const div = document.createElement('DIV');
+		div.classList.add(type);
+		if ( !typeEnabled ) {
+			div.classList.add('hidden');
+		}
+console.log("=======",data,shortJsonOutput(data));
+		div.innerHTML = `${ title ? `<span class="title">${title}</span>` : '' }${data ? JSON.stringify( shortJsonOutput(data) ) : ''}`;
+		debugLogsOut.appendChild(div);
+		debugLogsOut.scrollTop = debugLogsOut.scrollHeight;
+
+		oldMethod.apply( obj, args );
+	}
+}
+
+const callEPFDescrs = [];
+
+// Inits
+function initNewBase (base) {
+	debugLogsOutFnc( base.fsm, 'postLogEvent', 'logs', ({ event, ...rest }) => [ event, rest ] );
+	debugLogsOutFnc( base.fsm, 'triggerEvent', 'events', obj => [ obj ] );
+	debugLogsOutFnc( base.fsm, 'callCbs', 'messages', ([ cmd, ...params ]) => [ cmd, params.join(', ') ] );
+
+	// Message Button
+	base.getInitDonePromise().then( () => {
+		const oldBtn = document.getElementById('msg_btn');
+		if ( oldBtn ) {
+			oldBtn.remove();
+		}
+
+		// Gibt es Callbacks?
+		if ( base.fsm.callEPFcbs.length>0 ) {
+			// Descrs holen
+			callEPFDescrs.length = 0;
+			base.fsm.callEPFcbs.forEach( cb => {
+				const res = cb('__DESCRIBE_CALLBACK_PARAMS__');
+				if ( Array.isArray(res) && res.length>0 && res.every( r => r.length===3 ) ) {
+					callEPFDescrs.push( ...res );
+				}
+			})
+
+			// Button darstellen
+			const btn = document.createElement('BUTTON');
+			btn.textContent = "Send Msg";
+			btn.id = "msg_btn";
+			btn.addEventListener( 'click', showSendMsgDialog );
+			if ( callEPFDescrs.length==0 ) {
+				btn.setAttribute('disabled','disabled');
+			}
+			debugLogsOut.querySelector('.flex-container')?.appendChild(btn);
+		}
+
+		clearDebugLogOut();
+	})
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+const sendMsgDialog = document.getElementById('send-msg');
+document.getElementById( 'send-msg-ok' ).addEventListener( 'click', sendMsg );
+document.getElementById( 'send-msg-cancel' ).addEventListener( 'click', () => sendMsgDialog.close() );
+
+const sendMsgSelect = document.querySelector('#send-msg .select select');
+const sendMsgData = document.getElementById('send-msg-data');
+const updateDialog = (idx) => {
+	if ( callEPFDescrs[idx] ) {
+		sendMsgDescr.innerHTML = callEPFDescrs[idx][1];
+		sendMsgData.value = callEPFDescrs[idx][2];
+	}
+}
+sendMsgData.addEventListener( 'focus', e => e.target.select() );
+
+sendMsgSelect.addEventListener( 'change', ev => updateDialog( ev.target.value ) );
+const sendMsgDescr = document.getElementById('send-msg-descr');
+
+function showSendMsgDialog () {
+	sendMsgSelect.innerHTML = callEPFDescrs
+		.map( ( item, idx ) => `<option value="${idx}">${item[0]}</option>`)
+		.join('');
+
+	updateDialog(0);
+	sendMsgDialog.showModal();
+	sendMsgData.focus();
+}
+
+function sendMsg () {
+	try {
+		const sel = callEPFDescrs[ sendMsgSelect.value ][0];
+		const params = sendMsgData.value
+			.trim()
+			.split(',')
+			.map( e => e.trim() )
+			.map( e => e.match(/^[0-9]+(\.[0-9]+)?$/) ? Number(e) : e )
+			.map( e => e[0]=='"' && e[e.length-1]=='"' ? e.substring(1,e.length-1) : e );
+
+		const data = {
+			messageKey: 'callExternalPageFrameOperator',
+			parameters: [ sel, ...params ],
+		}
+
+		window.postMessage( JSON.stringify(data), '*' );
+	} catch (e) {
+		// console.error(e);
+	};
+
+	sendMsgDialog.close();
+}
 
 //////////////////////////////////////////////////////////////////////////////
 

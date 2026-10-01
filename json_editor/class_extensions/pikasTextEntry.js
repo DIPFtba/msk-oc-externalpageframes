@@ -425,6 +425,29 @@ export class pikasTextEntryFromSchema {
 					}
 				}
 			}
+/// #if __EDITOR
+			else if ( btn === '__DESCRIBE_CALLBACK_PARAMS__' ) {
+				return [
+					[ 'btn_0', `Simuliert (bei Focus) Tastendruck '0'`, '' ],
+					[ 'btn_1', `Simuliert (bei Focus) Tastendruck '1'`, '' ],
+					[ 'btn_2', `Simuliert (bei Focus) Tastendruck '2'`, '' ],
+					[ 'btn_3', `Simuliert (bei Focus) Tastendruck '3'`, '' ],
+					[ 'btn_4', `Simuliert (bei Focus) Tastendruck '4'`, '' ],
+					[ 'btn_5', `Simuliert (bei Focus) Tastendruck '5'`, '' ],
+					[ 'btn_6', `Simuliert (bei Focus) Tastendruck '6'`, '' ],
+					[ 'btn_7', `Simuliert (bei Focus) Tastendruck '7'`, '' ],
+					[ 'btn_8', `Simuliert (bei Focus) Tastendruck '8'`, '' ],
+					[ 'btn_9', `Simuliert (bei Focus) Tastendruck '9'`, '' ],
+					[ 'btn_plus', `Simuliert (bei Focus) Tastendruck '+'`, '' ],
+					[ 'btn_minus', `Simuliert (bei Focus) Tastendruck '-'`, '' ],
+					[ 'btn_result', `Simuliert (bei Focus) Tastendruck '='`, '' ],
+					[ 'btn_backspace', `Simuliert (bei Focus) Tastendruck 'Backspace'`, '' ],
+					[ 'btn_delete', `Simuliert (bei Focus) Tastendruck 'Delete'`, '' ],
+					[ 'btn_left', `Simuliert (bei Focus) Tastendruck 'ArrowLeft'`, '' ],
+					[ 'btn_right', `Simuliert (bei Focus) Tastendruck 'ArrowRight'`, '' ],
+				];
+			}
+/// #endif
 		});
 	}
 

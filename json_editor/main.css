@@ -27,6 +27,7 @@ html,body {
 	width: 245px;
 	display: flex;
 	flex-direction: column;
+	user-select: none;
 }
 
 #doku {
@@ -48,27 +49,27 @@ html,body {
 	  background-color: transparent;
 	}
 }
-#debugOut {
+#debugVarsOut {
 	font-size: 90%;
 	overflow-y: auto;
 	overflow-x: hidden;
 	padding-left: 5px;
-	flex-grow: 1;
+	flex-grow: 2;
 }
-#debugOut span {
+#debugVarsOut span {
 	display: block;
 	white-space: nowrap;
 }
-#debugOut span.Variables {
+#debugVarsOut span.Variables {
 	background-color: #FADBD8;
 }
-#debugOut span.Status {
+#debugVarsOut span.Status {
 	background-color: #FCF3CF;
 }
-#debugOut span.nc {
+#debugVarsOut span.nc {
 	color: #c0c0c0;
 }
-#debugOut span.error {
+#debugVarsOut span.error {
 	color: red;
 	background-color: yellow;
 	padding: 5px;
@@ -83,10 +84,10 @@ html,body {
 	font-weight: bold;
 	margin-bottom: 8px;
 }
-/* #debugOut tr td:nth-child(1) {
+/* #debugVarsOut tr td:nth-child(1) {
 	text-align: right;
 } */
-/* #debugOut tr td:nth-child(1) {
+/* #debugVarsOut tr td:nth-child(1) {
 	padding:0 3px;
 	white-space: nowrap;
 } */
@@ -148,7 +149,7 @@ div#schema_select .templ {
 	font-weight: bold;
 }
 
-hr#ruler {
+hr#ruler,hr#ruler2 {
 	height: 3px;
 	border-width: 0;
 	color: gray;
@@ -167,4 +168,95 @@ hr#ruler {
   padding: 0;
   margin: 0;
   background: #ffffff; /* Dein temporärer Hintergrund */
+}
+
+#debugLogsOut {
+  padding: 5px;
+  flex-grow: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+#debugLogsOut .flex-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 5px;
+  margin-bottom: 3px;
+}
+#debugLogsOut .flex-container button {
+ margin-left: auto;
+}
+
+#debugLogsOut .header {
+  padding-left: 5px;
+  padding-right: 5px;
+  cursor: pointer;
+}
+#debugLogsOut #clear {
+  cursor: pointer;
+}
+#debugLogsOut > div {
+  word-wrap: break-word;
+}
+#debugLogsOut #logs.header:not(.enabled),#debugLogsOut #events.header:not(.enabled),#debugLogsOut #messages.header:not(.enabled) {
+  background-color: lightgray;
+}
+#debugLogsOut #logs.header.enabled {
+  background-color: rgb(255, 255, 100);
+}
+#debugLogsOut #events.header.enabled {
+  background-color: rgb(175, 234, 175);
+}
+#debugLogsOut #messages.header.enabled {
+  background-color: lightpink;
+}
+#debugLogsOut > div.hidden {
+  display: none;
+}
+#debugLogsOut > div.logs:nth-child(odd of .logs) {
+	background-color: rgb(255, 255, 100);
+}
+#debugLogsOut > div.logs:nth-child(even of .logs) {
+	background-color: #ffffd0;
+}
+#debugLogsOut > div.events:nth-child(odd of .events) {
+	background-color: rgb(175, 234, 175);
+}
+#debugLogsOut > div.events:nth-child(even of .events) {
+	background-color: #e0f8e0;
+}
+#debugLogsOut > div.messages:nth-child(odd of .messages) {
+	background-color: rgb(254, 202, 211);
+}
+#debugLogsOut > div.messages:nth-child(even of .messages) {
+	background-color: #ffe4e1;
+}
+#debugLogsOut > div > span.title {
+	font-weight: bold;
+	padding-right: 5px;
+}
+
+#send-msg {
+	padding-right: 30px;
+	padding-left: 30px;
+	cursor: default;
+}
+#send-msg div {
+	margin-top: 20px;
+}
+#send-msg textarea {
+	width: 100%;
+	height: 5em;
+	cursor: text;
+}
+#send-msg .button {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+}
+#send-msg .button button, #send-msg select {
+	cursor: pointer;
+}
+#debugLogsOut button {
+	background-color: #ffe4e1;
 }

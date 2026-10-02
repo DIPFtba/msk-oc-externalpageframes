@@ -12,6 +12,20 @@ import { addScoring } from "../common";
 //		window.postMessage( JSON.stringify( [ 'setColorIdx', 1 ] ), '*' );
 //		window.postMessage( JSON.stringify( [ 'setColorIdx', 2 ] ), '*' );
 
+const cancelKonvaEvent = (e) => {
+	const evt = e.evt;
+	if ( evt ) {
+		e.cancelBubble = true;
+		evt.preventDefault?.();
+		evt.stopPropagation?.();
+	}
+}
+const cancelEvent = (e) => {
+	cancelKonvaEvent(e);
+	e.preventDefault?.();
+	e.stopPropagation?.();
+}
+
 import trashIcon from '../../libs/img/trash.svg'
 
 export class pointAreaExtFromSchema {
@@ -449,6 +463,7 @@ export class pointAreaExtFromSchema {
 					if ( ignoreEvent(e) ) {
 						return
 					}
+					this.clickNothingDetect = false;
 					e.cancelBubble = true;
 
 					if ( this.currColor == idx ) {
@@ -464,6 +479,7 @@ export class pointAreaExtFromSchema {
 				if ( this.draggable /*&& idx!==-1*/ ) {	// Strike auch draggable?
 					kBtn.draggable( true );
 					kBtn.on('dragstart', (e) => {
+						this.clickNothingDetect = false;
 						this.dragStart(e, idx);
 					});
 				}
@@ -474,13 +490,12 @@ export class pointAreaExtFromSchema {
 		this.dots.forEach( (dotRow, row) => {
 			dotRow.forEach( (dot, col) => {
 				if ( !this.dotReadonly[row][col] ) {
-					const clickHandler = (e) => {
+					const clickHandler = e => {
 						if ( ignoreEvent(e) ) {
 							return
 						}
-// console.log("=========== dot clicked",row,col)
-						e.cancelBubble = true;
 						this.clickDot( row, col );
+						this.clickNothingDetect = false;
 					};
 
 					if ( !this.draggable ) {
@@ -490,7 +505,6 @@ export class pointAreaExtFromSchema {
 						// click, not drag?
 						// (bei 'click tap' wird Handler auf jeden Fall gerufen, auch wenn später Drag daraus wird)
 						dot.k.on('mousedown touchstart', (e) => {
-// console.log("############# down")
 							e.cancelBubble = true;
 							this.clickDetect = e;	// Wenn mousedown doch zu drag wurde, dann muss das gelöscht werden
 							this.clickHandler = clickHandler;
@@ -499,9 +513,8 @@ export class pointAreaExtFromSchema {
 						// drag stat click
 						dot.k.draggable( true );
 						dot.k.on('dragstart', (e) => {
-// console.log("############# drag")
-// console.log("+++ will dragstart",this.dotColors[0],row, col)
 							this.clickDetect = null;
+							this.clickNothingDetect = false;
 							this.dragStart(e, null, row, col);
 						})
 					}
@@ -511,12 +524,13 @@ export class pointAreaExtFromSchema {
 		if ( this.draggable ) {
 			// Wenn dragstart doch nicht zu drag wurde, dann muss clickHandler gerufen werden
 			this.stage.on('mouseup touchend', (e) => {
-// console.log("############# up")
 				if ( this.clickDetect ) {
 					// Das hier übergebene Event stimmt ggf. nicht mehr, ist für mein Handler aber egal
-					this.clickHandler(this.clickDetect);
+					this.clickHandler(this.clickDetect, false);
+					this.clickDetect = null;
+					e.preventDefault?.();
+					e.stopPropagation?.();
 				}
-				this.clickDetect = null;
 			});
 		}
 
@@ -526,14 +540,20 @@ export class pointAreaExtFromSchema {
 		this.stage.on('mouseup touchend', this.h_mouseup.bind(this) );
 
 		this.stage.on('mouseleave', (e) => {
-			if ( this.drawStart !== null ) {
+			if ( this.drawStart ) {
 				this.h_mouseup(e);
 				this.base.postLog( 'rectMarkedLeftStage' );
 			}
+			this.clickNothingDetect = false;
 		});
 
+		// clickendNothing Detection
+		this.stage.container().addEventListener( 'pointerdown',
+			// this.clickNothingDetect = true als erstes setzen, wenn irgendwo geklickt wird (capture)
+			// muss auf false gesetzt werden, wenn Click zu einer Handlung führt, die anders abgehandelt wird
+			() => this.clickNothingDetect = true, true );
 		this.stage.on('click tap', (e) => {
-			if ( ignoreEvent(e) || this.drawMoved ) {
+			if ( ignoreEvent(e) || !this.clickNothingDetect ) {
 				return
 			}
 
@@ -541,11 +561,7 @@ export class pointAreaExtFromSchema {
 		});
 	}
 
-	setClickNotDragHandler ( k, clickHandler ) {
-	}
-
 	h_mousedown (e) {
-// console.log("-------down")
 		if ( ignoreEvent(e) ) {
 			return
 		}
@@ -557,20 +573,21 @@ export class pointAreaExtFromSchema {
 		if ( this.currColor>=0 ) {
 			this.lastDotColors = this.copyColors( this.dotColors);
 		}
-// console.log("!!!!!",this.dotColors[0],this.lastDotColors[0]);
 	}
 
 	h_mousemove (e) {
 		if ( !this.drawStart || ignoreEvent(e) ) {
 			return
 		}
-// console.log("-------move",this.dotColors[0],this.lastDotColors[0])
 		e.cancelBubble = true;
 
 		const cRect = this.getCurrRect(e);
 		// Cursor jemals bewegt?
 		if ( !this.drawMoved ) {
 			this.drawMoved = cRect.x0 !== cRect.x1 || cRect.y0 !== cRect.y1;
+			if ( this.drawMoved ) {
+				this.clickNothingDetect = false;
+			}
 		}
 		this.showCurrentRect( cRect );
 	}
@@ -581,10 +598,12 @@ export class pointAreaExtFromSchema {
 		}
 		e.cancelBubble = true;
 
+		const cRect = this.getCurrRect(e);
 		this.delRect();
 		if ( !this.drawMoved ) {
 			return;
 		}
+		this.clickNothingDetect = false;
 
 		if ( this.lastIdx ) {
 			this.base.postLog( 'rectMarked', {
@@ -593,10 +612,11 @@ export class pointAreaExtFromSchema {
 				c0: this.lastIdx.c0+1,
 				c1: this.lastIdx.c1+1,
 				color: this.currColor,
+				...cRect,
 			});
 			this.lastIdx = null;
 		} else {
-			this.base.postLog( 'rectMarkedNothing' );
+			this.base.postLog( 'rectMarkedNothing', cRect );
 		}
 		this.logAllCnts();
 
@@ -630,7 +650,6 @@ export class pointAreaExtFromSchema {
 
 			// Restore strikes
 			const lastIdx = this.lastIdx;
-// console.log("???????",lastIdx,this.lastDotColors[0])
 			if ( lastIdx ) {
 				let changed = false;
 				for ( let row=lastIdx.r0; row<=lastIdx.r1; row++ ) {
@@ -674,8 +693,6 @@ export class pointAreaExtFromSchema {
 	}
 
 	clickDot ( row, col, color=this.currColor, log=true ) {
-// console.log("====== clickDot",color,row,col)
-// console.trace();
 		const oldColor = this.dotColors[row][col];
 		const oldStriked = this.dotStriked[row][col];
 		let same = true;
@@ -798,8 +815,6 @@ export class pointAreaExtFromSchema {
 					const color = setNew ? this.currColor : this.lastDotColors[row][col];
 					if ( color !== this.dotColors[row][col] && !this.dotReadonly[row][col] ) {
 						this.dotColors[row][col] = color;
-// console.log("000000",this.dotColors[0],this.lastDotColors[0]);
-// console.trace();
 						this.dots[row][col].k.fill( this.colorDefs[color] );
 					}
 					strike = setNew ? false : this.lastDotStriked[row][col];
@@ -827,7 +842,6 @@ export class pointAreaExtFromSchema {
 
 	dragStart (e, color, row=null, col=null ) {
 		e.cancelBubble = true;
-// console.log("===== dragstart",color,row, col,this.dotColors[row])
 
 		// Weißer dot draggen? nicht erlaubt
 		if ( row!==null && this.dotColors[row][col]===0 ) {
@@ -868,9 +882,7 @@ export class pointAreaExtFromSchema {
 		} else {
 			// Dot
 			this.dots[row][col].k.stopDrag();
-// console.log("111111",this.dotColors[row])
 			this.revertMarkedRect();
-// console.log("222222",this.dotColors[row])
 			color = this.dotColors[row][col];
 
 			if ( !this.dotStriked[row][col] ) {
@@ -974,7 +986,6 @@ export class pointAreaExtFromSchema {
 				this.renderStrikedRow(row);
 			}
 		}
-// console.log("====== dragleave",this.dotColors[0])
 	}
 
 	dragMove (e) {
@@ -1024,7 +1035,6 @@ export class pointAreaExtFromSchema {
 		// 	this.dotStriked[ this.drag.lastRow ][ this.drag.lastCol ] = true;
 		// 	this.renderStrikedRow( this.drag.lastRow );
 		// }
-// console.log("===== dragend",this.drag.lastRow,this.drag.lastCol,this.dotColors[0])
 
 		if ( this.drag.lastCol===null ) {
 			this.base.postLog( 'droppedNowhere' );
@@ -1175,7 +1185,15 @@ export class pointAreaExtFromSchema {
 		this.base.startListeningToCallEPFOp( ( cmd, p1 ) => {
 			if ( cmd === 'setColorIdx' ) {
 				this.setColor(p1);
+				this.renderButtons();
 			}
+/// #if __EDITOR
+			else if ( cmd === '__DESCRIBE_CALLBACK_PARAMS__' ) {
+				return [
+					[ 'setColorIdx', `Setzt aktiven Farb-Index -1..${this.colorDefs.length-1} (-1=Durchstreichen, 0=leer,>0=Farbe Nr.)`, 'idx (integer)' ],
+				];
+			}
+/// #endif
 		});
 	}
 

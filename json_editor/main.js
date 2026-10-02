@@ -967,7 +967,6 @@ function debugLogsOutFnc (obj, method, type, transFnc) {
 		if ( !typeEnabled ) {
 			div.classList.add('hidden');
 		}
-console.log("=======",data,shortJsonOutput(data));
 		div.innerHTML = `${ title ? `<span class="title">${title}</span>` : '' }${data ? JSON.stringify( shortJsonOutput(data) ) : ''}`;
 		debugLogsOut.appendChild(div);
 		debugLogsOut.scrollTop = debugLogsOut.scrollHeight;

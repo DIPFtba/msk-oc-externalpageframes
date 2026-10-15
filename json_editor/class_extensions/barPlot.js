@@ -5,9 +5,7 @@ export class barPlotFromSchema extends barPlot {
 
 	constructor ( base, opts = {}, addMods={} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// basic
 		if ( opts.origin.x < 0 ) {
@@ -72,9 +70,7 @@ export class barPlotFromSchema extends barPlot {
 
 		addScoring( this, opts, addMods.Parser );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	scoreDefType (varName) {

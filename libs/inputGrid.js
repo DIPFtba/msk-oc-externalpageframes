@@ -13,9 +13,7 @@ export class inputGrid {
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// Defaults to opts
 		const defaultOpts = {
@@ -266,9 +264,7 @@ export class inputGrid {
 
 		this.stage.draw();
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////
@@ -1000,9 +996,7 @@ export class inputGrid_freePaint_InsertButtons_grayOut extends inputGrid_freePai
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		super( base, opts );
 
@@ -1047,9 +1041,7 @@ export class inputGrid_freePaint_InsertButtons_grayOut extends inputGrid_freePai
 				.then( me.grayOutAll.bind(me) );
 		}
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 }
 
@@ -1061,9 +1053,7 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// default mode 'null'
 		if ( !('mode' in opts) ) {
@@ -1073,9 +1063,7 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 		super( base, opts );
 
 		if ( opts.switchModeBarDef === null ) {
-			if ( base.fsm && base.fsm.decInitCnt ) {
-				base.fsm.decInitCnt();
-			}
+			base.decInitCnt();
 			return;
 		}
 
@@ -1221,9 +1209,7 @@ export class inputGrid_freePaint_InsertButtons_switch extends inputGrid_freePain
 			}
 		});
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	setAllOff () {

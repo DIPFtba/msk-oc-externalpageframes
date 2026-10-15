@@ -25,9 +25,7 @@ const speechApi = (baseClass) => class extends baseClass {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		const speechDefaults = {
 
@@ -97,9 +95,7 @@ const speechApi = (baseClass) => class extends baseClass {
 		this.lastRASdur = 0;
 		this.audioId = 0;
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////
@@ -450,9 +446,7 @@ export class textareaSpeechApiRO extends speechApi( textareaContainer ) {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		const readOutDefaults = {
 
@@ -481,9 +475,7 @@ export class textareaSpeechApiRO extends speechApi( textareaContainer ) {
 		this.parseReadOutTxt();
 		this.displayText();
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////
@@ -639,9 +631,7 @@ export class textareaSpeechApiRec extends speechApi( textareaContainer ) {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		const recDefaults = {
 
@@ -671,9 +661,7 @@ export class textareaSpeechApiRec extends speechApi( textareaContainer ) {
 		this.deleteAudios();
 		this.base.sendChangeState( this );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	enableTxtEdit () {

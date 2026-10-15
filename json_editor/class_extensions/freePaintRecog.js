@@ -1,6 +1,7 @@
 
 import { freePaintMultFromSchema } from "./freePaintMult";
 import { myScriptApi } from "../myScriptApi";
+import { baseInits } from '../../libs/baseInits.js';
 
 //
 // Wie freePaintMultFromSchema, aber mit Erkennung des "gemalten" Mathe-Terms (myScript)
@@ -9,8 +10,9 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 
 	constructor ( base, opts = {} ) {
 
-		base.incInitCnt();
 		base.regSendInitDone();
+		registerChildModule( baseInits );
+		base.incInitCnt();
 
 		super( base, opts );
 
@@ -35,6 +37,7 @@ export class freePaintRecogFromSchema extends freePaintMultFromSchema {
 
 		base.decInitCnt();
 	}
+
 
 	scoreDef () {
 		if ( !( "recogTxt" in this ) ) {

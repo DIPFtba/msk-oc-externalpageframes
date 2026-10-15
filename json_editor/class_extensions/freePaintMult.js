@@ -17,6 +17,8 @@ import Konva from 'konva/lib/Core'
 import { Line } from 'konva/lib/shapes/Line'
 import { Rect } from 'konva/lib/shapes/Rect'
 
+import { baseInits } from '../../libs/baseInits.js';
+
 import penicon from '../../libs/img/penicon.png'
 import erasericon from '../../libs/img/erasericon.png'
 
@@ -25,6 +27,7 @@ export class freePaintMultFromSchema {
 	constructor ( base, opts = {} ) {
 
 		base.regSendInitDone();
+		registerChildModule( baseInits );
 		base.incInitCnt();
 
 		if ( opts.width<= 0 ) {
@@ -134,6 +137,7 @@ export class freePaintMultFromSchema {
 
 		base.decInitCnt();
 	}
+
 
 	///////////////////////////////////
 
@@ -484,17 +488,21 @@ export class freePaintMultFromSchema {
 				case 'setBrush':
 					this.setBrush( p1, p2, p3 );
 					break;
-/// #if __EDITOR
-				case '__DESCRIBE_CALLBACK_PARAMS__':
-					return [
-						[ 'undo', `Macht letzte Aktion rückgängig`, '' ],
-						[ 'redo', `Wiedholt letzte rückgängig gemachte Aktion`, '' ],
-						[ 'clearAll', `Löscht alles`, '' ],
-						[ 'setBrush', `Setzt aktiven Pinsel`, 'color (HtmlColor), width (number), mode (add|sub)' ],
-					];
-/// #endif
 			}
 		});
+		registerMessage( 'undo',
+			'Macht letzte Aktion rückgängig',
+		)
+		registerMessage( 'redo',
+			'Wiedholt letzte rückgängig gemachte Aktion',
+		)
+		registerMessage( 'clearAll',
+			'Löscht alle Linien',
+		)
+		registerMessage( 'setBrush',
+			'Setzt aktiven Pinsel',
+			[ 'color (HtmlColor)', 'width (number)', 'mode (add|sub)' ],
+		)
 	}
 
 	sendButtonState () {

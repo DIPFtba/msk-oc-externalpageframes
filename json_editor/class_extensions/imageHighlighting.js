@@ -369,6 +369,7 @@ export class imageHighlightingFromSchema extends freePaintFromSchema {
 		const stage = base.stage;
 
 		base.regSendInitDone();
+		registerChildModule( baseInits );
 		base.incInitCnt();
 		base.incInitCnt();
 

@@ -1,6 +1,7 @@
 import { object_equals, mergeDeep, setStatePostProc } from '../../libs/common.js'
 // import { addScoring } from "../common.js";
-import { initializeAndMount } from '../external_bundled/chat-text-audio.js';
+import * as ChatTextAudio from '../external_bundled/chat-text-audio.js';
+import { baseInits } from '../../libs/baseInits.js';
 
 import '../external_bundled/chat-text-audio.css';
 import { setBodyFont } from '../common.js';
@@ -10,6 +11,7 @@ export class chatTextAudioFromSchema {
 	constructor(divSelector, cfgData, base ) {
 
 		base.regSendInitDone();
+		registerChildModule( baseInits );
 		base.incInitCnt();
 
 		setBodyFont( cfgData.fontFile );
@@ -24,7 +26,9 @@ export class chatTextAudioFromSchema {
 		mergeDeep( Object.assign( this, defaultOpts ), cfgData );
 		this.base = base;
 
-		this.vueApp = initializeAndMount(
+		registerChildModule( ChatTextAudio );
+
+		this.vueApp = ChatTextAudio.initializeAndMount(
 			divSelector,
 			cfgData,
 			() => {
@@ -46,6 +50,7 @@ export class chatTextAudioFromSchema {
 
 		base.decInitCnt();
 	}
+
 
 	///////////////////////////////////
 

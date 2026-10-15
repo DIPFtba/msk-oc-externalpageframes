@@ -18,9 +18,7 @@ export class iconBar {
 				throw( `iconBar: parameter '${o}' not specified!` );
 			}
 		})
-		if ( stage.base && stage.base.fsm && stage.base.fsm.incInitCnt ) {
-			stage.base.fsm.incInitCnt();
-		}
+		stage?.base?.incInitCnt();
 
 		const defaults = {
 			// x, y
@@ -404,9 +402,7 @@ export class iconBar {
 				me.layer.draw();
 			});
 
-		if ( stage.base && stage.base.fsm && stage.base.fsm.incInitCnt ) {
-			stage.base.fsm.decInitCnt();
-		}
+		stage?.base?.decInitCnt();
 	}
 
 	///////////////////////////////////

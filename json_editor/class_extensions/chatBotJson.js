@@ -1,6 +1,7 @@
 import { object_equals, mergeDeep, setStatePostProc } from '../../libs/common.js'
 // import { addScoring } from "../common.js";
-import { initializeAndMount } from '../external_bundled/chat-bot-json.js';
+import * as chatBotJson from '../external_bundled/chat-bot-json.js';
+import { baseInits } from '../../libs/baseInits.js';
 
 import '../external_bundled/chat-bot-json.css';
 import { setBodyFont } from '../common.js';
@@ -10,6 +11,7 @@ export class chatBotJsonFromSchema {
 	constructor(divSelector, cfgData, base ) {
 
 		base.regSendInitDone();
+		registerChildModule( baseInits );
 		base.incInitCnt();
 
 		setBodyFont( cfgData.fontFile );
@@ -22,7 +24,9 @@ export class chatBotJsonFromSchema {
 		mergeDeep( Object.assign( this, defaultOpts ), cfgData );
 		this.base = base;
 
-		this.vueApp = initializeAndMount(
+		registerChildModule( chatBotJson );
+
+		this.vueApp = chatBotJson.initializeAndMount(
 			divSelector,
 			cfgData,
 			() => {
@@ -48,6 +52,7 @@ export class chatBotJsonFromSchema {
 
 		base.decInitCnt();
 	}
+
 
 	///////////////////////////////////
 

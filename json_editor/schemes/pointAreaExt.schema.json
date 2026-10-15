@@ -9,7 +9,7 @@
 	},
 	"properties": {
 
-		"___freePaint": {
+		"___pointAreaExt": {
 			"title": "PointAreaExt",
 			"type": "object",
 			"format": "grid-strict",
@@ -781,9 +781,9 @@
 								"type": "string"
 							},
 							"color": {
-								"title": "Index Füllfarbe (1-n)",
+								"title": "Index Füllfarbe (0-n)",
 								"type": "integer",
-								"minimum": 1
+								"minimum": 0
 							},
 							"striked": {
 								"title": "Durchgestrichen",
@@ -823,7 +823,7 @@
 						},
 						"___version": {
 							"type": "string",
-							"default": "1.0"
+							"default": "1.1"
 						}
 					},
 					"options": {

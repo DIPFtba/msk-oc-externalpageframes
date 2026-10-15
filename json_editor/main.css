@@ -31,11 +31,16 @@ html,body {
 }
 
 #doku {
-	text-align: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
 	font-weight: bold;
 	font-size: 120%;
 	padding: 10px;
 	height: 50px;
+}
+#right .hidden {
+	display: none;
 }
 .clipboard {
 	background-color: lightgreen; /* Startfarbe */
@@ -249,7 +254,7 @@ hr#ruler,hr#ruler2 {
 	height: 5em;
 	cursor: text;
 }
-#send-msg .button {
+dialog .button {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-evenly;
@@ -259,4 +264,36 @@ hr#ruler,hr#ruler2 {
 }
 #debugLogsOut button {
 	background-color: #ffe4e1;
+}
+
+#ewk-logs-list {
+	padding: 30px;
+}
+#ewk-logs-list table {
+	margin-bottom: 30px;
+}
+#ewk-logs-list table th {
+	background-color: #d0d0d0;
+}
+#ewk-logs-list table tr:nth-child(odd) {
+	background-color: #e8e8e8;
+}
+#ewk-logs-list table tr:nth-child(even) {
+	background-color: #f7f7f7;
+}
+#ewk-logs-list table tr:hover {
+	background-color: #fffbdd;
+}
+#ewk-logs-list table td,#ewk-logs-list table th {
+	vertical-align: top;
+	padding: 2px 4px;
+}
+#ewk-logs-list table td:first-child, #ewk-logs-list table th:first-child {
+	padding-left: 10px;
+}
+#ewk-logs-list table td:last-child, #ewk-logs-list table th:last-child {
+	padding-right: 10px;
+}
+#ewk-logs-list table.inherited td:last-child {
+	font-size: 75%;
 }

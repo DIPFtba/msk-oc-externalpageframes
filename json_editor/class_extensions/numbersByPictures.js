@@ -5,9 +5,7 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 
 	constructor ( base, opts={}, addMods={}  ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		opts.pics = {
 			width: opts.picsWidth || 60,
@@ -38,9 +36,7 @@ export class numbersByPicturesFromSchema extends numbersByPictures {
 
 		addScoring( this, opts, addMods.Parser );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	scoreDef ( exportAll=false ) {

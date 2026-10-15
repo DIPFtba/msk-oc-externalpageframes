@@ -5,9 +5,7 @@ export class filledBarFromSchema extends filledBar {
 
 	constructor ( base, opts = {}, addMods={}  ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		if ( opts.stickyTo === 'no' ) {
 			opts.stickyTo = null;
@@ -26,9 +24,7 @@ export class filledBarFromSchema extends filledBar {
 
 		addScoring( this, opts, addMods.Parser );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	scoreDef ( exportAll=false ) {

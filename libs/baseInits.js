@@ -286,9 +286,11 @@ export class baseInits {
 	regSendInitDone () {
 		this.getInitDonePromise().then( () => {
 			this.fsm.triggerEvent( "EV_InitDone_ExtRes" );
+			registerEvent( "EV_InitDone_ExtRes", "Initialisierung der EWK ist abgeschlossen" );
 			if ( this.dataSettings?.variablePrefix ) {
 				this.fsm.triggerEvent( `EV_InitDone_${this.dataSettings.variablePrefix}` );
 			}
+			registerEvent( `EV_InitDone_<pref>`, "Initialisierung der EWK ist abgeschlossen" );
 		});
 	}
 

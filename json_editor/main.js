@@ -1,5 +1,6 @@
 import './main.css';
 import { clearCfgJson, addStatusVarDef } from './common';
+import { collectDocs } from './collectDocs';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -139,7 +140,7 @@ function getBase () {
 }
 
 let creator = null;
-let editor;
+let editor = null;
 
 // import { JSONEditor } from '@json-editor/json-editor';
 /// #if __DEVELOP
@@ -261,7 +262,7 @@ function initContainer (graph) {
 }
 
 
-function loadSchema( schema ) {
+function loadSchema( schema, configJson=null ) {
 
 	schema = parseSchema( schema );
 
@@ -277,7 +278,15 @@ function loadSchema( schema ) {
 /// #if __DEVELOP
 	window.editor = editor;
 /// #endif
-	editor.on( 'change', updateEWK );
+
+	editor.on( 'change', () => {
+		if ( !configJson ) {
+			updateEWK();
+		} else {
+			editor.setValue(configJson)
+			configJson = null;
+		}
+	});
 
 	editor.on( 'ready', () => {
 		const json = editor.getValue('root');
@@ -449,6 +458,7 @@ function loadSchema( schema ) {
 		// updateEWK();
 	});
 
+	clearDebugLogOut();
 	document.querySelector( '#json_button' ).style.display = "block";
 }
 
@@ -545,6 +555,7 @@ function updateEWK () {
 			if ( process.env.NODE_ENV !== 'production' ) {
 				window.extres = extres;
 			}
+			showEwkDocs( base, extres.constructor.name, collectDocs( extres.constructor ) );
 
 			// Patch statusVarDef
 			addStatusVarDef( extres, cfgData );
@@ -716,15 +727,17 @@ function loadJsonFromStorage () {
 			// schema laden
 			let [ schema ] = templs[schemaData.___name];
 			schema = parseSchema( schema );
-			loadSchema( schema );
 
 			// Neue Default-Werte patchen (z.B. für Funktionen, die es in alten Versionen noch nicht gab)
 			configJson = patchConfigJson( schema, configJson, schemaData );
 
-			editor.on( 'ready', () => {
-				// JSON laden
-				editor.setValue( configJson );
-			});
+			loadSchema( schema, configJson );
+
+			// // Früher wurde das später so gesetzt, dann wird der change Handler aber zweimal gerufen
+			// editor.on( 'ready', () => {
+			// 	// JSON laden
+			// 	editor.setValue( configJson );
+			// });
 
 		} catch(e) {
 			console.error( "Fehler beim JSON laden:", e );
@@ -736,6 +749,9 @@ function loadJsonFromStorage () {
 document.addEventListener( 'DOMContentLoaded', loadJsonFromStorage );
 
 //////////////////////////////////////////////////////////////////////////////
+//
+// Save/Load JSON
+//
 
 function saveJson () {
 	const json = editor.getValue('root');
@@ -902,10 +918,13 @@ window.debugVarsOut = debugVarsOut;
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// debugLogsOut
+// Logs debugOut
 //
 
 const debugLogsOut = document.getElementById('debugLogsOut');
+
+const sendMsgBtn = document.getElementById('msg_btn');
+sendMsgBtn.addEventListener( 'click', showSendMsgDialog );
 
 // Enable/Disable type
 const headers = Array.from( debugLogsOut.getElementsByClassName('header') );
@@ -983,40 +1002,13 @@ function initNewBase (base) {
 	debugLogsOutFnc( base.fsm, 'triggerEvent', 'events', obj => [ obj ] );
 	debugLogsOutFnc( base.fsm, 'callCbs', 'messages', ([ cmd, ...params ]) => [ cmd, params.join(', ') ] );
 
-	// Message Button
-	base.getInitDonePromise().then( () => {
-		const oldBtn = document.getElementById('msg_btn');
-		if ( oldBtn ) {
-			oldBtn.remove();
-		}
-
-		// Gibt es Callbacks?
-		if ( base.fsm.callEPFcbs.length>0 ) {
-			// Descrs holen
-			callEPFDescrs.length = 0;
-			base.fsm.callEPFcbs.forEach( cb => {
-				const res = cb('__DESCRIBE_CALLBACK_PARAMS__');
-				if ( Array.isArray(res) && res.length>0 && res.every( r => r.length===3 ) ) {
-					callEPFDescrs.push( ...res );
-				}
-			})
-
-			// Button darstellen
-			const btn = document.createElement('BUTTON');
-			btn.textContent = "Send Msg";
-			btn.id = "msg_btn";
-			btn.addEventListener( 'click', showSendMsgDialog );
-			if ( callEPFDescrs.length==0 ) {
-				btn.setAttribute('disabled','disabled');
-			}
-			debugLogsOut.querySelector('.flex-container')?.appendChild(btn);
-		}
-
-		clearDebugLogOut();
-	})
+	base.getInitDonePromise().then( clearDebugLogOut );
 }
 
 //////////////////////////////////////////////////////////////////////////////
+//
+// SendMsg
+//
 
 const sendMsgDialog = document.getElementById('send-msg');
 document.getElementById( 'send-msg-ok' ).addEventListener( 'click', sendMsg );
@@ -1025,9 +1017,13 @@ document.getElementById( 'send-msg-cancel' ).addEventListener( 'click', () => se
 const sendMsgSelect = document.querySelector('#send-msg .select select');
 const sendMsgData = document.getElementById('send-msg-data');
 const updateDialog = (idx) => {
-	if ( callEPFDescrs[idx] ) {
-		sendMsgDescr.innerHTML = callEPFDescrs[idx][1];
-		sendMsgData.value = callEPFDescrs[idx][2];
+	if ( ewkMsgs[idx] ) {
+		sendMsgDescr.innerHTML = ewkMsgs[idx].descr;
+		if ( ewkMsgs[idx].params && ewkMsgs[idx].params.length > 0 ) {
+			sendMsgData.value = ewkMsgs[idx].params.join(', ');
+		} else {
+			sendMsgData.value = '';
+		}
 	}
 }
 sendMsgData.addEventListener( 'focus', e => e.target.select() );
@@ -1036,8 +1032,8 @@ sendMsgSelect.addEventListener( 'change', ev => updateDialog( ev.target.value ) 
 const sendMsgDescr = document.getElementById('send-msg-descr');
 
 function showSendMsgDialog () {
-	sendMsgSelect.innerHTML = callEPFDescrs
-		.map( ( item, idx ) => `<option value="${idx}">${item[0]}</option>`)
+	sendMsgSelect.innerHTML = ewkMsgs
+		.map( ( data, idx ) => `<option value="${idx}">${data.name}</option>`)
 		.join('');
 
 	updateDialog(0);
@@ -1047,13 +1043,13 @@ function showSendMsgDialog () {
 
 function sendMsg () {
 	try {
-		const sel = callEPFDescrs[ sendMsgSelect.value ][0];
+		const sel = ewkMsgs[ sendMsgSelect.value ].name;
 		const params = sendMsgData.value
 			.trim()
 			.split(',')
 			.map( e => e.trim() )
-			.map( e => e.match(/^[0-9]+(\.[0-9]+)?$/) ? Number(e) : e )
-			.map( e => e[0]=='"' && e[e.length-1]=='"' ? e.substring(1,e.length-1) : e );
+			.map( e => e.match(/^[0-9]+(\.[0-9]+)?$/) ? Number(e) : e ) // To Number()
+			.map( e => e[0]=='"' && e[e.length-1]=='"' ? e.substring(1,e.length-1) : e ); // Trim ('"')
 
 		const data = {
 			messageKey: 'callExternalPageFrameOperator',
@@ -1066,6 +1062,157 @@ function sendMsg () {
 	};
 
 	sendMsgDialog.close();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// LogsList Übersicht
+//
+
+const logListBtn = document.getElementById('logslistbtn');
+const logCsvBtn = document.getElementById('ewk-logs-list-csv');
+const logListDialog = document.getElementById('ewk-logs-list');
+const logList = logListDialog.querySelector('.list');
+
+let ewkDocs = {};
+let ewkName = {};
+let ewkMsgs = [];
+
+document.getElementById('ewk-logs-list-close')?.addEventListener( 'click', () => logListDialog.close() );
+logCsvBtn?.addEventListener( 'click', () => copyLogsListCsv() );
+logListBtn?.addEventListener( 'click', () => showLogsList() )
+
+function showEwkDocs ( base, name, docs ) {
+	ewkDocs = docs;
+	ewkName = name;
+	ewkMsgs = [ ...(docs.own.messages ?? []), ...(docs.inherited.messages ?? []) ]
+		.sort( (a, b) => a.name.localeCompare(b.name) );
+
+	// Show-Logs Button
+	const hasEntry = Object.values(docs.own).some( arr => arr.length > 0 ) || Object.values(docs.inherited).some( arr => arr.length > 0 );
+	logListBtn?.classList?.[ hasEntry ? 'remove' : 'add' ]('hidden');
+
+	// SendMsg Button
+	const hasCallEPFDescrs = base.fsm.callEPFcbs.length>0;
+	sendMsgBtn?.classList?.[ hasCallEPFDescrs ? 'remove' : 'add' ]('hidden');
+	if ( ewkMsgs.length > 0 ) {
+		sendMsgBtn?.removeAttribute('disabled');
+	} else {
+		sendMsgBtn?.setAttribute( 'disabled', true );
+	}
+}
+
+const escapeHTML = (str) => {
+	const map = {
+		'&': '&amp;',
+		'<': '&lt;',
+		'>': '&gt;',
+		'"': '&quot;',
+		"'": '&#039;'
+	};
+	return str.replace(/[&<>"']/g, (m) => map[m]);
+}
+
+const escapeCSV = (str) => {
+	return str.replaceAll( '"', '""' );
+}
+
+const formatParams = (params, br, esc, nbsp) => {
+	switch ( typeof params ) {
+		case 'string':
+			return esc(params);
+		case 'object':
+			if ( Array.isArray(params) ) {
+				return `[${nbsp}${esc(params.join(', '))}${nbsp}]`;
+			} else {
+				const ps = Object.entries(params)
+					.sort( ([a],[b]) => a.localeCompare(b) )
+					.map( ([k,v]) => esc(`${k}: ${v}`) );
+				return `{${nbsp}${ps.join(`,${br}`)}${nbsp}}`;
+			}
+		default:
+			return '';
+	}
+};
+
+const formatTab = ( data, inh=0, spArgs=['<tr>','<td>','</td>','</tr>'], fpArgs=['<br>',escapeHTML,'&nbsp;'] ) => data
+	.sort( inh
+		? (a,b) => {
+				const v1 = a.from.localeCompare(b.from)
+				return v1 ? v1 : a.name.localeCompare(b.name);
+			}
+		: (a,b) => a.name.localeCompare(b.name) )
+	.map( item =>
+		spArgs[0] +
+			`${spArgs[1]}${(fpArgs[1])(item.name)}${spArgs[2]}`+
+			`${spArgs[1]}${(fpArgs[1])(item.descr ?? '')}${spArgs[2]}`+
+			`${spArgs[1]}${formatParams(item.params, ...fpArgs)}${spArgs[2]}`+
+			( inh ? `${spArgs[1]}${(fpArgs[1])(item.from ?? '')}${spArgs[2]}` : '' ) +
+		spArgs[3])
+	.join('');
+
+const llHeadersOwn = [ 'Name', 'Beschreibung', 'Parameter' ];
+const llHeadersInherited = [ ...llHeadersOwn, 'Subklasse' ];
+const llTypes = ['Logs', 'Events', 'Messages'];
+
+function showLogsList () {
+	logCsvBtn.textContent = "Kopiere CSV in Clipboard"
+	logCsvBtn.disabled = false;
+
+	logList.innerHTML = '';
+	for ( const type of llTypes ) {
+		const ktype = type.toLowerCase();
+		if ( ewkDocs.own?.[ktype]?.length > 0 || ewkDocs.inherited?.[ktype]?.length > 0 ) {
+			logList.innerHTML += `<h4>${escapeHTML(ewkName)} ${type}</h4><br>`;
+
+			let list = ewkDocs.own?.[ktype];
+			if ( list?.length > 0 ) {
+				logList.innerHTML +=
+					`<table class="own">`+
+						`<tr><th>${llHeadersOwn.join('</th><th>')}</th></tr>`+
+						formatTab( list, 0 ) +
+					`</table>`;
+			}
+
+			list = ewkDocs.inherited?.[ktype];
+			if ( list?.length > 0 ) {
+				logList.innerHTML += `<b>Von Subklassen</b>`+
+					`<table class="inherited">`+
+						`<tr><th>${llHeadersInherited.join('</th><th>')}</th></tr>`+
+						formatTab( list, 1 ) +
+					`</table>`;
+			}
+		}
+	}
+
+	logListDialog.showModal();
+}
+
+function copyLogsListCsv () {
+	let CSV = "";
+	for ( const type of llTypes ) {
+		const ktype = type.toLowerCase();
+		if ( ewkDocs.own?.[ktype]?.length > 0 || ewkDocs.inherited?.[ktype]?.length > 0 ) {
+			CSV += `"${escapeCSV(ewkName)} ${type}"\r\n\r\n`;
+
+			let list = ewkDocs.own?.[ktype];
+			if ( list?.length > 0 ) {
+				CSV += `"${llHeadersOwn.join('";"')}"\r\n"`+
+						formatTab( list, 0, [ '', '"', '";', "\r\n" ], [ "\r\n", escapeCSV, " " ] );
+			}
+
+			list = ewkDocs.inherited?.[ktype];
+			if ( list?.length > 0 ) {
+				CSV += `"${llHeadersInherited.join('";"')}"\r\n`+
+						formatTab( list, 1, [ '', '"', '";', "\r\n" ], [ "\r\n", escapeCSV, " " ] );
+			}
+		}
+	}
+
+	navigator.clipboard.writeText(CSV).then( () => {
+		logCsvBtn.textContent = "CSV in Clipboard kopiert"
+		logCsvBtn.disabled = true;
+	})
 }
 
 //////////////////////////////////////////////////////////////////////////////

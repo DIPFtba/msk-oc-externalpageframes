@@ -5,9 +5,7 @@ export class rectArrayMarkableFromSchema extends rectArrayMarkable {
 
 	constructor ( base, opts = {}, addMods={}  ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		const d = opts.rectArray;
 		if ( d ) {
@@ -23,9 +21,7 @@ export class rectArrayMarkableFromSchema extends rectArrayMarkable {
 
 		addScoring( this, opts, addMods.Parser );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	scoreDef ( exportAll=false ) {

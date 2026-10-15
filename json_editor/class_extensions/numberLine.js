@@ -6,9 +6,7 @@ export class numberLineFromSchema extends numberLine {
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		const layer = new Konva.Layer();
 		base.stage.add( layer );
@@ -16,9 +14,7 @@ export class numberLineFromSchema extends numberLine {
 		base.stage.draw();
 
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 }

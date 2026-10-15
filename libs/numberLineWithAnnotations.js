@@ -10,9 +10,7 @@ export class numberLineWithAnnotations {
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// Options
 		const defaults = {
@@ -110,9 +108,7 @@ export class numberLineWithAnnotations {
 			}
 		}.bind(this))
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////

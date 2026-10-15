@@ -7,9 +7,7 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// define clip Functions (if selected)
 		const clipBrush = opts.extraRects.filter( r => r.clipBrush );
@@ -88,9 +86,7 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 		// window.getRectPngImage = this.getRectPngImage.bind(this);
 /// #endif
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	getRectPngImage () {

@@ -2,6 +2,7 @@
 import { setStatePostProc } from '../../libs/common';
 import { addScoring, dp2labFncInputRegExp, setBodyFont } from '../common';
 import { SimpleInput } from './SimpleInput';
+import { baseInits } from '../../libs/baseInits.js';
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -181,6 +182,7 @@ export class pikasTextEntryFromSchema {
 
 	constructor ( divSelector, opts = {}, base = null, addMods={} ) {
 		base.regSendInitDone();
+		registerChildModule( baseInits );
 		base.incInitCnt();
 		this.base = base;
 

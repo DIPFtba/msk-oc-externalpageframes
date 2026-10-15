@@ -6,9 +6,7 @@ export class pointAreaFromSchema extends pointArea {
 
 	constructor ( base, opts = {}, addMods={}  ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		opts.colors.unshift( opts.dotColor );
 
@@ -16,9 +14,7 @@ export class pointAreaFromSchema extends pointArea {
 
 		addScoring( this, opts, addMods.Parser );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 

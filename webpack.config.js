@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyPlugin = require("copy-webpack-plugin");
 const JsonMinimizerPlugin = require("json-minimizer-webpack-plugin");
+const collector = ('./plugins/babel-plugin-static-collector.mjs');
 
 const babel_loader = {
 	loader: "babel-loader",
@@ -25,43 +26,51 @@ const babel_loader = {
 	},
 }
 
-const babel_plugin = {
-	test: /\.(js)$/,
-	exclude: /node_modules/,
-	use: [ babel_loader ],
-}
+const babel_doc_collector = (withDocs) => ({
+	loader: 'babel-loader',
+	options: {
+		presets: [['@babel/preset-env', { modules: false }]],
+		plugins: [[collector, { enabled: withDocs, debug: false }]],
+	},
+});
+
+// const babel_plugin = {
+// 	test: /\.(js)$/,
+// 	exclude: /node_modules/,
+// 	use: [ babel_loader ],
+// }
 
 //////////////////////////////////////////////////////////////////////////////
 
 const ExtResFromSchema = {
-	barPlot: { version: "0.3.3" },
-	barSlider: { version: "0.3.3" },
-	barSliderFull: { version: "0.3.3" },
-	chatBotJson: { version: "0.5.1" },
-	chatTextAudio: { version: "0.5.1" },
+	barPlot: { version: "0.3.4" },
+	barSlider: { version: "0.3.4" },
+	barSliderFull: { version: "0.3.4" },
+	chatBotJson: { version: "0.5.2" },
+	chatTextAudio: { version: "0.5.2" },
 	// vueExamplePropsEmit: { version: "0.3.2" },
 	// vueExamplePinia: { version: "0.3.2" },
-	connectedFrames: { version: "0.3.3" },
-	filledBar: { version: "0.3.3" },
-	freePaint: { version: "0.3.3" },
-	freePaintMult: { version: "0.3.3" },
-	freePaintRecog: { version: "0.4.2" },
-	imageHighlighting: { version: "0.2.2" },
-	inputfield: { version: "0.3.3" },
-	inputGrid: { version: "0.3.3" },
-	inputInserts: { version: "0.3.3" },
-	numberLine: { version: "0.3.3" },
-	numberLineWithAnnotations: { version: "0.3.3" },
-	numberLineWithArcs: { version: "0.3.3" },
-	numbersByPictures: { version: "0.3.3" },
-	pikasTextEntry: { version: "0.3.3" },
-	pointArea: { version: "0.3.3" },
-	pointAreaExt: { version: "0.5.1" },
-	ratings: { version: "0.4.3" },
-	recordAudio: { version: "0.4.3" },
-	rectArrayMarkable: { version: "0.3.3" },
-	stampImages: { version: "0.3.3" },
-	textareaInserts: { version: "0.3.3" },
+	connectedFrames: { version: "0.3.4" },
+	filledBar: { version: "0.3.4" },
+	freePaint: { version: "0.3.4" },
+	freePaintMult: { version: "0.3.4" },
+	freePaintRecog: { version: "0.4.3" },
+	imageHighlighting: { version: "0.2.3" },
+	inputfield: { version: "0.3.4" },
+	inputGrid: { version: "0.3.4" },
+	inputInserts: { version: "0.3.4" },
+	numberLine: { version: "0.3.4" },
+	numberLineWithAnnotations: { version: "0.3.4" },
+	numberLineWithArcs: { version: "0.3.4" },
+	numbersByPictures: { version: "0.3.4" },
+	pikasTextEntry: { version: "0.3.4" },
+	pointArea: { version: "0.3.4" },
+	pointAreaExt: { version: "0.5.2" },
+	ratings: { version: "0.4.4" },
+	recordAudio: { version: "0.4.4" },
+	rectArrayMarkable: { version: "0.3.4" },
+	stampImages: { version: "0.3.4" },
+	textareaInserts: { version: "0.3.4" },
 };
 
 const CopyPluginAdditionalPatterns = {
@@ -95,15 +104,20 @@ function getEditorCfg ( env, argv ) {
 			rules: [
 				{
 					test: /\.js$/,
-					use: [{
-						loader: 'ifdef-loader',
-						options: {
-							__DEVELOP: argv.mode==='production' ? false : true,
-							__EDITOR: true,
-							__item: '',
-							__VueExamples: false, // to enable Vue examples in editor
+					use: [
+						// Ist für den Editor nicht notwendig, aber so wird der finale Code auch im Editor gestestet
+						babel_loader,
+						babel_doc_collector(true),
+						{
+							loader: 'ifdef-loader',
+							options: {
+								__DEVELOP: argv.mode==='production' ? false : true,
+								__EDITOR: true,
+								__item: '',
+								__VueExamples: false, // to enable Vue examples in editor
+							}
 						}
-					}],
+					],
 					exclude: /node_modules/,
 				},{
 					test: /\.css$/,
@@ -112,7 +126,7 @@ function getEditorCfg ( env, argv ) {
 				},{
 					test: /\.(png|svg)$/,
 					type: 'asset/inline',
-				},
+				}
 			],
 		},
 
@@ -190,6 +204,7 @@ const getExtResFromSchemaWebPackConfig = (argv, extres) => ({
 				test: /\.js$/,
 				use: [
 					babel_loader,
+					babel_doc_collector(false), // im Editor werden die docs gesammelt, hier nicht
 					{
 						loader: 'ifdef-loader',
 						options: {

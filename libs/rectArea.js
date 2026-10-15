@@ -14,9 +14,7 @@ export class rectArea {
 		// 		throw( `area: parameter '${o}' not specified!` );
 		// 	}
 		// })
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// Defaults to opts
 		const defaultOpts = {
@@ -65,9 +63,7 @@ export class rectArea {
 			}
 		}
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////

@@ -23,19 +23,16 @@ function mergeAdditionalDefaultsToThis( target, source ) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-export const addInsertButtonsTo = ( baseClass, extraDefaults=null, inputCallback=null ) => class extends baseClass {
+export const addInsertButtonsTo = ( baseClass, extraDefaults=null, inputCallback=null ) => class insertButtonExt extends baseClass {
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
+		registerChildModule( baseClass );
 
 		super( base, opts );
 		if ( !opts.insertIconDefs || !opts.insertIconDefs.length ) {
-			if ( base.fsm && base.fsm.decInitCnt ) {
-				base.fsm.decInitCnt();
-			}
+			base.decInitCnt();
 			return;
 		}
 
@@ -77,15 +74,16 @@ export const addInsertButtonsTo = ( baseClass, extraDefaults=null, inputCallback
 					},
 					on: () => {
 						this.base.postLog( 'insertButtonPressed', { text: t } );
+						registerLog( 'insertButtonPressed',
+							'InsertButton geklickt',
+							{ text: "Eingefügter Text" });
 						this.insertButton(t);
 					},
 				}) );
 			this.insertIconBars.push( new iconBar( this.stage, opts ) );
 		})
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////
@@ -122,20 +120,17 @@ import markericon from './img/markericon.png'
 
 const defaultIconBarClass = iconBar;
 
-export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extraDefaults=null ) => class extends baseClass {
+export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extraDefaults=null ) => class freePaintExt extends baseClass {
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
+		registerChildModule( baseClass );
 
 		super( base, opts );
 
 		if ( opts.paintLines===null || opts.modeIconBarDef===null ) {
-			if ( base.fsm && base.fsm.decInitCnt ) {
-				base.fsm.decInitCnt();
-			}
+			base.decInitCnt();
 			return;
 		}
 		const stage = this.stage;
@@ -254,9 +249,7 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 			this.coloredPointsAtStart = this.pointsInDetectLayers();
 		});
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////
@@ -324,12 +317,26 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 					t: this.mode.substr( 0, 1 ),
 					p: this.paintPoints,
 				})
+
 				const logNames = {
 					brush: 'paintLine',
 					marker: 'paintMarker',
 					erase: 'paintErase',
 				}
 				this.base.postLog( logNames[ this.mode ], { points: this.paintPoints } );
+				registerLog( 'paintLine',
+					'Ein Pinselstrich wurde gezeichnet',
+					{ points: "Koordinaten der Linie [ x1, y1, x2, y2, ... ]" }
+				);
+				registerLog( 'paintMarker',
+					'Ein Marker-Strich wurde gezeichnet',
+					{ points: "Koordinaten der Linie [ x1, y1, x2, y2, ... ]" }
+				);
+				registerLog( 'paintErase',
+					'Ein Bereich wurde mit dem Radierer gelöscht',
+					{ points: "Koordinaten der Löschung [ x1, y1, x2, y2, ... ]" }
+				);
+
 				this.base.sendChangeState( this );	// init & send changeState & score
 			}
 			if ( this.mode == 'erase' ) {
@@ -430,6 +437,9 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 
 		if ( coloredPoints < threshold ) {
 			this.base.postLog( 'clearedByEraser', {} );
+			registerLog( 'clearedByEraser',
+				'Es wurde so viel mit Eraser gelöscht, dass die Fläche als "leer" gilt',
+			);
 			this.freePaintClearAll( false );
 			this.base.sendChangeState( this );
 		}
@@ -452,6 +462,9 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 
 		if ( notify ) {
 			this.base.postLog( 'paintClearAll', {} );
+			registerLog( 'paintClearAll',
+				'Die gesamte Malfläche wurde gelöscht, keine Linien mehr im Log/vorhanden',
+			);
 
 			this.base.sendChangeState( this );	// init & send changeState & score
 		}
@@ -460,6 +473,10 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 	setPaintMode (mode) {
 		this.mode = mode;
 		this.base.postLog( 'modeSet', { mode } )
+		registerLog( 'modeSet',
+			'Der Malmodus wurde gewechselt',
+			{ mode: "brush, marker oder erase" }
+		);
 	}
 
 	///////////////////////////////////
@@ -540,22 +557,19 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 
 //////////////////////////////////////////////////////////////////////////////
 
-export const addFreeLabelsTo = ( baseClass ) => class extends baseClass {
+export const addFreeLabelsTo = ( baseClass ) => class freeLabelsExt extends baseClass {
 
 	// baseClass must call this.redraw() when values are changed
 	// depending changes in pos/text of labels
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
+		registerChildModule( baseClass );
 
 		super( base, opts );
 		if ( !opts.freeLabels || !opts.freeLabels.length ) {
-			if ( base.fsm && base.fsm.decInitCnt ) {
-				base.fsm.decInitCnt();
-			}
+			base.decInitCnt();
 			return;
 		}
 
@@ -587,9 +601,7 @@ export const addFreeLabelsTo = ( baseClass ) => class extends baseClass {
 		this.initData = this.getChState();
 		this.base.sendChangeState( this );	// init & send changeState & score
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////
@@ -623,6 +635,10 @@ export const addFreeLabelsTo = ( baseClass ) => class extends baseClass {
 							id: nr+1,
 							labelNew: l.textObj.value,
 						});
+						registerLog( 'labelChanged',
+							'Text eines Labels wurde geändert',
+							{ id: "Label-ID", labelNew: "Neuer Text" }
+						);
 						this.base.sendChangeState( this );
 					},
 				})

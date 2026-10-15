@@ -4,9 +4,7 @@ export class inputInserts extends textareaInserts {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// apply other defaults to textareaInserts
 
@@ -49,9 +47,7 @@ export class inputInserts extends textareaInserts {
 		// init textareaInserts
 		super( divSelector, newOpts, base );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////

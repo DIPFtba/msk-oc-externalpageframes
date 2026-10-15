@@ -8,9 +8,7 @@ export class rectArrayMarkable {
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// Defaults to opts
 		const defaultOpts = {
@@ -81,9 +79,7 @@ export class rectArrayMarkable {
 		this.initData = this.getChState();
 		this.base.sendChangeState( this );	// init & send changeState & score
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	createRects () {

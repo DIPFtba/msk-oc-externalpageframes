@@ -43,7 +43,10 @@
 		</div>
 		<div id="vruler"></div>
 		<div id="right">
-			<div id="doku"><a target="_blank" href="doku.html">Doku</a></div>
+			<div id="doku">
+				<a target="_blank" href="doku.html">Doku</a>
+				<a id="logslistbtn" class="hidden" href="#">Logs</a>
+			</div>
 			<div id="loaderOut"></div>
 			<div id="debugVarsOut"></div>
 			<hr id="ruler2">
@@ -53,6 +56,7 @@
 					<span id="events" class="header enabled">Events</span>
 					<!-- <span id="messages" class="header enabled">Messages</span> -->
 					<span id="clear">&#x274C;</span>
+					<button id="msg_btn" class="hidden">Send Msg</button>
 				</span>
 			</div>
 		</div>
@@ -65,6 +69,15 @@
 		<div class="descr" id="send-msg-descr"></div>
 		<div class="input"><textarea id="send-msg-data"></textarea></div>
 		<div class="button"><button id="send-msg-ok">Senden</button><button id="send-msg-cancel">Abbruch</button></div>
+	</dialog>
+
+	<!-- EWK Logs List-->
+	<dialog id="ewk-logs-list">
+		<div class="list"></div>
+		<div class="button">
+			<button id="ewk-logs-list-close">Schließen</button>
+			<button id="ewk-logs-list-csv"></button>
+		</div>
 	</dialog>
 
 	<!-- Das temporäre Overlay -->

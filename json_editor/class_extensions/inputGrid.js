@@ -4,9 +4,7 @@ export class inputGridFromSchema extends inputGrid_freePaint_InsertButtons_switc
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// opts.compEventId = '_' + opts.dataSettings.variablePrefix;
 
@@ -151,9 +149,8 @@ export class inputGridFromSchema extends inputGrid_freePaint_InsertButtons_switc
 
 		super( base, opts );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
+
 
 }

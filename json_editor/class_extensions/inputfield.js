@@ -2,12 +2,14 @@
 import { setStatePostProc } from '../../libs/common';
 import { dp2labFncInputRegExp, setBodyFont } from '../common';
 import { expStyle, camelToKebab } from '../styles';
+import { baseInits } from '../../libs/baseInits.js';
 
 export class inputfieldFromSchema {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
 		base.regSendInitDone();
+		registerChildModule( baseInits );
 		base.incInitCnt();
 		this.dataSettings = opts.dataSettings || {};
 
@@ -118,6 +120,7 @@ export class inputfieldFromSchema {
 
 		base.decInitCnt();
 	}
+
 
 	scoreDefType (varName) {
 		return varName.match( /^V_Input_\w+$/ ) ? this.labType : 'Integer';

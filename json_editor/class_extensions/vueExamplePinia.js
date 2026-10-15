@@ -6,9 +6,7 @@ export class vueExamplePiniaFromSchema {
 
 	constructor(base, cfgData, addMods ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		const defaultOpts = {
 			readonly: false,
@@ -32,9 +30,7 @@ export class vueExamplePiniaFromSchema {
 
 		addScoring( this, cfgData, addMods.Parser );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	getChState() {

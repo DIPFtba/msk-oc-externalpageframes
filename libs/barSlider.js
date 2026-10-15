@@ -15,9 +15,7 @@ export class barSlider {
 				throw( `barSlider: parameter '${o}' not specified!` );
 			}
 		})
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// Defaults to opts
 		const defaultOpts = {
@@ -75,13 +73,15 @@ export class barSlider {
 					id: this.logObjectId,
 					value: this.pos,
 				});
+				registerLog( 'sliderSet',
+					`Slider wurde auf neuen Wert gesetzt`,
+					{ id: 'ID des Sliders (wenn verwaltet)', value: 'Neuer Wert des Sliders' }
+				 );
 				this.base.sendChangeState( this );
 			}
 		})
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////

@@ -14,9 +14,7 @@ export class numbersByPictures {
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		const defaults = {
 
@@ -30,7 +28,7 @@ export class numbersByPictures {
 				spacing: 4,
 				framePadding: 6,
 				frameWidth: 1,
-				frameFill: 'lightgray',				
+				frameFill: 'lightgray',
 			},
 			// iconBarTooltip: {
 			// 	src: `${base.scriptDir}/add_icon.png`,
@@ -190,7 +188,7 @@ export class numbersByPictures {
 						// tooltipImage: this.iconBarTooltip,
 						cursorOver: `url(${cursor_del}) 2 2, auto`,
 						on: () => this.delShapeByType('b'),
-						modifier: 'minus',						
+						modifier: 'minus',
 					},
 					{ kCreateFunc: function (x,y) {
 						return this.dot({
@@ -207,7 +205,7 @@ export class numbersByPictures {
 				],
 			}}
 
-			this.iconBarAdd = new iconBar( stage, {...iconBarOptsAdd, ...{highlightColor: '#ccffcc', frameColor: '#11de11', frameFill: '#eaf5ea'}} ); 
+			this.iconBarAdd = new iconBar( stage, {...iconBarOptsAdd, ...{highlightColor: '#ccffcc', frameColor: '#11de11', frameFill: '#eaf5ea'}} );
 			this.iconBarRemove = new iconBar( stage, {...iconBarOptsRemove, ...{x: this.iconBar.x + this.iconbarWidth + this.iconBar.spacing, highlightColor: '#ffcccc',  frameColor: '#ff6666'}} );
 
 			this.stage.height(this.iconBar.y+this.iconBarAdd.getOverallHeight()+4);
@@ -220,9 +218,7 @@ export class numbersByPictures {
 		this.initData = delDefaults( this.data );
 		this.base.sendChangeState( this );	// init & send changeState & score
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////
@@ -306,8 +302,8 @@ export class numbersByPictures {
 			}
 
 			this.drawShapes();
-		
-			if ( scrollTo === 0 ) 
+
+			if ( scrollTo === 0 )
 				this.scrollToStart();
 			else if ( scrollTo > 0 )
 				this.scrollToShape( scrollTo, 'center' );
@@ -325,7 +321,7 @@ export class numbersByPictures {
 				this.delShape(i, shape);
 				found = true;
 			}
-		});		
+		});
 	}
 
 	delShape ( nr, shape = null ) {
@@ -363,7 +359,7 @@ export class numbersByPictures {
 		const new_layer = new Konva.Layer();
 		let x = this.x;
 		let y = this.y;
-		
+
 		// Calculate total width needed
 		let totalWidth = x;
 
@@ -467,23 +463,23 @@ export class numbersByPictures {
 		this.layer = new_layer;
 		this.stage.add( this.layer );
 		this.layer.moveToBottom();
-		
+
 		// Restore scroll position if it exists
 		if (this._shapesScrollOffset && this.enableScrolling) {
 			this.layer.x(-this._shapesScrollOffset);
-			
+
 			// Re-apply clipping if needed
 			const stageWidth = this.stage.width();
 			const shapesStartX = this.x;
 			const availableShapesWidth = stageWidth - shapesStartX;
-			
+
 			if (this.usedWidth > availableShapesWidth) {
 				this.layer.clipFunc((ctx) => {
 					ctx.rect(shapesStartX, 0, availableShapesWidth, this.stage.height());
 				});
 			}
 		}
-		
+
 		// Create or update scrollbar
 		this.createScrollbar();
 	}
@@ -506,7 +502,7 @@ export class numbersByPictures {
 		const shapesStartX = this.x; // Where shapes start
 		const shapesWidth = totalWidth - shapesStartX; // Width of shapes content
 		const availableShapesWidth = stageWidth - shapesStartX; // Available width for shapes
-		
+
 		// Check if shapes content exceeds available width
 		if (shapesWidth > availableShapesWidth) {
 			// Create or update scrollable area for shapes only
@@ -529,26 +525,26 @@ export class numbersByPictures {
 				const pointer = this.stage.getPointerPosition();
 				if (pointer && pointer.x >= shapesStartX) {
 					e.preventDefault();
-					
+
 					const scrollSpeed = 20;
 					const delta = e.deltaX || e.deltaY;
 					const newOffset = this._shapesScrollOffset - (delta > 0 ? scrollSpeed : -scrollSpeed);
-					
+
 					// Clamp scroll offset - use total content width
 					const maxScroll = Math.max(0, this.usedWidth - availableShapesWidth);
 					this._shapesScrollOffset = Math.max(0, Math.min(maxScroll, newOffset));
-					
+
 					// Apply offset to shapes layer
 					if (this.layer) {
 						this.layer.x(-this._shapesScrollOffset);
 						this.layer.batchDraw();
 					}
-					
+
 					// Update scrollbar thumb position
 					this.updateScrollbarThumbPosition();
 				}
 			};
-			
+
 			const container = this.stage.container();
 			if (container) {
 				container.addEventListener('wheel', this._wheelHandler);
@@ -570,10 +566,10 @@ export class numbersByPictures {
 			this.layer.clipFunc(null);
 			this.layer.x(0);
 		}
-		
+
 		// Reset scroll offset
 		this._shapesScrollOffset = 0;
-		
+
 		// Remove wheel handler
 		if (this._wheelHandler) {
 			const container = this.stage.container();
@@ -582,7 +578,7 @@ export class numbersByPictures {
 			}
 			this._wheelHandler = null;
 		}
-		
+
 		// Remove scrollbar
 		this.removeScrollbar();
 	}
@@ -591,12 +587,12 @@ export class numbersByPictures {
 	enableDragScrolling() {
 		// Clean up existing handlers first
 		this.removeScrollableShapesArea();
-		
+
 		let isDragging = false;
 		let startX = 0;
 		let initialOffset = 0;
 		const shapesStartX = this.x;
-		
+
 		if (!this._shapesScrollOffset) {
 			this._shapesScrollOffset = 0;
 		}
@@ -607,13 +603,13 @@ export class numbersByPictures {
 			const availableShapesWidth = stageWidth - shapesStartX;
 			const maxScroll = Math.max(0, this.usedWidth - availableShapesWidth);
 			this._shapesScrollOffset = Math.max(0, Math.min(maxScroll, newOffset));
-			
+
 			// Apply offset to shapes layer only
 			if (this.layer) {
 				this.layer.x(-this._shapesScrollOffset);
 				this.layer.batchDraw();
 			}
-			
+
 			// Update scrollbar thumb position
 			this.updateScrollbarThumbPosition();
 		};
@@ -629,7 +625,7 @@ export class numbersByPictures {
 				initialOffset = this._shapesScrollOffset;
 			}
 		});
-		
+
 		this.stage.on('mousemove touchmove', (e) => {
 			if (!isDragging) return;
 
@@ -642,10 +638,10 @@ export class numbersByPictures {
 			const currentX = e.evt.clientX || e.evt.touches[0].clientX;
 			const deltaX = startX - currentX; // Reversed for natural scrolling
 			const newOffset = initialOffset + deltaX;
-			
+
 			updateScrollPosition(newOffset);
 		});
-		
+
 		this.stage.on('mouseup touchend', () => {
 			isDragging = false;
 		});
@@ -656,15 +652,15 @@ export class numbersByPictures {
 				const pointer = this.stage.getPointerPosition();
 				if (pointer && pointer.x >= shapesStartX) {
 					e.preventDefault();
-					
+
 					const scrollSpeed = 20;
 					const delta = e.deltaX || e.deltaY;
 					const newOffset = this._shapesScrollOffset + (delta > 0 ? scrollSpeed : -scrollSpeed);
-					
+
 					updateScrollPosition(newOffset);
 				}
 			};
-			
+
 			const container = this.stage.container();
 			if (container) {
 				container.addEventListener('wheel', this._wheelHandler);
@@ -682,44 +678,44 @@ export class numbersByPictures {
 
 	isTargetInScrollableLayer(target) {
 		if (!this.layer || !target) return false;
-		
+
 		// Check if target is the layer itself
 		if (target === this.layer) return true;
-		
+
 		// Check if target is a child of the scrollable layer
 		let parent = target.getParent();
 		while (parent) {
 			if (parent === this.layer) return true;
 			parent = parent.getParent();
 		}
-		
+
 		return false;
 	}
 
 	autoScrollToEnd() {
 		if (!this.enableScrolling || !this.layer) return;
-		
+
 		const stageWidth = this.stage.width();
 		const shapesStartX = this.x;
 		const availableShapesWidth = stageWidth - shapesStartX;
-		
+
 		// Only scroll if content exceeds available width
 		if (this.usedWidth <= availableShapesWidth) return;
-		
+
 		// Calculate maximum scroll position (scroll to the end)
 		const maxScroll = Math.max(0, this.usedWidth - availableShapesWidth);
 		this._shapesScrollOffset = maxScroll;
-		
+
 		// Set up clipping if not already done
 		// if (this.usedWidth > availableShapesWidth) {
 		// 	this.layer.clipFunc((ctx) => {
 		// 		ctx.rect(shapesStartX, 0, availableShapesWidth, this.stage.height());
 		// 	});
 		// }
-		
+
 		// Apply the scroll offset
 		this.layer.x(-this._shapesScrollOffset);
-		
+
 		// Update display
 		this.layer.batchDraw();
 		this.updateScrollbarThumbPosition();
@@ -727,19 +723,19 @@ export class numbersByPictures {
 
 	scrollToShape(shapeIndex, alignment = 'center') {
 		if (!this.enableScrolling || !this.layer || shapeIndex < 0 || shapeIndex >= this.data.length) return;
-		
+
 		const stageWidth = this.stage.width();
 		const shapesStartX = this.x;
 		const availableShapesWidth = stageWidth - shapesStartX;
-		
+
 		// Only scroll if content exceeds available width
 		if (this.usedWidth <= availableShapesWidth) return;
-		
+
 		// Calculate the x position of the target shape
 		let shapeX = this.x;
 		for (let i = 0; i < shapeIndex; i++) {
 			const dat = this.data[i];
-			
+
 			if (dat.c) {
 				shapeX += this.pics.width + this.pics.cuboidDepth;
 			} else if (dat.r) {
@@ -763,7 +759,7 @@ export class numbersByPictures {
 			}
 			shapeX += this.pics.spacing;
 		}
-		
+
 		// Calculate the width of the target shape
 		const dat = this.data[shapeIndex];
 		let shapeWidth = 0;
@@ -784,11 +780,11 @@ export class numbersByPictures {
 				}
 			}
 		}
-		
+
 		// Calculate target scroll offset based on alignment
 		let targetScrollOffset = 0;
 		const relativeShapeX = shapeX - this.x; // Position relative to shapes start
-		
+
 		switch (alignment) {
 			case 'left':
 				// Align shape to left edge of visible area
@@ -804,14 +800,14 @@ export class numbersByPictures {
 				targetScrollOffset = relativeShapeX + (shapeWidth / 2) - (availableShapesWidth / 2);
 				break;
 		}
-		
+
 		// Clamp scroll offset to valid range
 		const maxScroll = Math.max(0, this.usedWidth - availableShapesWidth);
 		this._shapesScrollOffset = Math.max(0, Math.min(maxScroll, targetScrollOffset));
-		
+
 		// Apply the scroll offset
 		this.layer.x(-this._shapesScrollOffset);
-		
+
 		// Update display
 		this.layer.batchDraw();
 		this.updateScrollbarThumbPosition();
@@ -819,13 +815,13 @@ export class numbersByPictures {
 
 	scrollToStart() {
 		if (!this.enableScrolling || !this.layer) return;
-		
+
 		// Reset scroll offset to 0 (beginning of content)
 		this._shapesScrollOffset = 0;
-		
+
 		// Apply the scroll offset
 		this.layer.x(-this._shapesScrollOffset);
-		
+
 		// Update display
 		this.layer.batchDraw();
 		this.updateScrollbarThumbPosition();
@@ -834,32 +830,32 @@ export class numbersByPictures {
 	createScrollbar() {
 		// Remove existing scrollbar
 		this.removeScrollbar();
-		
+
 		if (!this.enableScrolling) return;
-		
+
 		const stageWidth = this.stage.width();
 		const shapesStartX = this.x;
 		const availableShapesWidth = stageWidth - shapesStartX;
-		
+
 		// Only show scrollbar if content exceeds available width
 		if (this.usedWidth <= availableShapesWidth) return;
-		
+
 		// Scrollbar dimensions
 		const scrollbarHeight = 24;
 		const scrollbarY = this.stage.height() - scrollbarHeight - 5;
 		const scrollbarWidth = availableShapesWidth - 10; // Leave some margin
 		const scrollbarX = shapesStartX + 5;
-		
+
 		// Calculate thumb size and position
 		const thumbRatio = availableShapesWidth / this.usedWidth;
 		const thumbWidth = Math.max(20, scrollbarWidth * thumbRatio); // Minimum thumb width
 		const maxThumbPosition = scrollbarWidth - thumbWidth;
 		const scrollRatio = this._shapesScrollOffset / Math.max(1, this.usedWidth - availableShapesWidth);
 		const thumbX = scrollbarX + (scrollRatio * maxThumbPosition);
-		
+
 		// Create scrollbar layer
 		this._scrollbarLayer = new Konva.Layer();
-		
+
 		// Scrollbar track
 		this._scrollbarTrack = new Konva.Rect({
 			x: scrollbarX,
@@ -871,7 +867,7 @@ export class numbersByPictures {
 			strokeWidth: 1,
 			cornerRadius: 6,
 		});
-		
+
 		// Scrollbar thumb
 		this._scrollbarThumb = new Konva.Rect({
 			x: thumbX,
@@ -883,33 +879,33 @@ export class numbersByPictures {
 			strokeWidth: 1,
 			cornerRadius: 5,
 		});
-		
+
 		// Add hover effects
 		this._scrollbarThumb.on('mouseenter', () => {
 			this._scrollbarThumb.fill('#666');
 			this._scrollbarLayer.batchDraw();
 		});
-		
+
 		this._scrollbarThumb.on('mouseleave', () => {
 			this._scrollbarThumb.fill('#888');
 			this._scrollbarLayer.batchDraw();
 		});
-		
+
 		// Add scrollbar interactions
 		this.addScrollbarInteractions(scrollbarX, scrollbarWidth, thumbWidth, maxThumbPosition, availableShapesWidth);
-		
+
 		// Add to layer and stage
 		this._scrollbarLayer.add(this._scrollbarTrack);
 		this._scrollbarLayer.add(this._scrollbarThumb);
 		this.stage.add(this._scrollbarLayer);
 		this._scrollbarLayer.moveToTop();
 	}
-	
+
 	addScrollbarInteractions(scrollbarX, scrollbarWidth, thumbWidth, maxThumbPosition, availableShapesWidth) {
 		let isThumbDragging = false;
 		let startX = 0;
 		let initialThumbX = 0;
-		
+
 		// Thumb dragging
 		this._scrollbarThumb.on('mousedown touchstart', (e) => {
 			isThumbDragging = true;
@@ -917,21 +913,21 @@ export class numbersByPictures {
 			initialThumbX = this._scrollbarThumb.x();
 			e.cancelBubble = true;
 		});
-		
+
 		// Track clicking (jump to position)
 		this._scrollbarTrack.on('mousedown touchstart', (e) => {
 			const pointer = this.stage.getPointerPosition();
 			const clickX = pointer.x - scrollbarX;
 			const newThumbX = Math.max(0, Math.min(maxThumbPosition, clickX - thumbWidth / 2));
-			
+
 			this.updateScrollFromThumbPosition(newThumbX, maxThumbPosition, availableShapesWidth);
 			e.cancelBubble = true;
 		});
-		
+
 		// Global mouse move and up for thumb dragging
 		this.stage.on('mousemove touchmove', (e) => {
 			if (!isThumbDragging) return;
-			
+
 			const currentX = e.evt.clientX || e.evt.touches[0].clientX;
 			const deltaX = currentX - startX;
 			// Convert absolute thumb position to relative position within scrollbar track
@@ -940,40 +936,40 @@ export class numbersByPictures {
 
 			this.updateScrollFromThumbPosition(newThumbX, maxThumbPosition, availableShapesWidth);
 		});
-		
+
 		this.stage.on('mouseup touchend', () => {
 			isThumbDragging = false;
 		});
 	}
-	
+
 	updateScrollFromThumbPosition(thumbX, maxThumbPosition, availableShapesWidth) {
 		// Calculate scroll position from thumb position
 		const scrollRatio = maxThumbPosition > 0 ? thumbX / maxThumbPosition : 0;
 		const maxScroll = Math.max(0, this.usedWidth - availableShapesWidth);
 		this._shapesScrollOffset = scrollRatio * maxScroll;
-		
+
 		// Update thumb position - thumbX is relative to scrollbar track start
 		const scrollbarX = this.x + 5;
 		this._scrollbarThumb.x(scrollbarX + thumbX);
-		
+
 		// Update layer position
 		if (this.layer) {
 			this.layer.x(-this._shapesScrollOffset);
 			this.layer.batchDraw();
 		}
-		
+
 		this._scrollbarLayer.batchDraw();
 	}
-	
+
 	updateScrollbarThumbPosition() {
 		if (!this._scrollbarThumb || !this.enableScrolling) return;
-		
+
 		const stageWidth = this.stage.width();
 		const shapesStartX = this.x;
 		const availableShapesWidth = stageWidth - shapesStartX;
-		
+
 		if (this.usedWidth <= availableShapesWidth) return;
-		
+
 		const scrollbarWidth = availableShapesWidth - 10;
 		const scrollbarX = shapesStartX + 5;
 		const thumbRatio = availableShapesWidth / this.usedWidth;
@@ -981,11 +977,11 @@ export class numbersByPictures {
 		const maxThumbPosition = scrollbarWidth - thumbWidth;
 		const scrollRatio = this._shapesScrollOffset / Math.max(1, this.usedWidth - availableShapesWidth);
 		const thumbX = scrollRatio * maxThumbPosition;
-		
+
 		this._scrollbarThumb.x(scrollbarX + thumbX);
 		this._scrollbarLayer.batchDraw();
 	}
-	
+
 	removeScrollbar() {
 		if (this._scrollbarLayer) {
 			this._scrollbarLayer.destroy();
@@ -1082,22 +1078,22 @@ export class numbersByPictures {
 				container.removeEventListener('scroll', this._scrollHandler);
 			}
 		}
-		
+
 		if (this._wheelHandler) {
 			const container = this.stage.container();
 			if (container) {
 				container.removeEventListener('wheel', this._wheelHandler);
 			}
 		}
-		
+
 		// Remove scrollbar
 		this.removeScrollbar();
-		
+
 		// Clean up layer
 		if (this.layer) {
 			this.layer.destroy();
 		}
-		
+
 		// Reset scroll offset
 		this._shapesScrollOffset = 0;
 	}

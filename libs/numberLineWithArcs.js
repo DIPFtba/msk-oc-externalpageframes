@@ -12,9 +12,7 @@ export class numberLineWithArcs {
 
 	constructor ( base, opts = {} ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// Options
 		const defaults = {
@@ -179,9 +177,7 @@ export class numberLineWithArcs {
 		stage.draw();
 		this.getLastLog();
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	sortArcsTicks ( arcs, ticks ) {

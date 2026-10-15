@@ -5,9 +5,7 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 
 	constructor ( base, opts = {}, addMods={}  ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// BarSlider Defs
 		if ( opts.width<= 0 ) {
@@ -109,9 +107,7 @@ export class barSliderFullFromSchema extends barSlider_freePaintMarker_freeLabel
 		this.rwFreeLabels = this.freeLabels.filter( l => !l.readonly );
 		addScoring( this, opts, addMods.Parser );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	scoreDefType (varName) {

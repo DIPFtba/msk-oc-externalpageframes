@@ -10,6 +10,7 @@ import './recordAudio.css'
 
 import { textareaContainer } from '../../libs/textareaInserts'
 import { mergeDeep, setStatePostProc } from '../../libs/common';
+import { baseInits } from '../../libs/baseInits.js';
 
 import microSvg from '../../libs/img/micro.svg';
 import trashSvg from '../../libs/img/trash.svg';
@@ -19,6 +20,7 @@ export class recordAudioFromSchema extends textareaContainer {
 	constructor ( divSelector, opts = {}, base = null ) {
 
 		base.regSendInitDone();
+		registerChildModule( baseInits );
 		base.incInitCnt();
 
 		let width;

@@ -18,9 +18,7 @@ export class textareaInsertsFromSchema extends textareaInserts {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		let width;
 /// #if ! __EDITOR
@@ -81,9 +79,7 @@ export class textareaInsertsFromSchema extends textareaInserts {
 
 		super( divSelector, defs, base );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	scoreDef () {

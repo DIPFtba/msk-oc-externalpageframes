@@ -18,9 +18,7 @@ export class pointArea {
 				throw( `pointArea: parameter '${o}' not specified!` );
 			}
 		})
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// Defaults to opts
 		const defaultOpts = {
@@ -259,9 +257,7 @@ export class pointArea {
 			})
 		}
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////

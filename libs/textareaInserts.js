@@ -6,9 +6,7 @@ export class textareaContainer {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		const defaults = {
 			outerDivStyles: {	// styles of created outer div (containing textarea and toolbar)
@@ -34,9 +32,7 @@ export class textareaContainer {
 		this.outerDiv.appendChild( this.div );
 		this.initData = this.div.innerHTML.trim();
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	ev_input () {
@@ -70,9 +66,7 @@ export class textareaBase extends textareaContainer {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		const defaults = {
 			multiLine: true,
@@ -146,9 +140,7 @@ export class textareaBase extends textareaContainer {
 		this.initData = this.div.innerHTML.trim();
 		this.base.sendChangeState( this );	// init & send changeState & score
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////
@@ -776,9 +768,7 @@ export class textareaInserts extends textareaBase {
 
 	constructor ( divSelector, opts = {}, base = null ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		const insertsDefaults = {
 
@@ -862,9 +852,7 @@ export class textareaInserts extends textareaBase {
 				{ capture: true } );
 
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	///////////////////////////////////

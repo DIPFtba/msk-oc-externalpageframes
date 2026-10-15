@@ -4,9 +4,7 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 
 	constructor ( base, opts = {}, addMods={}  ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// pre-decimal places & decimal places --> inputRegexp
 		dp2labFncInputRegExp( opts, opts );
@@ -22,9 +20,7 @@ export class numberLineWithAnnotationsFromSchema extends numberLineWithAnnotatio
 
 		addScoring( this, opts, addMods.Parser );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	scoreDefType (varName) {

@@ -4,9 +4,7 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 
 	constructor ( base, opts = {}, addMods={}  ) {
 
-		if ( base.fsm && base.fsm.incInitCnt ) {
-			base.fsm.incInitCnt();
-		}
+		base.incInitCnt();
 
 		// pre-decimal places & decimal places --> inputRegexp
 		[ /*opts.default*/'Arc'/*Label*/, /*opts.default*/'Tick'/*Label*/ ].forEach( nam => {
@@ -24,9 +22,7 @@ export class numberLineWithArcsFromSchema extends numberLineWithArcs {
 		}
 		addScoring( this, opts, addMods.Parser, addFnc );
 
-		if ( base.fsm && base.fsm.decInitCnt ) {
-			base.fsm.decInitCnt();
-		}
+		base.decInitCnt();
 	}
 
 	scoreDefType (varName) {

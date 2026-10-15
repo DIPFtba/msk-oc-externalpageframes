@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import { mergeDeep, getPosOfEvent, object_equals, setStatePostProc, ignoreEvent } from '../../libs/common'
+import { mergeDeep, getPosOfEvent, object_equals, setStatePostProc, ignoreEvent } from '../../libs/common';
 import { addScoring } from "../common";
 
 //
@@ -26,13 +26,15 @@ const cancelEvent = (e) => {
 	e.stopPropagation?.();
 }
 
-import trashIcon from '../../libs/img/trash.svg'
+import trashIcon from '../../libs/img/trash.svg';
+import { baseInits } from '../../libs/baseInits.js';
 
 export class pointAreaExtFromSchema {
 
 	constructor ( base, opts = {}, addMods={} ) {
 
 		base.regSendInitDone();
+		registerChildModule(baseInits);
 		base.incInitCnt();
 
 		mergeDeep( /*Object.assign(*/ this/*, defaultOpts )*/, opts );
@@ -467,10 +469,18 @@ export class pointAreaExtFromSchema {
 					e.cancelBubble = true;
 
 					if ( this.currColor == idx ) {
-						this.base.postLog( 'btnColorClickedSame', { color: idx } );
+						this.base.postLog( 'btnColorClickedUnchanged', { color: idx } );
+						registerLog( 'btnColorClickedUnchanged',
+							"Der bereits aktive Button für Farb/Eigenschaft-Wahl wurde ohne Effekt erneut geklickt", {
+								color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der bereits aktiven Farbe/Eigenschaft",
+						});
 						return
 					}
 					this.base.postLog( 'btnColorClicked', { color: idx } );
+					registerLog( 'btnColorClicked',
+						"Ein Button für Farb/Eigenschaft-Wahl wurde geklickt", {
+							color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der gewählten Farbe/Eigenschaft",
+					});
 					this.setColor(idx);
 					this.renderButtons();
 				});
@@ -489,35 +499,33 @@ export class pointAreaExtFromSchema {
 		// click & drag point
 		this.dots.forEach( (dotRow, row) => {
 			dotRow.forEach( (dot, col) => {
-				if ( !this.dotReadonly[row][col] ) {
-					const clickHandler = e => {
-						if ( ignoreEvent(e) ) {
-							return
-						}
-						this.clickDot( row, col );
-						this.clickNothingDetect = false;
-					};
-
-					if ( !this.draggable ) {
-						dot.k.on('click tap', clickHandler );
-
-					} else {
-						// click, not drag?
-						// (bei 'click tap' wird Handler auf jeden Fall gerufen, auch wenn später Drag daraus wird)
-						dot.k.on('mousedown touchstart', (e) => {
-							e.cancelBubble = true;
-							this.clickDetect = e;	// Wenn mousedown doch zu drag wurde, dann muss das gelöscht werden
-							this.clickHandler = clickHandler;
-						});
-
-						// drag stat click
-						dot.k.draggable( true );
-						dot.k.on('dragstart', (e) => {
-							this.clickDetect = null;
-							this.clickNothingDetect = false;
-							this.dragStart(e, null, row, col);
-						})
+				const clickHandler = e => {
+					if ( ignoreEvent(e) ) {
+						return
 					}
+					this.clickDot( row, col );
+					this.clickNothingDetect = false;
+				};
+
+				if ( !this.draggable ) {
+					dot.k.on('click tap', clickHandler );
+
+				} else {
+					// click, not drag?
+					// (bei 'click tap' wird Handler auf jeden Fall gerufen, auch wenn später Drag daraus wird)
+					dot.k.on('mousedown touchstart', (e) => {
+						e.cancelBubble = true;
+						this.clickDetect = e;	// Wenn mousedown doch zu drag wurde, dann muss das gelöscht werden
+						this.clickHandler = clickHandler;
+					});
+
+					// drag stat click
+					dot.k.draggable( true );
+					dot.k.on('dragstart', (e) => {
+						this.clickDetect = null;
+						this.clickNothingDetect = false;
+						this.dragStart(e, null, row, col);
+					})
 				}
 			});
 		});
@@ -541,8 +549,10 @@ export class pointAreaExtFromSchema {
 
 		this.stage.on('mouseleave', (e) => {
 			if ( this.drawStart ) {
-				this.h_mouseup(e);
 				this.base.postLog( 'rectMarkedLeftStage' );
+				registerLog( 'rectMarkedLeftStage',
+					'Aktive, rechteckige Markierung durch Cursor hat Malbereich verlassen und wurde beendet' );
+				this.h_mouseup(e);
 			}
 			this.clickNothingDetect = false;
 		});
@@ -558,6 +568,11 @@ export class pointAreaExtFromSchema {
 			}
 
 			this.base.postLog( 'clickedNothing', getPosOfEvent( this.stage, e ) );
+			registerLog( 'clickedNothing',
+				'User hat ohne Effekt irgendwo geklickt', {
+					x: 'X-Koordinate auf stage',
+					y: 'Y-Koordinate auf stage',
+			});
 		});
 	}
 
@@ -614,9 +629,49 @@ export class pointAreaExtFromSchema {
 				color: this.currColor,
 				...cRect,
 			});
+			registerLog( 'rectMarked',
+				'Aktive, rechteckige Markierung durch Cursor wurde beendet und hat Elemente markiert', {
+					x0: 'Linke X-Koordinate auf stage', x1: 'Rechte X-Koordinate auf stage',
+					y0: 'Obere Y-Koordinate auf stage', y1: 'Untere Y-Koordinate auf stage',
+					c0: "Start-Spalte [1..n] der markierten Elemente", c1: "End-Spalte [1..n] der markierten Elemente",
+					r0: "Start-Reihe [1..m] der markierten Elemente", r1: "End-Reihe [1..m] der markierten Elemente",
+					color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der aktiven Farbe/Egenschaft",
+			});
+
+			for ( let row=this.lastIdx.r0; row<=this.lastIdx.r1; row++ ) {
+				for ( let col=this.lastIdx.c0; col<=this.lastIdx.c1; col++ ) {
+					const oldColor = this.lastDotColors[row][col];
+					const oldStriked = +this.lastDotStriked[row][col];
+					if ( +this.dotStriked[row][col] != oldStriked ||
+						this.dotColors[row][col] != oldColor ) {
+
+						this.base.postLog( 'rectChDot', {
+							r: row+1,
+							c: col+1,
+							oldColor,
+							oldStriked,
+							color: this.currColor,
+						});
+					}
+				}
+			}
+			registerLog( 'rectChDot',
+				'Durch das letzte rectMarked wurde (auch) dieses Element geändert', {
+					r: 'Reihe [1..m] des geänderten Punktes',
+					c: 'Spalte [1..n] des geänderten Punktes',
+					oldColor: "Index [0..c] der alten Farbe des Elements",
+					oldStriked: "War Element durchgestrichen? 0|1",
+					color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der gesetzten Farbe/Egenschaft",
+			});
+
 			this.lastIdx = null;
 		} else {
 			this.base.postLog( 'rectMarkedNothing', cRect );
+			registerLog( 'rectMarkedNothing',
+				'Aktive, rechteckige Markierung durch Cursor wurde beendet, keine Elemente waren markiert, kein Effekt', {
+					x0: 'Linke X-Koordinate auf stage', x1: 'Rechte X-Koordinate auf stage',
+					y0: 'Obere Y-Koordinate auf stage', y1: 'Untere Y-Koordinate auf stage',
+			});
 		}
 		this.logAllCnts();
 
@@ -694,23 +749,43 @@ export class pointAreaExtFromSchema {
 
 	clickDot ( row, col, color=this.currColor, log=true ) {
 		const oldColor = this.dotColors[row][col];
-		const oldStriked = this.dotStriked[row][col];
-		let same = true;
+		const oldStriked = +this.dotStriked[row][col];
+
+		if ( this.dotReadonly[row][col] ) {
+			this.base.postLog( 'dotClickedReadonly', {
+				c: col+1,
+				r: row+1,
+				oldColor,
+				oldStriked,
+				color,
+			});
+			registerLog( 'dotClickedReadonly',
+				'Ein unveränderbares Element wurde angeklickt, kein Effekt', {
+					c: 'Spalte [1..n] des Elements',
+					r: 'Reihe [1..m] des Elements',
+					oldColor: 'Index [0..c] der Farbe des Elements',
+					oldStriked: 'Ist Element durchgestrichen? 0|1',
+					color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der aktiven Farbe/Egenschaft",
+			});
+			return
+		}
+
+		let notchanged = true;
 		if ( color<0 ) {
 			if ( !oldStriked && oldColor>0 ) {
-				same = false;
+				notchanged = false;
 				this.dotStriked[row][col] = true;
 				this.hasStriked = true;
 				this.renderStrikedRow(row);
 			}
 		} else {
 			if ( oldColor !== color ) {
-				same = false;
+				notchanged = false;
 				this.dotColors[row][col] = color;
 				this.dots[row][col].k.fill( this.colorDefs[color] );
 			}
 			if ( oldStriked ) {
-				same = false;
+				notchanged = false;
 				this.dotStriked[row][col] = false;
 				this.hasStriked = this.getHasStriked();
 				this.renderStrikedRow(row);
@@ -718,12 +793,28 @@ export class pointAreaExtFromSchema {
 		}
 
 		if ( log ) {
-			this.base.postLog( same ? 'dotClickedSame' : 'dotClicked', {
+			this.base.postLog( notchanged ? 'dotClickedUnchanged' : 'dotClicked', {
 				c: col+1,
 				r: row+1,
-				color: this.currColor,
+				color,
 				oldColor,
 				oldStriked,
+			});
+			registerLog( 'dotClickedUnchanged',
+				'Ein Element mit gleicher Farbe/Eigenschaft wurde angeklickt oder Farbe/Eigenschaft ist nicht übertragbar, kein Effekt', {
+					c: 'Spalte [1..n] des Elements',
+					r: 'Reihe [1..m] des Elements',
+					color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der aktiven Farbe/Egenschaft",
+					oldColor: 'Index [0..c] der Farbe des Elements',
+					oldStriked: 'Ist Element durchgestrichen? 0|1',
+			});
+			registerLog( 'dotClicked',
+				'Ein Element wurde angeklickt, Farbe/Eigenschaft wurde gesetzt', {
+					c: 'Spalte [1..n] des Elements',
+					r: 'Reihe [1..m] des Elements',
+					color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der aktiven Farbe/Egenschaft",
+					oldColor: 'Index [0..c] der vorherigen Farbe des Elements',
+					oldStriked: 'War Element vorher durchgestrichen? 0|1',
 			});
 			this.logAllCnts();
 			this.base.sendChangeState( this );	// send changeState & score
@@ -805,19 +896,20 @@ export class pointAreaExtFromSchema {
 			const setNewRow = ( idx && row>=idx.r0 && row<=idx.r1 );
 			for ( let col=colFrom; col<=colTo; col++ ) {
 				const setNew = ( setNewRow && col>=idx.c0 && col<=idx.c1 );
+				const readOnly = this.dotReadonly[row][col];
 
 				let strike;
 				if ( this.currColor<0 ) {
 					// striken
-					strike = setNew && this.dotColors[row][col]>0 ? true : this.lastDotStriked[row][col];
+					strike = setNew && !readOnly && this.dotColors[row][col]>0 ? true : this.lastDotStriked[row][col];
 				} else {
 					// normale Farbe setzen
 					const color = setNew ? this.currColor : this.lastDotColors[row][col];
-					if ( color !== this.dotColors[row][col] && !this.dotReadonly[row][col] ) {
+					if ( color !== this.dotColors[row][col] && !readOnly ) {
 						this.dotColors[row][col] = color;
 						this.dots[row][col].k.fill( this.colorDefs[color] );
 					}
-					strike = setNew ? false : this.lastDotStriked[row][col];
+					strike = setNew && !readOnly ? false : this.lastDotStriked[row][col];
 				}
 				if ( strike !== this.dotStriked[row][col] ) {
 					this.dotStriked[row][col] = strike;
@@ -847,6 +939,12 @@ export class pointAreaExtFromSchema {
 		if ( row!==null && this.dotColors[row][col]===0 ) {
 			this.dots[row][col].k.stopDrag();
 			this.base.postLog( 'dotDragStartNoEffect', { r:row+1, c:col+1, color: 0 } );
+			registerLog( 'dotDragStartNoEffect',
+				"Element sollte gedraggt werden, das geht aber nicht", {
+					c: 'Spalte [1..n] des Elements',
+					r: 'Reihe [1..m] des Elements',
+					color: "Index [0] (0=gelöscht) der Farbe/Eigenschaft des Elements",
+			});
 			return;
 		}
 
@@ -875,6 +973,10 @@ export class pointAreaExtFromSchema {
 			// Button
 			this.kBtns[color].stopDrag();
 			this.base.postLog( 'btnColorDragStart', { color } );
+			registerLog( 'btnColorDragStart',
+				"Ein Farb/Eigenschaft-Button wird gedraggt", {
+					color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der Farbe/Eigenschaft des Buttons",
+			});
 			if ( this.currColor!==color ) {
 				this.setColor(color);
 				this.renderButtons();
@@ -887,18 +989,28 @@ export class pointAreaExtFromSchema {
 
 			if ( !this.dotStriked[row][col] ) {
 				// Farb-Drag
-				this.dotColors[row][col] = 0; // gedraggter Dot wird als gelöscht wieder hergestellt (wenn Drop irgendwo)
-				this.dots[row][col].k.fill( this.colorDefs[0] );
+				if ( !this.dotReadonly[row][col] ) {
+					this.dotColors[row][col] = 0; // gedraggter Dot wird als gelöscht wieder hergestellt (wenn Drop irgendwo)
+					this.dots[row][col].k.fill( this.colorDefs[0] );
+				}
 			} else {
 				// Strike-Drag
 				dragVars.orgStriked = true;
 				color = -1;
-				this.dotStriked[row][col] = false; // gedraggter Dot wird als nicht Striked wieder hergestellt (wenn Drop irgendwo)
-				this.renderStrikedRow(row);
+				if ( !this.dotReadonly[row][col] ) {
+					this.dotStriked[row][col] = false; // gedraggter Dot wird als nicht Striked wieder hergestellt (wenn Drop irgendwo)
+					this.renderStrikedRow(row);
+				}
 			}
 			dragVars.startCol = col;
 			dragVars.startRow = row;
 			this.base.postLog( 'dotDragStart', { r:row+1, c:col+1, color: dragVars.orgStriked ? -1 : color } );
+			registerLog( 'dotDragStart',
+				"Ein Element wir gedraggt", {
+					c: 'Spalte [1..n] des Elements',
+					r: 'Reihe [1..m] des Elements',
+					color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der Farbe/Eigenschaft des Elements",
+			});
 		}
 
 		this.lastDotStriked = this.copyColors( this.dotStriked );
@@ -948,36 +1060,76 @@ export class pointAreaExtFromSchema {
 
 	dragEnter ( row, col ) {
 		const oldColor = this.dotColors[row][col];
-		const oldStriked = this.dotStriked[row][col];
-		const same = this.drag.color===oldColor && this.drag.orgStriked===oldStriked;
-		this.base.postLog( 'dragMoveOverDot'+( same ? 'Unchanged' : '' ), {
+		const oldStriked = +this.dotStriked[row][col];
+		const notchanged =
+			// Strike auf leeres Feld
+			( oldColor===0 && this.drag.color===-1 ) ||
+			// Oder unverändert
+			this.dotReadonly[row][col] || ( this.drag.color==-1 ? oldStriked : this.drag.color===oldColor );
+		this.base.postLog( 'dragEnterDot'+( notchanged ? 'Unchanged' : '' ), {
 			c: col+1,
 			r: row+1,
 			oldColor,
 			oldStriked,
 			dragColor: this.drag.color,
-		} );
-		if ( !same ) {
+		});
+		registerLog( 'dragEnterDot',
+			"Drag-Element wird über Element platziert, Vorschau der neuen Farbe/Eigenschaft wird angezeigt", {
+				c: 'Spalte [1..n] des Elements',
+				r: 'Reihe [1..m] des Elements',
+				oldColor: "Index [0..c] der alten Farbe des Elements",
+				oldStriked: "War Element durchgestrichen? 0|1",
+				dragColor: 'Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der Farbe/Eigenschaft des Drag-Elements',
+		});
+		registerLog( 'dragEnterDotUnchanged',
+			"Drag-Element wird über Element gleicher Farbe/Eigenschaft platziert oder Farbe/Eigenschaft ist nicht übertragbar", {
+				c: 'Spalte [1..n] des Elements',
+				r: 'Reihe [1..m] des Elements',
+				oldColor: "Index [0..c] der Farbe des Elements",
+				oldStriked: "Ist Element durchgestrichen? 0|1",
+				dragColor: 'Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der Farbe/Eigenschaft des Drag-Elements',
+		});
+		if ( !notchanged ) {
 			this.clickDot( row, col, this.drag.color, false );
 		}
 	}
 
 	dragLeave ( row, col ) {
 		const oldColor = this.lastDotColors[row][col];
-		const oldStriked = this.lastDotStriked[row][col];
-		const same = this.drag.color===oldColor && this.drag.orgStriked===oldStriked;
-		this.base.postLog( 'dragLeaveDot'+( same ? 'Unchanged' : '' ), {
+		const oldStriked = +this.lastDotStriked[row][col];
+		const notchanged =
+			// Strike auf leeres Feld
+			( oldColor===0 && this.drag.color===-1 ) ||
+			// Oder unverändert
+			this.dotReadonly[row][col] || ( this.drag.color==-1 ? oldStriked : this.drag.color===oldColor );
+		this.base.postLog( 'dragLeaveDot'+( notchanged ? 'Unchanged' : '' ), {
 			c: col+1,
 			r: row+1,
 			oldColor,
 			oldStriked,
 			dragColor: this.drag.color,
-		} );
-		if ( !same ) {
+		});
+		registerLog( 'dragLeaveDot',
+			"Drag-Element wird von Element weggezogen, alte Element-Farbe/Eigenschaft wird wieder angezeigt", {
+				c: 'Spalte [1..n] des Elements',
+				r: 'Reihe [1..m] des Elements',
+				oldColor: "Index [0..c] der alten Farbe des Elements",
+				oldStriked: "War Element durchgestrichen? 0|1",
+				dragColor: 'Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der Farbe/Eigenschaft des Drag-Elements',
+		});
+		registerLog( 'dragLeaveDotUnchanged',
+			"Drag-Element wird von Element gleicher Farbe/Eigenschaft weggezogen oder Farbe/Eigenschaft nicht übertragbar", {
+				c: 'Spalte [1..n] des Elements',
+				r: 'Reihe [1..m] des Elements',
+				oldColor: "Index [0..c] der Farbe des Elements",
+				oldStriked: "Ist Element durchgestrichen? 0|1",
+				dragColor: 'Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der Farbe/Eigenschaft des Drag-Elements'
+		});
+		if ( !notchanged ) {
 			this.dotColors[row][col] = oldColor;
 			this.dots[row][col].k.fill(this.colorDefs[ oldColor ] );
-			if ( this.dotStriked[row][col] != oldStriked ) {
-				this.dotStriked[row][col] = oldStriked;
+			if ( this.dotStriked[row][col] !== !!oldStriked ) {
+				this.dotStriked[row][col] = !!oldStriked;
 				if ( oldStriked ) {
 					this.hasStriked = true;
 				} else {
@@ -1024,26 +1176,76 @@ export class pointAreaExtFromSchema {
 	}
 
 	dragEnd (e) {
-		const droppedSame = this.drag.startCol!==null && this.drag.lastCol === this.drag.startCol && this.drag.lastRow === this.drag.startRow;
 
 		// Aktuell dargestellter Zustand wird beibehalten
 
-		// Früher:
-		// // Original war striked und wieder gedraggt?
-		// if ( this.drag.orgStriked && droppedSame ) {
-		// 	// Striked wieder herstellen
-		// 	this.dotStriked[ this.drag.lastRow ][ this.drag.lastCol ] = true;
-		// 	this.renderStrikedRow( this.drag.lastRow );
-		// }
+		const startCoords = this.drag.startCol!==null && this.drag.startRow!==null ?
+				{ sc: this.drag.startCol+1, sr: this.drag.startRow+1 } : {};
 
 		if ( this.drag.lastCol===null ) {
-			this.base.postLog( 'droppedNowhere' );
+
+			this.base.postLog( 'droppedNowhere', {
+				color : this.drag.color,
+				...startCoords
+			});
+			registerLog( 'droppedNowhere',
+				"Drag-Element wurde nirgendwo gedroppt, also verworfen", {
+					sc : "(Wenn Element gedraggt wurde, kein Button:) Spalte des Elements",
+					sr : "(Wenn Element gedraggt wurde, kein Button:) Reihe des Elements",
+					color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der Farbe/Eigenschaft des Drag-Elements",
+				});
+
 		} else {
-			this.base.postLog( droppedSame ? 'droppedSamePos' : 'droppedPos', {
-				c: this.drag.lastCol+1,
-				r: this.drag.lastRow+1,
-				color: this.drag.color,
-			})
+
+			const row = this.drag.lastRow;
+			const col = this.drag.lastCol;
+			if ( col === this.drag.startCol && row === this.drag.startRow ) {
+
+				// Dropped on the same element it started from
+				this.base.postLog( 'droppedOnSame', {
+					c: col+1,
+					r: row+1,
+					color : this.drag.color
+				});
+				registerLog( 'droppedOnSame',
+					"Das Drag-Element wurde auf dem gleichen Element gedroppt, von dem es gestartet wurde", {
+						c: 'Spalte [1..n] des Elements',
+						r: 'Reihe [1..m] des Elements',
+						color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der Farbe/Eigenschaft des Elements",
+				});
+
+			} else {
+
+				// Dropped woanders
+				const oldColor = this.lastDotColors[row][col];
+				const oldStriked = +this.lastDotStriked[row][col];
+				const newColor = this.dotColors[row][col];
+				const newStriked = +this.dotStriked[row][col];
+				const same = oldColor===newColor && oldStriked===newStriked;
+
+				this.base.postLog( 'dropped'+( same ? 'Unchanged' : '' ), {
+					c: col+1,
+					r: row+1,
+					color: this.drag.color,
+					...startCoords,
+				});
+				registerLog( 'droppedUnchanged',
+					"Das Drag-Element wurde auf einem Element gleicher Farb/Eigenschaft gedroppt, kein Effekt", {
+						c: 'Spalte [1..n] des Elements',
+						r: 'Reihe [1..m] des Elements',
+						sc : "(Wenn Element gedraggt wurde, kein Button:) Spalte des Elements",
+						sr : "(Wenn Element gedraggt wurde, kein Button:) Reihe des Elements",
+						color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der Farbe/Eigenschaft des Elements",
+				});
+				registerLog( 'dropped',
+					"Das Drag-Element wurde gedroppt, Farbe/Eigenschaft wird gesetzt", {
+						c: 'Spalte [1..n] des Elements',
+						r: 'Reihe [1..m] des Elements',
+						sc : "(Wenn Element gedraggt wurde, kein Button:) Spalte des Elements",
+						sr : "(Wenn Element gedraggt wurde, kein Button:) Reihe des Elements",
+						color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der neuen Farbe/Eigenschaft des Elements",
+				});
+			}
 		}
 		this.logAllCnts();
 		this.base.sendChangeState(this);
@@ -1164,19 +1366,31 @@ export class pointAreaExtFromSchema {
 		return r;
 	}
 
-	logNewCnt (reset=0) {
-		const newCnt = this.getColorCnt( this.currColor );
-		if ( newCnt !== this.lastCnt || reset ) {
-			this.base.postLog( reset ? 'cntCurrentColor' : 'newCntCurrentColor', { cnt: newCnt } );
-			this.lastCnt = newCnt;
-		}
-	}
+	// logNewCnt (reset=0) {
+	// 	const newCnt = this.getColorCnt( this.currColor );
+	// 	if ( newCnt !== this.lastCnt || reset ) {
+	// 		this.base.postLog( reset ? 'cntCurrentColor' : 'newCntCurrentColor', { cnt: newCnt, color: this.currColor } );
+	// 		registerLog( 'cntCurrentColor',
+	// 			"Farbe hat neue Anzahl",
+	// 			{ cnt: "Anzahl der Farbe",
+	// 			color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der Farbe" });
+	// 		registerLog( 'cntCurrentColor',
+	// 			"Farbe hat neue Anzahl",
+	// 			{ cnt: "Anzahl der Farbe",
+	// 			color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der Farbe" });
+	// 		this.lastCnt = newCnt;
+	// 	}
+	// }
+
 	logAllCnts () {
 		const log = {};
-		for ( let idx=-1; idx<this.colors.length; idx++ ) {
+		for ( let idx=-1; idx<=this.colors.length; idx++ ) {
 			log[ idx ] = this.getColorCnt( idx );
 		}
 		this.base.postLog( 'cntAllColors', log );
+		registerLog( 'cntAllColors',
+			"Anzahl der Elemente mit allen Farb-Indizes",
+			{ '-1..n': 'Anzahl der Elemente mit jeweiligem Farb/Eigenschaft-Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index)' });
 	}
 
 	///////////////////////////////////
@@ -1187,13 +1401,10 @@ export class pointAreaExtFromSchema {
 				this.setColor(p1);
 				this.renderButtons();
 			}
-/// #if __EDITOR
-			else if ( cmd === '__DESCRIBE_CALLBACK_PARAMS__' ) {
-				return [
-					[ 'setColorIdx', `Setzt aktiven Farb-Index -1..${this.colorDefs.length-1} (-1=Durchstreichen, 0=leer,>0=Farbe Nr.)`, 'idx (integer)' ],
-				];
-			}
-/// #endif
+			registerMessage( 'setColorIdx',
+				"Setzt aktiven Farb-Index -1..c (-1=Durchstreichen, 0=leer,>0=Farbe Nr.)",
+				[ 'idx (Integer)' ],
+			);
 		});
 	}
 
@@ -1203,7 +1414,12 @@ export class pointAreaExtFromSchema {
 			return
 		}
 		this.currColor = idx;
-		this.base.postLog( 'colorChanged', { idx, color: idx, colorHtml: this.colorDefs[idx] } );
+		this.base.postLog( 'colorChanged', { color: idx, colorHtml: this.colorDefs[idx] } );
+		registerLog( 'colorChanged',
+			"Aktive Farbe/Eigenschaft wurde gewechselt", {
+				color: "Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index) der aktiven Farbe/Eigenschaft",
+				colorHtml: "HTML-Code der Farbe"
+		});
 		this.logAllCnts();
 	}
 

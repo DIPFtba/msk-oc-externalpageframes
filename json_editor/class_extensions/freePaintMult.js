@@ -300,15 +300,38 @@ export class freePaintMultFromSchema {
 
 	///////////////////////////////////
 
-	getRectPngImage () {
+	getRectPngImage ( bgColor='white' ) {
 		const fwh = Math.ceil( this.frameWidth/2 );
-		const url = this.stage.toDataURL({
-			mimeType: "image/png",
+		const rect = {
 			x: Math.max( 0, this.x - fwh ),
 			y: Math.max( 0, this.y - fwh ),
 			width: this.width + 2 * fwh,
 			height: this.height + 2 * fwh,
+		};
+
+		// Rechteck als Hintergrund
+		let layer;
+		if ( bgColor ) {
+			layer = new Konva.Layer();
+			layer.add( new Konva.Rect({
+				fill: bgColor,
+				listening: false,
+				...rect,
+			}) );
+			this.stage.add( layer );
+			layer.moveToBottom();
+		}
+
+		const url = this.stage.toDataURL({
+			mimeType: "image/png",
+			...rect,
 		});
+
+		// Hintergrundrechteck weg
+		if ( bgColor ) {
+			layer.destroy();
+		}
+
 // console.log(url);
 		return url;
 	}
@@ -567,9 +590,11 @@ export class freePaintMultFromSchema {
 	}
 
 	getState () {
+		const png = this.getRectPngImage();
 		const state = {
 			l:  this.linesCopy,
 			r:  this.linesRedo,
+			png_final_response: png.replace( /^.{1,30};base64,/, '' ),
 		};
 		if ( this.undoClearAll ) {
 			state.c = this.undoClearAll;

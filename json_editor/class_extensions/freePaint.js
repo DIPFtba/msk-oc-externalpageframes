@@ -83,22 +83,60 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 
 		// this.startGetImageListener();
 /// #if __DEVELOP
-		// window.getRectPngImage = this.getRectPngImage.bind(this);
+		window.getRectPngImage = this.getRectPngImage.bind(this);
 /// #endif
 
 		base.decInitCnt();
 	}
 
-	getRectPngImage () {
+	getRectPngImage ( bgColor='white' ) {
+		const fwh = Math.ceil( this.frameWidth/2 );
+		const rect = {
+			x: Math.max( 0, this.x - fwh ),
+			y: Math.max( 0, this.y - fwh ),
+			width: this.width + 2 * fwh,
+			height: this.height + 2 * fwh,
+		};
+
+		// Rechteck als Hintergrund
+		let layer;
+		if ( bgColor ) {
+			layer = new Konva.Layer();
+			layer.add( new Konva.Rect({
+				fill: bgColor,
+				listening: false,
+				...rect,
+			}) );
+			this.stage.add( layer );
+			layer.moveToBottom();
+		}
+
 		const url = this.stage.toDataURL({
 			mimeType: "image/png",
-			x: Math.max( 0, this.x - Math.ceil( this.frameWidth/2 ) ),
-			y: Math.max( 0, this.y - Math.ceil( this.frameWidth/2 ) ),
-			width: this.width + 2*Math.ceil( this.frameWidth/2 ),
-			height: this.height + 2*Math.ceil( this.frameWidth/2 ),
+			...rect,
 		});
+
+		// Hintergrundrechteck weg
+		if ( bgColor ) {
+			layer.destroy();
+		}
+
 // console.log(url);
 		return url;
+	}
+
+	getState () {
+		// Wrapper, um PNG noch mit in state zu schreiben
+		const jsonState = super.getState();
+		try {
+			const state = JSON.parse(jsonState);
+			const png = this.getRectPngImage();
+			state.png_final_response = png.replace( /^.{1,30};base64,/, '' );
+			return JSON.stringify( state );
+		} catch (e) {
+			console.error("freepaint: Failed to parse state:", e);
+			return jsonState;
+		}
 	}
 
 // 	startGetImageListener () {

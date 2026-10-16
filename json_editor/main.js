@@ -1075,7 +1075,7 @@ const logListDialog = document.getElementById('ewk-logs-list');
 const logList = logListDialog.querySelector('.list');
 
 let ewkDocs = {};
-let ewkName = {};
+let ewkName = "";
 let ewkMsgs = [];
 
 document.getElementById('ewk-logs-list-close')?.addEventListener( 'click', () => logListDialog.close() );
@@ -1085,6 +1085,7 @@ logListBtn?.addEventListener( 'click', () => showLogsList() )
 function showEwkDocs ( base, name, docs ) {
 	ewkDocs = docs;
 	ewkName = name;
+// console.log("=========",name)
 	ewkMsgs = [ ...(docs.own.messages ?? []), ...(docs.inherited.messages ?? []) ]
 		.sort( (a, b) => a.name.localeCompare(b.name) );
 

@@ -124,6 +124,10 @@ import inputInsertsSVG from './svgs/inputInserts.svg';
 
 //////////////////////////////////////////////////////////////////////////////
 
+let ewkDocs = {};
+let ewkName = "";
+let ewkMsgs = [];
+
 import { baseInits } from '../libs/baseInits';
 let base = getBase();
 const textContainer = document.getElementById('ewk_textcontainer');
@@ -297,6 +301,7 @@ function loadSchema( schema, configJson=null ) {
 
 		try {
 			if ( schemaData && schemaData.___name ) {
+				ewkName = schemaData.___name;
 				switch (schemaData.___name) {
 
 					case 'barPlot':
@@ -555,7 +560,7 @@ function updateEWK () {
 			if ( process.env.NODE_ENV !== 'production' ) {
 				window.extres = extres;
 			}
-			showEwkDocs( base, extres.constructor.name, collectDocs( extres.constructor ) );
+			showEwkDocs( base, collectDocs( extres.constructor ) );
 
 			// Patch statusVarDef
 			addStatusVarDef( extres, cfgData );
@@ -1074,17 +1079,12 @@ const logCsvBtn = document.getElementById('ewk-logs-list-csv');
 const logListDialog = document.getElementById('ewk-logs-list');
 const logList = logListDialog.querySelector('.list');
 
-let ewkDocs = {};
-let ewkName = "";
-let ewkMsgs = [];
-
 document.getElementById('ewk-logs-list-close')?.addEventListener( 'click', () => logListDialog.close() );
 logCsvBtn?.addEventListener( 'click', () => copyLogsListCsv() );
 logListBtn?.addEventListener( 'click', () => showLogsList() )
 
-function showEwkDocs ( base, name, docs ) {
+function showEwkDocs ( base, docs ) {
 	ewkDocs = docs;
-	ewkName = name;
 // console.log("=========",name)
 	ewkMsgs = [ ...(docs.own.messages ?? []), ...(docs.inherited.messages ?? []) ]
 		.sort( (a, b) => a.name.localeCompare(b.name) );

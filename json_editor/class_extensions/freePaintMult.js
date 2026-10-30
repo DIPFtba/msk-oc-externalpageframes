@@ -221,10 +221,6 @@ export class freePaintMultFromSchema {
 		// interactivity
 		if ( !this.readonly ) {
 
-			this.stage.on('mousedown touchstart', this.iStartDraw.bind(this) );
-			this.stage.on('mousemove touchmove', this.iDraw.bind(this) );
-			this.stage.on('mouseup mouseleave touchend', this.iEndDraw.bind(this) );
-
 			this.paintObj.on( 'mouseleave', (ev) => {
 				if ( ignoreEvent( this.stage, ev ) ) {
 					return;
@@ -236,6 +232,10 @@ export class freePaintMultFromSchema {
 						'Ein aktiver Pinselstrich wurde beendet, weil der Cursor den Malbereich verlassen hat' );
 				}
 			});
+
+			this.stage.on('mousedown touchstart', this.iStartDraw.bind(this) );
+			this.stage.on('mousemove touchmove', this.iDraw.bind(this) );
+			this.stage.on('mouseup mouseleave touchend', this.iEndDraw.bind(this) );
 
 			this.paintObj.on( 'mouseenter', (ev) => {
 				if ( ignoreEvent( this.stage, ev ) ) {

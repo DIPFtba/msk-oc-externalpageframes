@@ -1382,15 +1382,25 @@ export class pointAreaExtFromSchema {
 	// 	}
 	// }
 
+	asStringVars () {
+		return {
+			_colors: this.dotColors.map( row => row.join( this.colorDefs.length>10 ? ',' : '' ) ).join( '|' ),
+			_strikes: this.dotStriked.map( row => row.map( c => +c ).join( '' ) ).join( '|' ),
+		}
+	}
+
 	logAllCnts () {
-		const log = {};
+		const log = this.asStringVars();
 		for ( let idx=-1; idx<=this.colors.length; idx++ ) {
 			log[ idx ] = this.getColorCnt( idx );
 		}
 		this.base.postLog( 'cntAllColors', log );
 		registerLog( 'cntAllColors',
-			"Anzahl der Elemente mit allen Farb-Indizes",
-			{ '-1..n': 'Anzahl der Elemente mit jeweiligem Farb/Eigenschaft-Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index)' });
+			"Anzahl der Elemente mit allen Farb-Indizes", {
+				'-1..n': 'Anzahl der Elemente mit jeweiligem Farb/Eigenschaft-Index [-1..c] (-1=Durchstreichen, 0=Löschen, >0=Farb-Index)',
+				_colors: 'Farben der Elemente als String, Zeilen durch "|" getrennt',
+				_strikes: 'Durchstreichungen der Elemente als String, Zeilen durch "|" getrennt',
+			});
 	}
 
 	///////////////////////////////////
@@ -1428,6 +1438,7 @@ export class pointAreaExtFromSchema {
 	getState () {
 		const state = {
 			c: this.dotColors,
+			...this.asStringVars(),
 		};
 		if ( this.hasStriked ) {
 			state.s = this.dotStriked.map( row => row.map( v => +v ) );

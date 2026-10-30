@@ -337,8 +337,8 @@ export class pointAreaExtFromSchema {
 						height: this.strikedFillHeight * zoom,
 						stroke: this.strikedColor,
 						strokeWidth: this.strikedWidth * zoom,
-						fill: this.strikedFillColor,
-						opacity: this.strikedFillOpacity100/100,
+						fill: this.strikedFillOpacity100>0 ? this.strikedFillColor : 'transparent',
+						opacity: ( this.strikedFillOpacity100>0 ? this.strikedFillOpacity100 : this.strikedOpacity100 )/100,
 					}) :
 					new Konva.Line({
 						points: [ -radius, 0, +radius, 0 ],
@@ -408,6 +408,7 @@ export class pointAreaExtFromSchema {
 					height: width,
 					listening: false,
 				});
+				this.kBtnsImgs[ 0 ] = trashNode;
 				layer.add(trashNode);
 			});
 			const trBtn = new Konva.Circle({
@@ -951,20 +952,20 @@ export class pointAreaExtFromSchema {
 		// dragVars Inits
 		const dragVars = this.drag;
 		const startPos = getPosOfEvent( this.stage, e );
-		if ( row===null && this.kBtnsImgs[color] ) {
-			// Buttons: offs korrigieren bei Imgs
-			const width = this.kBtnsImgs[color][0].width() / 2;
-			startPos.x -= width;
-			startPos.y -= width;
-		}
+		// if ( row===null && this.kBtnsImgs[color] ) {
+		// 	// Buttons: offs korrigieren bei Imgs
+		// 	const width = this.kBtnsImgs[color][0].width() / 2;
+		// 	startPos.x -= width;
+		// 	startPos.y -= width;
+		// }
 		dragVars.offsX = startPos.x - e.target.x();
 		dragVars.offsY = startPos.y - e.target.y();
-		if ( row===null && this.kBtnsImgs[color] ) {
-			// offs korrigieren bei Imgs
-			const width = this.kBtnsImgs[color][0].width() / 2;
-			dragVars.offsX -= width;
-			dragVars.offsY -= width;
-		}
+		// if ( row===null && this.kBtnsImgs[color] ) {
+		// 	// offs korrigieren bei Imgs
+		// 	const width = this.kBtnsImgs[color][0].width() / 2;
+		// 	dragVars.offsX -= width;
+		// 	dragVars.offsY -= width;
+		// }
 		dragVars.lastCol = null;
 		dragVars.startCol = null;
 		dragVars.orgStriked = false;
@@ -1024,13 +1025,28 @@ export class pointAreaExtFromSchema {
 		const kDragObj =
 			color>-1 ?
 			// eine Farbe dragged
-			new Konva.Circle({
-				...this.dotAttrs,
-				x: zx,
-				y: zy,
-				fill: this.colorDefs[ color ],
-				opacity: 0.5,
-			}) :
+			(
+				color > 0 ?
+					new Konva.Circle({
+						...this.dotAttrs,
+						x: zx,
+						y: zy,
+						fill: this.colorDefs[ color ],
+						opacity: 0.5,
+					}) :
+					// Mülleimer-Image nehmen
+					( () => {
+						const elem = Array.isArray(this.kBtnsImgs[0]) ? this.kBtnsImgs[0][0] : this.kBtnsImgs[0];
+						// dragVars.offsX += elem.x() - this.kBtns[0].x();
+						// dragVars.offsY += elem.y() - this.kBtns[0].y();
+						return elem.clone({
+							x: zx + elem.x() - this.kBtns[0].x(),
+							y: zy + elem.y() - this.kBtns[0].y(),
+							draggable: false,
+							opacity: 0.5,
+						})
+					})()
+			) :
 			// Durchstreichen gedraggt
 			this.strikedFill ?
 				new Konva.Rect({
@@ -1040,8 +1056,8 @@ export class pointAreaExtFromSchema {
 					height: this.strikedFillHeight,
 					stroke: this.strikedColor,
 					strokeWidth: this.strikedWidth,
-					fill: this.strikedFillColor,
-					opacity: this.strikedFillOpacity100/100 * 0.5,
+					fill: this.strikedFillOpacity100>0 ? this.strikedFillColor : 'transparent',
+					opacity: ( this.strikedFillOpacity100>0 ? this.strikedFillOpacity100 : this.strikedOpacity100 )/100 * 0.5,
 				}) :
 				new Konva.Line({
 					points: [ zx - radius, zy, zx + radius, zy ],
@@ -1287,8 +1303,8 @@ export class pointAreaExtFromSchema {
 					height: this.strikedFillHeight,
 					stroke: this.strikedColor,
 					strokeWidth: this.strikedWidth,
-					fill: this.strikedFillColor,
-					opacity: this.strikedFillOpacity100 / 100,
+					fill: this.strikedFillOpacity100>0 ? this.strikedFillColor : 'transparent',
+					opacity: ( this.strikedFillOpacity100>0 ? this.strikedFillOpacity100 : this.strikedOpacity100 ) / 100,
 					listening: false,
 				}) :
 				new Konva.Line({

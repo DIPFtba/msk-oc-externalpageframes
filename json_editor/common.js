@@ -133,7 +133,8 @@ export function addScoring ( obj, opts, Parser=null, addFncs={} ) {
 		isBetween,
 		match: (a,r,fl='') => a.toString().match( new RegExp(r,fl) ),
 		// regexp: (a,b) => a.match(b),
-		strEqual: (a,b) => a.toLowerCase == b.toLowerCase,
+		strEqual: (a,b) => a.toLowerCase() === b.toLowerCase(),
+		xor: (a,b) => Boolean(a) !== Boolean(b),
 	});
 	for ( const fnc in addFncs ) {
 		parser.functions[fnc]= addFncs[fnc];

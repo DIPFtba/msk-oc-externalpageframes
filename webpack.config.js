@@ -53,7 +53,7 @@ const ExtResFromSchema = {
 	connectedFrames: { version: "0.3.4" },
 	filledBar: { version: "0.3.4" },
 	freePaint: { version: "0.3.5" },
-	freePaintMult: { version: "0.3.5" },
+	freePaintMult: { version: "0.3.6" },
 	freePaintRecog: { version: "0.4.4" },
 	imageHighlighting: { version: "0.2.3" },
 	inputfield: { version: "0.3.4" },

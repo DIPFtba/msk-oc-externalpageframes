@@ -231,7 +231,9 @@ export class freePaintMultFromSchema {
 				}
 				document.body.style.cursor = "default";
 				if ( this.paintPoints!==null ) {
-					this.base.postLog( 'paintingPointerLeavesIFrame' );
+					this.base.postLog( 'paintingPointerLeavesFrame' );
+					registerLog( 'paintingPointerLeavesFrame',
+						'Ein aktiver Pinselstrich wurde beendet, weil der Cursor den Malbereich verlassen hat' );
 				}
 			});
 
@@ -290,6 +292,13 @@ export class freePaintMultFromSchema {
 			this.linesUpdated();
 
 			this.base.postLog( 'line', this.corr4Log(o) );
+			registerLog( 'line',
+				'Ein Pinselstrich wurde gezeichnet', {
+					p: 'Koordinaten der Linie [ x1, y1, x2, y2, ... ]',
+					c: "HTML-Farbcode des Strichs (optional, default 'black')",
+					w: 'Breite des Strichs (optional, default 1)',
+					a: "Art des Strichs: 'sub' für Radierer (optional, default 'add')",
+			});
 
 			this.detectCleared();
 
@@ -348,13 +357,9 @@ export class freePaintMultFromSchema {
 
 // 				window.parent.postMessage( JSON.stringify( pass_data ), '*' );
 // 			}
-// /// #if __EDITOR
-// 			else if ( cmd === '__DESCRIBE_CALLBACK_PARAMS__' ) {
-// 				return [
-// 					[ 'getImage', `Schickt aktuelles Bild als PNG als Message`, '' ]
-// 				];
-// 			}
-// /// #endif
+// 			registerMessage( 'getImage',
+// 				'Schickt aktuelles Bild als PNG als Message',
+// 			);
 // 		});
 // 	}
 
@@ -410,6 +415,8 @@ export class freePaintMultFromSchema {
 		const coloredPoints = this.getPointsColored( threshold );
 		if ( coloredPoints < threshold ) {
 			this.base.postLog( 'clearedByEraser', {} );
+			registerLog( 'clearedByEraser',
+				'Der Malbereich wurde durch den Radierer vollständig geleert' );
 			this.clearAll();
 			this.undoTwice = true;
 			this.base.sendChangeState( this );
@@ -422,6 +429,10 @@ export class freePaintMultFromSchema {
 		if ( Array.isArray(this.undoClearAll) && this.undoClearAll.length>0 ) {
 			this.linesCopy = this.undoClearAll;
 			this.drawLog( 'undoClearAll', this.undoClearAll );
+			registerLog( 'undoClearAll',
+				'Das Löschen aller Linien wurde rückgängig gemacht',
+				[ [ 'x1, y1, x2, y2, ... erste Linie'], [ '... zweite Linie' ], '...' ]
+			);
 			this.undoClearAll = null;
 			this.paintLinesCopy();
 
@@ -436,8 +447,17 @@ export class freePaintMultFromSchema {
 			this.linesUpdated();
 
 			this.drawLog( 'undo', line );
+			registerLog( 'undo',
+				'Der letzte Pinselstrich wurde rückgängig gemacht', {
+					p: 'Koordinaten der rückgängig gemachten Linie [ x1, y1, x2, y2, ... ]',
+					c: "HTML-Farbcode des Strichs (optional, default 'black')",
+					w: 'Breite des Strichs (optional, default 1)',
+					a: "Art des Strichs: 'sub' für Radierer (optional, default 'add')",
+			});
 		} else {
 			this.base.postLog( 'undoNothing' );
+			registerLog( 'undoNothing',
+				'Rückgängig wurde ohne Effekt ausgelöst, da keine Aktion rückgängig gemacht werden konnte' );
 		}
 	}
 
@@ -450,9 +470,18 @@ export class freePaintMultFromSchema {
 			this.linesUpdated();
 
 			this.drawLog( 'redo', line );
+			registerLog( 'redo',
+				'Der letzte rückgängig gemachte Pinselstrich wurde wiederhergestellt', {
+					p: 'Koordinaten der wiederhergestellten Linie [ x1, y1, x2, y2, ... ]',
+					c: "HTML-Farbcode des Strichs (optional, default 'black')",
+					w: 'Breite des Strichs (optional, default 1)',
+					a: "Art des Strichs: 'sub' für Radierer (optional, default 'add')",
+			});
 			this.detectCleared();
 		} else {
 			this.base.postLog( 'redoNothing' );
+			registerLog( 'redoNothing',
+				'Wiederholen wurde ohne Effekt ausgelöst, da keine Aktion wiederhergestellt werden konnte' );
 		}
 	}
 
@@ -466,8 +495,12 @@ export class freePaintMultFromSchema {
 			this.linesUpdated();
 
 			this.drawLog( 'clearAll' );
+			registerLog( 'clearAll',
+				'Alle Linien im Malbereich wurden gelöscht' );
 		} else {
 			this.base.postLog( 'clearAllNothing' );
+			registerLog( 'clearAllNothing',
+				'Es wurde keine Linie zum Löschen gefunden, da der Malbereich bereits leer war' );
 		}
 	}
 
@@ -494,6 +527,12 @@ export class freePaintMultFromSchema {
 			this.paintLine.globalCompositeOperation = mode==='sub' ? 'destination-out' : 'source-over';
 		}
 		this.base.postLog( 'setBrush', { c: color, w: +width, a: mode } );
+		registerLog( 'setBrush',
+			'Der aktive Pinsel wurde geändert', {
+				c: 'HTML-Farbcode des Pinsels',
+				w: 'Breite des Pinsels',
+				a: "Art des Pinselstrichs: 'add' zum Malen oder 'sub' zum Radieren",
+		});
 	}
 
 	startButtonListener () {
@@ -534,6 +573,12 @@ export class freePaintMultFromSchema {
 			const ev = `EV_${ canUndo ? 'CAN' : 'CANNOT' }_UNDO`;
 // console.log(`-------- EVENT ${ev} sent --------`);
 			this.base.fsm.triggerEvent( ev );
+			registerEvent( 'EV_CAN_UNDO',
+				"Der Undo-Button ist jetzt aktiv"
+			);
+			registerEvent( 'EV_CANNOT_UNDO',
+				"Der Undo-Button ist jetzt inaktiv"
+			);
 			this.canUndoSent = canUndo;
 		}
 
@@ -542,6 +587,12 @@ export class freePaintMultFromSchema {
 			const ev = `EV_${ canRedo ? 'CAN' : 'CANNOT' }_REDO`;
 // console.log(`-------- EVENT ${ev} sent --------`);
 			this.base.fsm.triggerEvent( ev );
+			registerEvent( 'EV_CAN_REDO',
+				"Der Redo-Button ist jetzt aktiv"
+			);
+			registerEvent( 'EV_CANNOT_REDO',
+				"Der Redo-Button ist jetzt inaktiv"
+			);
 			this.canRedoSent = canRedo;
 		}
 	}

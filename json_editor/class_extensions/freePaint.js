@@ -151,12 +151,10 @@ export class freePaintFromSchema extends rectArea_freePaintMarker {
 
 // 				window.parent.postMessage( JSON.stringify( pass_data ), '*' );
 // 			}
-// /// #if __EDITOR
-// 			else if ( cmd === '__DESCRIBE_CALLBACK_PARAMS__' ) {
-// 				return [
-// 					[ 'getImage', `Schickt aktuelles Bild als PNG als Message`, '' ]
-// 				];
-// 			}
+// 			registerMessage( 'getImage',
+// 				'Schickt aktuelles Bild als PNG als Message',
+// 			);
+// 		}
 // /// #endif
 // 		});
 // 	}

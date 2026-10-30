@@ -1003,7 +1003,7 @@ const callEPFDescrs = [];
 
 // Inits
 function initNewBase (base) {
-	debugLogsOutFnc( base.fsm, 'postLogEvent', 'logs', ({ event, ...rest }) => [ event, rest ] );
+	debugLogsOutFnc( base.fsm, 'postLogEvent', 'logs', ({ event, ...rest }) => event==='RECEIVED_MESSAGE' ? [] : [ event, rest ] ); // Alles außer event==RECEIVED_MESSAGE loggen
 	debugLogsOutFnc( base.fsm, 'triggerEvent', 'events', obj => [ obj ] );
 	debugLogsOutFnc( base.fsm, 'callCbs', 'messages', ([ cmd, ...params ]) => [ cmd, params.join(', ') ] );
 
@@ -1124,7 +1124,9 @@ const formatParams = (params, br, esc, nbsp) => {
 			return esc(params);
 		case 'object':
 			if ( Array.isArray(params) ) {
-				return `[${nbsp}${esc(params.join(', '))}${nbsp}]`;
+				return `[${nbsp}${esc(params.map(p =>
+					Array.isArray(p) ? `[${p.join(', ')}]` : p
+				).join(', '))}${nbsp}]`;
 			} else {
 				const ps = Object.entries(params)
 					.sort( ([a],[b]) => a.localeCompare(b) )

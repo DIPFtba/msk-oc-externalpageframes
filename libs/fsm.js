@@ -125,7 +125,11 @@ export class fsmSend {
 		this.prInitDone.then( () => {
 			if ( process.env.NODE_ENV !== 'production' ) {
 				this.debugOut( `callExternalPageFrameOperator ${this.callEPFcbs.length} listener(s) called with data: ${JSON.stringify(data)}` );
-			};
+			}
+			if ( this.callEPFcbs.length === 0 ) {
+				return;
+			}
+			this.postLogEvent({ event: 'RECEIVED_MESSAGE', data: JSON.stringify(data) });
 			for ( const cb of this.callEPFcbs ) {
 				cb( ...data );
 			}

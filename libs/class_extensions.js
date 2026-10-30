@@ -75,8 +75,9 @@ export const addInsertButtonsTo = ( baseClass, extraDefaults=null, inputCallback
 					on: () => {
 						this.base.postLog( 'insertButtonPressed', { text: t } );
 						registerLog( 'insertButtonPressed',
-							'InsertButton geklickt',
-							{ text: "Eingefügter Text" });
+							'InsertButton geklickt', {
+								text: "Eingefügter Text",
+						});
 						this.insertButton(t);
 					},
 				}) );
@@ -325,17 +326,17 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 				}
 				this.base.postLog( logNames[ this.mode ], { points: this.paintPoints } );
 				registerLog( 'paintLine',
-					'Ein Pinselstrich wurde gezeichnet',
-					{ points: "Koordinaten der Linie [ x1, y1, x2, y2, ... ]" }
-				);
+					'Ein Pinselstrich wurde gezeichnet', {
+						points: "Koordinaten der Linie [ x1, y1, x2, y2, ... ]",
+				});
 				registerLog( 'paintMarker',
-					'Ein Marker-Strich wurde gezeichnet',
-					{ points: "Koordinaten der Linie [ x1, y1, x2, y2, ... ]" }
-				);
+					'Ein Marker-Strich wurde gezeichnet', {
+						points: "Koordinaten der Linie [ x1, y1, x2, y2, ... ]",
+				});
 				registerLog( 'paintErase',
-					'Ein Bereich wurde mit dem Radierer gelöscht',
-					{ points: "Koordinaten der Löschung [ x1, y1, x2, y2, ... ]" }
-				);
+					'Ein Bereich wurde mit dem Radierer gelöscht', {
+						points: "Koordinaten der Löschung [ x1, y1, x2, y2, ... ]",
+				});
 
 				this.base.sendChangeState( this );	// init & send changeState & score
 			}
@@ -474,9 +475,9 @@ export const addFreePaintTo = ( baseClass, linesChangeState=1, hasMarker=0, extr
 		this.mode = mode;
 		this.base.postLog( 'modeSet', { mode } )
 		registerLog( 'modeSet',
-			'Der Malmodus wurde gewechselt',
-			{ mode: "brush, marker oder erase" }
-		);
+			'Der Malmodus wurde gewechselt',{
+				mode: "brush, marker oder erase",
+		});
 	}
 
 	///////////////////////////////////
@@ -636,9 +637,10 @@ export const addFreeLabelsTo = ( baseClass ) => class freeLabelsExt extends base
 							labelNew: l.textObj.value,
 						});
 						registerLog( 'labelChanged',
-							'Text eines Labels wurde geändert',
-							{ id: "Label-ID", labelNew: "Neuer Text" }
-						);
+							'Text eines Labels wurde geändert', {
+								id: "Label-ID",
+								labelNew: "Neuer Text",
+						});
 						this.base.sendChangeState( this );
 					},
 				})

@@ -74,9 +74,10 @@ export class barSlider {
 					value: this.pos,
 				});
 				registerLog( 'sliderSet',
-					`Slider wurde auf neuen Wert gesetzt`,
-					{ id: 'ID des Sliders (wenn verwaltet)', value: 'Neuer Wert des Sliders' }
-				 );
+					`Slider wurde auf neuen Wert gesetzt`, {
+						id: 'ID des Sliders (wenn verwaltet)',
+						value: 'Neuer Wert des Sliders',
+				});
 				this.base.sendChangeState( this );
 			}
 		})

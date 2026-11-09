@@ -574,6 +574,20 @@ export class pointAreaExtFromSchema {
 					y: 'Y-Koordinate auf stage',
 			});
 		});
+
+		// keyDownNothing event listener
+		document.addEventListener( "keydown", (ev) => {
+			if ( ignoreEvent(ev) ) {
+				return
+			}
+			this.base.postLog( 'keyDownNothing', {
+				data: ev.key,
+			});
+			registerLog( 'keyDownNothing',
+				"Eine Taste ohne Effekt gedrückt", {
+					data: "Gedrückte Taste",
+			});
+		});
 	}
 
 	h_mousedown (e) {

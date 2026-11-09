@@ -65,7 +65,7 @@ const ExtResFromSchema = {
 	numbersByPictures: { version: "0.3.5" },
 	pikasTextEntry: { version: "0.3.6" },
 	pointArea: { version: "0.3.5" },
-	pointAreaExt: { version: "0.5.4" },
+	pointAreaExt: { version: "0.5.5" },
 	ratings: { version: "0.4.5" },
 	recordAudio: { version: "0.4.5" },
 	rectArrayMarkable: { version: "0.3.5" },

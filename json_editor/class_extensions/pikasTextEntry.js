@@ -453,42 +453,45 @@ export class pikasTextEntryFromSchema {
 			return inp;
 		});
 
-		// clickedNothing
-		const container = typeof divSelector === "string" ? document.querySelector(divSelector) : divSelector;
-		if ( container ) {
-			container.style.width = "100%";
-			container.style.height = "100%";
+		if ( !opts.readonly ) {
 
-			// clickedNothing event listener
-			container.addEventListener( "click", (ev) => {
+			// clickedNothing
+			const container = typeof divSelector === "string" ? document.querySelector(divSelector) : divSelector;
+			if ( container ) {
+				container.style.width = "100%";
+				container.style.height = "100%";
+
+				// clickedNothing event listener
+				container.addEventListener( "click", (ev) => {
+					if ( ignoreEvent(ev) ) {
+						return
+					}
+					const div = ev.currentTarget.getBoundingClientRect();
+					const x = ev.clientX - div.left; // X-Koordinate relativ zum Div
+					const y = ev.clientY - div.top;  // Y-Koordinate relativ zum Div
+					this.base.postLog( 'clickedNothing', { x, y } );
+					registerLog( 'clickedNothing',
+						'User hat ohne Effekt irgendwo geklickt', {
+							x: 'X-Koordinate innerhalb Container',
+							y: 'Y-Koordinate innerhalb Container',
+					});
+				});
+			}
+
+			// keyDownNothing event listener
+			document.addEventListener( "keydown", (ev) => {
 				if ( ignoreEvent(ev) ) {
 					return
 				}
-				const div = ev.currentTarget.getBoundingClientRect();
-				const x = ev.clientX - div.left; // X-Koordinate relativ zum Div
-				const y = ev.clientY - div.top;  // Y-Koordinate relativ zum Div
-				this.base.postLog( 'clickedNothing', { x, y } );
-				registerLog( 'clickedNothing',
-					'User hat ohne Effekt irgendwo geklickt', {
-						x: 'X-Koordinate innerhalb Container',
-						y: 'Y-Koordinate innerhalb Container',
+				this.base.postLog( 'keyDownNothing', {
+					data: ev.key,
+				});
+				registerLog( 'keyDownNothing',
+					"Eine Taste wurde außerhalb eines Feldes (ohne Effekt) gedrückt", {
+						data: "Gedrückte Taste",
 				});
 			});
-		}
-
-		// keyDownNothing event listener
-		document.addEventListener( "keydown", (ev) => {
-			if ( ignoreEvent(ev) ) {
-				return
-			}
-			this.base.postLog( 'keyDownNothing', {
-				data: ev.key,
-			});
-			registerLog( 'keyDownNothing',
-				"Eine Taste wurde außerhalb eines Feldes (ohne Effekt) gedrückt", {
-					data: "Gedrückte Taste",
-			});
-		});
+		} // if !this.readonly
 
 		this.startButtonListener();
 

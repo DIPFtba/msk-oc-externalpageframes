@@ -194,16 +194,18 @@ export class SimpleInput {
             this.render();
 
             // check if text fits in div
-            if ( newValue.length>0 && 
+            if ( newValue.length>0 &&
                     ( this.chars[ this.chars.length-1 ].x2 - this.chars[0].x1 ) > ( this.width - 2*this.padding ) ) {
 
                 // shrink if possible
                 if ( !this.minFontSize || !this.resizeFont() ) {
-                    // no shrinking posible, revert to old value
+                    // no shrinking possible, revert to old value
                     this.emit( 'oversize', newValue );
                     this._value = oldValue; // revert to old value
                     this.setCursorPos( oldCursorPos, false );
                     this.render(); // re-render with old value
+                } else {
+                    this.emit( 'input', newValue );
                 }
 
             } else {
@@ -234,7 +236,7 @@ export class SimpleInput {
                 this.div.style.fontSize = fontSize + "px";
                 this.getCharPositions(); // update character positions
                 this.renderCursor(); // re-render cursor with new font size
-                this.emit( 'fontSizeChange', fontSize );
+                this.emit( 'fontSizeChange', fontSize.toFixed(1) );
                 return true;
             }
         }
@@ -373,6 +375,7 @@ export class SimpleInput {
         }
 
         let handled = 0;
+        this.emit( "keyDown", ev.key );
         switch ( ev.key ) {
             case "ArrowLeft":
                 this.curLeft();
@@ -400,16 +403,16 @@ export class SimpleInput {
                 break;
             case "Enter":
                 if ( this.blurOnEnter ) {
-                    this.blur();
                     this.emit( 'enterPressed', this._value );
+                    this.blur();
                     handled = 1;
                 }
                 break;
             case "Escape":
                 if ( this.revertOnEsc ) {
+                    this.emit( 'escPressed', this._value );
                     this.setValue( this.focusStartValue, this._cursorPos );
                     this.blur();
-                    this.emit( 'escPressed', this._value );
                     handled = 1;
                 }
                 break;

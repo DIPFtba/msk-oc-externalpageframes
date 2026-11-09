@@ -73,6 +73,10 @@ export class baseInits {
 	triggerInputValidationEvent () {
 		if ( this.fsm.triggerEvent ) {
 /// #if __item == ''
+			// Die "EV_InitDone_*" Events werden hier registriert, werden also durch
+			// registerChildModule(baseInits) registriert, die "ev_InputValidation_*"
+			// Events werden hier nicht registriert (deutlich seltener), müssen also
+			// durch registerEvent() selbst registriert werden
 			if ( this.dataSettings?.variablePrefix ) {
 				this.fsm.triggerEvent( 'ev_InputValidation_' + this.dataSettings.variablePrefix );
 			}
@@ -286,6 +290,10 @@ export class baseInits {
 	regSendInitDone () {
 		this.getInitDonePromise().then( () => {
 			this.fsm.triggerEvent( "EV_InitDone_ExtRes" );
+			// Die "EV_InitDone_*" Events werden hier registriert, werden also durch
+			// registerChildModule(baseInits) registriert, die "ev_InputValidation_*"
+			// Events werden hier nicht registriert (deutlich seltener), müssen also
+			// durch registerEvent() selbst registriert werden
 			registerEvent( "EV_InitDone_ExtRes", "Initialisierung der EWK ist abgeschlossen" );
 			if ( this.dataSettings?.variablePrefix ) {
 				this.fsm.triggerEvent( `EV_InitDone_${this.dataSettings.variablePrefix}` );

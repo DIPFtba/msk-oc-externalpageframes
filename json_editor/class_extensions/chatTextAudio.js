@@ -66,7 +66,7 @@ export class chatTextAudioFromSchema {
 
 	getChState() {
 		// Einträge können nicht geändert werden, also nur Länge ansehen
-		return this.vueApp?.state?.chatList?.length;
+		return this.vueApp?.state?.chatList?.some( item => item.status !== 'deleted' );
 	}
 
 	// Check if User made changes

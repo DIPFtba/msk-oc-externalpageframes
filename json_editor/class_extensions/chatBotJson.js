@@ -125,7 +125,7 @@ export class chatBotJsonFromSchema {
 
 	getChState () {
 		// Einträge können nicht geändert werden, also nur Länge ansehen
-		return this.vueApp?.state?.chat?.curr?.length;
+		return this.vueApp?.state?.chat?.curr?.length !== 0;
 	}
 
 	// Check if User made changes

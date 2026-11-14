@@ -8082,6 +8082,9 @@ const ChatInput = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-
 const registerLog = (...args) => {
   globalThis.__registerLog?.(...args);
 };
+const registerEvent = (...args) => {
+  globalThis.__registerEvent?.(...args);
+};
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "App",
   setup(__props, { expose: __expose }) {
@@ -8127,6 +8130,10 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             logData.text = strip_html(botResponse.text);
           }
           jsonConfig.fsm?.logEvent(logData);
+          registerLog("ENTRY_ADDED_BOT", "Eine Bot-Antwort wurde im Chat dargestellt", {
+            label: "Label der Bot-Antwort (nur wenn die Antwort ein Label hat)",
+            text: "Text der Bot-Antwort ohne HTML (nur wenn die Antwort kein Label hat)"
+          });
           setTimeout(() => {
             if (newLen === chat.value.curr.length) {
               const entry = chat.value.curr[newLen - 1];
@@ -8135,7 +8142,15 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
             }
           }, delay);
         } else {
-          jsonConfig.fsm?.logEvent(`BOT_RESPONSE_NOT_FOUND: ${newVal}`);
+          jsonConfig.fsm?.logEvent({
+            event: "BOT_RESPONSE_NOT_FOUND",
+            label: newVal
+          });
+          registerLog(
+            "BOT_RESPONSE_NOT_FOUND",
+            "Zum aktuellen Label wurde keine Bot-Antwort gefunden",
+            { label: "Label des aktuellen Chat-Labels" }
+          );
         }
       },
       { immediate: false }
@@ -8168,6 +8183,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
       chat.value.curr = [];
       chat.value.currLabel = "START";
       jsonConfig.fsm?.logEvent("CHAT_RESTARTED");
+      registerLog("CHAT_RESTARTED", "Der Chat wurde neu gestartet");
       insertPreChat();
       nextBotText(chat.value.currLabel);
     };
@@ -8183,10 +8199,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
           if (newBotText) {
             chat.value.currLabel = newBotText.label;
           } else {
-            jsonConfig.fsm?.logEvent(`CHAT_LABEL_NOT_FOUND: ${nextLabel}`);
+            jsonConfig.fsm?.logEvent({ event: "CHAT_LABEL_NOT_FOUND", label: nextLabel });
             registerLog(
               "CHAT_LABEL_NOT_FOUND",
-              "Ein in der Chat-Liste angegebener Labelname wurde nicht gefunden"
+              "Ein in der Chat-Liste angegebener Labelname wurde nicht gefunden",
+              { label: "Nicht gefundener Labelname" }
             );
             nextLabel = "END";
           }
@@ -8209,6 +8226,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         jsonConfig.fsm?.logEvent("CHAT_ENDED");
         registerLog("CHAT_ENDED", "Der Chat wurde beendet");
         jsonConfig.fsm?.triggerEvent("RESPONSE");
+        registerEvent("EV_RESPONSE", "Der Chat wurde beendet");
         return;
       }
     };
@@ -8249,6 +8267,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         logData.text = strip_html(newEntry.text);
       }
       jsonConfig.fsm?.logEvent(logData);
+      registerLog("ENTRY_ADDED_USER", "Eine User-Antwort wurde ausgewählt und im Chat dargestellt", {
+        label: "Label der User-Antwort",
+        logLabel: "Log-Label der User-Antwort (nur wenn definiert)",
+        text: "Text der User-Antwort ohne HTML (nur wenn kein Log-Label definiert ist)"
+      });
       nextBotText(newEntry.next || "");
     };
     return (_ctx, _cache) => {
@@ -8267,7 +8290,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const RootVueComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-dabb961c"]]);
+const RootVueComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-4de22212"]]);
 function addFsmFuncs(jsonConfig) {
   if (jsonConfig.postMessagePayload) {
     jsonConfig.fsm = {

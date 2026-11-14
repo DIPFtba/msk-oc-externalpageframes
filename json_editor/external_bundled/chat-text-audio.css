@@ -1,11 +1,11 @@
 
-audio[data-v-c34464fb] {
+audio[data-v-d4e23093] {
     height: 2rem;
 }
-.loader[data-v-c34464fb] {
+.loader[data-v-d4e23093] {
     text-align: center;
 }
-.loader span[data-v-c34464fb] {
+.loader span[data-v-d4e23093] {
     width: 1.8rem;
     height: 1.8rem;
     border: 5px solid #fff;
@@ -13,9 +13,9 @@ audio[data-v-c34464fb] {
     border-radius: 50%;
     display: inline-block;
     box-sizing: border-box;
-    animation: rotation-c34464fb 1s linear infinite;
+    animation: rotation-d4e23093 1s linear infinite;
 }
-@keyframes rotation-c34464fb {
+@keyframes rotation-d4e23093 {
 0% {
         transform: rotate(0deg);
 }
@@ -24,7 +24,7 @@ audio[data-v-c34464fb] {
 }
 }
 
-.entry[data-v-6298b429] {
+.entry[data-v-50f73d25] {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -32,7 +32,7 @@ audio[data-v-c34464fb] {
     max-width: 75%;
     box-sizing: border-box;
 }
-.button[data-v-6298b429] {
+.button[data-v-50f73d25] {
     border: none;
     padding: 0 0.3rem;
     padding-right: 0;
@@ -43,17 +43,17 @@ audio[data-v-c34464fb] {
     cursor: pointer;
     box-sizing: content-box;
 }
-.button img[data-v-6298b429] {
+.button img[data-v-50f73d25] {
     height: 100%;
     width: 100%;
     vertical-align: top;
 }
-.deleted[data-v-6298b429] {
+.deleted[data-v-50f73d25] {
     animation:
-        deleted-fadeout-6298b429 0.5s 2.5s forwards,deleted-collapse-6298b429 0.5s 3s forwards;
+        deleted-fadeout-50f73d25 0.5s 2.5s forwards,deleted-collapse-50f73d25 0.5s 3s forwards;
     overflow: hidden;
 }
-@keyframes deleted-fadeout-6298b429 {
+@keyframes deleted-fadeout-50f73d25 {
 from {
         opacity: 1;
 }
@@ -61,7 +61,7 @@ to {
         opacity: 0;
 }
 }
-@keyframes deleted-collapse-6298b429 {
+@keyframes deleted-collapse-50f73d25 {
 from {
 }
 to {
@@ -86,7 +86,7 @@ to {
     overflow-y: auto;
 }
 
-div.outer[data-v-55c370d7] {
+div.outer[data-v-ec87b77b] {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -94,7 +94,7 @@ div.outer[data-v-55c370d7] {
     box-sizing: border-box;
     width: 100%;
 }
-textarea[data-v-55c370d7] {
+textarea[data-v-ec87b77b] {
     /* border: 1px solid black; */
     border: none;
     /* border-radius: 0.2rem; */
@@ -106,7 +106,7 @@ textarea[data-v-55c370d7] {
     background-color: transparent;
     color: inherit;
 }
-.button[data-v-55c370d7] {
+.button[data-v-ec87b77b] {
     border: none;
     padding: 0.3rem;
     height: 2rem;
@@ -114,13 +114,13 @@ textarea[data-v-55c370d7] {
     cursor: pointer;
     box-sizing: content-box;
 }
-.button img[data-v-55c370d7],
-.button-stop img[data-v-55c370d7] {
+.button img[data-v-ec87b77b],
+.button-stop img[data-v-ec87b77b] {
     height: 100%;
     width: 100%;
     vertical-align: top;
 }
-.striked[data-v-55c370d7] {
+.striked[data-v-ec87b77b] {
     background: linear-gradient(
         to left top,
         transparent 47.75%,
@@ -129,18 +129,18 @@ textarea[data-v-55c370d7] {
         transparent 52.25%
     );
 }
-.rectext[data-v-55c370d7] {
+.rectext[data-v-ec87b77b] {
     padding: 0.3rem;
     font-weight: bold;
     color: crimson;
     flex-grow: 1000;
 }
-.rectext div[data-v-55c370d7]::after {
+.rectext div[data-v-ec87b77b]::after {
     content: ''; /* Startinhalt */
     display: inline-block;
-    animation: dots-55c370d7 1.5s steps(4, end) infinite; /* Animation */
+    animation: dots-ec87b77b 1.5s steps(4, end) infinite; /* Animation */
 }
-@keyframes dots-55c370d7 {
+@keyframes dots-ec87b77b {
 0% {
         content: ''; /* Kein Punkt */
 }
@@ -169,7 +169,7 @@ textarea[data-v-55c370d7] {
         color: inherit;
     }
 } */
-.button-stop[data-v-55c370d7] {
+.button-stop[data-v-ec87b77b] {
     border: none;
     padding: 0.3rem;
     padding-right: 0.5em;
@@ -179,7 +179,7 @@ textarea[data-v-55c370d7] {
     box-sizing: content-box;
 }
 
-div[data-v-f4907ab0] {
+div[data-v-9cd71a33] {
     display: flex;
     flex-direction: column;
     padding: 0;
@@ -187,7 +187,7 @@ div[data-v-f4907ab0] {
     /* width: 60%;
     border: 1px solid red; */
 }
-.list[data-v-f4907ab0] {
+.list[data-v-9cd71a33] {
     flex-grow: 1000;
     max-height: 500px;
     overflow-y: auto;

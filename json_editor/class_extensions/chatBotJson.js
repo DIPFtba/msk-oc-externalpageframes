@@ -75,6 +75,7 @@ export class chatBotJsonFromSchema {
 				this.chatBotVar = newVal;
 				sendChange = 1;
 				triggerEvents.push('EV_CHAT_BOT');
+				registerEvent('EV_CHAT_BOT','Eine Bot-Antwort wurde im Chat dargestellt')
 			}
 		}
 		if ( msgObject?.traceMessage?.event==='ENTRY_ADDED_USER' ) {
@@ -84,6 +85,7 @@ export class chatBotJsonFromSchema {
 				this.chatUserVar = newVal;
 				sendChange = 1;
 				triggerEvents.push('EV_CHAT_USER');
+				registerEvent('EV_CHAT_USER','Eine User-Antwort wurde im Chat dargestellt')
 			}
 
 			// IB-Var gesetzt?
@@ -103,7 +105,17 @@ export class chatBotJsonFromSchema {
 		}
 		triggerEvents.forEach( ev => this.base.fsm.triggerEvent(ev) );
 
+/// #if __EDITOR
+		// Im Editor alles über Funktionen leiten, die für Ausgabe gepatcht werden
+		if ( msgObject?.traceMessage?.event ) {
+			const { event, ...rest } = msgObject.traceMessage;
+			this.base.postLog( event, rest );
+		} else if ( msgObject?.microfinEvent ) {
+			this.base.fsm.triggerEvent( msgObject?.microfinEvent );
+		}
+/// #else
 		this.base.fsm.postMessageWithPathsAndTraceCount( msgObject )
+/// #endif
 	}
 
 	///////////////////////////////////

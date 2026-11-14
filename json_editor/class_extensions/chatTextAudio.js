@@ -59,7 +59,18 @@ export class chatTextAudioFromSchema {
 		if ( data.traceMessage?.event==='RECORDING_RECEIVED' && !this.dataSettings?.saveAudioTraces ) {
 			return;
 		}
-		this.base.fsm.postMessageWithPathsAndTraceCount( data );
+
+/// #if __EDITOR
+		// Im Editor alles über Funktionen leiten, die für Ausgabe gepatcht werden
+		if ( data?.traceMessage?.event ) {
+			const { event, ...rest } = data.traceMessage;
+			this.base.postLog( event, rest );
+		} else if ( data?.microfinEvent ) {
+			this.base.fsm.triggerEvent( data?.microfinEvent );
+		}
+/// #else
+		this.base.fsm.postMessageWithPathsAndTraceCount( data )
+/// #endif
 	}
 
 	///////////////////////////////////

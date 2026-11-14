@@ -7853,6 +7853,12 @@ function initDev() {
 if (!!(process.env.NODE_ENV !== "production")) {
   initDev();
 }
+const registerLog = (...args) => {
+  globalThis.__registerLog?.(...args);
+};
+const registerEvent = (...args) => {
+  globalThis.__registerEvent?.(...args);
+};
 const ConfigSymbol = Symbol("GlobalJsonConfig");
 const JsonConfigPlugin = {
   install(app, config) {
@@ -7883,10 +7889,34 @@ const _sfc_main$5 = /* @__PURE__ */ defineComponent({
     const audioElement = ref(null);
     onMounted(() => {
       const evs = {
-        ended: () => jsonConfig.fsm?.logEvent({ event: "AUDIO_PLAY_ENDED", id: props.id }),
-        play: () => jsonConfig.fsm?.logEvent({ event: "AUDIO_PLAY_START", id: props.id }),
-        pause: () => jsonConfig.fsm?.logEvent({ event: "AUDIO_PLAY_PAUSE", id: props.id }),
-        seeked: () => jsonConfig.fsm?.logEvent({ event: "AUDIO_PLAY_SEEKED", id: props.id })
+        ended: () => {
+          jsonConfig.fsm?.logEvent({ event: "AUDIO_PLAY_ENDED", id: props.id });
+          registerLog("AUDIO_PLAY_ENDED", "Die Wiedergabe eines Audio-Eintrags ist zu Ende", {
+            id: "ID [1..n] des Audio-Eintrags"
+          });
+        },
+        play: () => {
+          jsonConfig.fsm?.logEvent({ event: "AUDIO_PLAY_START", id: props.id });
+          registerLog("AUDIO_PLAY_START", "Die Wiedergabe eines Audio-Eintrags wurde gestartet", {
+            id: "ID [1..n] des Audio-Eintrags"
+          });
+        },
+        pause: () => {
+          jsonConfig.fsm?.logEvent({ event: "AUDIO_PLAY_PAUSE", id: props.id });
+          registerLog("AUDIO_PLAY_PAUSE", "Die Wiedergabe eines Audio-Eintrags wurde pausiert", {
+            id: "ID [1..n] des Audio-Eintrags"
+          });
+        },
+        seeked: () => {
+          jsonConfig.fsm?.logEvent({ event: "AUDIO_PLAY_SEEKED", id: props.id });
+          registerLog(
+            "AUDIO_PLAY_SEEKED",
+            "In einem Audio-Eintrag wurde eine neue Abspielposition gewählt",
+            {
+              id: "ID [1..n] des Audio-Eintrags"
+            }
+          );
+        }
       };
       for (const key in evs) {
         audioElement.value?.addEventListener(key, evs[key]);
@@ -7917,7 +7947,7 @@ const _export_sfc = (sfc, props) => {
   }
   return target;
 };
-const ChatEntryAudio = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-c34464fb"]]);
+const ChatEntryAudio = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["__scopeId", "data-v-d4e23093"]]);
 const _sfc_main$4 = /* @__PURE__ */ defineComponent({
   __name: "ChatEntryText",
   props: {
@@ -8053,8 +8083,26 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
         entryDivStyles.value = entryDivStylesDefault;
         logData.event = "ENTRY_DELETED";
         jsonConfig.fsm?.logEvent(logData);
+        registerLog(
+          "ENTRY_DELETED",
+          "Ein Eintrag wurde endgültig gelöscht (Zeit zum Rückgängig-Machen ist abgelaufen)",
+          {
+            id: "ID [1..n] des Eintrags",
+            type: 'Typ des Eintrags: "text" | "audio"',
+            text: 'Inhalt des Textes (nur bei type "text")'
+          }
+        );
       }, delTimeOut);
       jsonConfig.fsm?.logEvent(logData);
+      registerLog(
+        "ENTRY_DELETING",
+        "Ein Eintrag wurde gelöscht und kann noch rückgängig gemacht werden",
+        {
+          id: "ID [1..n] des Eintrags",
+          type: 'Typ des Eintrags: "text" | "audio"',
+          text: 'Inhalt des Textes (nur bei type "text")'
+        }
+      );
     };
     const setStatusActive = () => {
       if (delTimer) {
@@ -8072,6 +8120,11 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
           logData["text"] = localValue.value.entry;
         }
         jsonConfig.fsm?.logEvent(logData);
+        registerLog("ENTRY_DELETE_CANCEL", "Das Löschen eines Eintrags wurde rückgängig gemacht", {
+          id: "ID [1..n] des Eintrags",
+          type: 'Typ des Eintrags: "text" | "audio"',
+          text: 'Inhalt des Textes (nur bei type "text")'
+        });
       }
     };
     return (_ctx, _cache) => {
@@ -8107,7 +8160,7 @@ const _sfc_main$3 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const ChatEntry = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-6298b429"]]);
+const ChatEntry = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["__scopeId", "data-v-50f73d25"]]);
 const _sfc_main$2 = /* @__PURE__ */ defineComponent({
   __name: "ChatList",
   props: {
@@ -8341,17 +8394,28 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       switch (newVal) {
         case "none":
           jsonConfig.fsm?.triggerEvent("NEXT_ENABLED");
+          registerEvent(
+            "EV_NEXT_ENABLED",
+            "Die Eingabe ist leer, der Weiter-Button darf aktiv sein"
+          );
           break;
         case "texting":
           jsonConfig.fsm?.logEvent("TEXTINPUT_STARTED");
+          registerLog("TEXTINPUT_STARTED", "Der User hat begonnen, einen Text einzugeben");
           jsonConfig.fsm?.triggerEvent("NEXT_DISABLED");
+          registerEvent(
+            "EV_NEXT_DISABLED",
+            "Eine Eingabe ist in Arbeit, der Weiter-Button soll inaktiv sein"
+          );
           break;
         case "recording":
           jsonConfig.fsm?.logEvent("RECORD_STARTED");
+          registerLog("RECORD_STARTED", "Eine Audio-Aufnahme wurde gestartet");
           jsonConfig.fsm?.triggerEvent("NEXT_DISABLED");
           break;
         case "recording_ack":
           jsonConfig.fsm?.logEvent("RECORD_STOPPED");
+          registerLog("RECORD_STOPPED", "Die Audio-Aufnahme wurde beendet");
           break;
       }
     });
@@ -8382,15 +8446,35 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
       switch (newVal) {
         case "not-supported":
           jsonConfig.fsm?.logAndTriggerEvent("RECORD_NOT_SUPPORTED");
+          registerLog(
+            "RECORD_NOT_SUPPORTED",
+            "Audio-Aufnahme wird vom Browser/Gerät nicht unterstützt"
+          );
+          registerEvent(
+            "EV_RECORD_NOT_SUPPORTED",
+            "Audio-Aufnahme wird vom Browser/Gerät nicht unterstützt"
+          );
           break;
         case "denied":
           jsonConfig.fsm?.logAndTriggerEvent("RECORD_DENIED");
+          registerLog("RECORD_DENIED", "Der Zugriff auf das Mikrofon wurde verweigert");
+          registerEvent("EV_RECORD_DENIED", "Der Zugriff auf das Mikrofon wurde verweigert");
           break;
         case "allowed":
           jsonConfig.fsm?.logAndTriggerEvent("RECORD_ALLOWED");
+          registerLog("RECORD_ALLOWED", "Der Zugriff auf das Mikrofon wurde erlaubt");
+          registerEvent("EV_RECORD_ALLOWED", "Der Zugriff auf das Mikrofon wurde erlaubt");
           break;
         case "prompt":
           jsonConfig.fsm?.logAndTriggerEvent("RECORD_PROMPT");
+          registerLog(
+            "RECORD_PROMPT",
+            "Der User wird nach der Erlaubnis für den Mikrofon-Zugriff gefragt"
+          );
+          registerEvent(
+            "EV_RECORD_PROMPT",
+            "Der User wird nach der Erlaubnis für den Mikrofon-Zugriff gefragt"
+          );
           break;
       }
     });
@@ -8437,6 +8521,13 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
             event: "RECORDING_RECEIVED",
             b64
           });
+          registerLog(
+            "RECORDING_RECEIVED",
+            "Die Audio-Aufnahme liegt jetzt fertig kodiert vor (kann nach RECORD_STOPPED eintreffen)",
+            {
+              b64: "Audio-Aufnahme als Base64-kodierter Data-URL-String"
+            }
+          );
           if (sendAudioWhenReady) {
             sendAudio();
           }
@@ -8504,6 +8595,11 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
         logData.type = "text";
       }
       jsonConfig.fsm?.logEvent(logData);
+      registerLog("INPUT_DELETED", "Die aktuelle Eingabe (Text oder Aufnahme) wurde verworfen", {
+        id: "Immer null, da die Eingabe noch keine ID hat",
+        type: 'Typ der verworfenen Eingabe: "text" | "audio"',
+        text: 'Verworfener Text (nur bei type "text")'
+      });
       resetInput();
     };
     return (_ctx, _cache) => {
@@ -8568,7 +8664,7 @@ const _sfc_main$1 = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const ChatInput = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-55c370d7"]]);
+const ChatInput = /* @__PURE__ */ _export_sfc(_sfc_main$1, [["__scopeId", "data-v-ec87b77b"]]);
 const _sfc_main = /* @__PURE__ */ defineComponent({
   __name: "App",
   setup(__props, { expose: __expose }) {
@@ -8599,6 +8695,11 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
         logData["text"] = newEntry.entry;
       }
       jsonConfig.fsm?.logEvent(logData);
+      registerLog("ENTRY_ADDED", "Ein neuer Eintrag (Text oder Audio) wurde zur Liste hinzugefügt", {
+        id: "Eindeutige ID [1..n] des Eintrags",
+        type: 'Typ des Eintrags: "text" | "audio"',
+        text: 'Inhalt des Textes (nur bei type "text")'
+      });
     };
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock("div", null, [
@@ -8612,7 +8713,7 @@ const _sfc_main = /* @__PURE__ */ defineComponent({
     };
   }
 });
-const RootVueComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-f4907ab0"]]);
+const RootVueComponent = /* @__PURE__ */ _export_sfc(_sfc_main, [["__scopeId", "data-v-9cd71a33"]]);
 function addFsmFuncs(jsonConfig) {
   if (jsonConfig.postMessagePayload) {
     jsonConfig.fsm = {
